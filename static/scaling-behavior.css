@@ -1,0 +1,163 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+body {
+	margin: 0px;
+	padding: 0px;
+	background-color:#f2f2f2;
+}
+
+
+.global_nav {
+	width:224px;
+	min-height: 100vh;
+	margin:0px;
+	padding-left:16px;
+	padding-top:16px;
+	background-color: #525252;
+	color: #fff;
+	font-family: "Bernina Sans";
+	font-size: 14px;
+	float: left;
+	display: none;
+}
+
+.right_side{
+	width: auto;
+}
+
+.menu_bar{
+	width: auto;
+	height: 44px;
+	position: relative;
+	background-color:#242424;
+	padding-left: 16px;
+	color: #fff;
+	font-family: "Bernina Sans";
+	font-size: 14px;
+	display: flex;
+	align-items: center;
+}
+
+.nav_bar{
+	width: auto;
+	height: 32px;
+	position:relative;
+	background-color: #00a6fb;
+	color: #fff;
+	font-family: "Bernina Sans";
+	font-size: 14px;
+	padding-left: 16px;
+	display: flex;
+	align-items: center;
+}
+
+.content_area{
+	margin-right:0px;
+	margin-left:0px;
+	padding-left:8px;
+	padding-top:8px;
+	padding-right:0px;
+	width: auto;
+	display: grid;
+	grid-template-columns: 1fr;
+}
+
+
+.content-tile{
+	font-family: "Bernina Sans";
+	font-size: 24px;
+	font-weight: 300;
+	color: #454646;
+	padding:8px;
+	margin-right:8px;
+	margin-bottom:8px;
+	background-color:#fff;
+	border: #ececec 1px solid;
+	border-radius:3px;
+	height: 180px;
+	/* min-width: 344px; */
+}
+
+
+
+
+/* Screen width from 1280px - 2559px */
+@media (min-width: 1280px) {
+
+
+.global_nav {
+	display: inline;
+}
+
+
+.content_area{
+	margin-left:240px;
+	padding-left:20px;
+	padding-top:20px;
+	grid-template-columns: 1fr 1fr;
+}
+
+
+.content-tile{
+	/* min-width: 490px; */
+	margin-right:20px;
+	margin-bottom:20px;
+	padding: 16px;
+}
+
+}
+
+/* Screen width from 2560px - 4095px */
+@media (min-width: 2560px) {
+
+
+.global_nav {
+	display: inline;
+}
+
+
+.content_area{
+	margin-left:240px;
+	padding-left:20px;
+	padding-top:20px;
+	grid-template-columns: 1fr 1fr 1fr;
+}
+
+
+.content-tile{
+	/* min-width: 746px; */
+	margin-right:20px;
+	margin-bottom:20px;
+	padding: 16px;
+}
+
+}
+
+/* Screen width ≥ 4096px */
+@media (min-width: 4096px) {
+
+
+.global_nav {
+	display: inline;
+}
+
+
+.content_area{
+	margin-left:240px;
+	padding-left:20px;
+	padding-top:20px;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+
+.content-tile{
+	/* min-width: 939px; */
+	margin-right:20px;
+	margin-bottom:20px;
+	padding: 16px;
+
+}
+
+}
