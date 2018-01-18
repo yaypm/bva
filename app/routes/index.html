@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<title>Dynatrace Business Value Calculator</title>
+
+	<link rel="stylesheet" type="text/css" href='/static/main.css' />
+	<script src='/static/es6-promise.auto.js'></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="icon" href="https://dt-cdn.net/assets/images/brand/favicon-63e287af7c.ico">
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<script src="/static/finance.js"></script>
+	<style>a:hover {cursor:pointer;}</style>
+	<script src="/static/bva.js"></script>
+
+</head>
+
+<body style="background-image: url(/static/welcome-background.svg); background-size: cover;">
+<!--start of nav bar-->
+
+
+<div class="nav has-no-secondary">
+  <a class="nav__brand" href="/">
+    <img class="nav__logo" src="https://assets.dynatrace.com/global/logos/dynatrace-logo.svg" alt="dynatrace logo"/>
+  </a>
+</div>
+<!--end of nav bar-->
+
+
+
+<!--start of content-->
+
+<div id="intro_box">
+		
+	<h1 >Welcome to your Dynatrace Business Value Assessment</h1>
+
+	<h3>Please enter your email address and hit enter to get started!</h3>
+		
+		<br />
+		
+	<input type="email" class="inputfield" id="userId" value=""/>
+		
+		<br /><br /> 
+	
+	<input type="password" class="inputfield" id="password" value=""/>
+		
+		<br /><br /> 	
+	
+	<button id="intro_box_submit" type="button" class="btn btn--primary theme--dark" href="/workflow">Enter</button>
+				
+</div> 
+		
+<!--end of content-->
+
+<script src="/static/main.js"></script>
+
+</body>
+
+</html>
