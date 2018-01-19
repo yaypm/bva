@@ -142,44 +142,108 @@
 
 <!--start of content-->
 
-<div class="section" style="height: 90%; margin-left: 20px; margin-right: 20px;">
+<div class="section" style="margin-left: 20px; margin-right: 20px; min-height: 90%;">
   
+
+<div class="column--1-of-2" style="background-color: white; margin-bottom: 20px; border-radius: 5px">
+ 
+<!-- start of test -->   
+<div style="background-color: #9355b7; color: white; width: 100%; height: 105px; border-top-right-radius: 5px; border-top-left-radius: 5px; background-image: url(/static/biz-dev-ops.svg);background-position: right; background-size: contain; background-repeat: no-repeat; ">
+
+		<div style="position: absolute; margin-top: 10px ; margin-left: 20px; max-width: 60%">
+		<h1 style="margin-bottom: 0px; max-width: 100px;">Business</h1>
+		<p>Achieve revenue gains from decreasing IT issues</p>
+		</div>
+
+</div>
+
+<!--end of test-->
+
+<div class="tags">
+<!-- <button class="tag tag--interactive">alistair.emslie@dynatrace.com</button> -->
+<!-- <button class="tag tag--interactive">hoaApJ2XUl</button> -->
+<span tabindex="1" class="tag">
+  <span class="tag__key">email:</span>
+  alistair.emslie@dynatrace.com
+</span>
+<span tabindex="1" class="tag">
+  <span class="tag__key">id:</span>
+  hoaApJ2XUl
+</span>
+</div>
+<br />
+<div class="progress" style="width: 100%"><div style="width: 30%; display: inline-block; text-align: center "><img src="/static/home.svg" style="height:75px; width: 75px"/><br />Home</div><div class="theme--purple" style="width: 40%; display: inline-block;vertical-align:top; margin-top: 20px "><label class="label--progressbar" for="p1">1/4</label><progress class="progressbar" value="1" max="4" if="p1"></progress></div><div style="width: 30%; display: inline-block; text-align: center"><img src="/static/menu-close.svg" style="height:75px; width: 75px"/><br />Next</div></div>
+
+
+<div class="section">
+
+
+
+<div class="column--1-of-2"> 
+ 
+
+	
+
+	<div style="padding: 20px; color: black">
+	
+	
+	<label for="i0" class="label" style="font-size: 1em">Company or business unit annual revenue</label>
+	<input type="text" class="inputfield" id="i0" oninput="if(getNumbers(this.value) != 'null') {this.value = parseInt(getNumbers(this.value)).toLocaleString() } else {this.value = ''}" style="height: 35px; width: 300px; max-width: 100%; font-size: 1em" />
+
+	<br /><br />
+	
+	<label for="i0" class="label" style="font-size: 1em">Annual growth rate (%)</label>
+	<input type="text" class="inputfield" id="i1" style="font-size: 1em;height: 35px; width: 300px; max-width: 100%;"/>
+
+	<br /><br />
+	
+	<label for="i0" class="label" style="font-size: 1em">Revenue dependent on applications (%)</label>
+	<input type="text" class="inputfield" id="i2" style="font-size: 1em;height: 35px; width: 300px; max-width: 100%;"/>
+
+	<br /><br />
+	
+	<label for="i0" class="label" style="font-size: 1em">Time where performance goals are met (%)</label>
+	<input type="text" class="inputfield" id="i3" style="font-size: 1em;height: 35px; width: 300px; max-width: 100%;"/>	
+
+	<br /><br />
+	
+	<label for="i0" class="label" style="font-size: 1em">Revenue affected when SLA is breached (%)</label>
+	<input type="text" class="inputfield" id="i4" style="font-size: 1em;height: 35px; width: 300px; max-width: 100%;"/>		
+	</div>
+ 
+ </div>
+ 
+ 
+ 
+ 
+  <div class="column--1-of-2">
+
+  <div class="layout__container layout--half">
+    <div class="island">
+      <h2>Island 2</h2>
+    </div>
+    <div class="island">
+      <h2>Island 3</h2>
+      <p>Here comes more text</p>
+      <p>Here comes more text</p>
+      <p>Here comes more text</p>
+      <p>Here comes more text</p>
+      <p>Here comes more text</p>
+    </div>
+  </div>
   
-  <div class="column--1-of-2" style=" background-color: #9355b7; background-image: url(/static/biz-dev-ops.svg); background-size: auto; background-repeat: no-repeat; background-position: bottom; background-size: 35%; margin-bottom: 20px">
-    
-	<div class="theme--royalblue">
-		<label class="label--progressbar" for="p0">50/100</label>
-		<progress class="progressbar" value="1" max="5" id="p0"></progress>
-	</div>
-	
-	<br />
+  </div>
+  
+</div>
 
-	<div style="padding: 20px; color: white">
-	<h1>Business</h1>
-	
-	<label for="i0" class="label" style="font-size: 18px">Company or business unit annual revenue</label>
-	<input type="text" class="inputfield" id="i0" style="font-size: 25px;height: 40px; width: 200px"/>
 
-	<br /><br />
-	
-	<label for="i0" class="label" style="font-size: 18px">Annual growth rate (%)</label>
-	<input type="text" class="inputfield" id="i0" style="font-size: 25px;height: 40px; width: 200px"/>
 
-	<br /><br />
-	
-	<label for="i0" class="label" style="font-size: 18px">% of revenue dependent on applications</label>
-	<input type="text" class="inputfield" id="i0" style="font-size: 25px;height: 40px; width: 200px"/>
 
-	<br /><br />
-	
-	<label for="i0" class="label" style="font-size: 18px">% of time where performance and availability goals are met</label>
-	<input type="text" class="inputfield" id="i0" style="font-size: 25px;height: 40px; width: 200px"/>	
 
-	<br /><br />
-	
-	<label for="i0" class="label" style="font-size: 18px">% of revenue affected when SLA is breached</label>
-	<input type="text" class="inputfield" id="i0" style="font-size: 25px;height: 40px; width: 200px"/>		
-	</div>
+
+
+  
+
 	
 	
 	
@@ -189,10 +253,10 @@
   
   
   
-  <div class="column--1-of-2" style=" background-color:white; margin-bottom: 20px">
+  <div class="column--1-of-2" style=" background-color:white; margin-bottom: 20px; border-radius: 5px;">
 
   
-   <div id="container" style="float: left; height: 300px; width: 90%;margin-bottom: 50px;"></div>
+   <div id="container" style="float: left; height: 300px; width: 100%; margin-bottom: 50px;"></div>
   
   
   

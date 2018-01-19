@@ -17,7 +17,13 @@ function activateControls() {
 
 function getNumbers(txt) {
 	var numb = txt.match(/\d/g);
-	numb = numb.join("");	
+	if(numb != null) {
+		numb = numb.join("");	
+	}
+	
+	else {
+		numb = "null";
+	}
 	
 	return numb;
 }
