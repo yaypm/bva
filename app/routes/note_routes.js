@@ -14,9 +14,9 @@ module.exports = function(app, db) {
 
 	});
 	
-	app.get('/workflow', (req, res) => {
+	app.get('/business', (req, res) => {
 		
-		res.sendFile(path.join(__dirname + '/workflow.html'));
+		res.sendFile(path.join(__dirname + '/business.html'));
 
 	});
 	
