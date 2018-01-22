@@ -3224,7 +3224,9 @@ ol.list ol ul ul li:before {
 #intro_box {
 	position: absolute;
 	width: 500px; 
-	height: 550px;  
+	height: 550px; 
+	max-width: 95%;
+	max-height: 95%;
 	margin: auto;
      top: 0;
      right: 0;
