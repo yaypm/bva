@@ -26,6 +26,12 @@ module.exports = function(app, db) {
 
 	});
 	
+	app.get('/operations', (req, res) => {
+		
+		res.sendFile(path.join(__dirname + '/operations.html'));
+
+	});	
+	
 	app.get('/getOptions', (req, res) => {	
 		var userId = req.header('userId');
 		console.log(userId + " is getting options");
