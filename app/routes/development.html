@@ -148,11 +148,11 @@
 <div class="column--1-of-2" style="background-color: white; margin-bottom: 20px; border-radius: 5px">
  
 <!-- start of title -->   
-<div style="background-color: #9355b7; color: white; width: 100%; height: 105px; border-top-right-radius: 5px; border-top-left-radius: 5px; background-image: url(/static/biz-dev-ops.svg);background-position: right; background-size: contain; background-repeat: no-repeat; ">
+<div style="background-color: #1496ff; color: white; width: 100%; height: 105px; border-top-right-radius: 5px; border-top-left-radius: 5px; background-image: url(/static/dev.svg);background-position: right; background-size: contain; background-repeat: no-repeat; ">
 
 		<div style="position: absolute; margin-top: 10px ; margin-left: 20px; max-width: 60%">
-		<h1 style="margin-bottom: 0px; max-width: 100px;">Business</h1>
-		<p>Increased revenue from improved technology performance</p>
+		<h1 style="margin-bottom: 0px; max-width: 100px;">Development</h1>
+		<p>Decreased cost of problem detection and impact</p>
 		</div>
 
 </div>
@@ -177,7 +177,7 @@
 <br />
 
 <!--start of progress-->
-<div class="progress" style="width: 100%"><div style="width: 30%; display: inline-block; text-align: center; margin-bottom: 20px "><img src="/static/home.svg" style="height:75px; width: 75px"/><br />Home</div><div class="theme--purple" style="width: 40%; display: inline-block;vertical-align:top; margin-top: 20px "><label class="label--progressbar" for="p1">1/4</label><progress class="progressbar" value="1" max="4" if="p1"></progress></div><div style="width: 30%; display: inline-block; text-align: center"><img src="/static/menu-close.svg" style="height:75px; width: 75px"/><br />Next</div></div>
+<div class="progress" style="width: 100%"><div style="width: 30%; display: inline-block; text-align: center; margin-bottom: 20px "><img src="/static/next-blue.svg" style="transform: rotate(180deg);height:75px; width: 75px"/><br />Previous</div><div class="theme--royalblue" style="width: 40%; display: inline-block;vertical-align:top; margin-top: 20px "><label class="label--progressbar" for="p1">3/4</label><progress class="progressbar" value="3" max="4" if="p1"></progress></div><div style="width: 30%; display: inline-block; text-align: center"><img src="/static/next-blue.svg" style="height:75px; width: 75px"/><br />Next</div></div>
 <!--end of progress-->
 
 
@@ -186,54 +186,72 @@
 	<div style="padding-bottom: 20px; color: black; width: 100%;">
 	
 	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/sales-light.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
+	<img src="/static/release.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
 	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Company or business unit annual revenue</label>
-	<input type="text" class="inputfield" id="i1" placeholder="£" oninput="if(getNumbers(this.value) != 'null') {this.value = parseInt(getNumbers(this.value)).toLocaleString() } else {this.value = ''}" style=" height: 50px;  font-size: 1.3em; display: inline-block" />
+	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Release cycles per year for all applications</label>
+	<input type="text" class="inputfield" id="i1" placeholder="# of release cycles" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
 	</div>
 	</div>
 	
 	<br /><br />
 
 	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/trend-light.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
+	<img src="/static/days.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
 	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Projected annual growth rate</label>
-	<input type="text" class="inputfield" id="i1" placeholder="%" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
+	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Number of days to complete a release cycle</label>
+	<input type="text" class="inputfield" id="i1" placeholder="# of days" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
 	</div>
 	</div>
 	
 	<br /><br />
 
 	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/application-light.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
+	<img src="/static/test.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
 	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Revenue dependent on applications</label>
-	<input type="text" class="inputfield" id="i1" placeholder="%" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
+	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Percentage of time spent testing per release cycle</label>
+	<input type="text" class="inputfield" id="i1" placeholder="% of time" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
 	</div>
 	</div>
 	
 	<br /><br />
 
 	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/health-light.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
+	<img src="/static/performance.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
 	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">How often performance goals are met</label>
-	<input type="text" class="inputfield" id="i1" placeholder="%" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
+	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Amount of QA testing time spent documenting performance issues</label>
+	<input type="text" class="inputfield" id="i1" placeholder="% of time" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
 	</div>
 	</div>
 	
 	<br /><br />
 
 	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/warning-light.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
+	<img src="/static/document.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
 	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Revenue affected during SLA breach</label>
+	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Number of QA people documenting performance problems per release (QA)</label>
+	<input type="text" class="inputfield" id="i1" placeholder="# of people" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
+	</div>
+	</div>
+	
+	<br /><br />
+	
+	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
+	<img src="/static/performance.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
+	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
+	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Amount of dev testing time spent documenting performance issues</label>
+	<input type="text" class="inputfield" id="i1" placeholder="# of people" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
+	</div>
+	</div>
+
+	<br /><br />
+	
+	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
+	<img src="/static/document.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
+	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
+	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Number of dev people documenting performance problems per release</label>
 	<input type="text" class="inputfield" id="i1" placeholder="%" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
 	</div>
-	</div>
-	
-	
+	</div>	
 	
 	
 	
