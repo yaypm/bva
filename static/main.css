@@ -3139,13 +3139,14 @@ ol.list ol ul ul li:before {
   margin: 0;
   padding: 0; }
 
+  /**al change was 4px**/
 .progressbar {
   position: relative;
   background-image: none;
   border: none;
   outline: none;
   width: 100%;
-  height: 4px;
+  height: 8px;
   border: none;
   background-color: #aeebf0;
   color: #4fd5e0; }
@@ -3221,16 +3222,19 @@ ol.list ol ul ul li:before {
 	
 /**al additions**/
 #intro_box {
-	position: absolute; 
-	top: 50%; 
-	left: 50%; 
-	width: auto; 
-	height: auto;  
-	transform: translate(-50%, -50%); 
-	background-color: #008CDB; 
+	position: absolute;
+	width: 500px; 
+	height: 550px;  
+	margin: auto;
+     top: 0;
+     right: 0;
+     bottom: 0;
+     left: 0;
+	/**transform: translate(-50%, -50%); **/
+	background-color: rgb(3, 106, 186); 
 	color: white; 
 	text-align: center; 
-	box-shadow: 0px 0px 30px 30px #008CDB; 
+	box-shadow: 0px 0px 30px 30px rgb(3, 106, 186); 
 	color: white; }		
 	
 #intro_box h1 {
@@ -3240,18 +3244,18 @@ ol.list ol ul ul li:before {
 #userId {
 	width: 350px; 
 	height: 50px; 
-	font-size: 25px
+	font-size: 1.3em;
 }
 
 #password {
 	width: 350px; 
 	height: 50px; 
-	font-size: 25px
+	font-size: 1.3em;
 }
 
 #intro_box_submit {
 	width: 350px; 
 	height: 40px; 
-	font-size: 20px }
+	font-size: 1.3em; }
 
 	
