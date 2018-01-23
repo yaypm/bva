@@ -3223,6 +3223,8 @@ ol.list ol ul ul li:before {
 /**al additions**/
 #intro_box {
 	position: absolute;
+	max-width: 600px; 
+	max-height: 400px; 
 	width: 600px; 
 	height: 400px; 
 	max-width: 95%;
@@ -3230,11 +3232,12 @@ ol.list ol ul ul li:before {
 	margin: auto;
      top: 0;
      right: 0;
-     bottom: 0;
+     bottom: 100px;
      left: 0;
 	/**transform: translate(-50%, -50%); **/
 	background-color: rgb(3, 106, 186); 
 	color: white; 
+	border-radius: 20px;
 	text-align: center; 
 	box-shadow: 0px 0px 30px 30px rgb(3, 106, 186); 
 	color: white; }		
