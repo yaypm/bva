@@ -13,399 +13,308 @@
 	<script src="/static/finance.js"></script>
 	<style>a:hover {cursor:pointer;}</style>
 	<script src="/static/bva.js"></script>
-	<script>
-	
-				$(function () {
-				
-				blankData = [];
-				
-				var now = new Date;
-				var rightNow = now.getTime();
-				var first = rightNow - 3600000;
-				
-				blankData.push([first, 100]);
-				
-				for(i=1; i < 12; i++) {
-					blankData.push([(first + 300000 * i), 100]);
-				}	
-			
-				var myChart = Highcharts.chart('container', {
-						title: {
-							style: {
-								color: "#ffffff"
-							},
-							text: ''
-						},
-					
-					exporting: {
-						enabled: false
-					},
-					
-					plotOptions: {
-						line: {
-							marker: {
-								enabled: false
-							},
-						},
-					},
-					
-					chart: {
-						backgroundColor: "#ffffff",
-						borderColor: "#ffffff",
-						borderRadius: 3,
-						borderWidth: 2,
-						spacingBottom: 5,
-						spacingTop: 5,
-						spacingLeft: 1,
-						spacingRight: 5,	
-
-						update: {
-							redraw: false
-						},						
-					},	
-					
-					credits: {
-						enabled: false
-					},
-					
-					yAxis: {
-							title: {
-								text: 'Response Time (ms)',
-								style: {
-									color: "#000000"
-								}
-							},
-							
-							min: 0,
-							max: 50,
-							
-							labels: {
-								style: {
-									color: "#000000"
-								}
-							}
-					},
-					
-					xAxis: {
-							type: 'datetime',
-
-							labels: {
-								style: {
-									color: "#000000"
-								}
-							},
-							
-							title: {
-								style: {
-									color: "#000000"
-								},
-							enabled: false
-						}
-					},
-					
-					legend: {
-						enabled: false
-				},
-
-					series: [{
-						type: 'line',
-						forced: 'true',
-						name: 'Time (ms)',
-						data: blankData
-					}]
-				});
-			});
-	
-	</script>
 
 </head>
 
-<body style="background-color: #f2f2f2">
+<body class="bva-body">
+
 <!--start of nav bar-->
-
-
 <div class="nav has-no-secondary">
+
   <a class="nav__brand" href="/">
     <img class="nav__logo" src="http://assets.dynatrace.com/global/logos/dynatrace-logo.svg" alt="dynatrace logo"/>
   </a>
-  <!-- <div class="nav__buttongroup"> -->
-    <!-- <button data-target="#nav-bar-example1" class="nav__btn nav__btn--menutoggle">Menu</button> -->
-  <!-- </div> -->
+
   <nav id="nav-bar-example1" class="nav__bar">
-
   </nav>
+  
 </div>
-
 <!--end of nav bar-->
 
-
-
 <!--start of content-->
-
-<div class="section" style="margin-left: 20px; margin-right: 20px; min-height: 90%;">
+<div class="section bva-content">
   
-
-<div class="column--1-of-2" style="background-color: white; margin-bottom: 20px; border-radius: 5px">
+<div class="column--1-of-2 bva-content-column">
  
 <!-- start of title -->   
-<div style="background-color: #73be28; color: white; width: 100%; height: 105px; border-top-right-radius: 5px; border-top-left-radius: 5px; background-image: url(/static/dev.svg);background-position: right; background-size: contain; background-repeat: no-repeat; ">
+<div class="bva-title-wrapper bva-title-wrapper-ops">
 
-		<div style="position: absolute; margin-top: 10px ; margin-left: 20px; max-width: 60%">
-		<h1 style="margin-bottom: 0px; max-width: 100px;">Operations</h1>
+	<div class="bva-title-wrapper-inner">
+		
+		<h1 class="bva-title-text">Operations</h1>
 		<p>Reducing the frequency and cost of issues</p>
-		</div>
+		
+	</div>
 
 </div>
-
-<!--end of title-->
 
 <!--start of tags-->
 <div class="tags">
 
-<span tabindex="1" class="tag">
-  <span class="tag__key">email:</span>
-  alistair.emslie@dynatrace.com
-</span>
-<span tabindex="1" class="tag">
-  <span class="tag__key">id:</span>
-  hoaApJ2XUl
-</span>
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">email:</span>
+	  alistair.emslie@dynatrace.com
+	</span>
+	
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">id:</span>
+	  hoaApJ2XUl
+	</span>
+	
 </div>
 <!--end of tags-->
-
 
 <br />
 
 <!--start of progress-->
-<div class="progress" style="width: 100%"><div style="width: 30%; display: inline-block; text-align: center; margin-bottom: 20px "><a href="/business"><img src="/static/arrow-green.svg" style="transform: rotate(180deg);height:75px; width: 75px"/></a><br />Previous</div><div class="theme--green" style="width: 40%; display: inline-block;vertical-align:top; margin-top: 15px "><label class="label--progressbar" for="p1">2/4</label><progress class="progressbar" value="2" max="4" if="p1"></progress></div><div style="width: 30%; display: inline-block; text-align: center"><a href="/development"><img src="/static/arrow-green.svg" style="height:75px; width: 75px"/></a><br />Next</div></div>
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a href="/business"><img src="/static/arrow-green.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--green bva-progress-wrapper"><label class="label--progressbar" for="p1">2/4</label><progress class="progressbar" value="2" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><a href="/development"><img src="/static/arrow-green.svg" class="bva-progress-button"/></a><br />Next</div></div>
 <!--end of progress-->
 
-
-
 <!--start of questions-->
-	<div style="padding-bottom: 20px; color: black; width: 100%;">
+<div class="bva-all-question-wrapper">
 	
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/incident-green.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Number of incidents reported per month caused by slowness or availability</label>
-	<input type="text" class="inputfield" id="i1" placeholder="# of incidents" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
+	<div class="bva-question-wrapper">
 	
-	<br /><br />
-
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/ops-green.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Average number of Ops people used to troubleshoot an incident</label>
-	<input type="text" class="inputfield" id="i1" placeholder="# of Ops people" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
-	
-	<br /><br />
-
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/dev-green.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Average number of Dev people used to troubleshoot an incident</label>
-	<input type="text" class="inputfield" id="i1" placeholder="# of Dev people" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
-	
-	<br /><br />
-
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/repair-green.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Average MTTR</label>
-	<input type="text" class="inputfield" id="i1" placeholder="# of hours" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
-	
-	<br /><br />
-
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/transaction-green.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;"># of apps being monitored end-to-end currently</label>
-	<input type="text" class="inputfield" id="i1" placeholder="# of apps" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
-	
-	<br /><br />
-	
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/application-green.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Total # of T1/T2 apps in production</label>
-	<input type="text" class="inputfield" id="i1" placeholder="# of apps" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
-	
-	<br /><br />	
-	
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/user-green.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;"># of FTEs looking after existing tools</label>
-	<input type="text" class="inputfield" id="i1" placeholder="# of FTEs" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
-	
-	<br /><br />	
-	
-	<h2 style="text-align: center">Replacement of existing tools</h2>
-	<br />
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/tools-green.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Name of tool</label>
-	<input type="text" class="inputfield" id="i1" placeholder="Name of tool" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
-
-	
-	
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px; margin-top: 15px">
-	
-	<div style="display:inline-block; width: 340px; max-width: 82%; margin-left: 16%">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Annual license and support costs</label>
-	<input type="text" class="inputfield" id="i1" placeholder="£" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
-	
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px; margin-top: 15px">
-	
-	<div style="display:inline-block; width: 340px; max-width: 82%; margin-left: 16%">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">FTEs used for config and admin</label>
-	<input type="text" class="inputfield" id="i1" placeholder="# of FTEs" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
-
-	
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px; margin-top: 15px">
-	
-	<div style="display:inline-block; width: 340px; max-width: 82%; margin-left: 16%">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block; width: 100%">% replaced with Dynatrace</label>
-	<input type="text" class="inputfield" id="i1" placeholder="Year 1" style=" height: 50px;  font-size: 1.3em; display: inline-block; width: 32%"/>
-	<input type="text" class="inputfield" id="i1" placeholder="Year 2" style=" height: 50px;  font-size: 1.3em; display: inline-block; width: 32%"/>
-	<input type="text" class="inputfield" id="i1" placeholder="Year 3" style=" height: 50px;  font-size: 1.3em; display: inline-block; width: 32%"/>
-	</div>
-	</div>
-	
-	
-	
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px; margin-top: 15px">
-	<div style="display:inline-block; width: 340px; max-width: 82%; margin-left: 16%">	
-	<a href="#"><button  type="button" class="btn btn--primary theme--dark" style="height: 50px; width: 100%; font-size: 1.3em">Add tool</button></a>
-	</div>
-	</div>
-	
- <br />
- 
- <div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px; margin-top: 15px">
-	<div style="display:inline-block; width: 340px; max-width: 82%; margin-left: 16%; ">	
- <button class="tile " style="margin: 0 auto; ">
-  <div class="tile__header">
-    <div class="tile__iconbox" style="text-align: center; ">
-      <a href="#"><img src="/static/delete-white.svg" style="margin-top: 20%; width: 50%; height: 50%; text-align: center; vertical-align: middle"/></a>
-    </div>
-
-    <h1 class="tile__heading">AppDynamics</h1>
-    <h2 class="tile__subheading">£300,000 - 10 FTEs</h2>
-  </div>
-  <p class="tile__content" style="text-align: center">
-		 
-  y1: 100%&nbsp;&nbsp;&nbsp;&nbsp;y2: 150%&nbsp;&nbsp;&nbsp;&nbsp;y3: 200%
-  </p>
-</button>
-
- </div>
- </div>
- 
- 
-  <div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px; margin-top: 15px">
-	<div style="display:inline-block; width: 340px; max-width: 82%; margin-left: 16%; ">	
- <button class="tile " style="margin: 0 auto; ">
-  <div class="tile__header">
-    <div class="tile__iconbox" style="text-align: center; ">
-      <a href="#"><img src="/static/delete-white.svg" style="margin-top: 20%; width: 50%; height: 50%; text-align: center; vertical-align: middle"/></a>
-    </div>
-
-    <h1 class="tile__heading">New Relic</h1>
-    <h2 class="tile__subheading">£50,000 - 3 FTEs</h2>
-  </div>
-  <p class="tile__content" style="text-align: center">
-		 y1: 200%&nbsp;&nbsp;&nbsp;&nbsp;y2: 250%&nbsp;&nbsp;&nbsp;&nbsp;y3: 300%
-  
-  </p>
-</button>
-
- </div>
- </div>	
-	
-	
-	</div>
- <!--end of questions-->
- 
- <!--applications-->
- 
-
- <!--end of applications-->
- 
- 
-
-  <!--start of secondary-->
-	<div style="font-size: 1.2em; padding-left: 7%; padding-right: 7%; padding-bottom: 10%">
-
-	
-	
-	
-	</div>
-  
-  <!--end of secondary-->
-  
-  
-
-
-
-
-
-
-
-
-  
-
-	
-	
-	
-  </div>
-  
-  
-  
-  
-  
-  <div class="column--1-of-2" style=" background-color:white; margin-bottom: 20px; border-radius: 5px;">
-
-  
-   <div id="container" style="float: left; height: 300px; width: 100%; margin-bottom: 50px;"></div>
-  
-  
-  
-  
-  
-  </div>
-</div>
-
-
-
-
-
-
-
-
+		<img src="/static/incident-green.svg" class="bva-question-image"/>
 		
+		<div class="bva-input-wrapper">	
+	
+			<label for="incidents_month" class="label bva-question-text">Number of incidents reported per month caused by slowness or availability</label>
+			<input type="text" class="inputfield bva-question-input" id="incidents_month" placeholder="# of incidents"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/ops-green.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="no_ops_troubleshoot" class="label bva-question-text">Average number of Ops people used to troubleshoot an incident</label>
+			<input type="text" class="inputfield bva-question-input" id="no_ops_troubleshoot" placeholder="# of Ops people"/>
+		
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/dev-green.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">	
+	
+			<label for="no_dev_troubleshoot" class="label bva-question-text">Average number of Dev people used to troubleshoot an incident</label>
+			<input type="text" class="inputfield bva-question-input" id="no_dev_troubleshoot" placeholder="# of Dev people"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/repair-green.svg" class="bva-question-image"/>
+		
+		<div class="bva-input-wrapper">
+	
+			<label for="mttr" class="label bva-question-text">Average MTTR</label>
+			<input type="text" class="inputfield bva-question-input" id="mttr" placeholder="# of hours"/>
+		
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/transaction-green.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="no_apps_e2e" class="label bva-question-text"># of apps being monitored end-to-end currently</label>
+			<input type="text" class="inputfield bva-question-input" id="no_apps_e2e" placeholder="# of apps"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+		
+		<img src="/static/application-green.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="no_t1t2_apps" class="label bva-question-text">Total # of T1/T2 apps in production</label>
+			<input type="text" class="inputfield bva-question-input" id="no_t1t2_apps" placeholder="# of apps"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />	
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/user-green.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="no_fte_existing" class="label bva-question-text"># of FTEs looking after existing tools</label>
+			<input type="text" class="inputfield bva-question-input" id="no_fte_existing" placeholder="# of FTEs"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />	
+	
+	<h2 class="bva-question-text-centre">Replacement of existing tools</h2>
+	
+		<br />
+	
+		<div class="bva-question-wrapper">
+	
+			<img src="/static/tools-green.svg" class="bva-question-image"/>
+	
+			<div class="bva-input-wrapper">	
+			
+				<label for="name_tool" class="label bva-question-text">Name of tool</label>
+				<input type="text" class="inputfield bva-question-input" id="name_tool" placeholder="Name of tool"/>
+			
+			</div>
+	
+		</div>
+	
+		<div class="bva-question-wrapper bva-question-top">
+	
+			<div class="bva-question-block">	
+	
+				<label for="annual_cost" class="label bva-question-text">Annual license and support costs</label>
+				<input type="text" class="inputfield bva-question-input" id="annual_cost" placeholder="£"/>
+	
+			</div>
+		
+		</div>
+	
+		<div class="bva-question-wrapper bva-question-top">
+	
+			<div class="bva-question-block">	
+	
+				<label for="no_fte_config" class="label bva-question-text">FTEs used for config and admin</label>
+				<input type="text" class="inputfield bva-question-input" id="no_fte_config" placeholder="# of FTEs"/>
+	
+			</div>
+		
+		</div>
+
+		<div class="bva-question-wrapper bva-question-top">
+	
+			<div class="bva-question-existing-wrapper">	
+			
+				<label class="label bva-question-existing-label">% replaced with Dynatrace</label>
+				<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y1" placeholder="Year 1"/>
+				<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y2" placeholder="Year 2"/>
+				<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y3" placeholder="Year 3"/>
+			
+			</div>
+	
+		</div>
+	
+		<div class="bva-question-wrapper bva-question-top">
+			
+			<div class="bva-question-existing-wrapper">		
+	
+				<a href="#"><button  type="button" class="btn btn--primary theme--dark bva-question-existing-add">Add tool</button></a>
+			
+			</div>
+		
+		</div>
+	
+			<br /><br />
+ 
+		<div class="bva-question-wrapper bva-question-top">
+			
+			<div class="bva-question-existing-wrapper">	
+			
+				<button class="tile bva-question-centre">
+				
+					<div class="tile__header">
+						
+						<div class="tile__iconbox bva-question-text-centre">
+							
+							<a href="#"><img src="/static/delete-white.svg" class="bva-existing-delete"/></a>
+						
+						</div>
+
+							<h1 class="tile__heading">AppDynamics</h1>
+							<h2 class="tile__subheading">£300,000 - 10 FTEs</h2>
+					
+					</div>
+  
+						<p class="tile__content bva-question-text-centre">
+		 
+							y1: 100%&nbsp;&nbsp;&nbsp;&nbsp;y2: 150%&nbsp;&nbsp;&nbsp;&nbsp;y3: 200%
+						
+						</p>
+					
+				</button>
+
+			</div>
+ 
+		</div>
+ 
+ 
+		<div class="bva-question-wrapper bva-question-top">
+			
+			<div class="bva-question-existing-wrapper">		
+		
+				<button class="tile bva-question-centre">
+		  
+					<div class="tile__header">
+				
+						<div class="tile__iconbox bva-question-text-centre">
+					
+							<a href="#"><img src="/static/delete-white.svg" class="bva-existing-delete"/></a>
+						
+						</div>
+
+							<h1 class="tile__heading">New Relic</h1>
+							<h2 class="tile__subheading">£50,000 - 3 FTEs</h2>
+						
+						</div>
+			  
+							<p class="tile__content bva-question-text-centre">
+					 
+								y1: 200%&nbsp;&nbsp;&nbsp;&nbsp;y2: 250%&nbsp;&nbsp;&nbsp;&nbsp;y3: 300%
+			  
+							</p>
+				
+				</button>
+
+			</div>
+		
+		</div>	
+	
+</div>
+<!--end of questions-->
+ 
+</div>
+   
+<div class="column--1-of-2 bva-content-column">
+    
+</div>
+	
+</div>
 <!--end of content-->
 
 <script src="/static/main.js"></script>

@@ -13,308 +13,181 @@
 	<script src="/static/finance.js"></script>
 	<style>a:hover {cursor:pointer;}</style>
 	<script src="/static/bva.js"></script>
-	<script>
-	
-				$(function () {
-				
-				blankData = [];
-				
-				var now = new Date;
-				var rightNow = now.getTime();
-				var first = rightNow - 3600000;
-				
-				blankData.push([first, 100]);
-				
-				for(i=1; i < 12; i++) {
-					blankData.push([(first + 300000 * i), 100]);
-				}	
-			
-				var myChart = Highcharts.chart('container', {
-						title: {
-							style: {
-								color: "#ffffff"
-							},
-							text: ''
-						},
-					
-					exporting: {
-						enabled: false
-					},
-					
-					plotOptions: {
-						line: {
-							marker: {
-								enabled: false
-							},
-						},
-					},
-					
-					chart: {
-						backgroundColor: "#ffffff",
-						borderColor: "#ffffff",
-						borderRadius: 3,
-						borderWidth: 2,
-						spacingBottom: 5,
-						spacingTop: 5,
-						spacingLeft: 1,
-						spacingRight: 5,	
-
-						update: {
-							redraw: false
-						},						
-					},	
-					
-					credits: {
-						enabled: false
-					},
-					
-					yAxis: {
-							title: {
-								text: 'Response Time (ms)',
-								style: {
-									color: "#000000"
-								}
-							},
-							
-							min: 0,
-							max: 50,
-							
-							labels: {
-								style: {
-									color: "#000000"
-								}
-							}
-					},
-					
-					xAxis: {
-							type: 'datetime',
-
-							labels: {
-								style: {
-									color: "#000000"
-								}
-							},
-							
-							title: {
-								style: {
-									color: "#000000"
-								},
-							enabled: false
-						}
-					},
-					
-					legend: {
-						enabled: false
-				},
-
-					series: [{
-						type: 'line',
-						forced: 'true',
-						name: 'Time (ms)',
-						data: blankData
-					}]
-				});
-			});
-	
-	</script>
 
 </head>
 
-<body style="background-color: #f2f2f2">
+<body class="bva-body">
+
 <!--start of nav bar-->
-
-
 <div class="nav has-no-secondary">
+
   <a class="nav__brand" href="/">
     <img class="nav__logo" src="http://assets.dynatrace.com/global/logos/dynatrace-logo.svg" alt="dynatrace logo"/>
   </a>
-  <!-- <div class="nav__buttongroup"> -->
-    <!-- <button data-target="#nav-bar-example1" class="nav__btn nav__btn--menutoggle">Menu</button> -->
-  <!-- </div> -->
+
   <nav id="nav-bar-example1" class="nav__bar">
-
   </nav>
+  
 </div>
-
 <!--end of nav bar-->
-
-
 
 <!--start of content-->
 
-<div class="section" style="margin-left: 20px; margin-right: 20px; min-height: 90%;">
+<div class="section bva-content">
   
-
-<div class="column--1-of-2" style="background-color: white; margin-bottom: 20px; border-radius: 5px">
+<div class="column--1-of-2 bva-content-column">
  
 <!-- start of title -->   
-<div style="background-color: #1496ff; color: white; width: 100%; height: 105px; border-top-right-radius: 5px; border-top-left-radius: 5px; background-image: url(/static/dev.svg);background-position: right; background-size: contain; background-repeat: no-repeat; ">
+<div class="bva-title-wrapper bva-title-wrapper-dev">
 
-		<div style="position: absolute; margin-top: 10px ; margin-left: 20px; max-width: 60%">
-		<h1 style="margin-bottom: 0px; max-width: 100px;">Development</h1>
+	<div class="bva-title-wrapper-inner">
+	
+		<h1 class="bva-title-text">Development</h1>
 		<p>Decreased cost of problem detection and impact</p>
-		</div>
+	
+	</div>
 
 </div>
-
 <!--end of title-->
 
 <!--start of tags-->
 <div class="tags">
 
-<span tabindex="1" class="tag">
-  <span class="tag__key">email:</span>
-  alistair.emslie@dynatrace.com
-</span>
-<span tabindex="1" class="tag">
-  <span class="tag__key">id:</span>
-  hoaApJ2XUl
-</span>
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">email:</span>
+	  alistair.emslie@dynatrace.com
+	</span>
+	
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">id:</span>
+	  hoaApJ2XUl
+	</span>
+	
 </div>
 <!--end of tags-->
-
 
 <br />
 
 <!--start of progress-->
-<div class="progress" style="width: 100%"><div style="width: 30%; display: inline-block; text-align: center; margin-bottom: 20px "><a href="/operations"><img src="/static/next-blue.svg" style="transform: rotate(180deg);height:75px; width: 75px"/></a><br />Previous</div><div class="theme--royalblue" style="width: 40%; display: inline-block;vertical-align:top; margin-top: 15px "><label class="label--progressbar" for="p1">3/4</label><progress class="progressbar" value="3" max="4" if="p1"></progress></div><div style="width: 30%; display: inline-block; text-align: center"><img src="/static/next-blue.svg" style="height:75px; width: 75px"/><br />Next</div></div>
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a href="/operations"><img src="/static/arrow-blue.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--royalblue bva-progress-wrapper"><label class="label--progressbar" for="p1">3/4</label><progress class="progressbar" value="3" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><img src="/static/arrow-blue.svg" class="bva-progress-button"/><br />Next</div></div>
 <!--end of progress-->
 
-
-
 <!--start of questions-->
-	<div style="padding-bottom: 20px; color: black; width: 100%;">
+<div class="bva-all-question-wrapper">
 	
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/release.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Release cycles per year for all applications</label>
-	<input type="text" class="inputfield" id="i1" placeholder="# of release cycles" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
+	<div class="bva-question-wrapper">
 	
-	<br /><br />
-
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/days.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Number of days to complete a release cycle</label>
-	<input type="text" class="inputfield" id="i1" placeholder="# of days" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
+		<img src="/static/release-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+			
+			<label for="cycles_per_year" class="label bva-question-text">Release cycles per year for all applications</label>
+			<input type="text" class="inputfield bva-question-input" id="cycles_per_year" placeholder="# of release cycles"/>
+	
+		</div>
+	
 	</div>
 	
 	<br /><br />
 
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/test.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Percentage of time spent testing per release cycle</label>
-	<input type="text" class="inputfield" id="i1" placeholder="% of time" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
+	<div class="bva-question-wrapper">
+		
+		<img src="/static/days-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">	
+			
+			<label for="cycle_days" class="label bva-question-text">Number of days to complete a release cycle</label>
+			<input type="text" class="inputfield bva-question-input" id="cycle_days" placeholder="# of days"/>
+	
+		</div>
+	
 	</div>
 	
-	<br /><br />
+		<br /><br />
 
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/performance.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Amount of QA testing time spent documenting performance issues</label>
-	<input type="text" class="inputfield" id="i1" placeholder="% of time" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
+	<div class="bva-question-wrapper">
+		
+		<img src="/static/test-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="test_per_cycle" class="label bva-question-text">Percentage of time spent testing per release cycle</label>
+			<input type="text" class="inputfield bva-question-input" id="test_per_cycle" placeholder="% of time"/>
+	
+		</div>
+	
 	</div>
 	
-	<br /><br />
+		<br /><br />
 
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/document.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Number of QA people documenting performance problems per release (QA)</label>
-	<input type="text" class="inputfield" id="i1" placeholder="# of people" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/performance-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="qa_time_per_cycle" class="label bva-question-text">Amount of QA testing time spent documenting performance issues</label>
+			<input type="text" class="inputfield bva-question-input" id="qa_time_per_cycle" placeholder="% of time"/>
+		
+		</div>
+	
 	</div>
 	
-	<br /><br />
+		<br /><br />
+
+	<div class="bva-question-wrapper">
 	
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/performance.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Amount of dev testing time spent documenting performance issues</label>
-	<input type="text" class="inputfield" id="i1" placeholder="# of people" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
+		<img src="/static/document-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">	
+			
+			<label for="qa_people_per_cycle" class="label bva-question-text">Number of QA people documenting performance problems per release (QA)</label>
+			<input type="text" class="inputfield bva-question-input" id="qa_people_per_cycle" placeholder="# of people"/>
+	
+		</div>
+	
 	</div>
+	
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/performance-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+			
+			<label for="dev_time_per_cycle" class="label bva-question-text">Amount of dev testing time spent documenting performance issues</label>
+			<input type="text" class="inputfield bva-question-input" id="dev_time_per_cycle" placeholder="# of people"/>
+		
+		</div>
+	
 	</div>
 
-	<br /><br />
+		<br /><br />
 	
-	<div style="margin: 0 auto; width: 420px; max-width: 100%; padding-left: 10px; padding-right: 10px">
-	<img src="/static/document.svg" style="max-height: 15%; max-width: 15%; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; width: 340px; max-width: 82%; ">	
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block;">Number of dev people documenting performance problems per release</label>
-	<input type="text" class="inputfield" id="i1" placeholder="%" style=" height: 50px;  font-size: 1.3em; display: inline-block"/>
-	</div>
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/document-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="dev_people_per_cycle" class="label bva-question-text">Number of dev people documenting performance problems per release</label>
+			<input type="text" class="inputfield bva-question-input" id="dev_people_per_cycle" placeholder="%"/>
+		
+		</div>
+	
 	</div>	
 	
-	
-	
-	</div>
- <!--end of questions-->
- 
+</div>
+<!--end of questions-->
 
- 
- 
- 
- 
- 
+</div>
+  
+<div class="column--1-of-2 bva-content-column">
 
-  <!--start of secondary-->
-	<div style="font-size: 1.2em; padding-left: 7%; padding-right: 7%; padding-bottom: 10%">
-
-	
-	
-	
-	</div>
-  
-  <!--end of secondary-->
-  
-  
-
-
-
-
-
-
-
-
-  
-
-	
-	
-	
-  </div>
-  
-  
-  
-  
-  
-  <div class="column--1-of-2" style=" background-color:white; margin-bottom: 20px; border-radius: 5px;">
-
-  
-   <div id="container" style="float: left; height: 300px; width: 100%; margin-bottom: 50px;"></div>
-  
-  
-  
-  
-  
-  </div>
 </div>
 
-
-
-
-
-
-
-
-		
+</div>
 <!--end of content-->
 
 <script src="/static/main.js"></script>
