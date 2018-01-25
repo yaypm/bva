@@ -3141,7 +3141,7 @@ ol.list ol ul ul li:before {
   margin: 0;
   padding: 0; }
 
-  /**al change was 4px**/
+  /**al change was 4px and aeebf0 (background) 4fd5e0 (color)**/
 .progressbar {
   position: relative;
   background-image: none;
@@ -3177,7 +3177,7 @@ ol.list ol ul ul li:before {
 
 .theme--blue .progressbar[value]::-moz-progress-bar {
   background-color: #2ab6f4; }
-
+  
 .theme--purple .progressbar {
   background-color: #debbf3;
   color: #a972cc; }
@@ -3236,11 +3236,11 @@ ol.list ol ul ul li:before {
      right: 0;
      bottom: 100px;
      left: 0;
-	background-color: rgb(3, 106, 186); 
+	background-color: #008bdb; 
 	color: white; 
 	border-radius: 20px;
 	text-align: center; 
-	box-shadow: 0px 0px 30px 30px rgb(3, 106, 186); 
+	box-shadow: 0px 0px 30px 30px #008bdb; 
 	color: white; }		
 	
 #intro_box h1 {
@@ -3283,11 +3283,11 @@ ol.list ol ul ul li:before {
      right: 0;
      bottom: 100px;
      left: 0;
-	background-color: rgb(3, 106, 186); 
+	background-color: #008bdb; 
 	color: white; 
 	border-radius: 20px;
 	text-align: center; 
-	box-shadow: 0px 0px 30px 30px rgb(3, 106, 186); 
+	box-shadow: 0px 0px 30px 30px #008bdb; 
 	color: white; }		
 	
 @font-face {
@@ -3313,9 +3313,9 @@ ol.list ol ul ul li:before {
 	font-size: 1em; }
 	
 .landing-body {
-	background-image: url(/static/universe.svg); 
+	background-image: url(/static/welcome-background.svg); 
 	background-size: cover; 
-	background-color: rgb(3, 106, 186); }
+	background-color: #008bdb; }
 
 .bva-body {
 	background-color: #f2f2f2; }
@@ -3367,6 +3367,10 @@ ol.list ol ul ul li:before {
 .bva-title-wrapper-dev {
 	background-image: url(/static/dev.svg);
 	background-color: #1496ff;  }		
+
+.bva-title-wrapper-options {
+	background-image: url(/static/options.svg);
+	background-color: #1a1a1a;  }	
 	
 .bva-title-wrapper-inner {
 	position: absolute; 
@@ -3459,3 +3463,20 @@ ol.list ol ul ul li:before {
 	height: 50%; 
 	text-align: center; 
 	vertical-align: middle; }
+	
+.bva-progress-grey {
+	background-color: #1a1a1a;
+	color: #1a1a1a;	}
+
+.theme--grey .progressbar {
+  background-color: #1a1a1a;
+  color: #1a1a1a; }
+
+.theme--grey .progressbar[value]::-webkit-progress-bar {
+  background-color: #1a1a1a; }
+
+.theme--grey .progressbar[value]::-webkit-progress-value {
+  background-color: #1a1a1a; }
+
+.theme--grey .progressbar[value]::-moz-progress-bar {
+  background-color: #1a1a1a; }	

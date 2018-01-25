@@ -36,7 +36,13 @@ module.exports = function(app, db) {
 		
 		res.sendFile(path.join(__dirname + '/landing.html'));
 
-	});		
+	});	
+
+	app.get('/options', (req, res) => {
+		
+		res.sendFile(path.join(__dirname + '/options.html'));
+
+	});	
 	
 	app.get('/getOptions', (req, res) => {	
 		var userId = req.header('userId');

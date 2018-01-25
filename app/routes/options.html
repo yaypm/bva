@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<title>Dynatrace Business Value Calculator</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" type="text/css" href='/static/main.css' />
+	<script src='/static/es6-promise.auto.js'></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="icon" href="https://dt-cdn.net/assets/images/brand/favicon-63e287af7c.ico">
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<script src="/static/finance.js"></script>
+	<style>a:hover {cursor:pointer;}</style>
+	<script src="/static/bva.js"></script>
+
+</head>
+
+<body class="bva-body">
+
+<!--start of nav bar-->
+<div class="nav has-no-secondary">
+
+  <a class="nav__brand" href="/">
+    <img class="nav__logo" src="http://assets.dynatrace.com/global/logos/dynatrace-logo.svg" alt="dynatrace logo"/>
+  </a>
+
+  <nav id="nav-bar-example1" class="nav__bar">
+  </nav>
+  
+</div>
+<!--end of nav bar-->
+
+<!--start of content-->
+
+<div class="section bva-content">
+  
+<div class="column--1-of-2 bva-content-column">
+ 
+<!-- start of title -->   
+<div class="bva-title-wrapper bva-title-wrapper-options">
+
+	<div class="bva-title-wrapper-inner">
+	
+		<h1 class="bva-title-text">Options</h1>
+		<p>Provide the impact that Dynatrace will have to you</p>
+	
+	</div>
+
+</div>
+<!--end of title-->
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">email:</span>
+	  alistair.emslie@dynatrace.com
+	</span>
+	
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">id:</span>
+	  hoaApJ2XUl
+	</span>
+	
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a href="/development"><img src="/static/arrow-grey.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--grey bva-progress-wrapper"><label class="label--progressbar" for="p1">4/4</label><progress class="progressbar" value="4" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><img src="/static/finish-grey.svg" class="bva-progress-button"/><br />Finished!</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+	
+	<h2 class="bva-question-text-centre">IT labour costs</h2>
+	
+		<br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/ops-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+			
+			<label for="operation_cost" class="label bva-question-text">Fully loaded cost of operations person</label>
+			<input type="text" class="inputfield bva-question-input" id="operation_cost" placeholder="£" value="£55,000"/>
+	
+		</div>
+	
+	</div>
+	
+	<br /><br />
+
+	<div class="bva-question-wrapper">
+		
+		<img src="/static/dev-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">	
+			
+			<label for="developer_cost" class="label bva-question-text">Fully loaded cost of developer</label>
+			<input type="text" class="inputfield bva-question-input" id="developer_cost" placeholder="£" value="£56,000"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+		
+		<img src="/static/test-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="qa_cost" class="label bva-question-text">Fully loaded cost of QA person</label>
+			<input type="text" class="inputfield bva-question-input" id="qa_cost" placeholder="£" value="£46,000"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/time-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="work_hours" class="label bva-question-text">Work hours per year</label>
+			<input type="text" class="inputfield bva-question-input" id="work_hours" placeholder="# hours per year" value="1,950"/>
+		
+		</div>
+	
+	</div>
+	
+		<br />
+	
+	<h2 class="bva-question-text-centre">Dynatrace benefits</h2>
+	
+		<br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/incident-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">	
+			
+			<label for="benefit_incident_reduction" class="label bva-question-text">Incident reduction in production through pro-active detection</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_incident_reduction" placeholder="# of people" value="30%"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/analysis-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+			
+			<label for="benefit_mttr" class="label bva-question-text">Faster MTTR and root cause analysis in production</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_mttr" placeholder="# of people" value="90%"/>
+		
+		</div>
+	
+	</div>
+
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/performance-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="benefit_performance" class="label bva-question-text">Page load improvement</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_performance" placeholder="%" value="25%"/>
+		
+		</div>
+	
+	</div>	
+
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/alert-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="benefit_alert_storm" class="label bva-question-text">Alert storm reduction</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_alert_storm" placeholder="%" value="88%"/>
+		
+		</div>
+	
+	</div>	
+
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/sla-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="benefit_sla" class="label bva-question-text">Improvement on SLA achievement</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_sla" placeholder="%" value="75%"/>
+		
+		</div>
+	
+	</div>
+
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/find-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="benefit_fix_qa" class="label bva-question-text">Reduced time finding and fixing performance problems in QA</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_fix_qa" placeholder="%" value="90%"/>
+		
+		</div>
+	
+	</div>	
+
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/down-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="benefit_prod_reduction" class="label bva-question-text">Incident reduction in production by finding and fixing defects in Dev and QA</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_prod_reduction" placeholder="%" value="55%"/>
+		
+		</div>
+	
+	</div>
+
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/config-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="benefit_config" class="label bva-question-text">Reduced time spent implementing and configuring vs. existing tools</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_config" placeholder="%" value="97%"/>
+		
+		</div>
+	
+	</div>
+	
+</div>
+<!--end of questions-->
+
+</div>
+  
+<div class="column--1-of-2 bva-content-column">
+
+</div>
+
+</div>
+<!--end of content-->
+
+<script src="/static/main.js"></script>
+
+</body>
+
+</html>
