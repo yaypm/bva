@@ -13,7 +13,7 @@
 	<script src="/static/finance.js"></script>
 	<style>a:hover {cursor:pointer;}</style>
 	<script src="/static/bva.js"></script>
-
+	
 </head>
 
 <body class="bva-body">
@@ -153,12 +153,68 @@
 </div>
   
 <div class="column--1-of-2 bva-content-column">
- 
+
+	
+	<div id="total_stacked_bar" style="width: 100%; height: 400px; margin: 0 auto"></div>
+	
+	
+	
+	
+
+	<div class="layout is-flex has-islands">
+	  <div class="island">
+		<div id="total_pie" style="height: 400px;"></div>
+	  </div>
+
+	  <div class="island">
+		
+		<table class="table">
+  <thead>
+    <tr>
+      <th>timeseries id</th>
+      <th>name</th>
+      <th>unit</th>
+      <th>aggregations</th>
+      <th>filters</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>com.ruxit.builtin:host.cpu idle</td>
+      <td>CPU idle</td>
+      <td>%</td>
+      <td>min, max, sum, avg</td>
+      <td>osType</td>
+    </tr>
+    <tr>
+      <td>com.ruxit.builtin:host.cpu system</td>
+      <td>CPU system</td>
+      <td>%</td>
+      <td>min, max, sum, avg</td>
+      <td>osType</td>
+    </tr>
+    <tr>
+      <td>com.ruxit.builtin:host.cpu.load</td>
+      <td>CPU load</td>
+      <td>%</td>
+      <td>min, max, sum, avg</td>
+      <td>osType</td>
+    </tr>
+  </tbody>
+</table>
+		
+	  </div>
+	</div>
+
+	
+	
+
+	
 </div>
 
 </div>
 <!--end of content-->
-
+<script src="/static/result_charts.js"></script>
 <script src="/static/main.js"></script>
 
 </body>
