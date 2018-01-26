@@ -1,19 +1,29 @@
 Highcharts.chart('total_stacked_bar', {
-    chart: {
-        type: 'column'
+    colors: ['#1496ff','#73be28','#9355b7'],
+	chart: {
+        type: 'column',
+		style: {
+            fontFamily: 'BerninaSans'
+        }
     },
+	exporting: {
+		enabled: false
+	},
     title: {
-        text: 'Total cost savings and revenue gains with Dynatrace'
+        text: ''
     },
+	credits: {
+		enabled: false
+	},
     xAxis: {
         categories: ['Year 1', 'Year 2', 'Year 3']
     },
     yAxis: {
         min: 0,
-        title: {
-            text: 'Total fruit consumption'
-        },
-        stackLabels: {
+		title: {
+				text: ''
+		},
+            stackLabels: {
             enabled: true,
             style: {
                 fontWeight: 'bold',
@@ -22,14 +32,11 @@ Highcharts.chart('total_stacked_bar', {
         }
     },
     legend: {
-        align: 'right',
-        x: -30,
-        verticalAlign: 'top',
-        y: 25,
-        floating: true,
+        align: 'center',
+        verticalAlign: 'bottom',     
         backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
         borderColor: '#CCC',
-        borderWidth: 1,
+        borderWidth: 0,
         shadow: false
     },
     tooltip: {
@@ -42,36 +49,50 @@ Highcharts.chart('total_stacked_bar', {
             dataLabels: {
                 enabled: true,
                 color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-            }
-        }
+            },
+		},
+		series: {
+			borderWidth:0
+		}
     },
     series: [{
-        name: 'Business',
+        name: 'Development',
         data: [564720, 632486, 708385]
     }, {
         name: 'Operations',
         data: [1687642, 2336059, 2521387]
     }, {
-        name: 'Development',
+        name: 'Business',
         data: [2107500, 2360400, 2643648]
     }]
 });
 
 Highcharts.chart('total_pie', {
+	colors: ['#1496ff','#73be28','#9355b7'],
+	credits: {
+		enabled: false
+	},
+	exporting: {
+		enabled: false
+	},	
     chart: {
         plotBackgroundColor: null,
         plotBorderWidth: null,
         plotShadow: false,
-        type: 'pie'
+        type: 'pie',
+		style: {
+            fontFamily: 'BerninaSans'
+        }		
     },
     title: {
-        text: 'Total savings'
+        text: ''
     },
     tooltip: {
         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
     },
     plotOptions: {
         pie: {
+			borderWidth:0,
             allowPointSelect: true,
             cursor: 'pointer',
             dataLabels: {
@@ -84,14 +105,14 @@ Highcharts.chart('total_pie', {
         name: 'Brands',
         colorByPoint: true,
         data: [{
-            name: 'Business',
-            y: 7111548
+            name: 'Development',
+            y: 1905591
         }, {
             name: 'Operations',
             y: 6545088,
         }, {
-            name: 'Development',
-            y: 1905591
+            name: 'Business',
+            y: 7111548
         }]
     }]
 });
