@@ -10,7 +10,9 @@ Highcharts.chart('total_stacked_bar', {
 		enabled: false
 	},
     title: {
-        text: ''
+        text: 'Cost savings and revenue gains with Dynatrace',
+		align: 'left',
+		margin: 30
     },
 	credits: {
 		enabled: false
@@ -52,7 +54,9 @@ Highcharts.chart('total_stacked_bar', {
             },
 		},
 		series: {
-			borderWidth:0
+			borderWidth:0,
+			pointPadding: 0,
+			groupPadding: 0.1
 		}
     },
     series: [{

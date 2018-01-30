@@ -3371,6 +3371,10 @@ ol.list ol ul ul li:before {
 .bva-title-wrapper-options {
 	background-image: url(/static/options.svg);
 	background-color: #1a1a1a;  }	
+
+.bva-title-wrapper-results {
+	/* background-image: url(/static/biz.svg); */
+	background-color: #9355b7;  }	
 	
 .bva-title-wrapper-inner {
 	position: absolute; 
