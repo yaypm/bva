@@ -2760,3 +2760,37 @@ function financialAnalysis() {
 	})
 }
 
+	<table class="table" style="margin-left: 5%; margin-right: 10%">
+	  <thead>
+		<tr>
+		  <th></th>
+		  <th>Year 1</th>
+		  <th>Year 2</th>
+		  <th>Year 3</th>
+		  <th><b>Total</b></th>
+		</tr>
+	  </thead>
+	  <tbody>
+		<tr style="background-color: #9355b7; color: white;">
+		  <td style="padding-left: 2px; padding-right: 2px"><img src="/static/biz.svg" style="width: 20px; height: 20px"> Biz</td>
+		  <td style="padding-left: 2px; padding-right: 2px">£2,107,500</td>
+		  <td style="padding-left: 2px; padding-right: 2px">£2,360,400</td>
+		  <td style="padding-left: 2px; padding-right: 2px">£2,643,648</td>
+		  <td style="padding-left: 2px; padding-right: 2px">£7,111,548</td>
+		</tr>
+		<tr style="background-color: #73be28; color: white">
+		  <td><img src="/static/ops.svg" style="width: 20px; height: 20px"> Ops</td>
+		  <td>£1,687,642</td>
+		  <td>£2,336,059</td>
+		  <td>£2,521,387</td>
+		  <td>£6,545,088</td>
+		</tr>
+		<tr style="background-color: #1496ff; color: white">
+		  <td><img src="/static/dev.svg" style="width: 20px; height: 20px"> Dev</td>
+		  <td>£564,720</td>
+		  <td>£632,486</td>
+		  <td>£708,385</td>
+		  <td>£1,905,591</td>
+		</tr>
+	  </tbody>
+	</table>
