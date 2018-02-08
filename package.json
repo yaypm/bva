@@ -25,7 +25,8 @@
 	"mongodb": "^2.2.31",
 	"es6-promise": "^4.2.2",
 	"bcrypt": "^1.0.3",
-	"connect-mongo": "^2.0.1"
+	"connect-mongo": "^2.0.1",
+	"express-session": "^1.15.6"
 
   },
   "engines": {
