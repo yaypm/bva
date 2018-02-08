@@ -10,9 +10,13 @@
 	<link rel="icon" href="https://dt-cdn.net/assets/images/brand/favicon-63e287af7c.ico">
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
-	<script src="/static/finance.js"></script>
 	<style>a:hover {cursor:pointer;}</style>
 	<script src="/static/bva.js"></script>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function(event) {
+			getAssessmentList();
+		});
+	</script>
 
 </head>
 
@@ -31,20 +35,22 @@
 	
 		<br />
 	
-	<select class="select bva-select" id="bva_select" >
-	  <option value="hoaApJ2XUl" selected="selected">Dynatrace - hoaApJ2XUl</option>
-	  <option value="OpxegkYks5">Compuserve - OpxegkYks5</option>
-	  <option value="uhJNqx5tPh">Dynorod - uhJNqx5tPh</option>
-	</select>
+	<form action="/workflow" method="get" enctype="application/x-www-form-urlencoded">
 	
-	<br /><br /> 	
+		<select class="select bva-select" name="bva_id" id="bva_select" >
+		 
+		</select>
+		
+		<br /><br /> 	
+		
+		<a href="/"><button id="landing_box_submit" type="submit" class="btn btn--primary theme--dark">Continue</button></a>
+		
+			<br /><br /><br />
+		
+		<button id="landing_box_new" type="submit" class="btn btn--secondary theme--dark landing-button">Create new</button> <button role="button" id="landing_box_password" type="button" class="btn btn--secondary theme--dark landing-button">Change password</button>
+
+	</form>
 	
-	<a href="/business"><button id="landing_box_submit" type="button" class="btn btn--primary theme--dark">Continue</button></a>
-	
-		<br /><br /><br />
-	
-	<button role="button" id="landing_box_new" type="button" class="btn btn--secondary theme--dark landing-button">Create new</button> <button role="button" id="landing_box_password" type="button" class="btn btn--secondary theme--dark landing-button">Change password</button>
-			
 </div> 
 
 </div>		

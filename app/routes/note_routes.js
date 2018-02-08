@@ -1,13 +1,72 @@
 var request = require('request-promise');
 var express = require('express');
+var session = require('express-session');
 const bodyParser = require('body-parser');
 var path = require('path');
 var MongoClient = require('mongodb').MongoClient;
+var bcrypt = require('bcrypt');
+const MongoStore = require('connect-mongo')(session);
+
 
 module.exports = function(app, db) {
 
-	app.use(bodyParser.json());
+	connectionOptions = process.env.MONGO_URI;
 
+	app.use(bodyParser.urlencoded({ extended: true }))
+	app.use(bodyParser.json());
+	app.use(session({
+		secret: process.env.COOKIE_SECRET,
+		resave: false,
+		saveUninitialized: false,
+		store: new MongoStore({url: connectionOptions}),
+		cookie: { secure: false }
+	}));
+
+	function requiresLogin(req, res) {
+  
+		if (req.session && req.session.username) {
+			return true;
+		} 
+		
+		else {
+			console.log("Not logged in user attempted access");
+			return false;
+		}
+	}
+	
+	function generateId() {
+		
+		var text = "";
+		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+		for (var i = 0; i < 16; i++)
+			text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+		return text;
+	}	
+	
+	function checkAssessmentStatus(req, res) {
+		var username = req.session.username;
+		var bva_id = req.query.bva_id;
+		
+		MongoClient.connect(connectionOptions, function(err, db) {
+			var collection = db.collection('user_assessments');
+			collection.findOne({username:username, _id:bva_id}, function(err, result) {
+				if (err) throw err;
+					if(result != null) {
+						res.sendFile(path.join(__dirname + '/workflow.html'));
+						console.log(username + " is accessing " + bva_id);
+					}
+					else {
+						res.redirect('/landing');
+						console.log(username + " tried to access a bva they don't have access to: " + bva_id);
+					}
+				
+					db.close();
+			});
+		})
+	}
+	
 	app.get('/', (req, res) => {
 		
 		res.sendFile(path.join(__dirname + '/index.html'));
@@ -33,446 +92,258 @@ module.exports = function(app, db) {
 	});	
 	
 	app.get('/landing', (req, res) => {
-		
-		res.sendFile(path.join(__dirname + '/landing.html'));
-
+		if (requiresLogin(req, res) == false) {
+			res.redirect('/');
+		}
+		else {
+			res.sendFile(path.join(__dirname + '/landing.html'));
+		}	
 	});	
 
 	app.get('/options', (req, res) => {
-		
+
 		res.sendFile(path.join(__dirname + '/options.html'));
 
 	});	
 	
-	app.get('/getOptions', (req, res) => {	
-		var userId = req.header('userId');
-		console.log(userId + " is getting options");
-		
-		//var resp = "test";
-		
-		MongoClient.connect("mongodb://dtbva:ijustwannahaveabeerwithmymates@ds141274.mlab.com:41274/dtbva", function(err, db) {
-			if(err) { return console.dir(err); }
+	app.get('/workflow', (req, res) => {
+		if (requiresLogin(req, res) == false) {
+			res.redirect('/');
+		}
+		else {
+			checkAssessmentStatus(req, res);
+		}
 
-			var collection = db.collection('option');
-			var results = collection.find({_id:userId}).toArray(function(err, items) {
-			var resp = JSON.stringify(items[0]);
-				
-				console.log(userId + " received options");
-				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-				res.end(resp);
-				db.close();
-			});
-		});
-	});
-	
-	app.post('/insertOptions', (req, res) => {
-		var userId = req.body.userId;
-		var it_downtime = req.body.it_downtime;
-		var employee_productivity = req.body.employee_productivity;
-		var incident_frequency = req.body.incident_frequency;
-		var service_desk = req.body.service_desk;
-		var sla_compliance = req.body.sla_compliance;
-		var cloud_bill = req.body.cloud_bill;
-		var speed_market = req.body.speed_market;
-		
-		var company_name = req.body.company_name;
-		var study_period = req.body.study_period;
-		var dynatrace_cost = req.body.dynatrace_cost;
-		var competitive_analysis = req.body.competitive_analysis;
-		
-		console.log(userId + " is inserting options");
-		
-		MongoClient.connect("mongodb://dtbva:ijustwannahaveabeerwithmymates@ds141274.mlab.com:41274/dtbva", function(err, db) {
-			if(err) { return console.dir(err); }
-
-			var collection = db.collection('option');
-			
-			collection.update({'_id':userId},{$set:{'it_downtime':it_downtime,'employee_productivity':employee_productivity,'incident_frequency':incident_frequency,'service_desk':service_desk,'sla_compliance':sla_compliance,'cloud_bill':cloud_bill,'speed_market':speed_market,'company_name':company_name,'study_period':study_period,'dynatrace_cost':dynatrace_cost,'competitive_analysis':competitive_analysis}});
-		});
-		console.log(userId + " inserted options");
-		res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-		res.end("success!");
-		db.close();
-	});
-	
-	app.post('/insertExpectedBenefits', (req, res) => {
-		if(typeof req.body.userId !== undefined) {var userId = req.body.userId;}
-		if(typeof req.body.dec_rev_incidents !== undefined) {var dec_rev_incidents = req.body.dec_rev_incidents;} else {var dec_rev_incidents = '';}
-		if(typeof req.body.reduce_downtime !== undefined) {var reduce_downtime = req.body.reduce_downtime;} else {var reduce_downtime = '';}
-		if(typeof req.body.increase_employee_prod !== undefined) {var increase_employee_prod = req.body.increase_employee_prod;} else {var increase_employee_prod = '';}
-		if(typeof req.body.decrease_user_incidents !== undefined) {var decrease_user_incidents = req.body.decrease_user_incidents;} else {var decrease_user_incidents = '';}
-		if(typeof req.body.reduce_incident_resolve !== undefined) {var reduce_incident_resolve = req.body.reduce_incident_resolve;} else {var reduce_incident_resolve = '';}
-		if(typeof req.body.reduce_service_desk !== undefined) {var reduce_service_desk = req.body.reduce_service_desk;} else {var reduce_service_desk = '';}
-		if(typeof req.body.reduce_sla_penalties !== undefined) {var reduce_sla_penalties = req.body.reduce_sla_penalties;} else {var reduce_sla_penalties = '';}
-		if(typeof req.body.reduce_sla_resources !== undefined) {var reduce_sla_resources = req.body.reduce_sla_resources;} else {var reduce_sla_resources = '';}
-		if(typeof req.body.reduce_cloud_bill !== undefined) {var reduce_cloud_bill = req.body.reduce_cloud_bill;} else {var reduce_cloud_bill = '';}
-		if(typeof req.body.increase_time_market !== undefined) {var increase_time_market = req.body.increase_time_market;} else {var increase_time_market = '';}
-		
-		console.log(userId + " is inserting expected benefits");
-			
-		MongoClient.connect("mongodb://dtbva:ijustwannahaveabeerwithmymates@ds141274.mlab.com:41274/dtbva", function(err, db) {
-			if(err) { return console.dir(err); }
-			
-			var collection = db.collection('expected_benefits');
-			
-			var fullJson = {'_id':userId,'dec_rev_incidents':dec_rev_incidents,'reduce_downtime':reduce_downtime,'increase_employee_prod':increase_employee_prod,'decrease_user_incidents':decrease_user_incidents,'reduce_incident_resolve':reduce_incident_resolve,'reduce_service_desk':reduce_service_desk,'reduce_sla_penalties':reduce_sla_penalties, 'reduce_sla_resources':reduce_sla_resources, 'reduce_cloud_bill':reduce_cloud_bill,'increase_time_market':increase_time_market};
-			
-			collection.find({_id:userId}).toArray(function(err, items) { 
-		
-				if(items[0] != undefined) {
-					collection.update({'_id':userId},{$set:{'dec_rev_incidents':dec_rev_incidents,'reduce_downtime':reduce_downtime,'increase_employee_prod':increase_employee_prod,'decrease_user_incidents':decrease_user_incidents,'reduce_incident_resolve':reduce_incident_resolve,'reduce_service_desk':reduce_service_desk,'reduce_sla_penalties':reduce_sla_penalties,'reduce_sla_resources':reduce_sla_resources,'reduce_cloud_bill':reduce_cloud_bill,'increase_time_market':increase_time_market}});		
-					console.log(userId + " updated expected benefits");
-				} 
-				
-				else {
-					collection.insert(fullJson, {w:1}, function(err, result) { if(err!=null){console.log(err);}     console.log(userId + " inserted fresh expected benefits");    });								
-				}
-			});
-			
-		});
-		
-		res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-		res.end("success!");
-		db.close();
-	});
-
-	app.get('/getExpectedBenefits', (req, res) => {	
-		var userId = req.header('userId');
-		console.log(userId + " is getting expected benefits");
-		
-		var resp = "test";
-		
-		MongoClient.connect("mongodb://dtbva:ijustwannahaveabeerwithmymates@ds141274.mlab.com:41274/dtbva", function(err, db) {
-			if(err) { return console.dir(err); }
-
-			var collection = db.collection('expected_benefits');
-			var results = collection.find({_id:userId}).toArray(function(err, items) {
-				var resp = JSON.stringify(items[0]);
-				console.log(userId + " retrieved expected benefits");
-				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-				res.end(resp);
-				db.close();
-			});
-		});
-	});	
-
-	app.post('/insertGeneralDetails', (req, res) => {
-		var userId = req.body.userId;
-		if(typeof req.body.bus_days !== undefined) {var bus_days = req.body.bus_days;} else {var bus_days = '';}
-		if(typeof req.body.npv !== undefined) {var npv = req.body.npv;} else {var npv = '';}		
-		if(typeof req.body.avg_salary !== undefined) {var avg_salary = req.body.avg_salary;} else {var avg_salary = '';}
-		if(typeof req.body.svc_desk_cost !== undefined) {var svc_desk_cost = req.body.svc_desk_cost;} else {var svc_desk_cost = '';}	
-		if(typeof req.body.rev_growth !== undefined) {var rev_growth = req.body.rev_growth;} else {var rev_growth = '';}
-		if(typeof req.body.confidence !== undefined) {var confidence = req.body.confidence;} else {var confidence = '';}			
-
-		console.log(userId + " is inserting general details");
-		
-		MongoClient.connect("mongodb://dtbva:ijustwannahaveabeerwithmymates@ds141274.mlab.com:41274/dtbva", function(err, db) {
-			if(err) { return console.dir(err); }
-			
-			var collection = db.collection('general');
-			
-			var fullJson = {'_id':userId,'bus_days':bus_days,'npv':npv,'avg_salary':avg_salary,'svc_desk_cost':svc_desk_cost,'rev_growth':rev_growth,'confidence':confidence};
-			
-			collection.find({_id:userId}).toArray(function(err, items) { 
-		
-				if(items[0] != undefined) {
-					collection.update({'_id':userId},{$set:{'bus_days':bus_days,'npv':npv,'avg_salary':avg_salary,'svc_desk_cost':svc_desk_cost,'rev_growth':rev_growth,'confidence':confidence}});		
-					console.log(userId + " updated general details");		
-				} 
-				
-				else {
-					collection.insert(fullJson, {w:1}, function(err, result) { if(err!=null){console.log(err);}     console.log(userId + " inserted new general details");   });								
-				}
-			});
-			
-		});
-		
-		res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-		res.end("success!");
-		db.close();
-	});	
-	
-	app.get('/getGeneralDetails', (req, res) => {	
-		var userId = req.header('userId');
-		console.log(userId + " is getting general details");
-		
-		//var resp = "test";
-		
-		MongoClient.connect("mongodb://dtbva:ijustwannahaveabeerwithmymates@ds141274.mlab.com:41274/dtbva", function(err, db) {
-			if(err) { return console.dir(err); }
-
-			var collection = db.collection('general');
-			var results = collection.find({_id:userId}).toArray(function(err, items) {
-				var resp = JSON.stringify(items[0]);
-				console.log(userId + " retrieved general details");
-				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-				res.end(resp);
-				db.close();
-			});
-		});
 	});		
-
-	app.post('/addApplication', (req, res) => {
-		var userId = req.body.userId;
-		var application_id = req.body.application_id;
-		var application_name = req.body.application_name;
-		var application_users = req.body.application_users;
-		
-		console.log(userId + " is adding an application");	
-
-		MongoClient.connect("mongodb://dtbva:ijustwannahaveabeerwithmymates@ds141274.mlab.com:41274/dtbva", function(err, db) {
-			if(err) { return console.dir(err); }
-			
-			var collection = db.collection('applications');
-			
-			var fullJson = {'_id':application_id,'userId':userId,'application_name':application_name, 'application_users': application_users};
-					
-			collection.insert(fullJson, {w:1}, function(err, result) { if(err!=null){console.log(err);}     console.log(userId + " inserted an application");    });										
-		});
-		
-		res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-		res.end("success!");
-		db.close();
-	});	
 	
-	app.post('/deleteApplication', (req, res) => {
-		var application_id = req.body.application_id;
+	app.post('/createUser', (req, res) => {	
+		requiresLogin(req, res);
+		var username = req.body.username;
+		var passwd = generateId();
 		
-		//console.log(userId + " is deleting an application");
-		
-		MongoClient.connect("mongodb://dtbva:ijustwannahaveabeerwithmymates@ds141274.mlab.com:41274/dtbva", function(err, db) {
-			if(err) { return console.dir(err); }
-			
-			var collection = db.collection('applications');
-			
-			collection.deleteOne( { _id: application_id } );
+		bcrypt.hash(passwd, 10, function (err, hash){
+    
+			if (err) {
 				
-			//console.log(userId + " deleted an application");	
-		});
-		
-		res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-		res.end("success!");
-		db.close();
-	});	
+				return err;
+    
+			}
 
-	app.get('/getApplications', (req, res) => {	
-		var userId = req.header('userId');
-		console.log(userId + " is getting applications");
+			passwd = hash;
+			//console.log(passwd + " is the hashed password.");
+			
+			var user = {
+				_id: req.body.username,
+				password: passwd
+			}
 		
-		var jsonStr = '{"application":[]}';
-		var obj = JSON.parse(jsonStr);
-		
-		MongoClient.connect("mongodb://dtbva:ijustwannahaveabeerwithmymates@ds141274.mlab.com:41274/dtbva", function(err, db) {
-			if(err) { return console.dir(err); }
+			MongoClient.connect(connectionOptions, function(err, db) {
+				if(err) { return console.dir(err); }
 
-			var collection = db.collection('applications');
-			var results = collection.find({'userId':userId}).toArray(function(err, items) {
-				
-				for(i=0; i < items.length; i++) {
-					obj['application'].push({'id': items[i]._id, 'application_name':items[i].application_name, 'application_users':items[i].application_users})
-				}
-				
-				console.log(userId + " retrieved applications");
-				resp = JSON.stringify(obj);
-				
-				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-				res.end(resp);
-				db.close();
+					var collection = db.collection('users');
+					collection.insert(user, {w:1}, function(err, result) { 
+					
+						if(err!=null){
+							console.log("could not insert " + username);   
+							res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+							res.end("failure");
+							db.close();
+						}   
+						
+						else {					
+							console.log("inserted " + username);   
+							res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+							res.end("success");
+							db.close();
+						}	
+					});	
 			});
 		});
-	});	
-
-	app.post('/insertProductCosts', (req, res) => {
-		var userId = req.body._id;
-		var obj = req.body;
-		
-		console.log(userId + " is inserting product costs");
-		
-		MongoClient.connect("mongodb://dtbva:ijustwannahaveabeerwithmymates@ds141274.mlab.com:41274/dtbva", function(err, db) {
-			if(err) { return console.dir(err); }
-			
-			var collection = db.collection('product_cost');
-			
-			collection.find({_id:userId}).toArray(function(err, items) { 
-		
-				if(items[0] != undefined) {
-					
-					for(i=0;i<obj.costs.length;i++) {
-						var query = {};
-						query["costs." + i + ".license_fees"] = obj.costs[i].license_fees;						
-						query["costs." + i + ".maintenance"] = obj.costs[i].maintenance;	
-						query["costs." + i + ".hardware"] = obj.costs[i].hardware;	
-						query["costs." + i + ".implementation"] = obj.costs[i].implementation;	
-						query["costs." + i + ".training"] = obj.costs[i].training;							
-						
-						collection.update({'_id':userId},{$set: query  });	
-					}
-					
-					console.log(userId + " updated product costs");
-				} 
-				
-				else {
-					
-					collection.insert(req.body, {w:1}, function(err, result) { if(err!=null){console.log(err);}     console.log(userId + " inserted new product costs");   });								
-				}
-			});			
-													
-		});
-		
-		res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-		res.end("success!");
-		db.close();
-	});	
-	
-	app.get('/getProductCosts', (req, res) => {	
-		var userId = req.header('userId');
-		var noYears = req.header('noYears');
-		
-		console.log(userId + " is getting product costs");
-		
-		MongoClient.connect("mongodb://dtbva:ijustwannahaveabeerwithmymates@ds141274.mlab.com:41274/dtbva", function(err, db) {
-			if(err) { return console.dir(err); }
-
-			var collection = db.collection('product_cost');
-			var results = collection.find({'_id':userId}).toArray(function(err, items) {
-				//console.log(items);
-
-				console.log(userId + " retrieved product costs");
-				resp=JSON.stringify(items);
-				
-				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-				res.end(resp);
-				db.close();
-			});
-		});
-	});	
-
-	app.post('/insertApplicationDetails', (req, res) => {
-		var userId = req.body._id;
-		var obj = req.body;
-		
-		console.log(userId + " is inserting application details");
-		
-		
-		MongoClient.connect("mongodb://dtbva:ijustwannahaveabeerwithmymates@ds141274.mlab.com:41274/dtbva", function(err, db) {
-			if(err) { return console.dir(err); }
-			
-			var collection = db.collection('application_details');
-			
-			collection.find({_id:userId}).toArray(function(err, items) { 
-				
-				if(items[0] != undefined) {
-					//console.log(items);
-					
-					var query = {};
-					
-					var keys = Object.keys(items[0]);
-					
-					for(i=1;i<keys.length;i++) {
-					
-						
-						query[keys[i]] = {};
-						if(typeof req.body.revincidents !== undefined) { query[keys[i]].revincidents = obj[keys[i]].revincidents; }
-						if(typeof req.body.revperminute !== undefined) { query[keys[i]].revperminute = obj[keys[i]].revperminute; }
-						if(typeof req.body.mttr !== undefined) { query[keys[i]].mttr = obj[keys[i]].mttr; }
-						if(typeof req.body.numusers !== undefined) { query[keys[i]].numusers = obj[keys[i]].numusers; }
-						if(typeof req.body.bustransperday !== undefined) { query[keys[i]].bustransperday = obj[keys[i]].bustransperday; }
-						if(typeof req.body.busincidents !== undefined) { query[keys[i]].busincidents = obj[keys[i]].busincidents; }
-						if(typeof req.body.bustransavgtime !== undefined) { query[keys[i]].bustransavgtime = obj[keys[i]].bustransavgtime; }
-						if(typeof req.body.allincidents !== undefined) { query[keys[i]].allincidents = obj[keys[i]].allincidents; }
-						if(typeof req.body.itstaffhours !== undefined) { query[keys[i]].itstaffhours = obj[keys[i]].itstaffhours; }
-						if(typeof req.body.itstaffnum !== undefined) { query[keys[i]].itstaffnum = obj[keys[i]].itstaffnum; }
-						if(typeof req.body.svcdeskpermonth !== undefined) { query[keys[i]].svcdeskpermonth = obj[keys[i]].svcdeskpermonth; }
-						if(typeof req.body.currentslapenalties !== undefined) { query[keys[i]].currentslapenalties = obj[keys[i]].currentslapenalties; }
-						if(typeof req.body.currenttimeslareport !== undefined) { query[keys[i]].currenttimeslareport = obj[keys[i]].currenttimeslareport; }
-					}
-					
-					
-					collection.update({'_id':userId},{$set: query  });			
-						
-						
-					console.log(userId + " updated application details");
-					
-				} 
-				
-				else {
-					
-					collection.insert(req.body, {w:1}, function(err, result) { if(err!=null){console.log(err);}     console.log(userId + " inserted new application details");    });								
-				}
-			});			
-													
-		});
-		
-		res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-		res.end("success!");
-		db.close();
-	});	
-
-	app.get('/getApplicationDetails', (req, res) => {	
-		var userId = req.header('userId');
-		
-		console.log(userId + " is getting application details");
-		
-		MongoClient.connect("mongodb://dtbva:ijustwannahaveabeerwithmymates@ds141274.mlab.com:41274/dtbva", function(err, db) {
-			if(err) { return console.dir(err); }
-
-			var collection = db.collection('application_details');
-			var results = collection.find({'_id':userId}).toArray(function(err, items) {
-
-				console.log(userId + " retrieved application details");
-				resp=JSON.stringify(items);
-				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-				res.end(resp);
-				db.close();
-			});
-		});
-	});	
-
-	app.get('/createUser', (req, res) => {	
-		var userId = req.header('userId');
-		var newEmail = req.header('emailAddress');
-		
-		console.log(userId + " is being created");
-		MongoClient.connect("mongodb://dtbva:ijustwannahaveabeerwithmymates@ds141274.mlab.com:41274/dtbva") 
-		
-		.then(function(db) {
-			//if(err) { return console.dir(err); }
-
-			//create user
-			var collection = db.collection('user');
-			var fullJson = ({'_id':userId,'email':newEmail});			
-			collection.insert(fullJson, {w:1}, function(err, result) { if(err!=null){console.log(err);}     console.log(userId + " inserted new user table");    });
-
-			//create options
-			var collection = db.collection('option');
-			var fullJson = {'_id':userId,'it_downtime':true,'employee_productivity':true,'incident_frequency':true,'service_desk':true,'sla_compliance':true,'cloud_bill':true,'speed_market':true,'company_name':'','study_period':3,'dynatrace_cost':true,'competitive_analysis':true};
-			collection.insert(fullJson, {w:1}, function(err, result) { if(err!=null){console.log(err);}     console.log(userId + " inserted new options table");    });
-			
-			//create expected benefits
-			var collection = db.collection('expected_benefits');
-			var fullJson = {'_id':userId,'dec_rev_incidents':'','reduce_downtime':'','increase_employee_prod':'','decrease_user_incidents':'','reduce_incident_resolve':'','reduce_service_desk':'','reduce_sla_penalties':'', 'reduce_sla_resources':'','reduce_cloud_bill':'','increase_time_market':''};
-			collection.insert(fullJson, {w:1}, function(err, result) { if(err!=null){console.log(err);}     console.log(userId + " inserted new expected benefits table");    });
-			
-			//create general
-			var collection = db.collection('general');
-			var fullJson = {'_id':userId,'bus_days':'','npv':'','avg_salary':'','svc_desk_cost':'','rev_growth':'','confidence':'70'};
-			collection.insert(fullJson, {w:1}, function(err, result) { if(err!=null){console.log(err);}     console.log(userId + " inserted new general table");    });
-			
-			//create empty product costs
-			var collection = db.collection('product_cost');
-			var fullJson = {"_id": userId,"costs": [{"license_fees": "","maintenance": "","hardware": "","implementation": "","training": ""},{"license_fees": "","maintenance": "","hardware": "","implementation": "","training": ""},{"license_fees": "","maintenance": "","hardware": "","implementation": "","training": ""},{"license_fees": "","maintenance": "","hardware": "","implementation": "","training": ""},{"license_fees": "","maintenance": "","hardware": "","implementation": "","training": ""}]};
-			collection.insert(fullJson, {w:1}, function(err, result) { if(err!=null){console.log(err);}     console.log(userId + " inserted new product cost table");    });
-		})
-			
-		.then(function () {
-				console.log(userId + " was created");
-				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-				res.end(userId);
-				db.close();				
-		})
-		
-		.catch(function (err) {})
 	});
 	
+	app.post('/login', (req, res, next) => {	
+		var username = req.body.username;
+		var password = req.body.password;
+		
+		var user = {
+			_id: req.body.username,
+			password: req.body.password
+		}
+		
+		
+		MongoClient.connect(connectionOptions, function(err, db) {
+			if(err) { 
+				return console.dir(err); 
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end(resp);
+				db.close();				
+			}
+
+			else {
+				var collection = db.collection('users');
+				var results = collection.find({_id:username}).toArray(function(err, items) {
+					if(items[0] == undefined) {
+						res.redirect('/?login=failed');
+						db.close();
+					}
+					
+					else {
+					bcrypt.compare(password, items[0].password, function(err, result) {
+					
+						if (err) { 
+							res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+							res.end("failure");
+							db.close(); 
+						}
+						
+						else {
+							
+							if(result == true) {
+								req.session.username = username;
+								req.session.save();
+								console.log(req.session.username + " has logged in.");
+								res.redirect('/landing');
+								db.close();
+							}
+							else {
+								res.redirect('/?login=failed');
+								db.close();
+							}
+						}
+					}) }
+				});
+			}	
+		});
+	});	
+	
+	app.post('/gimmePassword', (req, res) => {	
+		pass = req.body.password;
+	
+		//console.log(pass);
+	
+		bcrypt.hash(pass, 10, function (err, hash){
+    
+			if (err) {
+				
+				return err;
+    
+			}
+    
+			password = hash;
+			
+			res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+			res.end(password);
+		})
+	});
+
+	app.post('/createAssessment', (req, res) => {	
+		var company = req.body.company;
+		var business = req.body.business;
+		var operations = req.body.operations;
+		var development = req.body.development;
+		var id = generateId();		
+		
+		var assessment = {
+			_id: id,
+			company: company,
+			business: business,
+			operations: operations,
+			development: development			
+		}
+		
+		var user_assessments = {
+			_id: id,
+			company: company,
+			username: 'alistair.emslie@dynatrace.com'
+		}
+		
+		var assessment_data = {
+			_id: id,
+			company_revenue: '',
+			projected_growth: '',
+			revenue_dependent: '',
+			app_uptime: '',
+			revenue_breach: '',
+			incidents_month: '',
+			no_ops_troubleshoot: '',
+			no_dev_troubleshoot: '',
+			mttr: '',
+			no_apps_e2e: '',
+			no_t1t2_apps: '',
+			no_fte_existing: '',
+			existing_apps: [],
+			cycles_per_year: '',
+			cycle_days: '',
+			test_per_cycle: '',
+			qa_time_per_cycle: '',
+			qa_people_per_cycle: '',
+			dev_time_per_cycle: '',
+			dev_people_per_cycle: '',
+			operation_cost: '55000',
+			developer_cost: '56000',
+			qa_cost: '46000',
+			work_hours: '1950',
+			benefit_incident_reduction: '30',
+			benefit_mttr: '90',
+			benefit_performance: '25',
+			benefit_alert_storm: '88',
+			benefit_sla: '75',
+			benefit_fix_qa: '90',
+			benefit_prod_reduction: '55',
+			benefit_config: '97'
+		}
+		
+		MongoClient.connect(connectionOptions, function(err, db) {
+			if(err) { 
+				return console.dir(err); 
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();				
+			}
+
+			else {
+				var collection = db.collection('assessments');
+				collection.insert(assessment, {w:1}, function(err, result) { if(err!=null){console.log(err);}  console.log("added in assessment");  });
+				var collection = db.collection('user_assessments');
+				collection.insert(user_assessments, {w:1}, function(err, result) { if(err!=null){console.log(err);}  console.log("added in user_assessments");      });
+				var collection = db.collection('assessment_data');
+				collection.insert(assessment_data, {w:1}, function(err, result) { if(err!=null){console.log(err);}  console.log("added in assessment_data");      });
+				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("success");
+				db.close();					
+			}
+		});	
+	});	
+
+	app.get('/getAssessmentList', (req, res) => {	
+		//var username = requiresLogin();
+		//console.log(req.session);
+
+		var username = req.session.username;
+		//var username = "alistair.emslie@dynatrace.com";
+		//console.log("assessment list " + username);
+		MongoClient.connect(connectionOptions, function(err, db) {
+
+			if(err) { 
+				return console.dir(err); 
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();				
+			}	
+
+			var companyAssessment;
+			
+			var collection = db.collection('user_assessments');
+			var results = collection.find({username:username}).toArray(function(err, items) {				
+				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+				res.end(JSON.stringify(items));
+				db.close();
+			})		
+		})	
+	});	
+
+	
+	
+
 };
+

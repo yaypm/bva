@@ -10,283 +10,214 @@
 	<link rel="icon" href="https://dt-cdn.net/assets/images/brand/favicon-63e287af7c.ico">
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
-	<script src="/static/finance.js"></script>
 	<style>a:hover {cursor:pointer;}</style>
 	<script src="/static/bva.js"></script>
-	<script>
-	
-				$(function () {
-				
-				blankData = [];
-				
-				var now = new Date;
-				var rightNow = now.getTime();
-				var first = rightNow - 3600000;
-				
-				blankData.push([first, 100]);
-				
-				for(i=1; i < 12; i++) {
-					blankData.push([(first + 300000 * i), 100]);
-				}	
-			
-				var myChart = Highcharts.chart('container', {
-						title: {
-							style: {
-								color: "#ffffff"
-							},
-							text: ''
-						},
-					
-					exporting: {
-						enabled: false
-					},
-					
-					plotOptions: {
-						line: {
-							marker: {
-								enabled: false
-							},
-						},
-					},
-					
-					chart: {
-						backgroundColor: "#ffffff",
-						borderColor: "#ffffff",
-						borderRadius: 3,
-						borderWidth: 2,
-						spacingBottom: 5,
-						spacingTop: 5,
-						spacingLeft: 1,
-						spacingRight: 5,	
+	<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>	
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function(event) {
+		//$(".biz").fadeIn();
+		
+		$(" .opsFromBiz ").click(function() {
+		$( ".biz" ).hide('slide', {direction: 'left'});
+		$(".ops").fadeIn();
+		
+		 $(".leftContainer").css("height", $('.ops').css('height')); 
+		$( ".result-biz" ).hide('slide', {direction: 'left'});
+		$(".result-ops").fadeIn();		  
+		  //$(".ops").toggle( "slide" );
+		  	  
+		});	
+		
+		$(" .bizFromOps ").click(function() {
+		  $( ".ops" ).toggle( "slide" , { direction: "right" });
+		  $( ".biz" ).fadeIn();	
+		  $(".leftContainer").css("height", $('.biz').css('height'));
+		  $( ".result-ops" ).toggle( "slide" , { direction: "right" });
+		  $( ".result-biz" ).fadeIn();	
+		});	
+		
+		$(" .devFromOps ").click(function() {
+		  $( ".ops" ).toggle( "slide" , { direction: "left" });
+		  $( ".dev" ).fadeIn();		
+		  $(".leftContainer").css("height", $('.dev').css('height'));
+		  $( ".result-ops" ).toggle( "slide" , { direction: "left" });
+		  $( ".result-dev" ).fadeIn();			  
+		});	
+		
+		$(" .opsFromDev ").click(function() {
+		  $( ".dev" ).toggle( "slide" , { direction: "right" });
+		  $( ".ops" ).fadeIn();	
+		  $(".leftContainer").css("height", $('.ops').css('height'));
+		  $( ".result-dev" ).toggle( "slide" , { direction: "right" });
+		  $( ".result-ops" ).fadeIn();			  
+		});	
 
-						update: {
-							redraw: false
-						},						
-					},	
-					
-					credits: {
-						enabled: false
-					},
-					
-					yAxis: {
-							title: {
-								text: 'Response Time (ms)',
-								style: {
-									color: "#000000"
-								}
-							},
-							
-							min: 0,
-							max: 50,
-							
-							labels: {
-								style: {
-									color: "#000000"
-								}
-							}
-					},
-					
-					xAxis: {
-							type: 'datetime',
+		$(" .optionsFromDev ").click(function() {
+		  $( ".dev" ).toggle( "slide" , { direction: "left" });
+		  $( ".options" ).fadeIn();	
+		  $(".leftContainer").css("height", $('.options').css('height'));
+		  $( ".result-dev" ).toggle( "slide" , { direction: "left" });
+		  $( ".result-options" ).fadeIn();			  
+		});	
 
-							labels: {
-								style: {
-									color: "#000000"
-								}
-							},
-							
-							title: {
-								style: {
-									color: "#000000"
-								},
-							enabled: false
-						}
-					},
-					
-					legend: {
-						enabled: false
-				},
-
-					series: [{
-						type: 'line',
-						forced: 'true',
-						name: 'Time (ms)',
-						data: blankData
-					}]
-				});
-			});
-	
+		$(" .devFromOptions ").click(function() {
+		  $( ".options" ).toggle( "slide" , { direction: "right" });
+		  $( ".dev" ).fadeIn();		
+		  $(".leftContainer").css("height", $('.dev').css('height'));
+		  $( ".result-options" ).toggle( "slide" , { direction: "right" });
+		  $( ".result-dev" ).fadeIn();			  
+		});		
+		});	
 	</script>
-
+	
 </head>
 
-<body style="background-color: #f2f2f2">
+<body class="bva-body">
+
 <!--start of nav bar-->
-
-
 <div class="nav has-no-secondary">
+
   <a class="nav__brand" href="/">
     <img class="nav__logo" src="http://assets.dynatrace.com/global/logos/dynatrace-logo.svg" alt="dynatrace logo"/>
   </a>
-  <!-- <div class="nav__buttongroup"> -->
-    <!-- <button data-target="#nav-bar-example1" class="nav__btn nav__btn--menutoggle">Menu</button> -->
-  <!-- </div> -->
+
   <nav id="nav-bar-example1" class="nav__bar">
-
   </nav>
+  
 </div>
-
 <!--end of nav bar-->
 
-
-
 <!--start of content-->
-
-<div class="section" style="margin-left: 20px; margin-right: 20px; min-height: 90%;">
-  
-
-<div class="column--1-of-2" style="background-color: white; margin-bottom: 20px; border-radius: 5px">
+<div class="section bva-content">
  
-<!-- start of title -->   
-<div style="background-color: #9355b7; color: white; width: 100%; height: 105px; border-top-right-radius: 5px; border-top-left-radius: 5px; background-image: url(/static/biz-dev-ops.svg);background-position: right; background-size: contain; background-repeat: no-repeat; ">
+<div class="column--1-of-2 bva-content-column" >
 
-		<div style="position: absolute; margin-top: 10px ; margin-left: 20px; max-width: 60%">
-		<h1 style="margin-bottom: 0px; max-width: 100px;">Business</h1>
+<div class="leftContainer" style="position: relative; height: 964px">
+
+
+<div class="biz">  
+
+
+
+<!-- start of title -->   
+<div class="bva-title-wrapper bva-title-wrapper-biz">
+
+	<div class="bva-title-wrapper-inner">
+	
+		<h1 class="bva-title-text">Business</h1>
 		<p>Increased revenue from improved technology performance</p>
-		</div>
+		
+	</div>
 
 </div>
-
 <!--end of title-->
 
 <!--start of tags-->
 <div class="tags">
 
-<span tabindex="1" class="tag">
-  <span class="tag__key">email:</span>
-  alistair.emslie@dynatrace.com
-</span>
-<span tabindex="1" class="tag">
-  <span class="tag__key">id:</span>
-  hoaApJ2XUl
-</span>
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">email:</span>
+	  alistair.emslie@dynatrace.com
+	</span>
+	
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">id:</span>
+	  hoaApJ2XUl
+	</span>
+	
 </div>
 <!--end of tags-->
-
 
 <br />
 
 <!--start of progress-->
-<div class="progress" style="width: 100%"><div style="width: 30%; display: inline-block; text-align: center; margin-bottom: 20px "><img src="/static/home.svg" style="height:75px; width: 75px"/><br />Home</div><div class="theme--purple" style="width: 40%; display: inline-block;vertical-align:top; margin-top: 20px "><label class="label--progressbar" for="p1">1/4</label><progress class="progressbar" value="1" max="4" if="p1"></progress></div><div style="width: 30%; display: inline-block; text-align: center"><img src="/static/menu-close.svg" style="height:75px; width: 75px"/><br />Next</div></div>
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="toHome" href="/landing"><img src="/static/home-purple.svg" class="bva-progress-button"/></a><br />Home</div><div class="theme--purple bva-progress-wrapper" ><label class="label--progressbar" for="p1">1/4</label><progress class="progressbar" value="1" max="4" if="p1"></progress>	</div><div class="bva-button-wrapper"><a class="opsFromBiz" ><img src="/static/arrow-purple.svg" class="bva-progress-button"/></a><br />Next</div></div>
 <!--end of progress-->
 
-
-
 <!--start of questions-->
-	<div style="padding-bottom: 20px; color: black; width: 100%; text-align: center">
+<div class="bva-all-question-wrapper">
 	
-	<div style="display:inline-block; text-align: left">
-	<img src="/static/sales-light.svg" style="height: 50px; width: 50px; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; max-width: 75%; width: 350px; margin-left: 10px">
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block">Company or business unit annual revenue</label>
-	<input type="text" class="inputfield" id="i1" placeholder="£" style="height: 35px;   font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
+	<div class="bva-question-wrapper">
 	
-	<br /><br />
-
-	<div style="display:inline-block; text-align: left">
-	<img src="/static/trend-light.svg" style="height: 50px; width: 50px; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; max-width: 75%; width: 350px; margin-left: 10px">
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block">Annual growth rate</label>
-	<input type="text" class="inputfield" id="i1" placeholder="%" style="height: 35px;   font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
+		<img src="/static/sales-purple.svg" class="bva-question-image"/>
+		
+		<div class="bva-input-wrapper">	
+			
+			<label for="company_revenue" class="label bva-question-text" >Company or business unit annual revenue</label>
+			<input type="text" class="inputfield bva-question-input" id="company_revenue" placeholder="£" oninput="if(getNumbers(this.value) != 'null') {this.value = parseInt(getNumbers(this.value)).toLocaleString() } else {this.value = ''}" />
 	
-	<br /><br />
-
-	<div style="display:inline-block; text-align: left">
-	<img src="/static/application-light.svg" style="height: 50px; width: 50px; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; max-width: 75%; width: 350px; margin-left: 10px">
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block">Revenue dependent on applications</label>
-	<input type="text" class="inputfield" id="i1" placeholder="%" style="height: 35px;   font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
-	
-	<br /><br />
-
-	<div style="display:inline-block; text-align: left">
-	<img src="/static/health-light.svg" style="height: 50px; width: 50px; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; max-width: 75%; width: 350px; margin-left: 10px">
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block">How often performance goals are met</label>
-	<input type="text" class="inputfield" id="i1" placeholder="%" style="height: 35px;   font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
-	
-	<br /><br />
-
-	<div style="display:inline-block; text-align: left">
-	<img src="/static/warning-light.svg" style="height: 50px; width: 50px; display:inline-block; vertical-align:middle"/>
-	<div style="display:inline-block; max-width: 75%; width: 350px; margin-left: 10px">
-	<label for="i1" class="label" style="font-size: 1em; display: inline-block">Revenue affected during SLA breach</label>
-	<input type="text" class="inputfield" id="i1" placeholder="%" style="height: 35px;   font-size: 1.3em; display: inline-block"/>
-	</div>
-	</div>
-	
-	
-	
-	
+		</div>
 	
 	</div>
- <!--end of questions-->
- 
-
- 
- 
- 
- 
- 
-
-  <!--start of secondary-->
-	<div style="font-size: 1.2em; padding-left: 7%; padding-right: 7%; padding-bottom: 10%">
-
 	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
 	
+		<img src="/static/trend-purple.svg" class="bva-question-image"/>
+		
+		<div class="bva-input-wrapper">	
+			
+			<label for="projected_growth" class="label bva-question-text">Projected annual growth rate</label>
+			<input type="text" class="inputfield bva-question-input" id="projected_growth" placeholder="%"/>
+		
+		</div>
 	
 	</div>
-  
-  <!--end of secondary-->
-  
-  
-
-
-
-
-
-
-
-
-  
-
 	
-	
-	
-  </div>
-  
-  
-  
-  
-  
-  <div class="column--1-of-2" style=" background-color:white; margin-bottom: 20px; border-radius: 5px;">
+		<br /><br />
 
-  
-   <div id="container" style="float: left; height: 300px; width: 100%; margin-bottom: 50px;"></div>
-  
-  
-  
-  
-  
-  </div>
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/application-purple.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">	
+			
+			<label for="revenue_dependent" class="label bva-question-text">Revenue dependent on applications</label>
+			<input type="text" class="inputfield bva-question-input" id="revenue_dependent" placeholder="%" />
+		
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/health-purple.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">	
+	
+			<label for="app_uptime" class="label bva-question-text" >Excluding planned downtime, what is your app service uptime?</label>
+			<input type="text" class="inputfield bva-question-input" id="app_uptime" placeholder="%"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/warning-purple.svg" class="bva-question-image"/>
+		
+		<div class="bva-input-wrapper">	
+	
+			<label for="revenue_breach" class="label bva-question-text" >Revenue affected during SLA breach</label>
+			<input type="text" class="inputfield bva-question-input" id="revenue_breach" placeholder="%" />
+	
+		</div>
+	
+	</div>
+		
+</div>
+<!--end of questions-->
+
+
+
+
+
 </div>
 
 
@@ -296,9 +227,804 @@
 
 
 
-		
-<!--end of content-->
 
+<div class="ops">
+<!-- start of title -->   
+<div class="bva-title-wrapper bva-title-wrapper-ops">
+
+	<div class="bva-title-wrapper-inner">
+		
+		<h1 class="bva-title-text">Operations</h1>
+		<p>Reducing the frequency and cost of issues</p>
+		
+	</div>
+
+</div>
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">email:</span>
+	  alistair.emslie@dynatrace.com
+	</span>
+	
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">id:</span>
+	  hoaApJ2XUl
+	</span>
+	
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="bizFromOps" ><img src="/static/arrow-green.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--green bva-progress-wrapper"><label class="label--progressbar" for="p1">2/4</label><progress class="progressbar" value="2" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><a class="devFromOps" ><img src="/static/arrow-green.svg" class="bva-progress-button"/></a><br />Next</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/incident-green.svg" class="bva-question-image"/>
+		
+		<div class="bva-input-wrapper">	
+	
+			<label for="incidents_month" class="label bva-question-text">Number of incidents reported per month caused by slowness or availability</label>
+			<input type="text" class="inputfield bva-question-input" id="incidents_month" placeholder="# of incidents"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/ops-green.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="no_ops_troubleshoot" class="label bva-question-text">Average number of Ops people used to troubleshoot an incident</label>
+			<input type="text" class="inputfield bva-question-input" id="no_ops_troubleshoot" placeholder="# of Ops people"/>
+		
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/dev-green.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">	
+	
+			<label for="no_dev_troubleshoot" class="label bva-question-text">Average number of Dev people used to troubleshoot an incident</label>
+			<input type="text" class="inputfield bva-question-input" id="no_dev_troubleshoot" placeholder="# of Dev people"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/repair-green.svg" class="bva-question-image"/>
+		
+		<div class="bva-input-wrapper">
+	
+			<label for="mttr" class="label bva-question-text">Average MTTR</label>
+			<input type="text" class="inputfield bva-question-input" id="mttr" placeholder="# of hours"/>
+		
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/transaction-green.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="no_apps_e2e" class="label bva-question-text"># of apps being monitored end-to-end currently</label>
+			<input type="text" class="inputfield bva-question-input" id="no_apps_e2e" placeholder="# of apps"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+		
+		<img src="/static/application-green.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="no_t1t2_apps" class="label bva-question-text">Total # of T1/T2 apps in production</label>
+			<input type="text" class="inputfield bva-question-input" id="no_t1t2_apps" placeholder="# of apps"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />	
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/user-green.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="no_fte_existing" class="label bva-question-text"># of FTEs looking after existing tools</label>
+			<input type="text" class="inputfield bva-question-input" id="no_fte_existing" placeholder="# of FTEs"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />	
+	
+	<h2 class="bva-question-text-centre">Replacement of existing tools</h2>
+	
+		<br />
+	
+		<div class="bva-question-wrapper">
+	
+			<img src="/static/tools-green.svg" class="bva-question-image"/>
+	
+			<div class="bva-input-wrapper">	
+			
+				<label for="name_tool" class="label bva-question-text">Name of tool</label>
+				<input type="text" class="inputfield bva-question-input" id="name_tool" placeholder="Name of tool"/>
+			
+			</div>
+	
+		</div>
+	
+		<div class="bva-question-wrapper bva-question-top">
+	
+			<div class="bva-question-block">	
+	
+				<label for="annual_cost" class="label bva-question-text">Annual license and support costs</label>
+				<input type="text" class="inputfield bva-question-input" id="annual_cost" placeholder="£"/>
+	
+			</div>
+		
+		</div>
+	
+		<div class="bva-question-wrapper bva-question-top">
+	
+			<div class="bva-question-block">	
+	
+				<label for="no_fte_config" class="label bva-question-text">FTEs used for config and admin</label>
+				<input type="text" class="inputfield bva-question-input" id="no_fte_config" placeholder="# of FTEs"/>
+	
+			</div>
+		
+		</div>
+
+		<div class="bva-question-wrapper bva-question-top">
+	
+			<div class="bva-question-existing-wrapper">	
+			
+				<label class="label bva-question-existing-label">% replaced with Dynatrace</label>
+				<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y1" placeholder="Year 1"/>
+				<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y2" placeholder="Year 2"/>
+				<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y3" placeholder="Year 3"/>
+			
+			</div>
+	
+		</div>
+	
+		<div class="bva-question-wrapper bva-question-top">
+			
+			<div class="bva-question-existing-wrapper">		
+	
+				<a href="#"><button  type="button" class="btn btn--primary theme--dark bva-question-existing-add">Add tool</button></a>
+			
+			</div>
+		
+		</div>
+	
+			<br /><br />
+ 
+		<div class="bva-question-wrapper bva-question-top">
+			
+			<div class="bva-question-existing-wrapper">	
+			
+				<button class="tile bva-question-centre">
+				
+					<div class="tile__header">
+						
+						<div class="tile__iconbox bva-question-text-centre">
+							
+							<a href="#"><img src="/static/delete-white.svg" class="bva-existing-delete"/></a>
+						
+						</div>
+
+							<h1 class="tile__heading">AppDynamics</h1>
+							<h2 class="tile__subheading">£300,000 - 10 FTEs</h2>
+					
+					</div>
+  
+						<p class="tile__content bva-question-text-centre">
+		 
+							y1: 100%&nbsp;&nbsp;&nbsp;&nbsp;y2: 150%&nbsp;&nbsp;&nbsp;&nbsp;y3: 200%
+						
+						</p>
+					
+				</button>
+
+			</div>
+ 
+		</div>
+ 
+ 
+		<div class="bva-question-wrapper bva-question-top">
+			
+			<div class="bva-question-existing-wrapper">		
+		
+				<button class="tile bva-question-centre">
+		  
+					<div class="tile__header">
+				
+						<div class="tile__iconbox bva-question-text-centre">
+					
+							<a href="#"><img src="/static/delete-white.svg" class="bva-existing-delete"/></a>
+						
+						</div>
+
+							<h1 class="tile__heading">New Relic</h1>
+							<h2 class="tile__subheading">£50,000 - 3 FTEs</h2>
+						
+						</div>
+			  
+							<p class="tile__content bva-question-text-centre">
+					 
+								y1: 200%&nbsp;&nbsp;&nbsp;&nbsp;y2: 250%&nbsp;&nbsp;&nbsp;&nbsp;y3: 300%
+			  
+							</p>
+				
+				</button>
+
+			</div>
+		
+		</div>	
+	
+</div>
+<!--end of questions-->
+</div>
+
+
+
+
+
+
+
+
+
+<div class="dev">
+<!-- start of title -->   
+<div class="bva-title-wrapper bva-title-wrapper-dev">
+
+	<div class="bva-title-wrapper-inner">
+	
+		<h1 class="bva-title-text">Development</h1>
+		<p>Decreased cost of problem detection and impact</p>
+	
+	</div>
+
+</div>
+<!--end of title-->
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">email:</span>
+	  alistair.emslie@dynatrace.com
+	</span>
+	
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">id:</span>
+	  hoaApJ2XUl
+	</span>
+	
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="opsFromDev" ><img src="/static/arrow-blue.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--royalblue bva-progress-wrapper"><label class="label--progressbar" for="p1">3/4</label><progress class="progressbar" value="3" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><a class="optionsFromDev" ><img src="/static/arrow-blue.svg" class="bva-progress-button"/></a><br />Next</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/release-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+			
+			<label for="cycles_per_year" class="label bva-question-text">Release cycles per year for all applications</label>
+			<input type="text" class="inputfield bva-question-input" id="cycles_per_year" placeholder="# of release cycles"/>
+	
+		</div>
+	
+	</div>
+	
+	<br /><br />
+
+	<div class="bva-question-wrapper">
+		
+		<img src="/static/days-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">	
+			
+			<label for="cycle_days" class="label bva-question-text">Number of days to complete a release cycle</label>
+			<input type="text" class="inputfield bva-question-input" id="cycle_days" placeholder="# of days"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+		
+		<img src="/static/test-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="test_per_cycle" class="label bva-question-text">Percentage of time spent testing per release cycle</label>
+			<input type="text" class="inputfield bva-question-input" id="test_per_cycle" placeholder="% of time"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/performance-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="qa_time_per_cycle" class="label bva-question-text">Amount of QA testing time spent documenting performance issues</label>
+			<input type="text" class="inputfield bva-question-input" id="qa_time_per_cycle" placeholder="% of time"/>
+		
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/document-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">	
+			
+			<label for="qa_people_per_cycle" class="label bva-question-text">Number of QA people documenting performance problems per release (QA)</label>
+			<input type="text" class="inputfield bva-question-input" id="qa_people_per_cycle" placeholder="# of people"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/performance-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+			
+			<label for="dev_time_per_cycle" class="label bva-question-text">Amount of dev testing time spent documenting performance issues</label>
+			<input type="text" class="inputfield bva-question-input" id="dev_time_per_cycle" placeholder="# of people"/>
+		
+		</div>
+	
+	</div>
+
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/document-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="dev_people_per_cycle" class="label bva-question-text">Number of dev people documenting performance problems per release</label>
+			<input type="text" class="inputfield bva-question-input" id="dev_people_per_cycle" placeholder="%"/>
+		
+		</div>
+	
+	</div>	
+	
+</div>
+<!--end of questions-->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="options">
+<!-- start of title -->   
+<div class="bva-title-wrapper bva-title-wrapper-options">
+
+	<div class="bva-title-wrapper-inner">
+	
+		<h1 class="bva-title-text">Options</h1>
+		<p>Provide the impact that Dynatrace will have to you</p>
+	
+	</div>
+
+</div>
+<!--end of title-->
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">email:</span>
+	  alistair.emslie@dynatrace.com
+	</span>
+	
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">id:</span>
+	  hoaApJ2XUl
+	</span>
+	
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="devFromOptions" ><img src="/static/arrow-grey.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--grey bva-progress-wrapper"><label class="label--progressbar" for="p1">4/4</label><progress class="progressbar" value="4" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><img src="/static/finish-grey.svg" class="bva-progress-button"/><br />Finished!</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+	
+	<h2 class="bva-question-text-centre">IT labour costs</h2>
+	
+		<br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/ops-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+			
+			<label for="operation_cost" class="label bva-question-text">Fully loaded cost of operations person</label>
+			<input type="text" class="inputfield bva-question-input" id="operation_cost" placeholder="£" value="£55,000"/>
+	
+		</div>
+	
+	</div>
+	
+	<br /><br />
+
+	<div class="bva-question-wrapper">
+		
+		<img src="/static/dev-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">	
+			
+			<label for="developer_cost" class="label bva-question-text">Fully loaded cost of developer</label>
+			<input type="text" class="inputfield bva-question-input" id="developer_cost" placeholder="£" value="£56,000"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+		
+		<img src="/static/test-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="qa_cost" class="label bva-question-text">Fully loaded cost of QA person</label>
+			<input type="text" class="inputfield bva-question-input" id="qa_cost" placeholder="£" value="£46,000"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/time-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="work_hours" class="label bva-question-text">Work hours per year</label>
+			<input type="text" class="inputfield bva-question-input" id="work_hours" placeholder="# hours per year" value="1,950"/>
+		
+		</div>
+	
+	</div>
+	
+		<br />
+	
+	<h2 class="bva-question-text-centre">Dynatrace benefits</h2>
+	
+		<br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/incident-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">	
+			
+			<label for="benefit_incident_reduction" class="label bva-question-text">Incident reduction in production through pro-active detection</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_incident_reduction" placeholder="# of people" value="30%"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/analysis-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+			
+			<label for="benefit_mttr" class="label bva-question-text">Faster MTTR and root cause analysis in production</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_mttr" placeholder="# of people" value="90%"/>
+		
+		</div>
+	
+	</div>
+
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/performance-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="benefit_performance" class="label bva-question-text">Page load improvement</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_performance" placeholder="%" value="25%"/>
+		
+		</div>
+	
+	</div>	
+
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/alert-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="benefit_alert_storm" class="label bva-question-text">Alert storm reduction</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_alert_storm" placeholder="%" value="88%"/>
+		
+		</div>
+	
+	</div>	
+
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/sla-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="benefit_sla" class="label bva-question-text">Improvement on SLA achievement</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_sla" placeholder="%" value="75%"/>
+		
+		</div>
+	
+	</div>
+
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/find-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="benefit_fix_qa" class="label bva-question-text">Reduced time finding and fixing performance problems in QA</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_fix_qa" placeholder="%" value="90%"/>
+		
+		</div>
+	
+	</div>	
+
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/down-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="benefit_prod_reduction" class="label bva-question-text">Incident reduction in production by finding and fixing defects in Dev and QA</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_prod_reduction" placeholder="%" value="55%"/>
+		
+		</div>
+	
+	</div>
+
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/config-grey.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="benefit_config" class="label bva-question-text">Reduced time spent implementing and configuring vs. existing tools</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_config" placeholder="%" value="97%"/>
+		
+		</div>
+	
+	</div>
+	
+</div>
+<!--end of questions-->
+</div>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+</div>
+  
+<div class="column--1-of-2 bva-content-column" >
+
+
+
+
+
+<div class="headContainer" style="position: relative; height: 105px">
+<div class="bva-title-wrapper bva-title-wrapper-results result-biz">
+
+	<div class="bva-title-wrapper-inner">
+	
+		<h1 class="bva-title-text">Results</h1>
+		<p>The value to your business from partnering with Dynatrace</p>
+		
+	</div>
+
+</div>
+
+<div class="bva-title-wrapper bva-title-wrapper-results result-ops">
+
+	<div class="bva-title-wrapper-inner">
+	
+		<h1 class="bva-title-text">Results</h1>
+		<p>The value to your business from partnering with Dynatrace</p>
+		
+	</div>
+
+</div>
+
+
+<div class="bva-title-wrapper bva-title-wrapper-results result-dev">
+
+	<div class="bva-title-wrapper-inner">
+	
+		<h1 class="bva-title-text">Results</h1>
+		<p>The value to your business from partnering with Dynatrace</p>
+		
+	</div>
+
+</div>
+
+
+<div class="bva-title-wrapper bva-title-wrapper-results result-options">
+
+	<div class="bva-title-wrapper-inner">
+	
+		<h1 class="bva-title-text">Results</h1>
+		<p>The value to your business from partnering with Dynatrace</p>
+		
+	</div>
+
+</div>
+
+
+</div>
+	<!-- <h2 class="bva-question-text-centre">Dynatrace Business Value Results</h2> -->
+	
+	<div id="total_stacked_bar" style="height: 450px; margin-left: 10%; margin-right: 10%; margin-top: 20px"></div>
+	
+	<br /><br />
+	
+	<div style="width: 90%; overflow: auto; margin-left: 5%">
+		<table class="table">
+	  <thead>
+		<tr>
+		  <th></th>
+		  <th>Year 1</th>
+		  <th>Year 2</th>
+		  <th>Year 3</th>
+		  <th><b>Total</b></th>
+		</tr>
+	  </thead>
+	  <tbody>
+		<tr style="background-color: #9355b7; color: white;">
+		  <td><img src="/static/biz.svg" style="width: 20px; height: 20px"> Business</td>
+		  <td>£2,107,500</td>
+		  <td>£2,360,400</td>
+		  <td>£2,643,648</td>
+		  <td>£7,111,548</td>
+		</tr>
+		<tr style="background-color: #73be28; color: white">
+		  <td><img src="/static/ops.svg" style="width: 20px; height: 20px"> Operations</td>
+		  <td>£1,687,642</td>
+		  <td>£2,336,059</td>
+		  <td>£2,521,387</td>
+		  <td>£6,545,088</td>
+		</tr>
+		<tr style="background-color: #1496ff; color: white">
+		  <td><img src="/static/dev.svg" style="width: 20px; height: 20px"> Development</td>
+		  <td>£564,720</td>
+		  <td>£632,486</td>
+		  <td>£708,385</td>
+		  <td>£1,905,591</td>
+		</tr>
+	  </tbody>
+	</table>
+	</div>
+	
+
+	
+	
+	
+	
+
+	
+	
+	
+
+	
+
+
+</div>
+<!--end of content-->
+<script src="/static/result_charts.js"></script>
 <script src="/static/main.js"></script>
 
 </body>

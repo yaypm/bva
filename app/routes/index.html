@@ -10,9 +10,13 @@
 	<link rel="icon" href="https://dt-cdn.net/assets/images/brand/favicon-63e287af7c.ico">
 	<script src="https://code.highcharts.com/highcharts.js"></script>
 	<script src="https://code.highcharts.com/modules/exporting.js"></script>
-	<script src="/static/finance.js"></script>
 	<style>a:hover {cursor:pointer;}</style>
 	<script src="/static/bva.js"></script>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function(event) {
+			failedLogin();
+		});
+	</script>
 
 </head>
 
@@ -24,20 +28,25 @@
 <div id="intro_box">
 		
 	<p class="welcome-title">Welcome to your Dynatrace Business Value Assessment</p>
-		
+	
+	<div class="login-failure">Username/password is incorrect</div>
+	
 		<br />
 	
+	<form action="/login" method="post" enctype="application/x-www-form-urlencoded">
 	
-	<input type="email" class="inputfield" id="userId" value="" placeholder="email"/>
+		<input type="email" name="username" class="inputfield" id="userId" placeholder="email"/>
 		
-		<br /><br /> 
+			<br /><br /> 
 	
-	<input type="password" class="inputfield" id="password" value="" placeholder="password"/>
+		<input type="password" name="password" class="inputfield" id="password" placeholder="password"/>
 		
-		<br /><br /> 	
+			<br /><br /> 	
 	
-	<a href="/landing"><button id="intro_box_submit" type="button" class="btn btn--primary theme--dark">Enter</button></a>
-				
+		<button id="intro_box_submit" type="submit" class="btn btn--primary theme--dark">Enter</button>
+
+	</form>
+	
 </div> 
 
 </div>

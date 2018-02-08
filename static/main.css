@@ -3339,7 +3339,9 @@ ol.list ol ul ul li:before {
 .bva-content-column {
 	background-color: white; 
 	margin-bottom: 20px; 
-	border-radius: 5px; }
+	border-radius: 5px; 
+	}
+	
 
 .bva-content {
 	margin-left: 20px; 
@@ -3374,7 +3376,7 @@ ol.list ol ul ul li:before {
 
 .bva-title-wrapper-results {
 	/* background-image: url(/static/biz.svg); */
-	background-color: #9355b7;  }	
+	  }	
 	
 .bva-title-wrapper-inner {
 	position: absolute; 
@@ -3473,15 +3475,57 @@ ol.list ol ul ul li:before {
 	color: #1a1a1a;	}
 
 .theme--grey .progressbar {
-  background-color: #1a1a1a;
-  color: #1a1a1a; }
+	background-color: #1a1a1a;
+	color: #1a1a1a; }
 
 .theme--grey .progressbar[value]::-webkit-progress-bar {
-  background-color: #1a1a1a; }
+	background-color: #1a1a1a; }
 
 .theme--grey .progressbar[value]::-webkit-progress-value {
-  background-color: #1a1a1a; }
+	background-color: #1a1a1a; }
 
 .theme--grey .progressbar[value]::-moz-progress-bar {
-  background-color: #1a1a1a; }	
+	background-color: #1a1a1a; }	
   
+.login-failure {
+	display: none;
+	color: white;
+	background-color: red;}
+
+.biz {
+	position: absolute;
+	width: 100%;} 	
+	
+.ops {
+	position: absolute;
+	width: 100%;
+	display: none;}
+
+.dev {
+	position: absolute;
+	width: 100%;
+	display: none;}
+	
+.options {
+	position: absolute;
+	width: 100%;
+	display: none;	}	
+
+.result-biz {
+	position: absolute;
+	background-color: #9355b7;}	
+
+.result-ops {
+	position: absolute;
+	display: none;	
+	background-color: #73be28}	
+
+.result-dev {
+	position: absolute;
+	display: none;
+	background-color: #1496ff;}	
+
+.result-options {
+	position: absolute;
+	display: none;
+	background-color:#1a1a1a;	}		
