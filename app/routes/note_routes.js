@@ -130,7 +130,6 @@ module.exports = function(app, db) {
 			}
 
 			passwd = hash;
-			//console.log(passwd + " is the hashed password.");
 			
 			var user = {
 				_id: req.body.username,
@@ -218,8 +217,6 @@ module.exports = function(app, db) {
 	
 	app.post('/gimmePassword', (req, res) => {	
 		pass = req.body.password;
-	
-		//console.log(pass);
 	
 		bcrypt.hash(pass, 10, function (err, hash){
     
@@ -316,12 +313,8 @@ module.exports = function(app, db) {
 	});	
 
 	app.get('/getAssessmentList', (req, res) => {	
-		//var username = requiresLogin();
-		//console.log(req.session);
 
 		var username = req.session.username;
-		//var username = "alistair.emslie@dynatrace.com";
-		//console.log("assessment list " + username);
 		MongoClient.connect(connectionOptions, function(err, db) {
 
 			if(err) { 
@@ -342,7 +335,84 @@ module.exports = function(app, db) {
 		})	
 	});	
 
-	
+	app.post('/updateAssessment', (req, res) => {	
+		var company = req.body.company;
+		var business = req.body.business;
+		var operations = req.body.operations;
+		var development = req.body.development;
+		var id = generateId();		
+		
+		var assessment = {
+			_id: id,
+			company: company,
+			business: business,
+			operations: operations,
+			development: development			
+		}
+		
+		var user_assessments = {
+			_id: id,
+			company: company,
+			username: 'alistair.emslie@dynatrace.com'
+		}
+		
+		var assessment_data = {
+			_id: id,
+			company_revenue: '',
+			projected_growth: '',
+			revenue_dependent: '',
+			app_uptime: '',
+			revenue_breach: '',
+			incidents_month: '',
+			no_ops_troubleshoot: '',
+			no_dev_troubleshoot: '',
+			mttr: '',
+			no_apps_e2e: '',
+			no_t1t2_apps: '',
+			no_fte_existing: '',
+			existing_apps: [],
+			cycles_per_year: '',
+			cycle_days: '',
+			test_per_cycle: '',
+			qa_time_per_cycle: '',
+			qa_people_per_cycle: '',
+			dev_time_per_cycle: '',
+			dev_people_per_cycle: '',
+			operation_cost: '55000',
+			developer_cost: '56000',
+			qa_cost: '46000',
+			work_hours: '1950',
+			benefit_incident_reduction: '30',
+			benefit_mttr: '90',
+			benefit_performance: '25',
+			benefit_alert_storm: '88',
+			benefit_sla: '75',
+			benefit_fix_qa: '90',
+			benefit_prod_reduction: '55',
+			benefit_config: '97'
+		}
+		
+		MongoClient.connect(connectionOptions, function(err, db) {
+			if(err) { 
+				return console.dir(err); 
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();				
+			}
+
+			else {
+				var collection = db.collection('assessments');
+				collection.insert(assessment, {w:1}, function(err, result) { if(err!=null){console.log(err);}  console.log("added in assessment");  });
+				var collection = db.collection('user_assessments');
+				collection.insert(user_assessments, {w:1}, function(err, result) { if(err!=null){console.log(err);}  console.log("added in user_assessments");      });
+				var collection = db.collection('assessment_data');
+				collection.insert(assessment_data, {w:1}, function(err, result) { if(err!=null){console.log(err);}  console.log("added in assessment_data");      });
+				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("success");
+				db.close();					
+			}
+		});	
+	});		
 	
 
 };
