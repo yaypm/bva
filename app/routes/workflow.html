@@ -145,7 +145,7 @@
 		<div class="bva-input-wrapper">	
 			
 			<label for="company_revenue" class="label bva-question-text" >Company or business unit annual revenue</label>
-			<input type="text" pattern="[0-9]*" class="inputfield bva-question-input" id="company_revenue" placeholder="£" oninput="if(getNumbers(this.value) != '') {this.value = parseInt(getNumbers(this.value)).toLocaleString(); this.value = this.value;  temp = this.value; this.value = ''; this.value = temp; } else {this.value = ''}" />
+			<input type="text" class="inputfield bva-question-input" id="company_revenue" placeholder="£" onblur="if(getNumbers(this.value) != '') {this.value = '£' + parseInt(getNumbers(this.value)).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = ''}" />
 	
 		</div>
 	
