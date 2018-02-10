@@ -10,12 +10,12 @@ const MongoStore = require('connect-mongo')(session);
 
 module.exports = function(app, db) {
 
-	connectionOptions = process.env.MONGO_URI;
+	connectionOptions = "mongodb://dtbva:holyfuckingshititsthebva@ds141274.mlab.com:41274/dtbva";
 
 	app.use(bodyParser.urlencoded({ extended: true }))
 	app.use(bodyParser.json());
 	app.use(session({
-		secret: process.env.COOKIE_SECRET,
+		secret: 'dynatrace',
 		resave: false,
 		saveUninitialized: false,
 		store: new MongoStore({url: connectionOptions}),

@@ -192,7 +192,7 @@ function updateAssessment() {
 	})
 }
 
-document.addEventListener("DOMContentLoaded", function(event) {
+function addListeners() {
 	
 	$(" .opsFromBiz ").click(function() {
 		$( ".biz" ).hide('slide', {direction: 'left'});
@@ -256,4 +256,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	});
 
 	getAssessmentData();	
-});	
+}
