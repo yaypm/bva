@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<title>Dynatrace Business Value Calculator</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" type="text/css" href='/static/main.css' />
+	<script src='/static/es6-promise.auto.js'></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="icon" href="https://dt-cdn.net/assets/images/brand/favicon-63e287af7c.ico">
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<script src="/static/finance.js"></script>
+	<style>a:hover {cursor:pointer;}</style>
+	<script src="/static/bva.js"></script>
+
+</head>
+
+<body class="bva-body">
+
+<!--start of nav bar-->
+<div class="nav has-no-secondary">
+
+  <a class="nav__brand" href="/">
+    <img class="nav__logo" src="http://assets.dynatrace.com/global/logos/dynatrace-logo.svg" alt="dynatrace logo"/>
+  </a>
+
+  <nav id="nav-bar-example1" class="nav__bar">
+  </nav>
+  
+</div>
+<!--end of nav bar-->
+
+<!--start of content-->
+
+<div class="section bva-content">
+  
+<div class="column--1-of-2 bva-content-column">
+ 
+<!-- start of title -->   
+<div class="bva-title-wrapper bva-title-wrapper-dev">
+
+	<div class="bva-title-wrapper-inner">
+	
+		<h1 class="bva-title-text">Development</h1>
+		<p>Decreased cost of problem detection and impact</p>
+	
+	</div>
+
+</div>
+<!--end of title-->
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">email:</span>
+	  alistair.emslie@dynatrace.com
+	</span>
+	
+	<span tabindex="1" class="tag">
+	  <span class="tag__key">id:</span>
+	  hoaApJ2XUl
+	</span>
+	
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a href="/operations"><img src="/static/arrow-blue.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--royalblue bva-progress-wrapper"><label class="label--progressbar" for="p1">3/4</label><progress class="progressbar" value="3" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><a href="/options"><img src="/static/arrow-blue.svg" class="bva-progress-button"/></a><br />Next</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/release-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+			
+			<label for="cycles_per_year" class="label bva-question-text">Release cycles per year for all applications</label>
+			<input type="text" class="inputfield bva-question-input" id="cycles_per_year" placeholder="# of release cycles"/>
+	
+		</div>
+	
+	</div>
+	
+	<br /><br />
+
+	<div class="bva-question-wrapper">
+		
+		<img src="/static/days-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">	
+			
+			<label for="cycle_days" class="label bva-question-text">Number of days to complete a release cycle</label>
+			<input type="text" class="inputfield bva-question-input" id="cycle_days" placeholder="# of days"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+		
+		<img src="/static/test-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="test_per_cycle" class="label bva-question-text">Percentage of time spent testing per release cycle</label>
+			<input type="text" class="inputfield bva-question-input" id="test_per_cycle" placeholder="% of time"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/performance-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="qa_time_per_cycle" class="label bva-question-text">Amount of QA testing time spent documenting performance issues</label>
+			<input type="text" class="inputfield bva-question-input" id="qa_time_per_cycle" placeholder="% of time"/>
+		
+		</div>
+	
+	</div>
+	
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/document-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">	
+			
+			<label for="qa_people_per_cycle" class="label bva-question-text">Number of QA people documenting performance problems per release (QA)</label>
+			<input type="text" class="inputfield bva-question-input" id="qa_people_per_cycle" placeholder="# of people"/>
+	
+		</div>
+	
+	</div>
+	
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/performance-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+			
+			<label for="dev_time_per_cycle" class="label bva-question-text">Amount of dev testing time spent documenting performance issues</label>
+			<input type="text" class="inputfield bva-question-input" id="dev_time_per_cycle" placeholder="# of people"/>
+		
+		</div>
+	
+	</div>
+
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<img src="/static/document-blue.svg" class="bva-question-image"/>
+	
+		<div class="bva-input-wrapper">
+	
+			<label for="dev_people_per_cycle" class="label bva-question-text">Number of dev people documenting performance problems per release</label>
+			<input type="text" class="inputfield bva-question-input" id="dev_people_per_cycle" placeholder="%"/>
+		
+		</div>
+	
+	</div>	
+	
+</div>
+<!--end of questions-->
+
+</div>
+  
+<div class="column--1-of-2 bva-content-column">
+
+
+
+<div class="bva-title-wrapper bva-title-wrapper-results" style="background-color:#1496ff">
+
+	<div class="bva-title-wrapper-inner">
+	
+		<h1 class="bva-title-text">Results</h1>
+		<p>The value to your business from partnering with Dynatrace</p>
+		
+	</div>
+
+</div>
+
+	<!-- <h2 class="bva-question-text-centre">Dynatrace Business Value Results</h2> -->
+	
+	<div id="total_stacked_bar" style="height: 450px; margin-left: 10%; margin-right: 10%; margin-top: 20px"></div>
+	
+	<br /><br />
+	
+<table class="table" style="margin-left: 10%; margin-right: 10%; width: 80%">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Year 1</th>
+      <th>Year 2</th>
+      <th>Year 3</th>
+      <th><b>Total</b></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="background-color: #9355b7; color: white;">
+      <td><img src="/static/biz.svg" style="width: 20px; height: 20px"> Business</td>
+      <td>£2,107,500</td>
+      <td>£2,360,400</td>
+      <td>£2,643,648</td>
+      <td>£7,111,548</td>
+    </tr>
+    <tr style="background-color: #73be28; color: white">
+      <td><img src="/static/ops.svg" style="width: 20px; height: 20px"> Operations</td>
+      <td>£1,687,642</td>
+      <td>£2,336,059</td>
+      <td>£2,521,387</td>
+      <td>£6,545,088</td>
+    </tr>
+    <tr style="background-color: #1496ff; color: white">
+      <td><img src="/static/dev.svg" style="width: 20px; height: 20px"> Development</td>
+      <td>£564,720</td>
+      <td>£632,486</td>
+      <td>£708,385</td>
+      <td>£1,905,591</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+
+
+
+</div>
+
+</div>
+<!--end of content-->
+<script src="/static/result_charts.js"></script>
+<script src="/static/main.js"></script>
+
+</body>
+
+</html>

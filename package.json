@@ -32,10 +32,10 @@
   "engines": {
     "node": "6.11.3"
   },
-  "author": "Alistair Emslie and Nick Ross",
+  "author": "Alistair Emslie",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/yaypm/dtbva/issues"
+    "url": "https://github.com/yaypm/bva/issues"
   },
-  "homepage": "https://github.com/yaypm/dtbva#readme"
+  "homepage": "https://github.com/yaypm/bva#readme"
 }

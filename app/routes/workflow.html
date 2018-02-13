@@ -5,7 +5,8 @@
 	<title>Dynatrace Business Value Calculator</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<link rel="stylesheet" type="text/css" href='/static/main.css' />
-	<script src='/static/es6-promise.auto.js'></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.js"></script> -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>  -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<link rel="icon" href="https://dt-cdn.net/assets/images/brand/favicon-63e287af7c.ico">
 	<script src="https://code.highcharts.com/highcharts.js"></script>
@@ -65,14 +66,14 @@
 <!--start of tags-->
 <div class="tags">
 
-	<span tabindex="1" class="tag">
+	<span tabindex="1" class="tag user-email">
 	  <span class="tag__key">email:</span>
-	  alistair.emslie@dynatrace.com
+	  
 	</span>
 	
-	<span tabindex="1" class="tag">
-	  <span class="tag__key">id:</span>
-	  hoaApJ2XUl
+	<span tabindex="1" class="tag user-company">
+	  <span class="tag__key">company:</span>
+	  
 	</span>
 	
 </div>
@@ -164,7 +165,7 @@
 <!--end of questions-->
 
 
-
+<br /><br />
 
 
 </div>
@@ -193,14 +194,12 @@
 <!--start of tags-->
 <div class="tags">
 
-	<span tabindex="1" class="tag">
+	<span tabindex="1" class="tag user-email">
 	  <span class="tag__key">email:</span>
-	  alistair.emslie@dynatrace.com
 	</span>
 	
-	<span tabindex="1" class="tag">
+	<span tabindex="1" class="tag user-company">
 	  <span class="tag__key">id:</span>
-	  hoaApJ2XUl
 	</span>
 	
 </div>
@@ -376,79 +375,47 @@
 			
 			<div class="bva-question-existing-wrapper">		
 	
-				<a href="#"><button  type="button" class="btn btn--primary theme--dark bva-question-existing-add">Add tool</button></a>
+				<button  type="button" id="existingToolAdd" class="btn btn--primary theme--dark bva-question-existing-add">Add tool</button>
 			
 			</div>
 		
 		</div>
 	
 			<br /><br />
- 
+		
+		<div id="existing_apps">
+		
 		<div class="bva-question-wrapper bva-question-top">
 			
 			<div class="bva-question-existing-wrapper">	
 			
-				<button class="tile bva-question-centre">
+				<div style="position: relative"> <h2 style="display: inline-block">AppDynamics</h2> <div style="display: inline-block; position: absolute; right: 0px"><a onclick="console.log('YES');"><img src="/static/delete-grey.svg"  width="40px" height="40px" /></a></div> </div>
+				<p>£100,000 - 10 FTEs</p>
 				
-					<div class="tile__header">
-						
-						<div class="tile__iconbox bva-question-text-centre">
-							
-							<a href="#"><img src="/static/delete-white.svg" class="bva-existing-delete"/></a>
-						
-						</div>
+				<div class="theme--green">
+					<label class="label--progressbar" for="p0">Year 1</label>
+					<progress class="progressbar" value="80" max="100" id="p0"></progress>
+				</div>
 
-							<h1 class="tile__heading">AppDynamics</h1>
-							<h2 class="tile__subheading">£300,000 - 10 FTEs</h2>
-					
-					</div>
-  
-						<p class="tile__content bva-question-text-centre">
-		 
-							y1: 100%&nbsp;&nbsp;&nbsp;&nbsp;y2: 150%&nbsp;&nbsp;&nbsp;&nbsp;y3: 200%
-						
-						</p>
-					
-				</button>
+				<div class="theme--green">
+					<label class="label--progressbar" for="p0">Year 2</label>
+					<progress class="progressbar" value="90" max="100" id="p0"></progress>
+				</div>
 
+				<div class="theme--green">
+					<label class="label--progressbar" for="p0">Year 3</label>
+					<progress class="progressbar" value="100" max="100" id="p0"></progress>
+				</div>				
 			</div>
  
 		</div>
- 
- 
-		<div class="bva-question-wrapper bva-question-top">
-			
-			<div class="bva-question-existing-wrapper">		
-		
-				<button class="tile bva-question-centre">
-		  
-					<div class="tile__header">
-				
-						<div class="tile__iconbox bva-question-text-centre">
-					
-							<a href="#"><img src="/static/delete-white.svg" class="bva-existing-delete"/></a>
-						
-						</div>
-
-							<h1 class="tile__heading">New Relic</h1>
-							<h2 class="tile__subheading">£50,000 - 3 FTEs</h2>
-						
-						</div>
-			  
-							<p class="tile__content bva-question-text-centre">
-					 
-								y1: 200%&nbsp;&nbsp;&nbsp;&nbsp;y2: 250%&nbsp;&nbsp;&nbsp;&nbsp;y3: 300%
-			  
-							</p>
-				
-				</button>
-
-			</div>
-		
-		</div>	
-	
+ 		
+		</div>
 </div>
 <!--end of questions-->
+
+<br />
+
 </div>
 
 
@@ -476,14 +443,12 @@
 <!--start of tags-->
 <div class="tags">
 
-	<span tabindex="1" class="tag">
+	<span tabindex="1" class="tag user-email">
 	  <span class="tag__key">email:</span>
-	  alistair.emslie@dynatrace.com
 	</span>
 	
-	<span tabindex="1" class="tag">
+	<span tabindex="1" class="tag user-company">
 	  <span class="tag__key">id:</span>
-	  hoaApJ2XUl
 	</span>
 	
 </div>
@@ -603,6 +568,9 @@
 	
 </div>
 <!--end of questions-->
+
+<br />
+
 </div>
 
 
@@ -634,14 +602,12 @@
 <!--start of tags-->
 <div class="tags">
 
-	<span tabindex="1" class="tag">
+	<span tabindex="1" class="tag user-email">
 	  <span class="tag__key">email:</span>
-	  alistair.emslie@dynatrace.com
 	</span>
 	
-	<span tabindex="1" class="tag">
+	<span tabindex="1" class="tag user-company">
 	  <span class="tag__key">id:</span>
-	  hoaApJ2XUl
 	</span>
 	
 </div>
@@ -973,6 +939,7 @@
 
 </div>
 <!--end of content-->
+</div>
 <script src="/static/result_charts.js"></script>
 <script src="/static/main.js"></script>
 

@@ -23,6 +23,26 @@ function getNumbersAndDots(txt) {
 	}
 }
 
+function getBvaId(name){
+	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	return results[1] || 0;
+}
+
+function generateId() {
+		
+	var text = "";
+	var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+	for (var i = 0; i < 16; i++)
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+	return text;
+}	
+
+function resizeOps() {
+	setTimeout(function(){ $(".leftContainer").css("height", $('.ops').css('height')); }, 100);
+}
+
 function processMoney(preMoney) {
 	if(preMoney != '' && preMoney != undefined) {preMoney = '£' + parseInt(getNumbers(preMoney)).toLocaleString(); temp = preMoney; preMoney = ''; preMoney = temp; return preMoney} else {preMoney = ''; return preMoney}
 }
@@ -36,8 +56,8 @@ function processNumber(preNumber){
 }
 
 function failedLogin() {
-	var urlParams = new URLSearchParams(window.location.search);
-	fail = urlParams.get('login');
+	//var urlParams = new URLSearchParams(location.search);
+	fail = getBvaId('login');
 	if(fail == "failed") {
 		$(".login-failure").css("display", "block");
 	}
@@ -78,8 +98,8 @@ function getAssessmentData() {
 	myHeaders.append("Accept", "application/json");
 	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
 
-	var urlParams = new URLSearchParams(window.location.search);
-	bva_id = urlParams.get('bva_id');
+	//var urlParams = new URLSearchParams(location.search);
+	bva_id = getBvaId('bva_id');
 	
 	myHeaders.append("bva_id", bva_id);
 	
@@ -127,6 +147,20 @@ function getAssessmentData() {
 		document.getElementById("benefit_fix_qa").value = processPercent(jsonResponse.benefit_fix_qa);
 		document.getElementById("benefit_prod_reduction").value = processPercent(jsonResponse.benefit_prod_reduction);
 		document.getElementById("benefit_config").value = processPercent(jsonResponse.benefit_config);
+		
+		existingApps = "";
+		
+		for(i=0;i<jsonResponse.existing_apps.length;i++) {
+			existingApps += "<div class=\"bva-question-wrapper bva-question-top \" \"><div class=\"bva-question-existing-wrapper\">	<div style=\"position: relative\"> <h2 style=\"display: inline-block\">" + jsonResponse.existing_apps[i].name + "</h2> <div style=\"display: inline-block; position: absolute; right: 0px\"><a class=\"delete\" id=\"" + jsonResponse.existing_apps[i].tool_id + "\"><img src=\"/static/delete-grey.svg\"  width=\"40px\" height=\"40px\" /></a></div> </div><p>£" + parseInt(jsonResponse.existing_apps[i].annual_costs).toLocaleString() + " - " + jsonResponse.existing_apps[i].ftes + " FTEs</p><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 1: " + jsonResponse.existing_apps[i].y1 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y1 + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 2: " + jsonResponse.existing_apps[i].y2 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y2 + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 3: " + jsonResponse.existing_apps[i].y3 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y3 + "\" max=\"100\" id=\"p0\"></progress></div>	</div></div><br />";
+		}			
+		
+		document.getElementById("existing_apps").innerHTML = existingApps;
+		
+		$(" .delete ").click(function() {
+
+			deleteExistingTool(this.id);
+
+		});		
 	})
 }	
 
@@ -173,8 +207,8 @@ function updateAssessment() {
 	myHeaders.append("Accept", "application/json");
 	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
 	
-	var urlParams = new URLSearchParams(window.location.search);
-	bva_id = urlParams.get('bva_id');
+	//var urlParams = new URLSearchParams(location.search);
+	bva_id = getBvaId('bva_id');
 	
 	myHeaders.append("bva_id", bva_id);
 	
@@ -194,10 +228,18 @@ function updateAssessment() {
 
 function addListeners() {
 	
+	getTabs();
+	
+	$(".leftContainer").css("height", $('.biz').css('height'));
+	
+	$("#existingToolAdd").click(function() {
+		addExistingTool(); 	  	  
+	});	
+	
 	$(" .opsFromBiz ").click(function() {
 		$( ".biz" ).hide('slide', {direction: 'left'});
 		$(".ops").fadeIn();
-		
+		//getAssessmentData();
 		$(".leftContainer").css("height", $('.ops').css('height')); 
 		$( ".result-biz" ).hide('slide', {direction: 'left'});
 		$(".result-ops").fadeIn();		 	  	  
@@ -206,6 +248,7 @@ function addListeners() {
 	$(" .bizFromOps ").click(function() {
 		$( ".ops" ).toggle( "slide" , { direction: "right" });
 		$( ".biz" ).fadeIn();	
+		//getAssessmentData();
 		$(".leftContainer").css("height", $('.biz').css('height'));
 		$( ".result-ops" ).toggle( "slide" , { direction: "right" });
 		$( ".result-biz" ).fadeIn();	
@@ -213,7 +256,8 @@ function addListeners() {
 		
 	$(" .devFromOps ").click(function() {
 		$( ".ops" ).toggle( "slide" , { direction: "left" });
-		$( ".dev" ).fadeIn();		
+		$( ".dev" ).fadeIn();
+		//getAssessmentData();		
 		$(".leftContainer").css("height", $('.dev').css('height'));
 		$( ".result-ops" ).toggle( "slide" , { direction: "left" });
 		$( ".result-dev" ).fadeIn();			  
@@ -222,6 +266,7 @@ function addListeners() {
 	$(" .opsFromDev ").click(function() {
 		$( ".dev" ).toggle( "slide" , { direction: "right" });
 		$( ".ops" ).fadeIn();	
+		//getAssessmentData();
 		$(".leftContainer").css("height", $('.ops').css('height'));
 		$( ".result-dev" ).toggle( "slide" , { direction: "right" });
 		$( ".result-ops" ).fadeIn();			  
@@ -230,6 +275,7 @@ function addListeners() {
 	$(" .optionsFromDev ").click(function() {
 		$( ".dev" ).toggle( "slide" , { direction: "left" });
 		$( ".options" ).fadeIn();	
+		//getAssessmentData();
 		$(".leftContainer").css("height", $('.options').css('height'));
 		$( ".result-dev" ).toggle( "slide" , { direction: "left" });
 		$( ".result-options" ).fadeIn();			  
@@ -237,23 +283,146 @@ function addListeners() {
 
 	$(" .devFromOptions ").click(function() {
 		$( ".options" ).toggle( "slide" , { direction: "right" });
-		$( ".dev" ).fadeIn();		
+		$( ".dev" ).fadeIn();	
+		//getAssessmentData();		
 		$(".leftContainer").css("height", $('.dev').css('height'));
 		$( ".result-options" ).toggle( "slide" , { direction: "right" });
 		$( ".result-dev" ).fadeIn();			  
 	});	
 		
-	$('#company_revenue, #revenue_breach, #operation_cost, #developer_cost, #qa_cost').on( "blur", function() {
+	$('#company_revenue, #revenue_breach, #operation_cost, #developer_cost, #qa_cost, #annual_cost').on( "blur", function() {
 		if(this.value != '' && this.value != undefined) {this.value = '£' + parseInt(getNumbers(this.value)).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
 	} );
 		
-	$('#projected_growth, #revenue_dependent, #app_uptime, #test_per_cycle, #qa_time_per_cycle, #dev_time_per_cycle, #benefit_incident_reduction, #benefit_mttr, #benefit_performance, #benefit_alert_storm, #benefit_sla, #benefit_fix_qa, #benefit_prod_reduction, #benefit_config').on( "blur", function() {
+	$('#projected_growth, #revenue_dependent, #app_uptime, #test_per_cycle, #qa_time_per_cycle, #dev_time_per_cycle, #benefit_incident_reduction, #benefit_mttr, #benefit_performance, #benefit_alert_storm, #benefit_sla, #benefit_fix_qa, #benefit_prod_reduction, #benefit_config, #existing_y1, #existing_y2, #existing_y3').on( "blur", function() {
 		if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
 	} );
 		
-	$('#incidents_month, #no_ops_troubleshoot, #no_dev_troubleshoot, #mttr, #no_apps_e2e, #no_t1t2_apps, #no_fte_existing, #cycles_per_year, #cycle_days, #qa_people_per_cycle, #dev_people_per_cycle, #work_hours').on( "blur", function() {
+	$('#incidents_month, #no_ops_troubleshoot, #no_dev_troubleshoot, #mttr, #no_apps_e2e, #no_t1t2_apps, #no_fte_existing, #cycles_per_year, #cycle_days, #qa_people_per_cycle, #dev_people_per_cycle, #work_hours, #no_fte_config').on( "blur", function() {
 		if(this.value != '' && this.value != undefined) {this.value = parseInt(getNumbers(this.value)).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
 	});
 
 	getAssessmentData();	
+}
+
+function getTabs() {
+	//var urlParams = new URLSearchParams(location.search);
+	bva_id = getBvaId('bva_id');
+	
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");	
+	myHeaders.append("bva_id", bva_id);
+	
+	var myInit = { method: 'GET',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin'
+	}		
+	
+	fetch('/getUserDetails', myInit)
+		
+	.then(function(response) {
+		return response.json();
+	})	
+	
+	.then(function(jsonObj) {
+		document.getElementsByClassName("user-email")[0].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
+		document.getElementsByClassName("user-company")[0].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
+
+		document.getElementsByClassName("user-email")[1].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
+		document.getElementsByClassName("user-company")[1].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
+
+		document.getElementsByClassName("user-email")[2].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
+		document.getElementsByClassName("user-company")[2].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
+
+		document.getElementsByClassName("user-email")[3].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
+		document.getElementsByClassName("user-company")[3].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;		
+	})
+}
+
+function addExistingTool() {
+	
+	var tool_id = generateId();
+	
+	var existingTool = {
+		tool_id: tool_id,
+		name_tool: document.getElementById("name_tool").value,
+		annual_cost: getNumbers(document.getElementById("annual_cost").value),
+		no_fte_config: getNumbers(document.getElementById("no_fte_config").value),
+		existing_y1: getNumbers(document.getElementById("existing_y1").value),
+		existing_y2: getNumbers(document.getElementById("existing_y2").value),
+		existing_y3: getNumbers(document.getElementById("existing_y3").value),
+	}
+	
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+	
+	//var urlParams = new URLSearchParams(location.search);
+	bva_id = getBvaId('bva_id');
+	
+	myHeaders.append("bva_id", bva_id);
+	
+	var myInit = { method: 'POST',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin',
+		body: JSON.stringify(existingTool)
+	}		
+	
+	fetch('/addExistingTool', myInit)
+	
+	.then(function() {
+		
+		var newApp = "<div class=\"bva-question-wrapper bva-question-top \" \"><div class=\"bva-question-existing-wrapper\">	<div style=\"position: relative\"> <h2 style=\"display: inline-block\">" + document.getElementById("name_tool").value + "</h2> <div style=\"display: inline-block; position: absolute; right: 0px\"><a class=\"delete\" id=\"" + tool_id + "\"><img src=\"/static/delete-grey.svg\"  width=\"40px\" height=\"40px\" /></a></div> </div><p>" + document.getElementById("annual_cost").value + " - " + document.getElementById("no_fte_config").value + " FTEs</p><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 1: " + document.getElementById("existing_y1").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y1").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 2: " + document.getElementById("existing_y2").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y2").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 3: " + document.getElementById("existing_y3").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y3").value) + "\" max=\"100\" id=\"p0\"></progress></div>	</div></div><br />";
+		
+		$( "#existing_apps" ).append( newApp );
+		$(".leftContainer").css("height", $('.ops').css('height'));
+		
+		$(" .delete ").click(function() {
+			deleteExistingTool(this.id);
+		});
+		
+		document.getElementById("name_tool").value = "";
+		document.getElementById("annual_cost").value = "";
+		document.getElementById("no_fte_config").value = "";
+		document.getElementById("existing_y1").value = "";
+		document.getElementById("existing_y2").value = "";
+		document.getElementById("existing_y3").value = "";		
+	})
+
+}
+
+function deleteExistingTool(id) {
+	
+	var existing_id = {
+		id: id
+	}
+	
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+	
+	//var urlParams = new URLSearchParams(location.search);
+	bva_id = getBvaId('bva_id');
+	
+	myHeaders.append("bva_id", bva_id);
+	
+	var myInit = { method: 'POST',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin',
+		body: JSON.stringify(existing_id)
+	}		
+	
+	fetch('/deleteExistingTool', myInit)
+		
+	.then(function(response) {
+		$("#" + id).parent().parent().parent().parent().remove();
+		$(".leftContainer").css("height", $('.ops').css('height'));
+	})
 }

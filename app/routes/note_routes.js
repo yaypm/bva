@@ -375,7 +375,78 @@ module.exports = function(app, db) {
 				db.close();
 			})		
 		})	
+	});	
+
+	app.get('/getUserDetails', (req, res) => {	
+
+		var theUsername = req.session.username;
+
+		MongoClient.connect(connectionOptions, function(err, db) {
+
+			if(err) { 
+				return console.dir(err); 
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();				
+			}	
+			
+			var collection = db.collection('user_assessments');
+			var results = collection.find({'_id':req.header('bva_id')}).toArray(function(err, items) {
+				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+				userDetails = {
+					company: items[0].company,
+					username: theUsername
+				}
+				//console.log(JSON.stringify(userDetails));
+				res.end(JSON.stringify(userDetails));
+				db.close();
+			})		
+		})	
+	});	
+
+	app.post('/addExistingTool', (req, res) => {	
+		
+		MongoClient.connect(connectionOptions, function(err, db) {
+			if(err) { 
+				return console.dir(err); 
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();				
+			}
+
+			else {
+				var collection = db.collection('assessment_data');
+				collection.update({'_id':req.header('bva_id')},{$push:{'existing_apps':{"tool_id": req.body.tool_id, "name": req.body.name_tool, "annual_costs": req.body.annual_cost, "ftes":req.body.no_fte_config, "y1":req.body.existing_y1, "y2": req.body.existing_y2, "y3": req.body.existing_y3} }});			
+				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("success");
+				db.close();					
+			}
+		});			
 	});		
 
+	app.post('/deleteExistingTool', (req, res) => {	
+		
+		var id = req.body.id;
+		
+		MongoClient.connect(connectionOptions, function(err, db) {
+			if(err) { 
+				return console.dir(err); 
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();				
+			}
+
+			else {
+				//console.log(id);
+				var collection = db.collection('assessment_data');
+				collection.update({'_id':req.header('bva_id')},{$pull:{'existing_apps':{"tool_id": id} }});			
+				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("success");
+				db.close();					
+			}
+		});			
+	});		
 };
+
+	
 
