@@ -3360,22 +3360,22 @@ ol.list ol ul ul li:before {
 
 .bva-title-wrapper-biz {
 	background-image: url(/static/biz.svg);
-	background-size: 128px 128px;
+	background-size: 100px 100px;
 	background-color: #9355b7;  }
 
 .bva-title-wrapper-ops {
 	background-image: url(/static/ops.svg);
-	background-size: 128px 128px;
+	background-size: 100px 100px;
 	background-color: #73be28;  }	
 	
 .bva-title-wrapper-dev {
 	background-image: url(/static/dev.svg);
-	background-size: 128px 128px;
+	background-size: 100px 100px;
 	background-color: #1496ff;  }		
 
 .bva-title-wrapper-options {
 	background-image: url(/static/options.svg);
-	background-size: 128px 128px;
+	background-size: 100px 100px;
 	background-color: #1a1a1a;  }	
 
 .bva-title-wrapper-results {
