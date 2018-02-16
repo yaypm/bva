@@ -26,7 +26,8 @@
 	"es6-promise": "^4.2.2",
 	"bcrypt": "^1.0.3",
 	"connect-mongo": "^2.0.1",
-	"express-session": "^1.15.6"
+	"express-session": "^1.15.6",
+	"nodemailer": "^4.4.2"
 
   },
   "engines": {
