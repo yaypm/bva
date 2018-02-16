@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<title>Dynatrace Business Value Calculator</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" type="text/css" href='/static/main.css' />
+	<!-- <script src='/static/es6-promise.auto.js'></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="icon" href="https://dt-cdn.net/assets/images/brand/favicon-63e287af7c.ico">
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<style>a:hover {cursor:pointer;}</style>
+	<script src="/static/bva.js"></script>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function(event) {
+			statusDetect();
+		});
+	</script>
+
+</head>
+
+<body class="landing-body">
+
+<!--start of content-->
+<div id="content" class="main-content">
+
+<div id="reset_box">
+	
+	
+	<div style="text-align: center">
+	<div style="display: inline-block; text-align: left; width: 350px">
+	<h2 style="font-size: 2.2em">Reset your password</h2>
+	
+	<p>Enter your email address and a reset link will be sent to you.</p>	
+	</p>
+	
+	<div class="status-success">Password reset sent! Check your email.</div>
+	<div class="status-failure">Unable to reset password.</div>
+	
+	<form action="/reset" method="post" enctype="application/x-www-form-urlencoded">
+	
+		<input type="email" name="username" class="inputfield" id="userId" placeholder="email"/>
+		
+			<br /><br /> 	
+	
+		<a href="/"><button id="landing_box_new" type="button" class="btn btn--secondary theme--dark landing-button">Back</button></a> <button role="button" id="landing_box_password" type="submit" class="btn btn--primary theme--dark landing-button">Reset</button>
+		
+		<br /><br />
+		
+	</form>	
+	
+	</div>
+	</div>
+
+		<br />				
+	
+</div> 
+
+</div>
+<!--end of content-->
+
+<script src="/static/main.js"></script>
+
+</body>
+
+</html>

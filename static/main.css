@@ -3223,8 +3223,28 @@ ol.list ol ul ul li:before {
     display: none; } }
 	
 /**al additions**/
+/* #intro_box { */
+	/* position: absolute; */
+	/* max-width: 600px;  */
+	/* max-height: 400px;  */
+	/* width: 600px;  */
+	/* height: 400px;  */
+	/* max-width: 95%; */
+	/* max-height: 95%; */
+	/* margin: auto; */
+     /* top: 0; */
+     /* right: 0; */
+     /* bottom: 100px; */
+     /* left: 0; */
+	/* background-color: #008bdb;  */
+	/* color: white;  */
+	/* border-radius: 20px; */
+	/* text-align: center;  */
+	/* box-shadow: 0px 0px 30px 30px #008bdb;  */
+	/* color: white; }		 */
+
 #intro_box {
-	position: absolute;
+	position: fixed;
 	max-width: 600px; 
 	max-height: 400px; 
 	width: 600px; 
@@ -3232,9 +3252,29 @@ ol.list ol ul ul li:before {
 	max-width: 95%;
 	max-height: 95%;
 	margin: auto;
-     top: 0;
+     top: -170px;
      right: 0;
-     bottom: 100px;
+     bottom: 0;
+     left: 0;
+	background-color: #008bdb; 
+	color: white; 
+	border-radius: 20px;
+	text-align: center; 
+	box-shadow: 0px 0px 30px 30px #008bdb; 
+	color: white; }		
+
+#reset_box {
+	position: fixed;
+	max-width: 400px; 
+	max-height: 300px; 
+	width: 400px; 
+	height: 300px; 
+	max-width: 95%;
+	max-height: 95%;
+	margin: auto;
+     top: -170px;
+     right: 0;
+     bottom: 0;
      left: 0;
 	background-color: #008bdb; 
 	color: white; 
@@ -3247,8 +3287,17 @@ ol.list ol ul ul li:before {
 	font-size: 60px;
 }	
 
+
+
 #userId {
 	width: 350px; 
+	height: 50px; 
+	font-size: 1.3em;
+}
+
+.signup {
+	width: 172px;
+	display: inline-block;
 	height: 50px; 
 	font-size: 1.3em;
 }
@@ -3265,10 +3314,12 @@ ol.list ol ul ul li:before {
 	font-size: 1.3em; }
 	
 #landing_box_submit {
-	width: 400px; 
-	max-width: 90%;
+	width: 395px; 
+	max-width: 100%;
 	height: 40px; 
-	font-size: 1.3em; }	
+	font-size: 1.3em;
+	padding-left: 0px;
+	padding-right: 0px}	
 
 #landing_box {
 	position: absolute;
@@ -3303,14 +3354,35 @@ ol.list ol ul ul li:before {
 	font-size: 3em; }
 	
 .bva-select {
-	width: 400px; max-width: 90%; height: 50px; font-size: 1em; }
+	max-width: 67%; 
+	height: 50px; 
+	font-size: 1em; 
+	display: inline-block;}
 
+.landing-bva-button {
+	display: inline-block; 
+	width: 14%; 
+	/* max-width: 25%;  */
+	height: 50px; 
+	padding: 10px;
+	margin-bottom: 2px;
+	margin-left: 2px;
+	/* font-size: 1em;	 */
+}	
+	
 .landing-button {
 	display: inline-block; 
-	width: 200px; 
-	max-width: 45%; 
+	width: 198px; 
+	max-width: 49%;
 	height: 40px; 
 	font-size: 1em; }
+	
+.reset-button {
+	display: inline-block; 
+	width: 172px; 
+	/* max-width: 45%;  */
+	height: 40px; 
+	font-size: 1em; }	
 	
 .landing-body {
 	background-image: url(/static/welcome-background.svg); 
@@ -3491,11 +3563,24 @@ ol.list ol ul ul li:before {
 .theme--grey .progressbar[value]::-moz-progress-bar {
 	background-color: #1a1a1a; }	
   
-.login-failure {
+.status-failure {
 	display: none;
 	color: white;
-	background-color: red;}
-
+	background-color: #1a1a1a;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	width: 350px;
+	text-align: center;}
+	
+.status-success {
+	display: none;
+	color: white;
+	background-color: #1a1a1a;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	width: 350px;
+	text-align: center;}
+	
 .biz {
 	position: absolute;
 	width: 100%;} 	

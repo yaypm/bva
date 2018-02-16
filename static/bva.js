@@ -25,7 +25,9 @@ function getNumbersAndDots(txt) {
 
 function getBvaId(name){
 	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-	return results[1] || 0;
+	if(results != null) {
+		return results[1] || 0;
+	}	
 }
 
 function generateId() {
@@ -55,12 +57,69 @@ function processNumber(preNumber){
 	if(preNumber != '' && preNumber != undefined) {preNumber = parseInt(getNumbers(preNumber)).toLocaleString(); temp = preNumber; preNumber = ''; preNumber = temp; return preNumber; } else {preNumber = ''; return preNumber;}
 }
 
-function failedLogin() {
-	//var urlParams = new URLSearchParams(location.search);
-	fail = getBvaId('login');
+function statusDetect() {
+	fail = getBvaId('status');
 	if(fail == "failed") {
-		$(".login-failure").css("display", "block");
+		$(".status-failure").css("display", "block");
 	}
+	if(fail == "success") {
+		$(".status-success").css("display", "block");
+	}	
+}
+
+function setFormLocation() {
+	token = getBvaId('token');
+	document.getElementById("reset").action="/resetyourpassword?token=" + token;	
+}
+
+function setEditLocation() {
+	id = getBvaId('bva_id');
+	document.getElementById("edit").action="/editbva?bva_id=" + id;	
+}
+
+function setShareLocation() {
+	id = getBvaId('bva_id');
+	document.getElementById("share").action="/sharebva?bva_id=" + id;	
+}
+
+function setEditLocation() {
+	id = getBvaId('bva_id');
+	document.getElementById("edit").action="/editbva?bva_id=" + id;	
+}
+
+function setBvaLinks() {
+	id = document.getElementById("bva_select").value;
+	shareHref = "/share?bva_id=" + id;
+	editHref = "/edit?bva_id=" + id;
+	document.getElementById("edit").href=editHref;
+	document.getElementById("share").href=shareHref;
+}
+
+function getCompanyName() {
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+
+	bva_id = getBvaId('bva_id');
+	
+	myHeaders.append("bva_id", bva_id);
+	
+	var myInit = { method: 'GET',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin'
+	}		
+	
+	fetch('/getAssessmentMetaData', myInit)
+		
+	.then(function(response) {	
+		return response.json();
+	})
+	
+	.then(function(jsonResponse) {	
+		document.getElementById("userId").value=jsonResponse.company;
+	})	
 }
 
 function getAssessmentList() {
@@ -84,11 +143,18 @@ function getAssessmentList() {
 	.then(function(jsonObj) {
 		var newHTML = '';
 		
-		for(i=0;i<jsonObj.length;i++) {
-			newHTML += '<option value="' + jsonObj[i]._id + '">' + jsonObj[i].company + '</option>';
+		if(jsonObj.length < 1) {
+			document.getElementById("bva_select").innerHTML = '<option value="">Please create an assessment!</option>';
 		}
 		
-		document.getElementById("bva_select").innerHTML = newHTML;
+		else {
+			for(i=0;i<jsonObj.length;i++) {
+				newHTML += '<option value="' + jsonObj[i].id + '">' + jsonObj[i].company + '</option>';
+			}
+		
+			document.getElementById("bva_select").innerHTML = newHTML;
+			setBvaLinks();
+		}
 	})
 }
 

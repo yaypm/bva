@@ -14,7 +14,7 @@
 	<script src="/static/bva.js"></script>
 	<script type="text/javascript">
 		document.addEventListener("DOMContentLoaded", function(event) {
-			failedLogin();
+			statusDetect();
 		});
 	</script>
 
@@ -29,8 +29,9 @@
 		
 	<p class="welcome-title">Welcome to your Dynatrace Business Value Assessment</p>
 	
-	<div class="login-failure">Username/password is incorrect</div>
-	
+	<div style="width: 350px; margin-left: 50%; margin-right: 50%; transform: translate(-50%);">
+	<div class="status-failure">Username/password is incorrect</div>
+	</div>
 		<br />
 	
 	<form action="/login" method="post" enctype="application/x-www-form-urlencoded">
@@ -43,9 +44,29 @@
 		
 			<br /><br /> 	
 	
-		<button id="intro_box_submit" type="submit" class="btn btn--primary theme--dark">Enter</button>
-
+		<button id="intro_box_submit" type="submit" class="btn btn--primary theme--dark">Login</button>
+		
+		<br /><br />
+		
 	</form>
+	
+	<!-- <div style="width: 350px; text-align: center; margin-left: 52%; margin-right: 48%; position: relative"> -->
+		<!-- <div style="position: absolute; text-align: right;"> -->
+			<!-- <a href="/reset" style="color: white;"> -->
+				<!-- Forgot your password? -->
+			<!-- </a> -->
+			<!-- <br /> -->
+			<!-- <a href="/signup" style="color: white;"> -->
+				<!-- Need an account? -->
+			<!-- </a>			 -->
+		<!-- </div> -->
+	<!-- </div> -->
+	
+	<div style="text-align: center">
+	<div style="display: inline-block; text-align: right; width: 350px">
+	<a href="/reset" style="color: white;">Forgot your password?</a><br /><a href="/signup" style="color: white;">Need an account?</a>	
+	</div>
+	</div>	
 	
 </div> 
 
