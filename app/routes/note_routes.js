@@ -202,6 +202,17 @@ module.exports = function(app, db) {
 		}	
 
 	});	
+
+	app.get('/editassessment', (req, res) => {
+		
+		if (requiresLogin(req, res) == false) {
+			res.redirect('/');
+		}
+		else {
+			res.sendFile(path.join(__dirname + '/editassessment.html'));
+		}	
+
+	});	
 	
 	app.get('/resetpassword', (req, res) => {
 		var token = req.query.token;
@@ -329,7 +340,15 @@ module.exports = function(app, db) {
 			res.redirect('/');
 		}
 		else {
-			res.sendFile(path.join(__dirname + '/landing.html'));
+			var results = new RegExp('(@dynatrace.com)').exec(req.session.username);
+		
+			if(results != undefined) {
+				res.sendFile(path.join(__dirname + '/landing_admin.html'));
+			}
+		
+			else {
+				res.sendFile(path.join(__dirname + '/landing.html'));
+			}
 		}	
 	});	
 
@@ -517,7 +536,9 @@ module.exports = function(app, db) {
 	else {
 		var assessment = {
 			_id: id,
-			company: company			
+			company: company,	
+			has_pricing: false,
+			sfdc: ""
 		}
 		
 		var user_assessments = {
@@ -894,8 +915,162 @@ module.exports = function(app, db) {
 		});	
 
 		}	
+	});		
+
+	app.get('/deleteAssessment', (req, res) => {	
+		var id = req.query.bva_id;
+		var username = req.session.username;
+		
+		if(id == "") {
+			res.redirect('/edit?status=failed');
+		}
+		
+		else {
+		MongoClient.connect(connectionOptions, function(err, db) {
+			if(err) { 
+				return console.dir(err); 
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();				
+			}
+
+			else {
+				var collection = db.collection('user_assessments');
+				var results = collection.find({id:id, username:username}).toArray(function(err, items) {	
+					if(err) {
+						console.log(err);
+						res.redirect('/edit?bva_id=' + id + "&status=failed");
+					}
+					else {
+						var collection = db.collection('assessments');
+						collection.remove({_id: id}, function(err, result) {
+							
+						})
+						
+						var collection = db.collection('user_assessments');
+						collection.remove({id: id}, function(err, result) {
+							
+						})
+
+						var collection = db.collection('assessment_data');
+						collection.remove({_id: id}, function(err, result) {
+							
+						})						
+					
+						
+						res.redirect("/landing");
+					}
+				})
+			}
+		});	
+
+		}	
+	});		
+
+	app.get('/searchUsers', (req, res) => {	
+	
+		var emailSearch = req.header('emailSearch');
+		
+		MongoClient.connect(connectionOptions, function(err, db) {
+
+			if(err) { 
+				return console.dir(err); 
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();				
+			}	
+			
+			var collection = db.collection('user_assessments');
+			var results = collection.find({'username':emailSearch}).toArray(function(err, items) {
+				if(err || items[0] == undefined) {
+					console.log("no results found");
+					var response = {"status":"failed"};
+					res.end(JSON.stringify(response));
+					db.close();
+				}
+
+				else {
+					resultArray = [];
+					for(i=0;i<items.length;i++) {
+						resultItem = {
+							_id: items[i].id
+						}
+						resultArray.push(resultItem);
+					}
+					var collection = db.collection('assessments');
+					var results = collection.find({$or:resultArray}).toArray(function(err, items) {
+						
+						res.end(JSON.stringify(items));
+						db.close();
+					})
+				}
+			})		
+		})	
+	});
+	
+	app.get('/logout', function(req, res) {
+		req.session.destroy();
+		res.redirect('/');
+	});
+
+	app.post('/changeAssessment', (req, res) => {
+		if(req.body.listOfIds == "") {
+			res.redirect('/editassessment?status=failed');
+		}
+		
+		else {
+		var id = JSON.parse(req.body.listOfIds);
+
+		var assessmentUpdate = [];
+		
+		for(i=0;i<id.length;i++){
+			var has_pricing = req.body[id[i].id + "_pricing"];
+			
+			if(has_pricing == "Yes") {
+				has_pricing = true;
+			}
+			
+			else {
+				has_pricing = false;
+			}
+			
+			var sfdc = req.body[id[i].id + "_sfdc"];
+
+			
+			var add = {
+				has_pricing: has_pricing,
+				sfdc: sfdc
+			}
+			
+			assessmentUpdate.push(add);
+		}
+		
+		MongoClient.connect(connectionOptions, function(err, db) {
+			if(err) { 
+				return console.dir(err); 
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();				
+			}
+
+			else {
+				var collection = db.collection('assessments');
+				
+				for(i=0;i<id.length;i++) {
+					var has_pricing = assessmentUpdate[i].has_pricing;
+					var sfdc = assessmentUpdate[i].sfdc;
+					collection.update({'_id':id[i].id},{$set:{"has_pricing": has_pricing, "sfdc":sfdc}});
+				}
+				
+				res.redirect('/editassessment?status=success');
+			}
+		});		
+
+		}
 	});			
 };
+
+
 
 	
 

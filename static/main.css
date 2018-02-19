@@ -3246,11 +3246,11 @@ ol.list ol ul ul li:before {
 #intro_box {
 	position: fixed;
 	max-width: 600px; 
-	max-height: 400px; 
+	/* max-height: 450px;  */
 	width: 600px; 
-	height: 400px; 
+	height: 450px; 
 	max-width: 95%;
-	max-height: 95%;
+	/* max-height: 95%; */
 	margin: auto;
      top: -170px;
      right: 0;
@@ -3263,25 +3263,24 @@ ol.list ol ul ul li:before {
 	box-shadow: 0px 0px 30px 30px #008bdb; 
 	color: white; }		
 
-#reset_box {
+#content_box {
 	position: fixed;
-	max-width: 400px; 
-	max-height: 300px; 
 	width: 400px; 
 	height: 300px; 
 	max-width: 95%;
 	max-height: 95%;
 	margin: auto;
-     top: -170px;
+     top: -30%;
      right: 0;
      bottom: 0;
      left: 0;
+	color: white; }		
+
+.inner_box {
 	background-color: #008bdb; 
 	color: white; 
 	border-radius: 20px;
-	text-align: center; 
-	box-shadow: 0px 0px 30px 30px #008bdb; 
-	color: white; }		
+	box-shadow: 0px 0px 30px 30px #008bdb;  }
 	
 #intro_box h1 {
 	font-size: 60px;
@@ -3290,6 +3289,12 @@ ol.list ol ul ul li:before {
 
 
 #userId {
+	width: 350px; 
+	height: 50px; 
+	font-size: 1.3em;
+}
+
+.bigInput {
 	width: 350px; 
 	height: 50px; 
 	font-size: 1.3em;
@@ -3617,4 +3622,8 @@ ol.list ol ul ul li:before {
 .result-options {
 	position: absolute;
 	display: none;
-	background-color:#1a1a1a;	}		
+	background-color:#1a1a1a;	}	
+
+#confirmDelete {
+	display: none;
+}	

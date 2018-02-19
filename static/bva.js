@@ -30,6 +30,15 @@ function getBvaId(name){
 	}	
 }
 
+function isJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
 function generateId() {
 		
 	var text = "";
@@ -87,6 +96,17 @@ function setEditLocation() {
 	document.getElementById("edit").action="/editbva?bva_id=" + id;	
 }
 
+function enableUserSearch() {
+	$(" #user_search ").click(function() {
+		userSearch();
+	});
+}
+
+function openInNewTab(url) {
+	var win = window.open(url, '_blank');
+	win.focus();
+}
+
 function setBvaLinks() {
 	id = document.getElementById("bva_select").value;
 	shareHref = "/share?bva_id=" + id;
@@ -122,6 +142,77 @@ function getCompanyName() {
 	})	
 }
 
+function userSearch() {
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+
+	searchEmail = document.getElementById("emailSearch").value;
+	
+	myHeaders.append("emailSearch", searchEmail);
+	
+	var myInit = { method: 'GET',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin',
+	}		
+	
+	fetch('/searchUsers', myInit)
+		
+	.then(function(response) {	
+		return response.json();
+	})
+	
+	.then(function(jsonResponse) {	
+	
+		if(jsonResponse.status == undefined) {
+			$('#no_result').css("display","none");
+			$('#user_list').css("display","block");
+			
+			var newHtml = "";
+			var listId = [];
+			
+			for(i=0; i<jsonResponse.length; i++) {
+				var newId = {
+					id: jsonResponse[i]._id
+				}
+				
+				listId.push(newId);
+				
+				if(jsonResponse[i].has_pricing == true) {
+					pricingCheckYes = "selected=\"selected\"";
+					pricingCheckNo = "";
+				}
+				
+				else {
+					pricingCheckYes = "";
+					pricingCheckNo = "selected=\"selected\"";
+				}
+				
+				newHtml +=	"<tr style=\"background-color:#008bdb\"><td style=\"text-align: left\">" + jsonResponse[i].company + "</td><td>	<label for=\"" + jsonResponse[i]._id + "_pricing\" class=\"label\"></label><select style=\"height:40px; margin-bottom: 5px\" class=\"select\" name=\"" + jsonResponse[i]._id + "_pricing\" form=\"edit\"><option value=\"Yes\" " + pricingCheckYes + " >Yes</option><option value=\"No\" " + pricingCheckNo + ">No</option></select></td><td><input type=\"text\" name=\"" + jsonResponse[i]._id + "_sfdc\" class=\"inputfield\" id=\"\" placeholder=\"SFDC link\" style=\"max-width: 70%; width: 75%; height: 40px; display: inline-block\" value=\"" + jsonResponse[i].sfdc + "\"/><button id=\"landing_box_password\" type=\"button\" class=\"btn btn--secondary theme--dark landing-bva-button openlink\" style=\"max-width: 23%; width: 23%; display: inline-block; height: 40px; padding: 0px; margin-top: 2px\"><img src=\"/static/external-link-white.png\" height=40px width=40px/></button>	</td></tr>";
+			}
+			
+			document.getElementById("listOfIds").value=JSON.stringify(listId);
+			document.getElementById("user_list").children[1].innerHTML = newHtml;
+			
+			$(" #openlink ").click(function() {
+				
+					url = this.parentElement.children[0].value;
+					openInNewTab(url);
+			});
+		
+		}
+		
+		else {
+			document.getElementById("listOfIds").value = "";
+			document.getElementById("user_list").children[1].innerHTML = "";			
+			$('#user_list').css("display", "none");
+			$('#no_result').css("display", "block");
+		}
+	})	
+}
+
 function getAssessmentList() {
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
@@ -144,7 +235,7 @@ function getAssessmentList() {
 		var newHTML = '';
 		
 		if(jsonObj.length < 1) {
-			document.getElementById("bva_select").innerHTML = '<option value="">Please create an assessment!</option>';
+			document.getElementById("bva_select").innerHTML = '<option value="">Create an assessment!</option>';
 		}
 		
 		else {
@@ -300,7 +391,7 @@ function addListeners() {
 	
 	$("#existingToolAdd").click(function() {
 		addExistingTool(); 	  	  
-	});	
+	});		
 	
 	$(" .opsFromBiz ").click(function() {
 		$( ".biz" ).hide('slide', {direction: 'left'});
@@ -491,4 +582,74 @@ function deleteExistingTool(id) {
 		$("#" + id).parent().parent().parent().parent().remove();
 		$(".leftContainer").css("height", $('.ops').css('height'));
 	})
+}
+
+function confirmDelete() {
+	$("#edit_box_submit").fadeOut();
+	$("#confirmDelete").fadeIn();
+}
+
+function cancelDelete() {
+	console.log("test");
+	$("#edit_box_submit").fadeIn();
+	$("#confirmDelete").fadeOut();
+}
+
+function addDeleteId() {
+	id = getBvaId('bva_id');
+	document.getElementById("finalDelete").href="/deleteAssessment?bva_id=" + id;
+}
+
+function deleteAssessment() {
+	
+	var tool_id = generateId();
+	
+	var existingTool = {
+		tool_id: tool_id,
+		name_tool: document.getElementById("name_tool").value,
+		annual_cost: getNumbers(document.getElementById("annual_cost").value),
+		no_fte_config: getNumbers(document.getElementById("no_fte_config").value),
+		existing_y1: getNumbers(document.getElementById("existing_y1").value),
+		existing_y2: getNumbers(document.getElementById("existing_y2").value),
+		existing_y3: getNumbers(document.getElementById("existing_y3").value),
+	}
+	
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+	
+	//var urlParams = new URLSearchParams(location.search);
+	bva_id = getBvaId('bva_id');
+	
+	myHeaders.append("bva_id", bva_id);
+	
+	var myInit = { method: 'POST',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin',
+		body: JSON.stringify(existingTool)
+	}		
+	
+	fetch('/addExistingTool', myInit)
+	
+	.then(function() {
+		
+		var newApp = "<div class=\"bva-question-wrapper bva-question-top \" \"><div class=\"bva-question-existing-wrapper\">	<div style=\"position: relative\"> <h2 style=\"display: inline-block\">" + document.getElementById("name_tool").value + "</h2> <div style=\"display: inline-block; position: absolute; right: 0px\"><a class=\"delete\" id=\"" + tool_id + "\"><img src=\"/static/delete-grey.svg\"  width=\"40px\" height=\"40px\" /></a></div> </div><p>" + document.getElementById("annual_cost").value + " - " + document.getElementById("no_fte_config").value + " FTEs</p><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 1: " + document.getElementById("existing_y1").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y1").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 2: " + document.getElementById("existing_y2").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y2").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 3: " + document.getElementById("existing_y3").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y3").value) + "\" max=\"100\" id=\"p0\"></progress></div>	</div></div><br />";
+		
+		$( "#existing_apps" ).append( newApp );
+		$(".leftContainer").css("height", $('.ops').css('height'));
+		
+		$(" .delete ").click(function() {
+			deleteExistingTool(this.id);
+		});
+		
+		document.getElementById("name_tool").value = "";
+		document.getElementById("annual_cost").value = "";
+		document.getElementById("no_fte_config").value = "";
+		document.getElementById("existing_y1").value = "";
+		document.getElementById("existing_y2").value = "";
+		document.getElementById("existing_y3").value = "";		
+	})
+
 }

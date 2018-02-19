@@ -15,15 +15,7 @@
 	<script type="text/javascript">
 		document.addEventListener("DOMContentLoaded", function(event) {
 			statusDetect();
-			getCompanyName();
-			setEditLocation();
-			$("#edit_box_submit").click(function() {
-				confirmDelete(); 	  	  
-			});	
-			$("#noDelete").click(function() {
-				cancelDelete();
-			});
-			addDeleteId();
+			enableUserSearch();
 		});
 	</script>
 
@@ -39,40 +31,56 @@
 	
 	<div style="text-align: center" class="inner_box">
 	<div style="display: inline-block; text-align: left; width: 350px">
-	<h2 style="font-size: 2.2em">Edit assessment</h2>
+	<h2 style="font-size: 2.2em">Edit assessments</h2>
 	
-	<p>Edit the name of your assessment, or delete it completely.</p>	
+	<p>Find an assessment using an email address, then edit properties of the assessment.</p>	
 	</p>
 	
 	<div class="status-success">Assessment successfully updated!</div>
 	<div class="status-failure">Unable to update assessment.</div>	
+
+
+	<br />
 	
-		<br />
+	<form id="edit" action="/changeAssessment" method="post" enctype="application/x-www-form-urlencoded">
 	
-	<form id="edit" action="/editbva" method="post" enctype="application/x-www-form-urlencoded">
-	
-		<input type="text" name="company" class="inputfield" id="userId" placeholder="loading..."/>
-		
+		<input type="email" name="email" class="inputfield bigInput" id="emailSearch" placeholder="email" style="max-width: 290px; display: inline-block"/>
+
+		<button id="user_search" type="button" class="btn btn--primary theme--dark landing-bva-button" style="max-width: 50px; display: inline-block"><img src="/static/search-white.svg" /></button>	
 			<br /><br /> 	
+			
+		<table class="table" style="font-size: 16px; display: none" id="user_list">
+		  <thead>
+			<tr>
+			  <th>Name</th>
+			  <th>Sent pricing?</th>
+			  <th>SFDC opportunity</th>
+			</tr>
+		  </thead>
+		  <tbody>
+
+		  
+		  
+		</tbody>
+		</table>
 		
-		<div style="position: relative; width: 400px; height: 50px; ">
-		<button id="edit_box_submit" type="button" class="btn btn--primary theme--dark reset-button" style="width: 350px; background-color: red; position: absolute; ">Delete</button>
+		<input type="hidden" value="" name="listOfIds" id="listOfIds"/>
 		
-		<div id="confirmDelete" style="position: absolute; "><button id="noDelete" type="button" class="btn btn--secondary theme--dark reset-button">No</button> <a id="finalDelete" href=""><button id="yesDelete" type="button" class="btn btn--primary theme--dark reset-button" style="background-color: red">Yes</button></a></div>
-		</div>	
+		<p id="no_result" style="display: none">No assessments for this user found!</p>
+		
+		
+		
+		<a href="/landing"><button id="deleteBva" type="button" class="btn btn--secondary theme--dark reset-button">Back</button></a> <button role="button" id="landing_box_password" type="submit" class="btn btn--primary theme--dark reset-button">Save</button>
 		
 		<br />
-		<a href="/landing"><button id="deleteBva" type="button" class="btn btn--secondary theme--dark reset-button">Back</button></a> <button role="button" id="landing_box_password" type="submit" class="btn btn--primary theme--dark reset-button">Confirm</button>
-		
-		<br /><br />
 		
 	</form>	
-	
-	
-	</div>
-	</div>
-	
 
+	
+	</div>
+	</div>
+	
+	
 	
 				
 	
