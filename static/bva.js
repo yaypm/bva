@@ -196,7 +196,7 @@ function userSearch() {
 			document.getElementById("listOfIds").value=JSON.stringify(listId);
 			document.getElementById("user_list").children[1].innerHTML = newHtml;
 			
-			$(" #openlink ").click(function() {
+			$(" .openlink ").click(function() {
 				
 					url = this.parentElement.children[0].value;
 					openInNewTab(url);
