@@ -26,45 +26,43 @@
 <div id="content" class="main-content">
 
 <div id="content_box">
+		
+	<div class="inner_box center">
 	
-	
-	<div style="text-align: center" class="inner_box">
-	<div style="display: inline-block; text-align: left; width: 350px">
-	<p style="font-size: 2.5em">Create an account</p>
-	
-	<p>Please provide a few details to get started. An email will then be sent with a temporary password.</p>	
-	</p>
-	
-	
-	
-	<div class="status-failure">Account could not be created.</div>
-	<div class="status-success">Account created! Check your email.</div>
+		<div class="menu-box">
+		
+		<p class="menu-title">Create an account</p>
+		
+		<p>Please provide a few details to get started. An email will then be sent with a temporary password.</p>	
+				
+		<div class="status-failure">Account could not be created.</div>
+		<div class="status-success">Account created! Check your email.</div>
 
-	<br />
+			<br />
 
-	<form action="/createUser" method="post" enctype="application/x-www-form-urlencoded">
-	
-		<input type="text" name="firstName" class="inputfield signup" id="firstName" placeholder="first name"/>
-		<input type="text" name="lastName" class="inputfield signup" id="lastName" placeholder="last name"/>
-	
+		<form action="/createUser" method="post" enctype="application/x-www-form-urlencoded">
+		
+			<input type="text" name="firstName" class="inputfield signup" id="firstName" placeholder="first name"/>
+			<input type="text" name="lastName" class="inputfield signup" id="lastName" placeholder="last name"/>
+		
+				<br /><br />
+		
+			<input type="email" name="username" class="inputfield bigInput" id="username" placeholder="email"/>
+			
+				<br /><br /> 	
+		
+			<a href="/"><button id="back" type="button" class="btn btn--secondary theme--dark reset-button">Back</button></a> <button id="signup" type="submit" class="btn btn--primary theme--dark reset-button">Sign up</button>
+			
 			<br /><br />
-	
-		<input type="email" name="username" class="inputfield" id="userId" placeholder="email"/>
+			
+		</form>	
 		
-			<br /><br /> 	
-	
-		<a href="/"><button id="landing_box_new" type="button" class="btn btn--secondary theme--dark reset-button">Back</button></a> <button role="button" id="landing_box_password" type="submit" class="btn btn--primary theme--dark reset-button">Sign up</button>
+		</div>
 		
-		<br /><br />
-		
-	</form>	
-	
-	</div>
 	</div>
 	
 		<br />
 		
-	
 </div> 
 
 </div>

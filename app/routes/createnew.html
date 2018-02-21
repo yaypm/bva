@@ -23,35 +23,37 @@
 <body class="landing-body">
 
 <!--start of content-->
-<div id="content" class="main-content">
+<div id="content" >
 
 <div id="content_box">
 	
+	<div class="inner_box centre">
 	
-	<div style="text-align: center" class="inner_box">
-	<div style="display: inline-block; text-align: left; width: 350px">
-	<h2 style="font-size: 2.2em">Create a new value assessment</h2>
-	
-	<p>Enter the name of either your company or, if the focus is specific, the project.</p>	
-	</p>
-	
-	<div class="status-failure">There was a problem creating your assessment.</div><br />
-	
-	
-	
-	<form action="/createAssessment" method="post" enctype="application/x-www-form-urlencoded" class="createacc_box">
-	
-		<input type="text" name="company" class="inputfield" id="userId" placeholder="company/project name"/>
+		<div class="menu-box">
 		
-			<br /><br /> 	
-	
-		<a href="/landing"><button id="landing_box_new" type="button" class="btn btn--secondary theme--dark landing-button">Back</button></a> <button role="button" id="landing_box_password" type="submit" class="btn btn--primary theme--dark landing-button">Start</button>
+			<h2 class="menu-title">Create a new value assessment</h2>
+			
+			<p>Enter the name of your company and the currency you wish the assessment to be in.</p>	
+			</p>
+			
+			<div class="status-failure">There was a problem creating your assessment.</div><br />
+					
+				<form action="/createAssessment" method="post" enctype="application/x-www-form-urlencoded" class="createacc_box">
+				
+					<input type="text" name="company" class="inputfield bigInput create-company" id="company" placeholder="company"/>
+					
+					<select class="select pricing-result create-currency" name="currency" ><option value="pound">&pound;</option><option value="dollar">&dollar;</option><option value="euro">&euro;</option></select>
+					
+						<br /><br /> 	
+				
+					<a href="/landing"><button id="landing_box_new" type="button" class="btn btn--secondary theme--dark landing-button">Back</button></a> <button role="button" id="landing_box_password" type="submit" class="btn btn--primary theme--dark landing-button">Start</button>
+					
+						<br /><br />
+					
+				</form>	
 		
-		<br /><br />
+		</div>
 		
-	</form>	
-	
-	</div>
 	</div>
 
 		<br />				

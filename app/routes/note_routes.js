@@ -8,7 +8,6 @@ var bcrypt = require('bcrypt');
 const MongoStore = require('connect-mongo')(session);
 const nodemailer = require('nodemailer');
 
-
 module.exports = function(app, db) {
 
 	connectionOptions = process.env.MONGO_URI;
@@ -24,7 +23,6 @@ module.exports = function(app, db) {
 	}));
 
 	function requiresLogin(req, res) {
-  
 		if (req.session && req.session.username) {
 			return true;
 		} 
@@ -36,7 +34,6 @@ module.exports = function(app, db) {
 	}
 	
 	function generateId() {
-		
 		var text = "";
 		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -45,70 +42,99 @@ module.exports = function(app, db) {
 
 		return text;
 	}	
+
+	function validateEmail(mail) {
+		if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+			return (true)
+		}
+		
+		return (false)
+	}
 	
 	function checkAssessmentStatus(req, res) {
 		var username = req.session.username;
 		var bva_id = req.query.bva_id;
 		
-		MongoClient.connect(connectionOptions, function(err, db) {
-			var collection = db.collection('user_assessments');
-			collection.findOne({username:username, id:bva_id}, function(err, result) {
-				if (err) throw err;
-					if(result != null) {
-						res.sendFile(path.join(__dirname + '/workflow.html'));
-						console.log(username + " is accessing " + bva_id);
-					}
-					else {
-						res.redirect('/landing');
-						console.log(username + " tried to access a bva they don't have access to: " + bva_id);
-					}
-				
-					db.close();
-			});
-		})
+		if(bva_id == ""){
+			res.redirect('/landing');
+		}
+		
+		else {
+			MongoClient.connect(connectionOptions, function(err, db) {
+				var collection = db.collection('user_assessments');
+				collection.findOne({username:username, id:bva_id}, function(err, result) {
+					if (err) throw err;
+						if(result != null) {
+							db.close();
+							res.sendFile(path.join(__dirname + '/workflow.html'));
+						}
+						else {
+							db.close();
+							res.redirect('/landing');
+							console.log(username + " tried to access a bva they don't have access to: " + bva_id);
+						}
+				});
+			})
+		}	
 	}
 
 	function checkEditStatus(req, res) {
 		var username = req.session.username;
 		var bva_id = req.query.bva_id;
 		
-		console.log(username);
-		console.log(bva_id);
+		if(username == "" || bva_id == "") {
+			res.redirect('/landing');
+		}
 		
-		MongoClient.connect(connectionOptions, function(err, db) {
-			var collection = db.collection('user_assessments');
-			collection.findOne({username:username, id:bva_id}, function(err, result) {
-				if (err) throw err;
-					if(result != null) {
-						res.sendFile(path.join(__dirname + '/edit.html'));
-					}
-					else {
-						res.redirect('/landing');
-					}
-				
-					db.close();
-			});
-		})
+		else {
+			MongoClient.connect(connectionOptions, function(err, db) {
+				var collection = db.collection('user_assessments');
+				collection.findOne({username:username, id:bva_id}, function(err, result) {
+					if (err) throw err;
+						if(result != null) {
+							db.close();
+							res.sendFile(path.join(__dirname + '/edit.html'));
+						}
+						else {
+							db.close();
+							res.redirect('/landing');
+						}		
+				});
+			})
+		}		
 	}
 
 	function checkShareStatus(req, res) {
 		var username = req.session.username;
 		var bva_id = req.query.bva_id;
-		console.log(bva_id);
-		MongoClient.connect(connectionOptions, function(err, db) {
-			var collection = db.collection('user_assessments');
-			collection.findOne({username:username, id:bva_id}, function(err, result) {
-				if (err) throw err;
-					if(result != null) {
-						res.sendFile(path.join(__dirname + '/share.html'));
+		
+		if(username == "" || bva_id == "") {
+			res.redirect('/landing');
+		}
+		
+		else {
+			MongoClient.connect(connectionOptions, function(err, db) {
+				var collection = db.collection('user_assessments');
+				collection.findOne({username:username, id:bva_id}, function(err, result) {
+					if (err) {
+						console.log(err);
+						res.redirect('/share?bva_id=' + bva_id + '&staus=failed');
 					}
+					
 					else {
-						res.redirect('/landing');
-					}
-				
-					db.close();
-			});
-		})
+						if(result != null) {
+							db.close();
+							res.sendFile(path.join(__dirname + '/share.html'));
+						}
+						
+						else {
+							db.close();
+							res.redirect('/landing');
+						}
+					}	
+				});
+			})
+		}	
 	}
 	
 	function sendMail(email, subject, text, html) {
@@ -151,24 +177,6 @@ module.exports = function(app, db) {
 
 	});
 	
-	app.get('/business', (req, res) => {
-		
-		res.sendFile(path.join(__dirname + '/business.html'));
-
-	});
-	
-	app.get('/development', (req, res) => {
-		
-		res.sendFile(path.join(__dirname + '/development.html'));
-
-	});
-	
-	app.get('/operations', (req, res) => {
-		
-		res.sendFile(path.join(__dirname + '/operations.html'));
-
-	});	
-	
 	app.get('/reset', (req, res) => {
 		
 		res.sendFile(path.join(__dirname + '/reset.html'));
@@ -209,7 +217,14 @@ module.exports = function(app, db) {
 			res.redirect('/');
 		}
 		else {
-			res.sendFile(path.join(__dirname + '/editassessment.html'));
+			var results = new RegExp('(@dynatrace.com)').exec(req.session.username);
+			
+			if(results != undefined) {
+				res.sendFile(path.join(__dirname + '/editassessment.html'));
+			}
+			else {
+				res.redirect('/landing');
+			}
 		}	
 
 	});	
@@ -217,24 +232,35 @@ module.exports = function(app, db) {
 	app.get('/resetpassword', (req, res) => {
 		var token = req.query.token;
 
-		MongoClient.connect(connectionOptions, function(err, db) {
-
-			if(err) { 
-				return console.dir(err); 
-				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
-				res.end("failure");
-				db.close();				
-			}	
+		if(token == "") {
+			res.redirect('/');
+		}
+		
+		else {
 			
-			else { 
-				var collection = db.collection('user_reset');
-				var results = collection.find({reset:token}).toArray(function(err, items) {				
-					res.sendFile(path.join(__dirname + '/resetpassword.html'));
-					db.close();
-				})
-			}
-		})	
+			MongoClient.connect(connectionOptions, function(err, db) {
 
+				if(err) { 
+					console.log(err);
+					db.close();					
+					res.redirect('/');				
+				}	
+				
+				else { 
+					var collection = db.collection('user_reset');
+					var results = collection.find({reset:token}).toArray(function(err, items) {	
+						if(items[0] == undefined) {
+							db.close();
+							res.redirect('/');
+						}
+						else {
+							db.close();
+							res.sendFile(path.join(__dirname + '/resetpassword.html'));
+						}
+					})
+				}
+			})	
+		}
 	});	
 
 	app.post('/resetyourpassword', (req, res) => {
@@ -247,42 +273,49 @@ module.exports = function(app, db) {
 		}
 		
 		else {
-		bcrypt.hash(password, 10, function (err, hash){
-		
-		MongoClient.connect(connectionOptions, function(err, db) {
-
-			if(err) { 
-				return console.dir(err); 
-				res.redirect('/resetpassword?token=' + token + '&status=failed');
-				db.close();				
-			}	
 			
-			else { 
-	
-				var collection = db.collection('user_reset');
-				var results = collection.find({reset:token}).toArray(function(err, items) {
+			bcrypt.hash(password, 10, function (err, hash){
+			
+				MongoClient.connect(connectionOptions, function(err, db) {
+
+					if(err) { 
+						console.log(err); 
+						db.close();	
+						res.redirect('/resetpassword?token=' + token + '&status=failed');			
+					}	
 					
-					if(items != null) {
-						if(dat < items[0].expiry) {
-							var username = items[0].username;
-							var collection = db.collection('users');
-							collection.update({'_id':username},{$set:{'password':hash}});
+					else { 
+			
+						var collection = db.collection('user_reset');
+						var results = collection.find({reset:token}).toArray(function(err, items) {
 							
-							var collection = db.collection('user_reset');
-							collection.remove({reset: token}, function(err, result) {
-								res.redirect('/resetpassword?status=success');
-							})
-						}
+							if(err){
+								db.close();	
+								res.redirect('/resetpassword?token=' + token + '&status=failed');
+							}
+							
+							if(items != null) {
+								if(dat < items[0].expiry) {
+									var username = items[0].username;
+									var collection = db.collection('users');
+									collection.update({'_id':username},{$set:{'password':hash}});
+									
+									var collection = db.collection('user_reset');
+									collection.remove({reset: token}, function(err, result) {
+										db.close();	
+										res.redirect('/resetpassword?status=success');
+									})
+								}
+							}
+							
+							else {
+								db.close();	
+								res.redirect('/resetpassword?token=' + token + '&status=failed');
+							}
+						})		
 					}
-					else {
-						res.redirect('/resetpassword?token=' + token + '&status=failed');
-					}
-				})		
-			}
-		})	
-		
-		})
-		
+				})	
+			})
 		}
 	});		
 
@@ -301,34 +334,34 @@ module.exports = function(app, db) {
 				var collection = db.collection('users');
 				var results = collection.find({_id:username}).toArray(function(err, items) {
 					if(items[0] == undefined) {
+						db.close();	
 						res.redirect('/changepassword?status=failed');
-						db.close();
 					}
 					
 					else {
-					bcrypt.compare(currentpassword, items[0].password, function(err, result) {
-					
-						if (err) { 
-							res.redirect('/changepassword?status=failed');
-							db.close();
-						}
+						bcrypt.compare(currentpassword, items[0].password, function(err, result) {
 						
-						else {
-							
-							if(result == true) {
-								bcrypt.hash(newpassword, 10, function (err, hash){
-									var collection = db.collection('users');
-									collection.update({'_id':username},{$set:{'password':hash}});
-									res.redirect('/changepassword?status=success');
-									db.close();
-								})
-							}
-							else {
+							if (err) { 
+								db.close();			
 								res.redirect('/changepassword?status=failed');
-								db.close();
 							}
-						}
-					}) 
+							
+							else {
+								
+								if(result == true) {
+									bcrypt.hash(newpassword, 10, function (err, hash){
+										var collection = db.collection('users');
+										collection.update({'_id':username},{$set:{'password':hash}});
+										db.close();	
+										res.redirect('/changepassword?status=success');
+									})
+								}
+								else {
+									db.close();	
+									res.redirect('/changepassword?status=failed');
+								}
+							}
+						}) 
 					}
 				});
 			})
@@ -389,67 +422,71 @@ module.exports = function(app, db) {
 	});		
 	
 	app.post('/createUser', (req, res) => {	
-		//requiresLogin(req, res);
 		var firstName = req.body.firstName;
 		var lastName = req.body.lastName;
 		var username = req.body.username;
 		var passwd = generateId();
-
-		var results = new RegExp('(@dynatrace.com)').exec(username);
 		
-		if(results != undefined) {
-			var status = "dynatrace";
+		if(firstName == "" || lastName == "" || username == "" || validateEmail(username) == false) {
+			res.redirect('/signup?status=failed');
 		}
 		
 		else {
-			var status = "customer";
-		}
-		
-		bcrypt.hash(passwd, 10, function (err, hash){
-    
-			if (err) {
-				
-				return err;
-    
-			}
-
-			hashPw = hash;
 			
-			var user = {
-				_id: req.body.username,
-				firstName: firstName,
-				lastName: lastName,
-				status: status,
-				password: hashPw
-			}
+			var results = new RegExp('(@dynatrace.com)').exec(username);
 		
-			MongoClient.connect(connectionOptions, function(err, db) {
-				if(err) { return console.dir(err); }
-
-					var collection = db.collection('users');
-					collection.insert(user, {w:1}, function(err, result) { 
+			if(results != undefined) {
+				var status = "dynatrace";
+			}
+			
+			else {
+				var status = "customer";
+			}
+			
+			bcrypt.hash(passwd, 10, function (err, hash){
+		
+				if (err) {
 					
-						if(err!=null){
-							console.log("could not insert " + username);   
-							res.redirect('/signup?status=failed');
-							db.close();
-						}   
+					return err;
+		
+				}
+
+				hashPw = hash;
+				
+				var user = {
+					_id: req.body.username,
+					firstName: firstName,
+					lastName: lastName,
+					status: status,
+					password: hashPw
+				}
+			
+				MongoClient.connect(connectionOptions, function(err, db) {
+					if(err) { return console.dir(err); }
+
+						var collection = db.collection('users');
+						collection.insert(user, {w:1}, function(err, result) { 
 						
-						else {					
-							console.log("inserted " + username);   
-							res.redirect('/signup?status=success');
-							db.close();
+							if(err!=null){
+								db.close();									
+								res.redirect('/signup?status=failed');
+							}   
 							
-							var email = username;
-							var subject = "Your new account"
-							var text = "";
-							var html = "Dear " + firstName + ", <br /><br /> Your temporary password is: " + passwd + "<br /><br />Please login to change it as soon as possible! <br /><br /> <a href='https://dynatrace.ai/bva'>https://dynatrace.ai/ba</a><br /><br />Many thanks, <br /><br />Dynatrace";
-							
-							sendMail(email, subject, text, html);
-						}	
-					});	
+							else {													
+								var email = username;
+								var subject = "Your new account"
+								var text = "";
+								var html = "Dear " + firstName + ", <br /><br /> Your temporary password is: " + passwd + "<br /><br />Please login to change it as soon as possible! <br /><br /> <a href='https://dynatrace.ai/bva'>https://dynatrace.ai/ba</a><br /><br />Many thanks, <br /><br />Dynatrace";
+								
+								sendMail(email, subject, text, html);
+								console.log("inserted " + username);   
+								db.close();
+								res.redirect('/signup?status=success');
+							}	
+						});	
+				});
 			});
-		});
+		}
 	});
 	
 	app.post('/login', (req, res, next) => {	
@@ -461,49 +498,54 @@ module.exports = function(app, db) {
 			password: req.body.password
 		}
 
-		MongoClient.connect(connectionOptions, function(err, db) {
-			if(err) { 
-				return console.dir(err); 
-				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
-				res.end(resp);
-				db.close();				
-			}
+		if(validateEmail(username) == false) {
+			res.redirect('/?status=failed');
+		}
+		
+		else {
+			
+			MongoClient.connect(connectionOptions, function(err, db) {
+				if(err) { 
+					console.log(err);
+					db.close();
+					res.redirect('/?status=failed');			
+				}
 
-			else {
-				var collection = db.collection('users');
-				var results = collection.find({_id:username}).toArray(function(err, items) {
-					if(items[0] == undefined) {
-						res.redirect('/?login=failed');
-						db.close();
-					}
-					
-					else {
-					bcrypt.compare(password, items[0].password, function(err, result) {
-					
-						if (err) { 
-							res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
-							res.end("failure");
-							db.close(); 
+				else {
+					var collection = db.collection('users');
+					var results = collection.find({_id:username}).toArray(function(err, items) {
+						if(items[0] == undefined) {
+							db.close();
+							res.redirect('/?status=failed');
 						}
 						
 						else {
+						bcrypt.compare(password, items[0].password, function(err, result) {
+						
+							if (err) { 
+								db.close();
+								res.redirect('/?status=failed'); 
+							}
 							
-							if(result == true) {
-								req.session.username = username;
-								req.session.save();
-								console.log(req.session.username + " has logged in.");
-								res.redirect('/landing');
-								db.close();
-							}
 							else {
-								res.redirect('/?status=failed');
-								db.close();
+								
+								if(result == true) {
+									db.close();
+									req.session.username = username;
+									req.session.save();
+									console.log(req.session.username + " has logged in.");
+									res.redirect('/landing');
+								}
+								else {
+									db.close();
+									res.redirect('/?status=failed');
+								}
 							}
-						}
-					}) }
-				});
-			}	
-		});
+						}) }
+					});
+				}	
+			});
+		}	
 	});	
 	
 	app.post('/gimmePassword', (req, res) => {	
@@ -527,82 +569,90 @@ module.exports = function(app, db) {
 	app.post('/createAssessment', (req, res) => {	
 			
 		var company = req.body.company;
+		var currency = req.body.currency;
 		var id = generateId();		
 		
 		if(company == ""){
 			res.redirect('/createnew?status=failed');	
 		}
 		
-	else {
-		var assessment = {
-			_id: id,
-			company: company,	
-			has_pricing: false,
-			sfdc: ""
-		}
-		
-		var user_assessments = {
-			id: id,
-			company: company,
-			username: req.session.username
-		}
-		
-		var assessment_data = {
-			_id: id,
-			company_revenue: '',
-			projected_growth: '',
-			revenue_dependent: '',
-			app_uptime: '',
-			revenue_breach: '',
-			incidents_month: '',
-			no_ops_troubleshoot: '',
-			no_dev_troubleshoot: '',
-			mttr: '',
-			no_apps_e2e: '',
-			no_t1t2_apps: '',
-			no_fte_existing: '',
-			existing_apps: [],
-			cycles_per_year: '',
-			cycle_days: '',
-			test_per_cycle: '',
-			qa_time_per_cycle: '',
-			qa_people_per_cycle: '',
-			dev_time_per_cycle: '',
-			dev_people_per_cycle: '',
-			operation_cost: '55000',
-			developer_cost: '56000',
-			qa_cost: '46000',
-			work_hours: '1950',
-			benefit_incident_reduction: '30',
-			benefit_mttr: '90',
-			benefit_performance: '25',
-			benefit_alert_storm: '88',
-			benefit_sla: '75',
-			benefit_fix_qa: '90',
-			benefit_prod_reduction: '55',
-			benefit_config: '97'
-		}
-		
-		MongoClient.connect(connectionOptions, function(err, db) {
-			if(err) { 
-				return console.dir(err); 
-				res.redirect('/createnew?status=failed');
-				db.close();					
+		else {
+			var assessment = {
+				_id: id,
+				company: company,	
+				has_pricing: false,
+				sfdc: "",
+				currency: currency
 			}
+			
+			var user_assessments = {
+				id: id,
+				company: company,
+				username: req.session.username
+			}
+			
+			var assessment_data = {
+				_id: id,
+				company_revenue: '',
+				projected_growth: '',
+				revenue_dependent: '',
+				app_uptime: '',
+				revenue_breach: '',
+				incidents_month: '',
+				no_ops_troubleshoot: '',
+				no_dev_troubleshoot: '',
+				mttr: '',
+				no_apps_e2e: '',
+				no_t1t2_apps: '',
+				no_fte_existing: '',
+				existing_apps: [],
+				cycles_per_year: '',
+				cycle_days: '',
+				test_per_cycle: '',
+				qa_time_per_cycle: '',
+				qa_people_per_cycle: '',
+				dev_time_per_cycle: '',
+				dev_people_per_cycle: '',
+				operation_cost: '55000',
+				developer_cost: '56000',
+				qa_cost: '46000',
+				work_hours: '1950',
+				benefit_incident_reduction: '30',
+				benefit_mttr: '90',
+				benefit_performance: '25',
+				benefit_alert_storm: '88',
+				benefit_sla: '75',
+				benefit_fix_qa: '90',
+				benefit_prod_reduction: '55',
+				benefit_config: '97',
+				y1_software: '',
+				y1_services: '',
+				y2_software: '',
+				y2_services: '',
+				y3_software: '',
+				y3_services: ''
+			}
+			
+			MongoClient.connect(connectionOptions, function(err, db) {
+				if(err) { 
+					db.close();
+					console.log(err);
+					res.redirect('/createnew?status=failed');				
+				}
 
-			else {
-				var collection = db.collection('assessments');
-				collection.insert(assessment, {w:1}, function(err, result) { if(err!=null){console.log(err);}  console.log("added in assessment");  });
-				var collection = db.collection('user_assessments');
-				collection.insert(user_assessments, {w:1}, function(err, result) { if(err!=null){console.log(err);}  console.log("added in user_assessments");      });
-				var collection = db.collection('assessment_data');
-				collection.insert(assessment_data, {w:1}, function(err, result) { if(err!=null){console.log(err);}  console.log("added in assessment_data");      });
-				
-				res.redirect('/workflow?bva_id=' + id);
-				db.close();				
-			}
-		});	
-	}
+				else {
+					var collection = db.collection('assessments');
+					collection.insert(assessment, {w:1}, function(err, result) { if(err!=null){console.log(err);}   });
+					var collection = db.collection('user_assessments');
+					collection.insert(user_assessments, {w:1}, function(err, result) { if(err!=null){console.log(err);}   });
+					var collection = db.collection('assessment_data');
+					collection.insert(assessment_data, {w:1}, function(err, result) { if(err!=null){console.log(err);}        });
+					
+					res.redirect('/workflow?bva_id=' + id);
+					db.close();				
+				}
+			});	
+		}
 	
 	});	
 
@@ -641,7 +691,7 @@ module.exports = function(app, db) {
 
 			else {
 				var collection = db.collection('assessment_data');
-				collection.update({'_id':req.header('bva_id')},{$set:{'company_revenue':req.body.company_revenue,'projected_growth':req.body.projected_growth,'revenue_dependent':req.body.revenue_dependent,'app_uptime':req.body.app_uptime,'revenue_breach':req.body.revenue_breach,'incidents_month':req.body.incidents_month,'no_ops_troubleshoot':req.body.no_ops_troubleshoot,'no_dev_troubleshoot':req.body.no_dev_troubleshoot,'mttr':req.body.mttr,'no_apps_e2e':req.body.no_apps_e2e,'no_t1t2_apps':req.body.no_t1t2_apps, 'no_fte_existing':req.body.no_fte_existing, 'cycles_per_year':req.body.cycles_per_year, 'cycle_days':req.body.cycle_days, 'test_per_cycle':req.body.test_per_cycle, 'qa_time_per_cycle':req.body.qa_time_per_cycle, 'qa_people_per_cycle': req.body.qa_people_per_cycle, 'dev_time_per_cycle':req.body.dev_time_per_cycle, 'dev_people_per_cycle':req.body.dev_people_per_cycle, 'operation_cost':req.body.operation_cost, 'developer_cost':req.body.developer_cost, 'qa_cost':req.body.qa_cost, 'work_hours':req.body.work_hours, 'benefit_incident_reduction':req.body.benefit_incident_reduction, 'benefit_mttr':req.body.benefit_mttr, 'benefit_performance':req.body.benefit_performance, 'benefit_alert_storm':req.body.benefit_alert_storm, 'benefit_sla':req.body.benefit_sla, 'benefit_fix_qa':req.body.benefit_fix_qa, 'benefit_prod_reduction': req.body.benefit_prod_reduction, 'benefit_config': req.body.benefit_config}});			
+				collection.update({'_id':req.header('bva_id')},{$set:{'company_revenue':req.body.company_revenue,'projected_growth':req.body.projected_growth,'revenue_dependent':req.body.revenue_dependent,'app_uptime':req.body.app_uptime,'revenue_breach':req.body.revenue_breach,'incidents_month':req.body.incidents_month,'no_ops_troubleshoot':req.body.no_ops_troubleshoot,'no_dev_troubleshoot':req.body.no_dev_troubleshoot,'mttr':req.body.mttr,'no_apps_e2e':req.body.no_apps_e2e,'no_t1t2_apps':req.body.no_t1t2_apps, 'no_fte_existing':req.body.no_fte_existing, 'cycles_per_year':req.body.cycles_per_year, 'cycle_days':req.body.cycle_days, 'test_per_cycle':req.body.test_per_cycle, 'qa_time_per_cycle':req.body.qa_time_per_cycle, 'qa_people_per_cycle': req.body.qa_people_per_cycle, 'dev_time_per_cycle':req.body.dev_time_per_cycle, 'dev_people_per_cycle':req.body.dev_people_per_cycle, 'operation_cost':req.body.operation_cost, 'developer_cost':req.body.developer_cost, 'qa_cost':req.body.qa_cost, 'work_hours':req.body.work_hours, 'benefit_incident_reduction':req.body.benefit_incident_reduction, 'benefit_mttr':req.body.benefit_mttr, 'benefit_performance':req.body.benefit_performance, 'benefit_alert_storm':req.body.benefit_alert_storm, 'benefit_sla':req.body.benefit_sla, 'benefit_fix_qa':req.body.benefit_fix_qa, 'benefit_prod_reduction': req.body.benefit_prod_reduction, 'benefit_config': req.body.benefit_config, 'y1_software':req.body.y1_software, 'y1_services':req.body.y1_services, 'y2_software':req.body.y2_software, 'y2_services':req.body.y2_services, 'y3_software':req.body.y3_software, 'y3_services':req.body.y3_services}});			
 
 				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("success");
@@ -712,10 +762,14 @@ module.exports = function(app, db) {
 					company: items[0].company,
 					username: theUsername
 				}
-				//console.log(JSON.stringify(userDetails));
-				res.end(JSON.stringify(userDetails));
-				db.close();
-			})		
+				var collection = db.collection('assessments');
+				var results = collection.find({'_id':req.header('bva_id')}).toArray(function(err, items) {
+					userDetails.currency=items[0].currency;
+					userDetails.has_pricing=items[0].has_pricing;
+					res.end(JSON.stringify(userDetails));
+					db.close();
+				})
+			})				
 		})	
 	});	
 
@@ -752,7 +806,6 @@ module.exports = function(app, db) {
 			}
 
 			else {
-				//console.log(id);
 				var collection = db.collection('assessment_data');
 				collection.update({'_id':req.header('bva_id')},{$pull:{'existing_apps':{"tool_id": id} }});			
 				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
@@ -766,54 +819,59 @@ module.exports = function(app, db) {
 		var username = req.body.username;
 		var resetLink = generateId();
 		
-		var dat = new Date();
-		var dat = dat.setDate(dat.getDate() + 1);
-				
-		MongoClient.connect(connectionOptions, function(err, db) {
-			if(err) { 
-				return console.dir(err); 
-				res.redirect('/reset?status=failed');
-				db.close();				
-			}
-
-			else {
-				var collection = db.collection('users');
-				var results = collection.find({_id:username}).toArray(function(err, items) {
-					if(items[0] == undefined) {
-						res.redirect('/reset?status=failed');
-						db.close();
-					}
+		if(username == "" || validateEmail(username) == false) {
+			res.redirect('/reset?status=failed');
+		}
+		
+		else {
+			
+			var dat = new Date();
+			var dat = dat.setDate(dat.getDate() + 1);
 					
-					else {
-						var resetRecord = {
-							username: username,
-							reset: resetLink,
-							expiry: dat
+			MongoClient.connect(connectionOptions, function(err, db) {
+				if(err) { 
+					return console.dir(err); 
+					res.redirect('/reset?status=failed');
+					db.close();				
+				}
+
+				else {
+					var collection = db.collection('users');
+					var results = collection.find({_id:username}).toArray(function(err, items) {
+						if(items[0] == undefined) {
+							res.redirect('/reset?status=failed');
+							db.close();
 						}
 						
-						var collection = db.collection('user_reset');
-						collection.insert(resetRecord, {w:1}, function(err, result) { 
-							if(err!=null){
-								console.log(err);
-								res.redirect('/reset?status=failed');
-							}    
-						});
-						
-						
-						console.log(items[0].firstName);
-						var email = username;
-						var subject = "Reset your password"
-						var text = "";
-						var html = "Dear " + items[0].firstName + ", <br /><br />Please use this link to reset your password: <a href='https://bva.herokuapp.com/resetpassword?token=" + resetLink + "'>https://bva.herokuapp.com/resetpassword?token=" + resetLink + "</a><br /><br />Many thanks,<br /><br />Dynatrace";
+						else {
+							var resetRecord = {
+								username: username,
+								reset: resetLink,
+								expiry: dat
+							}
 							
-						sendMail(email, subject, text, html);
-						
-						res.redirect('/reset?status=success');
-						db.close(); 
-					}
-				});
-			}	
-		});
+							var collection = db.collection('user_reset');
+							collection.insert(resetRecord, {w:1}, function(err, result) { 
+								if(err!=null){
+									console.log(err);
+									res.redirect('/reset?status=failed');
+								}    
+							});
+							
+							var email = username;
+							var subject = "Reset your password"
+							var text = "";
+							var html = "Dear " + items[0].firstName + ", <br /><br />Please use this link to reset your password: <a href='https://bva.herokuapp.com/resetpassword?token=" + resetLink + "'>https://bva.herokuapp.com/resetpassword?token=" + resetLink + "</a><br /><br />Many thanks,<br /><br />Dynatrace";
+								
+							sendMail(email, subject, text, html);
+							
+							res.redirect('/reset?status=success');
+							db.close(); 
+						}
+					});
+				}	
+			});
+		}	
 	});
 
 	app.post('/sharebva', (req, res) => {	
@@ -821,8 +879,8 @@ module.exports = function(app, db) {
 		var username = req.session.username;
 		var username_share = req.body.username_share;
 		
-		if(username_share == "" || id == "") {
-			res.redirect('/share?status=failed');
+		if(username_share == "" || validateEmail(username_share) == false) {
+			res.redirect('/share?bva_id=' + id + '&status=failed');
 		}
 		
 		else {
@@ -836,36 +894,106 @@ module.exports = function(app, db) {
 
 			else {
 				var collection = db.collection('user_assessments');
-				var results = collection.find({id:id, username:username}).toArray(function(err, items) {	
+				var results = collection.find({id:id, username:username_share}).toArray(function(err, items) {	
 					if(err) {
 						console.log(err);
 						res.redirect('/share?bva_id=' + id + "&status=failed");
 					}
 					else {
-						console.log(items);
-						var company = items[0].company;
-	
-						var newShare = {
-							id:id,
-							company: company,
-							username: username_share
-						}
+						if(items[0] == undefined) {
+							var collection = db.collection('user_assessments');
+							var results = collection.find({id:id, username:username}).toArray(function(err, items) {	
+							
+								var company = items[0].company;
+			
+								var newShare = {
+									id:id,
+									company: company,
+									username: username_share
+								}
 
+								var collection = db.collection('user_assessments');
+								collection.insert(newShare, {w:1}, function(err, result) { 						
+									if(err!=null){
+										console.log(err);
+										res.redirect('/share?bva_id=' + id + "&status=failed");
+									}    
+									else {
+										var email = username_share;
+										var subject = "You have a new assessment!"
+										var text = "";
+										var html = "Hello,<br /><br />You have a new assessment that has been shared by " + username + ", titled \"" + company + ".\"<br /><br />Please access this at <a href='https://www.dynatrace.ai/bva'>https://www.dynatrace.ai/bva</a><br /><br />Many thanks,<br /><br />Dynatrace";
+									
+										sendMail(email, subject, text, html);
+										
+										res.redirect('/share?bva_id=' + id + "&status=success");
+									}
+								});
+							})
+						}
+						else {
+							res.redirect('/share?bva_id=' + id + "&status=failed");
+						}
+					}
+				})
+			}
+		});	
+
+		}	
+	});		
+
+	app.get('/giveMeBva', (req, res) => {	
+		var id = req.header('bva_id');
+		var company = req.header('company');
+		var username = req.session.username;
+		
+		var successBody = {
+			status: "success"
+		}
+		
+		var failBody = {
+			status: "fail"
+		}
+		
+		if(id == "") {
+			res.end(JSON.stringify(failBody));
+		}
+		
+		else {
+		MongoClient.connect(connectionOptions, function(err, db) {
+			if(err) { 
+				return console.dir(err); 
+				res.end(JSON.stringify(failBody));
+				db.close();				
+			}
+
+			else {
+			
+				var collection = db.collection('user_assessments');
+				var results = collection.find({id:id, username:username}).toArray(function(err, items) {
+					
+					if(items[0] != undefined) {
+						res.end(JSON.stringify(failBody));
+						db.close();
+					}					
+					
+					else {
+						newShare = {
+							id: id,
+							company: company,
+							username: username					
+						}
+						
 						var collection = db.collection('user_assessments');
 						collection.insert(newShare, {w:1}, function(err, result) { 						
 							if(err!=null){
 								console.log(err);
-								res.redirect('/share?bva_id=' + id + "&status=failed");
+								db.close();
+								res.end(JSON.stringify(failBody));
 							}    
 							else {
-								var email = username_share;
-								var subject = "You have a new assessment!"
-								var text = "";
-								var html = "Hello,<br /><br />You have a new assessment that has been shared by " + username + ", titled \"" + company + ".\"<br /><br />Please access this at <a href='https://www.dynatrace.ai/bva'>https://www.dynatrace.ai/bva</a><br /><br />Many thanks,<br /><br />Dynatrace";
-							
-								sendMail(email, subject, text, html);
-								
-								res.redirect('/share?bva_id=' + id + "&status=success");
+								db.close();
+								res.end(JSON.stringify(successBody));
 							}
 						});
 					}
@@ -874,46 +1002,51 @@ module.exports = function(app, db) {
 		});	
 
 		}	
-	});		
-
+	});			
+	
 	app.post('/editbva', (req, res) => {	
 		var id = req.query.bva_id;
 		var username = req.session.username;
 		var company = req.body.company;
+		var currency = req.body.currency;
 		
-		if(id == "") {
-			res.redirect('/edit?status=failed');
+		if(username == "" || company == "" || currency == "") {
+			res.redirect('/edit?bva_id=' + id + '&status=failed');
 		}
 		
 		else {
-		MongoClient.connect(connectionOptions, function(err, db) {
-			if(err) { 
-				return console.dir(err); 
-				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
-				res.end("failure");
-				db.close();				
-			}
+			MongoClient.connect(connectionOptions, function(err, db) {
+				if(err) { 
+					return console.dir(err); 
+					res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+					res.end("failure");
+					db.close();				
+				}
 
-			else {
-				var collection = db.collection('user_assessments');
-				var results = collection.find({id:id, username:username}).toArray(function(err, items) {	
-					if(err) {
-						console.log(err);
-						res.redirect('/edit?bva_id=' + id + "&status=failed");
-					}
-					else {
-						var collection = db.collection('assessments');
-						collection.update({'_id':id},{$set:{'company':company}});
-						
-						var collection = db.collection('user_assessments');
-						collection.update({'id':id},{$set:{'company':company}});
-						
-						res.redirect('/edit?bva_id=' + id + "&status=success");
-					}
-				})
-			}
-		});	
-
+				else {
+					var collection = db.collection('user_assessments');
+					var results = collection.find({id:id, username:username}).toArray(function(err, items) {	
+						if(err) {
+							console.log(err);
+							res.redirect('/edit?bva_id=' + id + "&status=failed");
+						}
+						else {
+							if(items[0] == undefined) {
+								res.redirect('/landing');
+							}
+							else {
+								var collection = db.collection('assessments');
+								collection.update({'_id':id},{$set:{'company':company, 'currency':currency}});
+								
+								var collection = db.collection('user_assessments');
+								collection.update({'id':id},{$set:{'company':company}});
+								
+								res.redirect('/edit?bva_id=' + id + "&status=success");
+							}	
+						}
+					})
+				}
+			});	
 		}	
 	});		
 
@@ -922,90 +1055,100 @@ module.exports = function(app, db) {
 		var username = req.session.username;
 		
 		if(id == "") {
-			res.redirect('/edit?status=failed');
+			res.redirect('/landing');
 		}
 		
 		else {
-		MongoClient.connect(connectionOptions, function(err, db) {
-			if(err) { 
-				return console.dir(err); 
-				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
-				res.end("failure");
-				db.close();				
-			}
+			MongoClient.connect(connectionOptions, function(err, db) {
+				if(err) { 
+					res.redirect('/edit?bva_id=' + id + '&status=failed');
+					db.close();				
+				}
 
-			else {
-				var collection = db.collection('user_assessments');
-				var results = collection.find({id:id, username:username}).toArray(function(err, items) {	
-					if(err) {
-						console.log(err);
-						res.redirect('/edit?bva_id=' + id + "&status=failed");
-					}
-					else {
-						var collection = db.collection('assessments');
-						collection.remove({_id: id}, function(err, result) {
+				else {
+					var collection = db.collection('user_assessments');
+					var results = collection.find({id:id, username:username}).toArray(function(err, items) {	
+						if(err) {
+							console.log(err);
+							res.redirect('/edit?bva_id=' + id + "&status=failed");
+						}
+						else {
+							if(items[0] == undefined){
+								res.redirect('/landing');
+							}
 							
-						})
-						
-						var collection = db.collection('user_assessments');
-						collection.remove({id: id}, function(err, result) {
-							
-						})
+							else {
+								var collection = db.collection('assessments');
+								collection.remove({_id: id}, function(err, result) {
+									
+								})
+								
+								var collection = db.collection('user_assessments');
+								collection.remove({id: id}, function(err, result) {
+									
+								})
 
-						var collection = db.collection('assessment_data');
-						collection.remove({_id: id}, function(err, result) {
+								var collection = db.collection('assessment_data');
+								collection.remove({_id: id}, function(err, result) {
+									
+								})						
 							
-						})						
-					
-						
-						res.redirect("/landing");
-					}
-				})
-			}
-		});	
+								
+								res.redirect("/landing");
+							}	
+						}
+					})
+				}
+			});	
 
 		}	
 	});		
 
 	app.get('/searchUsers', (req, res) => {	
 	
+		var username = req.session.username;	
 		var emailSearch = req.header('emailSearch');
+		var results = new RegExp('(@dynatrace.com)').exec(username);
 		
-		MongoClient.connect(connectionOptions, function(err, db) {
+		if(username == "" || results == false) {
+			res.redirect('/');
+		}
+		
+		else {
+			MongoClient.connect(connectionOptions, function(err, db) {
 
-			if(err) { 
-				return console.dir(err); 
-				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
-				res.end("failure");
-				db.close();				
-			}	
-			
-			var collection = db.collection('user_assessments');
-			var results = collection.find({'username':emailSearch}).toArray(function(err, items) {
-				if(err || items[0] == undefined) {
-					console.log("no results found");
+				if(err) { 
 					var response = {"status":"failed"};
 					res.end(JSON.stringify(response));
-					db.close();
-				}
-
-				else {
-					resultArray = [];
-					for(i=0;i<items.length;i++) {
-						resultItem = {
-							_id: items[i].id
-						}
-						resultArray.push(resultItem);
-					}
-					var collection = db.collection('assessments');
-					var results = collection.find({$or:resultArray}).toArray(function(err, items) {
-						
-						res.end(JSON.stringify(items));
+					db.close();				
+				}	
+				
+				var collection = db.collection('user_assessments');
+				var results = collection.find({'username':emailSearch}).toArray(function(err, items) {
+					if(err || items[0] == undefined) {
+						var response = {"status":"failed"};
+						res.end(JSON.stringify(response));
 						db.close();
-					})
-				}
-			})		
-		})	
+					}
+
+					else {
+						resultArray = [];
+						for(i=0;i<items.length;i++) {
+							resultItem = {
+								_id: items[i].id
+							}
+							resultArray.push(resultItem);
+						}
+						var collection = db.collection('assessments');
+						var results = collection.find({$or:resultArray}).toArray(function(err, items) {
+							
+							res.end(JSON.stringify(items));
+							db.close();
+						})
+					}
+				})		
+			})	
+		}
 	});
 	
 	app.get('/logout', function(req, res) {

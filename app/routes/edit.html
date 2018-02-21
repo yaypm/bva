@@ -15,7 +15,7 @@
 	<script type="text/javascript">
 		document.addEventListener("DOMContentLoaded", function(event) {
 			statusDetect();
-			getCompanyName();
+			getAssessmentForEdit();
 			setEditLocation();
 			$("#edit_box_submit").click(function() {
 				confirmDelete(); 	  	  
@@ -36,45 +36,46 @@
 
 <div id="content_box">
 	
+	<div class="inner_box centre">
 	
-	<div style="text-align: center" class="inner_box">
-	<div style="display: inline-block; text-align: left; width: 350px">
-	<h2 style="font-size: 2.2em">Edit assessment</h2>
-	
-	<p>Edit the name of your assessment, or delete it completely.</p>	
-	</p>
-	
-	<div class="status-success">Assessment successfully updated!</div>
-	<div class="status-failure">Unable to update assessment.</div>	
-	
-		<br />
-	
-	<form id="edit" action="/editbva" method="post" enctype="application/x-www-form-urlencoded">
-	
-		<input type="text" name="company" class="inputfield" id="userId" placeholder="loading..."/>
+		<div class="menu-box">
 		
-			<br /><br /> 	
-		
-		<div style="position: relative; width: 400px; height: 50px; ">
-		<button id="edit_box_submit" type="button" class="btn btn--primary theme--dark reset-button" style="width: 350px; background-color: red; position: absolute; ">Delete</button>
-		
-		<div id="confirmDelete" style="position: absolute; "><button id="noDelete" type="button" class="btn btn--secondary theme--dark reset-button">No</button> <a id="finalDelete" href=""><button id="yesDelete" type="button" class="btn btn--primary theme--dark reset-button" style="background-color: red">Yes</button></a></div>
-		</div>	
-		
-		<br />
-		<a href="/landing"><button id="deleteBva" type="button" class="btn btn--secondary theme--dark reset-button">Back</button></a> <button role="button" id="landing_box_password" type="submit" class="btn btn--primary theme--dark reset-button">Confirm</button>
-		
-		<br /><br />
-		
-	</form>	
-	
-	
-	</div>
-	</div>
-	
-
-	
+			<h2 style="font-size: 2.2em">Edit assessment</h2>
+			
+			<p>Edit the name of your assessment, or delete it completely.</p>	
+			</p>
+			
+			<div class="status-success">Assessment successfully updated!</div>
+			<div class="status-failure">Unable to update assessment.</div>	
+			
+				<br />
+			
+				<form id="edit" action="/editbva" method="post" enctype="application/x-www-form-urlencoded">
 				
+					<input type="text" name="company" class="edit-company inputfield bigInput" id="company" placeholder="loading..."/>
+					<select class="edit-currency select pricing-result" id="currency" name="currency"><option value="pound">&pound;</option><option value="dollar">&dollar;</option><option value="euro">&euro;</option></select>
+					
+						<br /><br /> 	
+					
+					<div class="delete-container">
+					
+						<button id="edit_box_submit" type="button" class="delete-button btn btn--primary theme--dark reset-button" style="background-color:red" >Delete</button>
+						
+						<div id="confirmDelete" class="absolute"><button id="noDelete" type="button" class="btn btn--secondary theme--dark reset-button">No</button> <a id="finalDelete" href=""><button id="yesDelete" type="button" class="btn btn--primary theme--dark reset-button" style="background-color: red">Yes</button></a></div>
+						
+					</div>	
+					
+						<br />
+						
+					<a href="/landing"><button id="deleteBva" type="button" class="btn btn--secondary theme--dark reset-button">Back</button></a> <button id="landing_box_password" type="submit" class="btn btn--primary theme--dark reset-button">Confirm</button>
+					
+						<br /><br />
+					
+				</form>	
+					
+		</div>
+	
+	</div>
 	
 </div> 
 

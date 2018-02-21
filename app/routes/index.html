@@ -29,31 +29,38 @@
 		
 	<p class="welcome-title">Welcome to your Dynatrace Business Value Assessment</p>
 	
-	<div style="width: 350px; margin-left: 50%; margin-right: 50%; transform: translate(-50%);">
-	<div class="status-failure">Username/password is incorrect</div>
+	<div class="incorrect-password">
+	
+		<div class="status-failure">Username/password is incorrect</div>
+	
 	</div>
+		
 		<br />
 	
 	<form action="/login" method="post" enctype="application/x-www-form-urlencoded">
 	
-		<input type="email" name="username" class="inputfield" id="userId" placeholder="email"/>
+		<input type="email" name="username" class="inputfield bigInput" id="userId" placeholder="email"/>
 		
 			<br /><br /> 
 	
-		<input type="password" name="password" class="inputfield" id="password" placeholder="password"/>
+		<input type="password" name="password" class="inputfield bigInput" id="password" placeholder="password"/>
 		
 			<br /><br /> 	
 	
 		<button id="intro_box_submit" type="submit" class="btn btn--primary theme--dark">Login</button>
 		
-		<br /><br />
+			<br /><br />
 		
 	</form>
 	
 	<div style="text-align: center">
-	<div style="display: inline-block; text-align: right; width: 350px">
-	<a href="/reset" style="color: white;">Forgot your password?</a><br /><a href="/signup" style="color: white;">Need an account?</a>	
-	</div>
+	
+		<div class="signup-forgot">
+			
+			<a href="/reset" class="white">Forgot your password?</a><br /><a href="/signup" class="white">Need an account?</a>	
+	
+		</div>
+	
 	</div>	
 	
 </div> 

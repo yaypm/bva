@@ -3275,6 +3275,17 @@ ol.list ol ul ul li:before {
      bottom: 0;
      left: 0;
 	color: white; }		
+	
+#content_box_admin {
+	/* position: fixed; */
+	width: 400px; 
+	height: 300px;  
+	max-width: 95%;
+	max-height: 95%; 
+	margin-top: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	color: white; }		
 
 .inner_box {
 	background-color: #008bdb; 
@@ -3288,16 +3299,22 @@ ol.list ol ul ul li:before {
 
 
 
-#userId {
-	width: 350px; 
-	height: 50px; 
-	font-size: 1.3em;
-}
+/* #userId { */
+	/* width: 350px;  */
+	/* height: 50px;  */
+	/* font-size: 1.3em; */
+/* } */
 
 .bigInput {
 	width: 350px; 
 	height: 50px; 
 	font-size: 1.3em;
+}
+
+.mediumInput {
+	width: 350px; 
+	height: 40px; 
+	font-size: 1.2em;
 }
 
 .signup {
@@ -3319,7 +3336,7 @@ ol.list ol ul ul li:before {
 	font-size: 1.3em; }
 	
 #landing_box_submit {
-	width: 395px; 
+	width: 375px; 
 	max-width: 100%;
 	height: 40px; 
 	font-size: 1.3em;
@@ -3586,6 +3603,24 @@ ol.list ol ul ul li:before {
 	width: 350px;
 	text-align: center;}
 	
+.share-success {
+	display: none;
+	color: white;
+	background-color: #1a1a1a;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	width: 350px;
+	text-align: center;}
+
+.share-failure {
+	display: none;
+	color: white;
+	background-color: #1a1a1a;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	width: 350px;
+	text-align: center;}	
+	
 .biz {
 	position: absolute;
 	width: 100%;} 	
@@ -3627,3 +3662,160 @@ ol.list ol ul ul li:before {
 #confirmDelete {
 	display: none;
 }	
+
+.searchResult {
+	border-bottom-right-radius:5px;
+	border-bottom-left-radius:5px;
+	border-top-right-radius:5px;
+	border-top-left-radius:5px;
+	background-color:#007DC5;
+	padding: 15px;
+}
+
+.result-block {
+	display: inline-block; 
+	width: 32%; 
+	max-width: 32%; 
+	text-align: center
+}
+
+.currency-result {
+	max-width: 40px; 
+	width: 40px; 
+	height: 40px; 
+	display: inline-block; 
+	font-size: 1.2em
+}
+
+.pricing-result {
+	height: 40px; 
+	font-size: 1.2em; 
+	transform: translate(0, 2px)
+}
+
+.add-button {
+	padding: 0px; 
+	height: 40px; 
+	font-size: 1.2em; 
+	width: 50px
+}
+
+.sfdc-result {
+	max-width: 80%; 
+	width: 80%; 
+	height: 40px; 
+	display: inline-block
+}
+
+.sfdc-link {
+	max-width: 18%; 
+	width: 18%; 
+	display: inline-block; 
+	height: 40px; 
+	padding: 0px; 
+	margin-top: 2px
+}
+
+.incorrect-password {
+	width: 350px; 
+	margin-left: 50%; 
+	margin-right: 50%; 
+	transform: translate(-50%);
+}
+
+.white {
+	color: white;
+	text-decoration-color:white;
+}
+
+.signup-forgot {
+	display: inline-block; 
+	text-align: right; 
+	width: 350px; 
+	color: white
+}
+
+.white:hover {
+	color: white;
+	text-decoration: underline; 
+}
+
+.centre {
+	text-align: center;
+}
+
+.menu-box {
+	display: inline-block; 
+	text-align: left; 
+	width: 350px
+}
+
+.menu-title {
+	font-size: 2.5em;
+}
+
+.landing-box {
+	display: inline-block; 
+	text-align: left; 
+	width: 400px; 
+	max-width: 95%
+}
+
+.landing-logout {
+	text-align: right; 
+	max-width: 100%
+}
+
+.edit-company {
+	display: inline-block; 
+	width: 70%
+}
+
+.edit-currency {
+	display: inline-block; 
+	width: 28%; 
+	height: 50px; 
+	font-size: 1.2em
+}
+
+.delete-container {
+	position: relative; 
+	width: 400px; 
+	height: 50px; 
+}
+
+.delete-button {
+	width: 350px; 
+	background-color: red; 
+	position: absolute;
+}
+
+.absolute {
+	position: absolute;
+}
+
+.red {
+	background-color: red;
+}
+
+.create-company	{
+	display: inline-block; 
+	width: 70%
+}
+
+.create-currency {
+	display: inline-block; 
+	width: 28%; 
+	height: 50px; 
+	font-size: 1.2em
+}
+
+.search-email {
+	max-width: 290px; 
+	display: inline-block
+}
+
+.search-button {
+	max-width: 50px; 
+	display: inline-block
+}

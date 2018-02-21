@@ -23,7 +23,12 @@ function getNumbersAndDots(txt) {
 	}
 }
 
-function getBvaId(name){
+function scrollToTop() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+
+function getGet(name){
 	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
 	if(results != null) {
 		return results[1] || 0;
@@ -40,7 +45,6 @@ function isJsonString(str) {
 }
 
 function generateId() {
-		
 	var text = "";
 	var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -55,7 +59,7 @@ function resizeOps() {
 }
 
 function processMoney(preMoney) {
-	if(preMoney != '' && preMoney != undefined) {preMoney = '£' + parseInt(getNumbers(preMoney)).toLocaleString(); temp = preMoney; preMoney = ''; preMoney = temp; return preMoney} else {preMoney = ''; return preMoney}
+	if(preMoney != '' && preMoney != undefined) {preMoney = document.getElementById("currency").value + parseInt(getNumbers(preMoney)).toLocaleString(); temp = preMoney; preMoney = ''; preMoney = temp; return preMoney} else {preMoney = ''; return preMoney}
 }
 
 function processPercent(prePercent) {
@@ -67,7 +71,7 @@ function processNumber(preNumber){
 }
 
 function statusDetect() {
-	fail = getBvaId('status');
+	fail = getGet('status');
 	if(fail == "failed") {
 		$(".status-failure").css("display", "block");
 	}
@@ -77,27 +81,31 @@ function statusDetect() {
 }
 
 function setFormLocation() {
-	token = getBvaId('token');
+	token = getGet('token');
 	document.getElementById("reset").action="/resetyourpassword?token=" + token;	
 }
 
 function setEditLocation() {
-	id = getBvaId('bva_id');
+	id = getGet('bva_id');
 	document.getElementById("edit").action="/editbva?bva_id=" + id;	
 }
 
 function setShareLocation() {
-	id = getBvaId('bva_id');
+	id = getGet('bva_id');
 	document.getElementById("share").action="/sharebva?bva_id=" + id;	
 }
 
 function setEditLocation() {
-	id = getBvaId('bva_id');
+	id = getGet('bva_id');
 	document.getElementById("edit").action="/editbva?bva_id=" + id;	
 }
 
 function enableUserSearch() {
 	$(" #user_search ").click(function() {
+		$(".status-success").css("display", "none");
+		$(".status-failure").css("display", "none");
+		$(".status-success").css("display", "none");
+		$(".status-failure").css("display", "none");
 		userSearch();
 	});
 }
@@ -115,13 +123,13 @@ function setBvaLinks() {
 	document.getElementById("share").href=shareHref;
 }
 
-function getCompanyName() {
+function getAssessmentForEdit() {
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
 	myHeaders.append("Accept", "application/json");
 	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
 
-	bva_id = getBvaId('bva_id');
+	bva_id = getGet('bva_id');
 	
 	myHeaders.append("bva_id", bva_id);
 	
@@ -138,7 +146,42 @@ function getCompanyName() {
 	})
 	
 	.then(function(jsonResponse) {	
-		document.getElementById("userId").value=jsonResponse.company;
+		document.getElementById("company").value=jsonResponse.company;
+		document.getElementById("currency").value=jsonResponse.currency		
+	})	
+}
+
+function addToMine(id) {
+	company = document.getElementById(id).parentElement.parentElement.getElementsByTagName("h2")[0].innerHTML;
+	
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+	myHeaders.append("company", company);
+	myHeaders.append("bva_id", id);
+	
+	var myInit = { method: 'GET',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin'
+	}		
+	
+	fetch('/giveMeBva', myInit)
+		
+	.then(function(response) {	
+		return response.json();
+	})
+	
+	.then(function(jsonResponse) {	
+		if(jsonResponse.status == "success") {
+			scrollToTop();
+			$(".share-success").css("display", "block");
+		}
+		if(jsonResponse.status == "fail") {
+			scrollToTop();
+			$(".share-failure").css("display", "block");
+		}
 	})	
 }
 
@@ -190,24 +233,30 @@ function userSearch() {
 					pricingCheckNo = "selected=\"selected\"";
 				}
 				
-				newHtml +=	"<tr style=\"background-color:#008bdb\"><td style=\"text-align: left\">" + jsonResponse[i].company + "</td><td>	<label for=\"" + jsonResponse[i]._id + "_pricing\" class=\"label\"></label><select style=\"height:40px; margin-bottom: 5px\" class=\"select\" name=\"" + jsonResponse[i]._id + "_pricing\" form=\"edit\"><option value=\"Yes\" " + pricingCheckYes + " >Yes</option><option value=\"No\" " + pricingCheckNo + ">No</option></select></td><td><input type=\"text\" name=\"" + jsonResponse[i]._id + "_sfdc\" class=\"inputfield\" id=\"\" placeholder=\"SFDC link\" style=\"max-width: 70%; width: 75%; height: 40px; display: inline-block\" value=\"" + jsonResponse[i].sfdc + "\"/><button id=\"landing_box_password\" type=\"button\" class=\"btn btn--secondary theme--dark landing-bva-button openlink\" style=\"max-width: 23%; width: 23%; display: inline-block; height: 40px; padding: 0px; margin-top: 2px\"><img src=\"/static/external-link-white.png\" height=40px width=40px/></button>	</td></tr>";
+				if(jsonResponse[i].currency == "pound") { var currency = "&pound;" }
+				if(jsonResponse[i].currency == "dollar") { var currency = "&dollar;" }
+				if(jsonResponse[i].currency == "euro") { var currency = "&euro;" }
+				
+				newHtml += "<div class=\"searchResult\"><h2>" + jsonResponse[i].company + "</h2><div class=\"result-block\"><label for=\"currency\" class=\"label\" >Currency</label><input name=\"currency\" disabled type=\"text\" class=\"inputfield currency-result\" value=\"" + currency + "\"/></div><div class=\"result-block\"><label for=\"pricing\" class=\"label\">Seen pricing?</label><select class=\"select pricing-result\" name=\"" + jsonResponse[i]._id + "_pricing\"><option value=\"Yes\" " + pricingCheckYes + ">Yes</option><option value=\"No\" " + pricingCheckNo + ">No</option></select></div><div class=\"result-block\"><label for=\"add\" class=\"label\">Add to yours</label><button type=\"button\" class=\"btn btn--primary theme--dark add-button\" id=\"" + jsonResponse[i]._id + "\"><img src=\"/static/add-white.png\" height=\"40px\" width=\"40px\" /></button></div><br /><br /><div style=\"block\"><label for=\"sfdc\" class=\"label\">Salesforce link</label><input type=\"text\" class=\"inputfield sfdc-result\" placeholder=\"SFDC link\" name=\"" + jsonResponse[i]._id + "_sfdc\" value=\"" + jsonResponse[i].sfdc + "\"/><button id=\"landing_box_password\" type=\"button\" class=\"btn btn--secondary theme--dark landing-bva-button openlink sfdc-link\"><img src=\"/static/external-link-white.png\" height=\"40px\" width=\"40px\"/></button></div></div><br />";
 			}
 			
 			document.getElementById("listOfIds").value=JSON.stringify(listId);
-			document.getElementById("user_list").children[1].innerHTML = newHtml;
+			document.getElementById("results").innerHTML = newHtml;
 			
 			$(" .openlink ").click(function() {
 				
-					url = this.parentElement.children[0].value;
+					url = this.parentElement.children[1].value;
 					openInNewTab(url);
 			});
+			
+			$(" .add-button ").click(function() {
+				addToMine(this.id);			  
+			});	
 		
 		}
 		
 		else {
 			document.getElementById("listOfIds").value = "";
-			document.getElementById("user_list").children[1].innerHTML = "";			
-			$('#user_list').css("display", "none");
 			$('#no_result').css("display", "block");
 		}
 	})	
@@ -255,8 +304,7 @@ function getAssessmentData() {
 	myHeaders.append("Accept", "application/json");
 	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
 
-	//var urlParams = new URLSearchParams(location.search);
-	bva_id = getBvaId('bva_id');
+	bva_id = getGet('bva_id');
 	
 	myHeaders.append("bva_id", bva_id);
 	
@@ -304,11 +352,19 @@ function getAssessmentData() {
 		document.getElementById("benefit_fix_qa").value = processPercent(jsonResponse.benefit_fix_qa);
 		document.getElementById("benefit_prod_reduction").value = processPercent(jsonResponse.benefit_prod_reduction);
 		document.getElementById("benefit_config").value = processPercent(jsonResponse.benefit_config);
+		document.getElementById("y1_software").value = processMoney(jsonResponse.y1_software);
+		document.getElementById("y1_services").value = processMoney(jsonResponse.y1_services);
+		document.getElementById("y2_software").value = processMoney(jsonResponse.y2_software);
+		document.getElementById("y2_services").value = processMoney(jsonResponse.y2_services);
+		document.getElementById("y3_software").value = processMoney(jsonResponse.y3_software);
+		document.getElementById("y3_services").value = processMoney(jsonResponse.y3_services);		
 		
 		existingApps = "";
 		
+		var currency = document.getElementById("currency").value;
+		
 		for(i=0;i<jsonResponse.existing_apps.length;i++) {
-			existingApps += "<div class=\"bva-question-wrapper bva-question-top \" \"><div class=\"bva-question-existing-wrapper\">	<div style=\"position: relative\"> <h2 style=\"display: inline-block\">" + jsonResponse.existing_apps[i].name + "</h2> <div style=\"display: inline-block; position: absolute; right: 0px\"><a class=\"delete\" id=\"" + jsonResponse.existing_apps[i].tool_id + "\"><img src=\"/static/delete-grey.svg\"  width=\"40px\" height=\"40px\" /></a></div> </div><p>£" + parseInt(jsonResponse.existing_apps[i].annual_costs).toLocaleString() + " - " + jsonResponse.existing_apps[i].ftes + " FTEs</p><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 1: " + jsonResponse.existing_apps[i].y1 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y1 + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 2: " + jsonResponse.existing_apps[i].y2 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y2 + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 3: " + jsonResponse.existing_apps[i].y3 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y3 + "\" max=\"100\" id=\"p0\"></progress></div>	</div></div><br />";
+			existingApps += "<div class=\"bva-question-wrapper bva-question-top \" \"><div class=\"bva-question-existing-wrapper\">	<div style=\"position: relative\"> <h2 style=\"display: inline-block\">" + jsonResponse.existing_apps[i].name + "</h2> <div style=\"display: inline-block; position: absolute; right: 0px\"><a class=\"delete\" id=\"" + jsonResponse.existing_apps[i].tool_id + "\"><img src=\"/static/delete-grey.svg\"  width=\"40px\" height=\"40px\" /></a></div> </div><p>" + currency + parseInt(jsonResponse.existing_apps[i].annual_costs).toLocaleString() + " - " + jsonResponse.existing_apps[i].ftes + " FTEs</p><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 1: " + jsonResponse.existing_apps[i].y1 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y1 + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 2: " + jsonResponse.existing_apps[i].y2 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y2 + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 3: " + jsonResponse.existing_apps[i].y3 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y3 + "\" max=\"100\" id=\"p0\"></progress></div>	</div></div><br />";
 		}			
 		
 		document.getElementById("existing_apps").innerHTML = existingApps;
@@ -354,18 +410,21 @@ function updateAssessment() {
 		benefit_sla: getNumbersAndDots(document.getElementById("benefit_sla").value),
 		benefit_fix_qa: getNumbersAndDots(document.getElementById("benefit_fix_qa").value),
 		benefit_prod_reduction: getNumbersAndDots(document.getElementById("benefit_prod_reduction").value),
-		benefit_config: getNumbersAndDots(document.getElementById("benefit_config").value)
+		benefit_config: getNumbersAndDots(document.getElementById("benefit_config").value),
+		y1_software: getNumbers(document.getElementById("y1_software").value),
+		y1_services: getNumbers(document.getElementById("y1_services").value),
+		y2_software: getNumbers(document.getElementById("y2_software").value),
+		y2_services: getNumbers(document.getElementById("y2_services").value),
+		y3_software: getNumbers(document.getElementById("y3_software").value),
+		y3_services: getNumbers(document.getElementById("y3_services").value)	
 	}
-	
-	console.log(assessment_data);
-	
+		
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
 	myHeaders.append("Accept", "application/json");
 	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
 	
-	//var urlParams = new URLSearchParams(location.search);
-	bva_id = getBvaId('bva_id');
+	bva_id = getGet('bva_id');
 	
 	myHeaders.append("bva_id", bva_id);
 	
@@ -379,7 +438,7 @@ function updateAssessment() {
 	fetch('/updateAssessment', myInit)
 		
 	.then(function(response) {
-		console.log("test update");
+	
 	})
 }
 
@@ -396,7 +455,6 @@ function addListeners() {
 	$(" .opsFromBiz ").click(function() {
 		$( ".biz" ).hide('slide', {direction: 'left'});
 		$(".ops").fadeIn();
-		//getAssessmentData();
 		$(".leftContainer").css("height", $('.ops').css('height')); 
 		$( ".result-biz" ).hide('slide', {direction: 'left'});
 		$(".result-ops").fadeIn();		 	  	  
@@ -405,7 +463,6 @@ function addListeners() {
 	$(" .bizFromOps ").click(function() {
 		$( ".ops" ).toggle( "slide" , { direction: "right" });
 		$( ".biz" ).fadeIn();	
-		//getAssessmentData();
 		$(".leftContainer").css("height", $('.biz').css('height'));
 		$( ".result-ops" ).toggle( "slide" , { direction: "right" });
 		$( ".result-biz" ).fadeIn();	
@@ -413,8 +470,7 @@ function addListeners() {
 		
 	$(" .devFromOps ").click(function() {
 		$( ".ops" ).toggle( "slide" , { direction: "left" });
-		$( ".dev" ).fadeIn();
-		//getAssessmentData();		
+		$( ".dev" ).fadeIn();		
 		$(".leftContainer").css("height", $('.dev').css('height'));
 		$( ".result-ops" ).toggle( "slide" , { direction: "left" });
 		$( ".result-dev" ).fadeIn();			  
@@ -423,7 +479,6 @@ function addListeners() {
 	$(" .opsFromDev ").click(function() {
 		$( ".dev" ).toggle( "slide" , { direction: "right" });
 		$( ".ops" ).fadeIn();	
-		//getAssessmentData();
 		$(".leftContainer").css("height", $('.ops').css('height'));
 		$( ".result-dev" ).toggle( "slide" , { direction: "right" });
 		$( ".result-ops" ).fadeIn();			  
@@ -432,7 +487,6 @@ function addListeners() {
 	$(" .optionsFromDev ").click(function() {
 		$( ".dev" ).toggle( "slide" , { direction: "left" });
 		$( ".options" ).fadeIn();	
-		//getAssessmentData();
 		$(".leftContainer").css("height", $('.options').css('height'));
 		$( ".result-dev" ).toggle( "slide" , { direction: "left" });
 		$( ".result-options" ).fadeIn();			  
@@ -440,15 +494,14 @@ function addListeners() {
 
 	$(" .devFromOptions ").click(function() {
 		$( ".options" ).toggle( "slide" , { direction: "right" });
-		$( ".dev" ).fadeIn();	
-		//getAssessmentData();		
+		$( ".dev" ).fadeIn();		
 		$(".leftContainer").css("height", $('.dev').css('height'));
 		$( ".result-options" ).toggle( "slide" , { direction: "right" });
 		$( ".result-dev" ).fadeIn();			  
 	});	
 		
-	$('#company_revenue, #revenue_breach, #operation_cost, #developer_cost, #qa_cost, #annual_cost').on( "blur", function() {
-		if(this.value != '' && this.value != undefined) {this.value = '£' + parseInt(getNumbers(this.value)).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
+	$('#company_revenue, #revenue_breach, #operation_cost, #developer_cost, #qa_cost, #annual_cost, #y1_software, #y1_services, #y2_software, #y2_services, #y3_software, #y3_services').on( "blur", function() {
+		if(this.value != '' && this.value != undefined) {this.value = document.getElementById("currency").value + parseInt(getNumbers(this.value)).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
 	} );
 		
 	$('#projected_growth, #revenue_dependent, #app_uptime, #test_per_cycle, #qa_time_per_cycle, #dev_time_per_cycle, #benefit_incident_reduction, #benefit_mttr, #benefit_performance, #benefit_alert_storm, #benefit_sla, #benefit_fix_qa, #benefit_prod_reduction, #benefit_config, #existing_y1, #existing_y2, #existing_y3').on( "blur", function() {
@@ -458,13 +511,10 @@ function addListeners() {
 	$('#incidents_month, #no_ops_troubleshoot, #no_dev_troubleshoot, #mttr, #no_apps_e2e, #no_t1t2_apps, #no_fte_existing, #cycles_per_year, #cycle_days, #qa_people_per_cycle, #dev_people_per_cycle, #work_hours, #no_fte_config').on( "blur", function() {
 		if(this.value != '' && this.value != undefined) {this.value = parseInt(getNumbers(this.value)).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
 	});
-
-	getAssessmentData();	
 }
 
 function getTabs() {
-	//var urlParams = new URLSearchParams(location.search);
-	bva_id = getBvaId('bva_id');
+	bva_id = getGet('bva_id');
 	
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
@@ -485,6 +535,12 @@ function getTabs() {
 	})	
 	
 	.then(function(jsonObj) {
+		if(jsonObj.currency == "pound") { var currency = "£" }
+		if(jsonObj.currency == "dollar") { var currency = "$" }
+		if(jsonObj.currency == "euro") { var currency = "€" }		
+		
+		document.getElementById("currency").value=currency;
+		
 		document.getElementsByClassName("user-email")[0].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
 		document.getElementsByClassName("user-company")[0].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
 
@@ -496,6 +552,12 @@ function getTabs() {
 
 		document.getElementsByClassName("user-email")[3].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
 		document.getElementsByClassName("user-company")[3].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;		
+		
+		if(jsonObj.has_pricing == true) {
+			$('#pricing').css("display", "block");
+		}
+		
+		getAssessmentData();	
 	})
 }
 
@@ -518,8 +580,7 @@ function addExistingTool() {
 	myHeaders.append("Accept", "application/json");
 	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
 	
-	//var urlParams = new URLSearchParams(location.search);
-	bva_id = getBvaId('bva_id');
+	bva_id = getGet('bva_id');
 	
 	myHeaders.append("bva_id", bva_id);
 	
@@ -564,8 +625,7 @@ function deleteExistingTool(id) {
 	myHeaders.append("Accept", "application/json");
 	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
 	
-	//var urlParams = new URLSearchParams(location.search);
-	bva_id = getBvaId('bva_id');
+	bva_id = getGet('bva_id');
 	
 	myHeaders.append("bva_id", bva_id);
 	
@@ -590,13 +650,12 @@ function confirmDelete() {
 }
 
 function cancelDelete() {
-	console.log("test");
 	$("#edit_box_submit").fadeIn();
 	$("#confirmDelete").fadeOut();
 }
 
 function addDeleteId() {
-	id = getBvaId('bva_id');
+	id = getGet('bva_id');
 	document.getElementById("finalDelete").href="/deleteAssessment?bva_id=" + id;
 }
 
@@ -619,8 +678,7 @@ function deleteAssessment() {
 	myHeaders.append("Accept", "application/json");
 	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
 	
-	//var urlParams = new URLSearchParams(location.search);
-	bva_id = getBvaId('bva_id');
+	bva_id = getGet('bva_id');
 	
 	myHeaders.append("bva_id", bva_id);
 	

@@ -34,49 +34,52 @@
 
 <div id="content_box">
 
-	<div style="text-align: center" class="inner_box">
-	<div style="display: inline-block; text-align: left; width: 400px; max-width: 95%">
-	<h2 style="font-size: 2.2em">Your account</h2>
+	<div class="inner_box centre">
 	
-	<p>Please choose from the options below; continue with an assessment, share it with somebody else, create a new assessment or change your password.</p>	
+		<div class="landing-box">
+		
+		<h2 class="menu-title">Your account</h2>
+		
+		<p>Please choose from the options below; continue with an assessment, share it with somebody else, create a new assessment or change your password.</p>	
 
+			<br />
+
+			<form action="/workflow" method="get" enctype="application/x-www-form-urlencoded">
+				
+				<select class="select bva-select" name="bva_id" id="bva_select">
+					<option value="">
+						Loading..
+					</option>	
+				</select>
+
+				<a id="edit" href=""><button id="edit_submit" type="button" class="btn btn--secondary theme--dark landing-bva-button"><img src="/static/edit-white.svg" /></button></a>	
+			
+				<a id="share" href=""><button id="share_submit" type="button" class="btn btn--secondary theme--dark landing-bva-button"><img src="/static/share-white.svg" /></button></a>
+			
+					<br /><br />
+			
+				<button id="landing_box_submit" type="submit" class="btn btn--primary theme--dark" >Continue</button>
+			
+					<br /><br />
+			
+				<a href="/createnew"><button id="landing_box_new" type="button" class="btn btn--secondary theme--dark landing-button">Create new</button></a> <a href="/changepassword"><button id="landing_box_password" type="button" class="btn btn--secondary theme--dark landing-button">Change password</button></a>
+
+			</form>	
+
+			<br />
+		
+		<div class="landing-logout">
+		
+			<a href="/logout" class="white">Logout</a><br />
+		
+		</div>
+		
+		</div>
+		
+	</div>
+	
 		<br />
 
-		<form action="/workflow" method="get" enctype="application/x-www-form-urlencoded">
-			
-			<select class="select bva-select" name="bva_id" id="bva_select">
-				<option value="">
-					-
-				</option>	
-			</select>
-
-		<a id="edit" href=""><button id="landing_box_password" type="button" class="btn btn--secondary theme--dark landing-bva-button"><img src="/static/edit-white.svg" /></button></a>	
-		
-		<a id="share" href=""><button id="landing_box_password" type="button" class="btn btn--secondary theme--dark landing-bva-button"><img src="/static/share-white.svg" /></button></a>
-		
-		<br /><br />
-		
-		<button id="landing_box_submit" type="submit" class="btn btn--primary theme--dark" >Continue</button>
-		
-			<br /><br />
-		
-		<a href="/createnew"><button id="landing_box_new" type="button" class="btn btn--secondary theme--dark landing-button">Create new</button></a> <a href="/changepassword"><button id="landing_box_password" type="button" class="btn btn--secondary theme--dark landing-button">Change password</button></a>
-
-	</form>	
-
-	<br />
-	
-	<div style="text-align: right; max-width: 100%">
-	<a href="/logout" style="color: white;">Logout</a><br />
-	</div>
-	
-	</div>
-	</div>
-	
-	<br />
-	
-
-	
 </div> 
 
 </div>		

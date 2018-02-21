@@ -16,7 +16,7 @@
 		document.addEventListener("DOMContentLoaded", function(event) {
 			statusDetect();
 			enableUserSearch();
-		});
+		});		
 	</script>
 
 </head>
@@ -26,63 +26,53 @@
 <!--start of content-->
 <div id="content" class="main-content">
 
-<div id="content_box">
+<div id="content_box_admin" >
 	
+	<div class="inner_box centre">
 	
-	<div style="text-align: center" class="inner_box">
-	<div style="display: inline-block; text-align: left; width: 350px">
-	<h2 style="font-size: 2.2em">Edit assessments</h2>
-	
-	<p>Find an assessment using an email address, then edit properties of the assessment.</p>	
-	</p>
-	
-	<div class="status-success">Assessment successfully updated!</div>
-	<div class="status-failure">Unable to update assessment.</div>	
-
-
-	<br />
-	
-	<form id="edit" action="/changeAssessment" method="post" enctype="application/x-www-form-urlencoded">
-	
-		<input type="email" name="email" class="inputfield bigInput" id="emailSearch" placeholder="email" style="max-width: 290px; display: inline-block"/>
-
-		<button id="user_search" type="button" class="btn btn--primary theme--dark landing-bva-button" style="max-width: 50px; display: inline-block"><img src="/static/search-white.svg" /></button>	
-			<br /><br /> 	
+		<div class="menu-box">
+		
+			<h2 class="menu-title">Edit assessments</h2>
 			
-		<table class="table" style="font-size: 16px; display: none" id="user_list">
-		  <thead>
-			<tr>
-			  <th>Name</th>
-			  <th>Sent pricing?</th>
-			  <th>SFDC opportunity</th>
-			</tr>
-		  </thead>
-		  <tbody>
+			<p>Find an assessment using an email address, then edit properties of the assessment.</p>	
+			</p>
+			
+			<div class="status-success">Assessment successfully updated!</div>
+			<div class="status-failure">Unable to update assessment.</div>	
 
-		  
-		  
-		</tbody>
-		</table>
-		
-		<input type="hidden" value="" name="listOfIds" id="listOfIds"/>
-		
-		<p id="no_result" style="display: none">No assessments for this user found!</p>
-		
-		
-		
-		<a href="/landing"><button id="deleteBva" type="button" class="btn btn--secondary theme--dark reset-button">Back</button></a> <button role="button" id="landing_box_password" type="submit" class="btn btn--primary theme--dark reset-button">Save</button>
-		
-		<br />
-		
-	</form>	
-
-	
-	</div>
-	</div>
-	
-	
-	
+			<div class="share-success">Assessment added to your list!</div>
+			<div class="share-failure">Already added to your list.</div>	
+			
+				<br />
+			
+				<form id="edit" action="/changeAssessment" method="post" enctype="application/x-www-form-urlencoded">
 				
+					<input type="email" name="email" class="inputfield bigInput search-email" id="emailSearch" placeholder="email" />
+
+					<button id="user_search" type="button" class="btn btn--primary theme--dark landing-bva-button search-button" ><img src="/static/search-white.svg" /></button>	
+						
+						<br /><br /> 	
+						
+					<p id="no_result" style="display: none">No assessments for this user found!</p>					
+					
+					<div id="results">
+					
+
+					</div>
+					
+						<br />
+					
+					<input type="hidden" value="" name="listOfIds" id="listOfIds"/>
+									
+					<a href="/landing"><button id="deleteBva" type="button" class="btn btn--secondary theme--dark reset-button">Back</button></a> <button id="landing_box_password" type="submit" class="btn btn--primary theme--dark reset-button">Save</button>
+					
+					<br /><br />
+					
+				</form>	
+		
+		</div>
+		
+	</div>
 	
 </div> 
 

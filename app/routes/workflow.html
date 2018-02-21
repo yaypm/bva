@@ -45,6 +45,7 @@
 
 <div class="leftContainer" style="position: relative; height: 964px">
 
+<input type="hidden" id="currency"/>
 
 <div class="biz">  
 
@@ -95,7 +96,7 @@
 		<div class="bva-input-wrapper">	
 			
 			<label for="company_revenue" class="label bva-question-text" >Company or business unit annual revenue</label>
-			<input type="text" class="inputfield bva-question-input" id="company_revenue" placeholder="£"  />
+			<input type="text" class="inputfield bva-question-input" id="company_revenue" placeholder="revenue"  />
 	
 		</div>
 	
@@ -110,7 +111,7 @@
 		<div class="bva-input-wrapper">	
 			
 			<label for="projected_growth" class="label bva-question-text">Projected annual growth rate</label>
-			<input type="text" class="inputfield bva-question-input" id="projected_growth" placeholder="%"/>
+			<input type="text" class="inputfield bva-question-input" id="projected_growth" placeholder="growth"/>
 		
 		</div>
 	
@@ -125,7 +126,7 @@
 		<div class="bva-input-wrapper">	
 			
 			<label for="revenue_dependent" class="label bva-question-text">Revenue dependent on applications</label>
-			<input type="text" class="inputfield bva-question-input" id="revenue_dependent" placeholder="%" />
+			<input type="text" class="inputfield bva-question-input" id="revenue_dependent" placeholder="% revenue" />
 		
 		</div>
 	
@@ -139,8 +140,8 @@
 	
 		<div class="bva-input-wrapper">	
 	
-			<label for="app_uptime" class="label bva-question-text" >Excluding planned downtime, what is your app service uptime?</label>
-			<input type="text" class="inputfield bva-question-input" id="app_uptime" placeholder="%"/>
+			<label for="app_uptime" class="label bva-question-text" >Excluding planned maintenance, how often do you experience an application degradation or outage?</label>
+			<input type="text" class="inputfield bva-question-input" id="app_uptime" placeholder="% of time"/>
 	
 		</div>
 	
@@ -154,8 +155,8 @@
 		
 		<div class="bva-input-wrapper">	
 	
-			<label for="revenue_breach" class="label bva-question-text" >Revenue lost per minute during an issue</label>
-			<input type="text" class="inputfield bva-question-input" id="revenue_breach" placeholder="£" />
+			<label for="revenue_breach" class="label bva-question-text" >Revenue lost per minute during a degradation or outage</label>
+			<input type="text" class="inputfield bva-question-input" id="revenue_breach" placeholder="revenue per minute" />
 	
 		</div>
 	
@@ -341,7 +342,7 @@
 			<div class="bva-question-block">	
 	
 				<label for="annual_cost" class="label bva-question-text">Annual license and support costs</label>
-				<input type="text" class="inputfield bva-question-input" id="annual_cost" placeholder="£"/>
+				<input type="text" class="inputfield bva-question-input" id="annual_cost" placeholder="annual costs"/>
 	
 			</div>
 		
@@ -385,30 +386,30 @@
 		
 		<div id="existing_apps">
 		
-		<div class="bva-question-wrapper bva-question-top">
+		<!-- <div class="bva-question-wrapper bva-question-top"> -->
 			
-			<div class="bva-question-existing-wrapper">	
+			<!-- <div class="bva-question-existing-wrapper">	 -->
 			
-				<div style="position: relative"> <h2 style="display: inline-block">AppDynamics</h2> <div style="display: inline-block; position: absolute; right: 0px"><a onclick="console.log('YES');"><img src="/static/delete-grey.svg"  width="40px" height="40px" /></a></div> </div>
-				<p>£100,000 - 10 FTEs</p>
+				<!-- <div style="position: relative"> <h2 style="display: inline-block">AppDynamics</h2> <div style="display: inline-block; position: absolute; right: 0px"><a onclick="console.log('YES');"><img src="/static/delete-grey.svg"  width="40px" height="40px" /></a></div> </div> -->
+				<!-- <p>£100,000 - 10 FTEs</p> -->
 				
-				<div class="theme--green">
-					<label class="label--progressbar" for="p0">Year 1</label>
-					<progress class="progressbar" value="80" max="100" id="p0"></progress>
-				</div>
+				<!-- <div class="theme--green"> -->
+					<!-- <label class="label--progressbar" for="p0">Year 1</label> -->
+					<!-- <progress class="progressbar" value="80" max="100" id="p0"></progress> -->
+				<!-- </div> -->
 
-				<div class="theme--green">
-					<label class="label--progressbar" for="p0">Year 2</label>
-					<progress class="progressbar" value="90" max="100" id="p0"></progress>
-				</div>
+				<!-- <div class="theme--green"> -->
+					<!-- <label class="label--progressbar" for="p0">Year 2</label> -->
+					<!-- <progress class="progressbar" value="90" max="100" id="p0"></progress> -->
+				<!-- </div> -->
 
-				<div class="theme--green">
-					<label class="label--progressbar" for="p0">Year 3</label>
-					<progress class="progressbar" value="100" max="100" id="p0"></progress>
-				</div>				
-			</div>
+				<!-- <div class="theme--green"> -->
+					<!-- <label class="label--progressbar" for="p0">Year 3</label> -->
+					<!-- <progress class="progressbar" value="100" max="100" id="p0"></progress> -->
+				<!-- </div>				 -->
+			<!-- </div> -->
  
-		</div>
+		<!-- </div> -->
  		
 		</div>
 </div>
@@ -633,7 +634,7 @@
 		<div class="bva-input-wrapper">
 			
 			<label for="operation_cost" class="label bva-question-text">Fully loaded cost of operations person</label>
-			<input type="text" class="inputfield bva-question-input" id="operation_cost" placeholder="£" />
+			<input type="text" class="inputfield bva-question-input" id="operation_cost" placeholder="ops cost" />
 	
 		</div>
 	
@@ -648,7 +649,7 @@
 		<div class="bva-input-wrapper">	
 			
 			<label for="developer_cost" class="label bva-question-text">Fully loaded cost of developer</label>
-			<input type="text" class="inputfield bva-question-input" id="developer_cost" placeholder="£" />
+			<input type="text" class="inputfield bva-question-input" id="developer_cost" placeholder="dev cost" />
 	
 		</div>
 	
@@ -663,7 +664,7 @@
 		<div class="bva-input-wrapper">
 	
 			<label for="qa_cost" class="label bva-question-text">Fully loaded cost of QA person</label>
-			<input type="text" class="inputfield bva-question-input" id="qa_cost" placeholder="£" />
+			<input type="text" class="inputfield bva-question-input" id="qa_cost" placeholder="qa cost" />
 	
 		</div>
 	
@@ -808,6 +809,69 @@
 	
 	</div>
 	
+	<div id="pricing" style="display:none">
+	
+		<br />
+	
+	<h2 class="bva-question-text-centre">Dynatrace pricing</h2>	
+	
+	<div class="bva-question-wrapper" style="text-align: center">
+	
+		<div class="bva-input-wrapper">	
+			
+			<p style="text-align: center; max-width: 420px">Please enter the prices provided by Dynatrace for the software and services if applicable.</p>
+	
+		</div>
+	
+	</div>	
+	
+	
+		<br />
+	
+	<div class="bva-question-wrapper" style="text-align: center">
+	
+		<div class="bva-input-wrapper">	
+			<p style="width: 25%; max-width: 25%; display: inline-block"></p>
+			<p style="width: 33%; max-width: 33%; display: inline-block"> software </p>
+			<p style="width: 33%; max-width: 33%; display: inline-block"> services </p>			
+			
+			<p style="width: 15%; max-width: 15%; display: inline-block; margin-top: 0px">Year 1</p>
+			<input type="text" class="inputfield bva-question-input" id="y1_software" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
+			<input type="text" class="inputfield bva-question-input" id="y1_services" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
+	
+		</div>
+	
+	</div>	
+		
+		<br />
+	
+	<div class="bva-question-wrapper" style="text-align: center">
+	
+		<div class="bva-input-wrapper">	
+			
+			<p style="width: 15%; max-width: 15%; display: inline-block;">Year 2</p>
+			<input type="text" class="inputfield bva-question-input" id="y2_software" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
+			<input type="text" class="inputfield bva-question-input" id="y2_services" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
+	
+		</div>
+	
+	</div>		
+	
+		<br />
+	
+	<div class="bva-question-wrapper" style="text-align: center">
+	
+		<div class="bva-input-wrapper">	
+			
+			<p style="width: 15%; max-width: 15%; display: inline-block">Year 3</p>
+			<input type="text" class="inputfield bva-question-input" id="y3_software" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
+			<input type="text" class="inputfield bva-question-input" id="y3_services" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
+	
+		</div>
+	
+	</div>	
+	
+	</div>
 </div>
 <!--end of questions-->
 </div>

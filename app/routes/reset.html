@@ -26,31 +26,35 @@
 <div id="content" class="main-content">
 
 <div id="content_box">
-	
-	
-	<div style="text-align: center" class="inner_box">
-	<div style="display: inline-block; text-align: left; width: 350px">
-	<h2 style="font-size: 2.2em">Reset your password</h2>
-	
-	<p>Enter your email address and a reset link will be sent to you.</p>	
-	</p>
-	
-	<div class="status-success">Password reset sent! Check your email.</div>
-	<div class="status-failure">Unable to reset password.</div>
-	
-	<form action="/reset" method="post" enctype="application/x-www-form-urlencoded">
-	
-		<input type="email" name="username" class="inputfield" id="userId" placeholder="email"/>
 		
-			<br /><br /> 	
+	<div class="inner_box centre">
 	
-		<a href="/"><button id="landing_box_new" type="button" class="btn btn--secondary theme--dark landing-button">Back</button></a> <button role="button" id="landing_box_password" type="submit" class="btn btn--primary theme--dark landing-button">Reset</button>
+		<div class="menu-box">
 		
-		<br /><br />
+		<h2 class="menu-title">Reset your password</h2>
 		
-	</form>	
+		<p>Enter your email address and a reset link will be sent to you.</p>	
+		</p>
+		
+		<div class="status-success">Password reset sent! Check your email.</div>
+		<div class="status-failure">Unable to reset password.</div>
+		
+			<br />
+			
+			<form action="/reset" method="post" enctype="application/x-www-form-urlencoded">
+			
+				<input type="email" name="username" class="inputfield bigInput" placeholder="email"/>
+				
+					<br /><br /> 	
+			
+				<a href="/"><button id="back" type="button" class="btn btn--secondary theme--dark landing-button">Back</button></a> <button id="reset" type="submit" class="btn btn--primary theme--dark landing-button">Reset</button>
+				
+					<br /><br />
+				
+			</form>	
+		
+		</div>
 	
-	</div>
 	</div>
 
 		<br />				
