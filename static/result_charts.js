@@ -10,7 +10,7 @@ Highcharts.chart('total_stacked_bar', {
 		enabled: false
 	},
     title: {
-        text: 'Cost savings and revenue gains with Dynatrace',
+        text: '',
 		align: 'left',
 		margin: 30
     },
@@ -22,6 +22,7 @@ Highcharts.chart('total_stacked_bar', {
     },
     yAxis: {
         min: 0,
+		max: 1000000,
 		title: {
 				text: ''
 		},
@@ -41,33 +42,33 @@ Highcharts.chart('total_stacked_bar', {
         borderWidth: 0,
         shadow: false
     },
-    tooltip: {
-        headerFormat: '<b>{point.x}</b><br/>',
-        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
-    },
-    plotOptions: {
-        column: {
-            stacking: 'normal',
-            dataLabels: {
-                enabled: true,
-                color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-            },
-		},
-		series: {
-			borderWidth:0,
-			pointPadding: 0,
-			groupPadding: 0.1
-		}
-    },
+    // tooltip: {
+        // headerFormat: '<b>{point.x}</b><br/>',
+        // pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+    // },
+    // plotOptions: {
+        // column: {
+            // stacking: 'normal',
+            // dataLabels: {
+                // enabled: true,
+                // color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+            // },
+		// },
+		// series: {
+			// borderWidth:0,
+			// pointPadding: 0,
+			// groupPadding: 0.1
+		// }
+    // },
     series: [{
         name: 'Development',
-        data: [564720, 632486, 708385]
+        data: [0, 0, 0]
     }, {
         name: 'Operations',
-        data: [1687642, 2336059, 2521387]
+        data: [0, 0, 0]
     }, {
         name: 'Business',
-        data: [2107500, 2360400, 2643648]
+        data: [0, 0, 0]
     }]
 });
 

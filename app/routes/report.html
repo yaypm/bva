@@ -25,25 +25,12 @@
 
 <body class="bva-body">
 
-<!--start of nav bar-->
-<div class="nav has-no-secondary">
-
-  <a class="nav__brand" href="/">
-    <img class="nav__logo" src="https://assets.dynatrace.com/global/logos/dynatrace-logo.svg" alt="dynatrace logo"/>
-  </a>
-
-  <nav id="nav-bar-example1" class="nav__bar">
-  </nav>
-  
-</div>
-<!--end of nav bar-->
-
 <!--start of content-->
-<div class="section bva-content">
+<div class=" bva-content">
  
-<div class="column--1-of-2 bva-content-column" >
+<div style="display: none" >
 
-<div class="leftContainer" >
+<div class="leftContainer" style="position: relative; height: 964px">
 
 <input type="hidden" id="currency"/>
 
@@ -805,11 +792,11 @@
 	
 	<h2 class="bva-question-text-centre">Dynatrace pricing</h2>	
 	
-	<div class="bva-question-wrapper centre">
+	<div class="bva-question-wrapper" style="text-align: center">
 	
 		<div class="bva-input-wrapper">	
 			
-			<p class="pricing-text">Please enter the prices provided by Dynatrace for the software and services if applicable.</p>
+			<p style="text-align: center; max-width: 420px">Please enter the prices provided by Dynatrace for the software and services if applicable.</p>
 	
 		</div>
 	
@@ -818,16 +805,16 @@
 	
 		<br />
 	
-	<div class="bva-question-wrapper centre" >
+	<div class="bva-question-wrapper" style="text-align: center">
 	
 		<div class="bva-input-wrapper">	
-			<p class="pricing-text-gap"></p>
-			<p class="pricing-text-header"> software </p>
-			<p class="pricing-text-header"> services </p>			
+			<p style="width: 25%; max-width: 25%; display: inline-block"></p>
+			<p style="width: 33%; max-width: 33%; display: inline-block"> software </p>
+			<p style="width: 33%; max-width: 33%; display: inline-block"> services </p>			
 			
-			<p class="year-header">Year 1</p>
-			<input type="text" class="inputfield bva-question-input pricing-input" id="y1_software" placeholder=""/>
-			<input type="text" class="inputfield bva-question-input pricing-input" id="y1_services" placeholder="" />
+			<p style="width: 15%; max-width: 15%; display: inline-block; margin-top: 0px">Year 1</p>
+			<input type="text" class="inputfield bva-question-input" id="y1_software" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
+			<input type="text" class="inputfield bva-question-input" id="y1_services" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
 	
 		</div>
 	
@@ -839,9 +826,9 @@
 	
 		<div class="bva-input-wrapper">	
 			
-			<p class="year-header">Year 2</p>
-			<input type="text" class="inputfield bva-question-input pricing-input" id="y2_software" placeholder="" />
-			<input type="text" class="inputfield bva-question-input pricing-input" id="y2_services" placeholder="" />
+			<p style="width: 15%; max-width: 15%; display: inline-block;">Year 2</p>
+			<input type="text" class="inputfield bva-question-input" id="y2_software" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
+			<input type="text" class="inputfield bva-question-input" id="y2_services" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
 	
 		</div>
 	
@@ -853,9 +840,9 @@
 	
 		<div class="bva-input-wrapper">	
 			
-			<p class="year-header">Year 3</p>
-			<input type="text" class="inputfield bva-question-input pricing-input" id="y3_software" placeholder="" />
-			<input type="text" class="inputfield bva-question-input pricing-input" id="y3_services" placeholder=""  />
+			<p style="width: 15%; max-width: 15%; display: inline-block">Year 3</p>
+			<input type="text" class="inputfield bva-question-input" id="y3_software" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
+			<input type="text" class="inputfield bva-question-input" id="y3_services" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
 	
 		</div>
 	
@@ -880,11 +867,11 @@
 
 </div>
   
-<div class="column--1-of-2 bva-content-column" >
+<div  >
 
 
 
-
+<div style="width: 800px; margin-left: 50%; margin-top: 20px; margin-bottom: 20px; margin-right: 50%; transform: translate(-50%, 0); background-color: white">
 
 <div class="headContainer" style="position: relative; height: 105px">
 <div class="bva-title-wrapper bva-title-wrapper-results result-biz">
@@ -897,47 +884,9 @@
 	</div>
 
 </div>
-
-<div class="bva-title-wrapper bva-title-wrapper-results result-ops">
-
-	<div class="bva-title-wrapper-inner">
-	
-		<h1 class="bva-title-text">Results</h1>
-		<p>The value to your business from partnering with Dynatrace</p>
-		
-	</div>
-
-</div>
-
-
-<div class="bva-title-wrapper bva-title-wrapper-results result-dev">
-
-	<div class="bva-title-wrapper-inner">
-	
-		<h1 class="bva-title-text">Results</h1>
-		<p>The value to your business from partnering with Dynatrace</p>
-		
-	</div>
-
-</div>
-
-
-<div class="bva-title-wrapper bva-title-wrapper-results result-options">
-
-	<div class="bva-title-wrapper-inner">
-	
-		<h1 class="bva-title-text">Results</h1>
-		<p>The value to your business from partnering with Dynatrace</p>
-		
-	</div>
-
-</div>
-
-
 </div>
 	
 	<div id="results" style="display: none">
-	
 		<h2 style="margin-left: 5%; margin-top: 20px">Total cost savings and revenue gains</h2>
 		
 		<p style="margin-left: 5%; width: 90%; font-family: BerninaSansLight">Based upon information provided about the current costs/revenue impact of performance problems, the summary below shows the expected improvements from working with Dynatrace.</p>
@@ -1038,9 +987,7 @@
 
 			</div>		
 		</div>
-		<button id="open-report" type="button" class="btn btn--secondary" style="width: 90%; margin-left: 5%">Open as report</button>	
-		
-		<br />
+
 	</div>
 	
 		<div id="no-results" style="display: none; margin-left: 10%; margin-right: 10%; margin-top: 30px">
@@ -1158,7 +1105,7 @@
 			<p class="loading__text">Loading...</p>
 		</div>
 	</div>
-
+</div>
 
 </div>
 <!--end of content-->

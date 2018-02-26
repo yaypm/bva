@@ -3819,3 +3819,39 @@ ol.list ol ul ul li:before {
 	max-width: 50px; 
 	display: inline-block
 }
+
+.leftContainer {
+	position: relative; 
+	height: 964px;
+}
+
+.pricing-text {
+	text-align: left; 
+	max-width: 420px
+}
+
+.pricing-text-gap {
+	width: 25%; 
+	max-width: 25%; 
+	display: inline-block
+}
+
+.pricing-text-header {
+	width: 33%; 
+	max-width: 33%; 
+	display: inline-block
+}
+
+.year-header {
+	width: 15%; 
+	max-width: 15%; 
+	display: inline-block; 
+	margin-top: 0px
+}
+
+.pricing-input {
+	width: 41%; 
+	max-width: 42%; 
+	display: inline-block
+}
+

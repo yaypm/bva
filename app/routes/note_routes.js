@@ -9,7 +9,7 @@ const MongoStore = require('connect-mongo')(session);
 const nodemailer = require('nodemailer');
 
 module.exports = function(app, db) {
-
+	
 	connectionOptions = process.env.MONGO_URI;
 
 	app.use(bodyParser.urlencoded({ extended: true }))
@@ -77,6 +77,33 @@ module.exports = function(app, db) {
 			})
 		}	
 	}
+	
+	function checkReportStatus(req, res) {
+		var username = req.session.username;
+		var bva_id = req.query.bva_id;
+		
+		if(bva_id == ""){
+			res.redirect('/landing');
+		}
+		
+		else {
+			MongoClient.connect(connectionOptions, function(err, db) {
+				var collection = db.collection('user_assessments');
+				collection.findOne({username:username, id:bva_id}, function(err, result) {
+					if (err) throw err;
+						if(result != null) {
+							db.close();
+							res.sendFile(path.join(__dirname + '/report.html'));
+						}
+						else {
+							db.close();
+							res.redirect('/landing');
+							console.log(username + " tried to access a bva they don't have access to: " + bva_id);
+						}
+				});
+			})
+		}	
+	}	
 
 	function checkEditStatus(req, res) {
 		var username = req.session.username;
@@ -400,6 +427,16 @@ module.exports = function(app, db) {
 		}
 
 	});		
+	
+	app.get('/report', (req, res) => {
+		if (requiresLogin(req, res) == false) {
+			res.redirect('/');
+		}
+		else {
+			checkReportStatus(req, res);
+		}
+
+	});			
 
 	app.get('/edit', (req, res) => {
 		if (requiresLogin(req, res) == false) {
@@ -617,6 +654,7 @@ module.exports = function(app, db) {
 				developer_cost: '56000',
 				qa_cost: '46000',
 				work_hours: '1950',
+				benefit_conversion: '0.5',
 				benefit_incident_reduction: '30',
 				benefit_mttr: '90',
 				benefit_performance: '25',
@@ -691,7 +729,7 @@ module.exports = function(app, db) {
 
 			else {
 				var collection = db.collection('assessment_data');
-				collection.update({'_id':req.header('bva_id')},{$set:{'company_revenue':req.body.company_revenue,'projected_growth':req.body.projected_growth,'revenue_dependent':req.body.revenue_dependent,'app_uptime':req.body.app_uptime,'revenue_breach':req.body.revenue_breach,'incidents_month':req.body.incidents_month,'no_ops_troubleshoot':req.body.no_ops_troubleshoot,'no_dev_troubleshoot':req.body.no_dev_troubleshoot,'mttr':req.body.mttr,'no_apps_e2e':req.body.no_apps_e2e,'no_t1t2_apps':req.body.no_t1t2_apps, 'no_fte_existing':req.body.no_fte_existing, 'cycles_per_year':req.body.cycles_per_year, 'cycle_days':req.body.cycle_days, 'test_per_cycle':req.body.test_per_cycle, 'qa_time_per_cycle':req.body.qa_time_per_cycle, 'qa_people_per_cycle': req.body.qa_people_per_cycle, 'dev_time_per_cycle':req.body.dev_time_per_cycle, 'dev_people_per_cycle':req.body.dev_people_per_cycle, 'operation_cost':req.body.operation_cost, 'developer_cost':req.body.developer_cost, 'qa_cost':req.body.qa_cost, 'work_hours':req.body.work_hours, 'benefit_incident_reduction':req.body.benefit_incident_reduction, 'benefit_mttr':req.body.benefit_mttr, 'benefit_performance':req.body.benefit_performance, 'benefit_alert_storm':req.body.benefit_alert_storm, 'benefit_sla':req.body.benefit_sla, 'benefit_fix_qa':req.body.benefit_fix_qa, 'benefit_prod_reduction': req.body.benefit_prod_reduction, 'benefit_config': req.body.benefit_config, 'y1_software':req.body.y1_software, 'y1_services':req.body.y1_services, 'y2_software':req.body.y2_software, 'y2_services':req.body.y2_services, 'y3_software':req.body.y3_software, 'y3_services':req.body.y3_services}});			
+				collection.update({'_id':req.header('bva_id')},{$set:{'company_revenue':req.body.company_revenue,'projected_growth':req.body.projected_growth,'revenue_dependent':req.body.revenue_dependent,'app_uptime':req.body.app_uptime,'revenue_breach':req.body.revenue_breach,'incidents_month':req.body.incidents_month,'no_ops_troubleshoot':req.body.no_ops_troubleshoot,'no_dev_troubleshoot':req.body.no_dev_troubleshoot,'mttr':req.body.mttr,'no_apps_e2e':req.body.no_apps_e2e,'no_t1t2_apps':req.body.no_t1t2_apps, 'no_fte_existing':req.body.no_fte_existing, 'cycles_per_year':req.body.cycles_per_year, 'cycle_days':req.body.cycle_days, 'test_per_cycle':req.body.test_per_cycle, 'qa_time_per_cycle':req.body.qa_time_per_cycle, 'qa_people_per_cycle': req.body.qa_people_per_cycle, 'dev_time_per_cycle':req.body.dev_time_per_cycle, 'dev_people_per_cycle':req.body.dev_people_per_cycle, 'operation_cost':req.body.operation_cost, 'developer_cost':req.body.developer_cost, 'qa_cost':req.body.qa_cost, 'work_hours':req.body.work_hours, 'benefit_conversion': req.body.benefit_conversion, 'benefit_incident_reduction':req.body.benefit_incident_reduction, 'benefit_mttr':req.body.benefit_mttr, 'benefit_performance':req.body.benefit_performance, 'benefit_alert_storm':req.body.benefit_alert_storm, 'benefit_sla':req.body.benefit_sla, 'benefit_fix_qa':req.body.benefit_fix_qa, 'benefit_prod_reduction': req.body.benefit_prod_reduction, 'benefit_config': req.body.benefit_config, 'y1_software':req.body.y1_software, 'y1_services':req.body.y1_services, 'y2_software':req.body.y2_software, 'y2_services':req.body.y2_services, 'y3_software':req.body.y3_software, 'y3_services':req.body.y3_services}});			
 
 				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("success");
@@ -720,7 +758,7 @@ module.exports = function(app, db) {
 			})		
 		})	
 	});	
-
+	
 	app.get('/getAssessmentMetaData', (req, res) => {	
 
 		var username = req.session.username;
