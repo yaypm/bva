@@ -1381,19 +1381,61 @@ function drawResults() {
 				var year2BenefitTotal = devY2 + operationsY2 + revenueGainY2;
 				var year3BenefitTotal = devY3 + operationsY3 + revenueGainY3;
 				
-				var year1CostTotal = parseInt(getNumbers(document.getElementById("y1_software").value)) + parseInt(getNumbers(document.getElementById("y1_services").value));
+				if(document.getElementById("y1_software").value == "") {
+					y1_software = 0;
+				}
+				else {
+					y1_software = parseInt(getNumbers(document.getElementById("y1_software").value));
+				}
+				
+				if(document.getElementById("y2_software").value == "") {
+					y2_software = 0;
+				}
+				else {
+					y2_software = parseInt(getNumbers(document.getElementById("y2_software").value));
+				}
+
+				if(document.getElementById("y3_software").value == "") {
+					y3_software = 0;
+				}
+				else {
+					y3_software = parseInt(getNumbers(document.getElementById("y3_software").value));
+				}	
+
+				if(document.getElementById("y1_services").value == "") {
+					y1_services = 0;
+				}
+				else {
+					y1_services = parseInt(getNumbers(document.getElementById("y1_services").value));
+				}
+				
+				if(document.getElementById("y2_services").value == "") {
+					y2_services = 0;
+				}
+				else {
+					y2_services = parseInt(getNumbers(document.getElementById("y2_services").value));
+				}
+
+				if(document.getElementById("y3_services").value == "") {
+					y3_services = 0;
+				}
+				else {
+					y3_services = parseInt(getNumbers(document.getElementById("y3_services").value));
+				}					
+				
+				var year1CostTotal = y1_software + y1_services;
 				
 				if(isNaN(year1CostTotal) == true) {
 					year1CostTotal = 0;
 				}
 				
-				var year2CostTotal = parseInt(getNumbers(document.getElementById("y2_software").value)) + parseInt(getNumbers(document.getElementById("y2_services").value));
+				var year2CostTotal = y2_software + y2_services;
 				
 				if(isNaN(year2CostTotal) == true) {
 					year2CostTotal = 0;
 				}				
 				
-				var year3CostTotal = parseInt(getNumbers(document.getElementById("y3_software").value)) + parseInt(getNumbers(document.getElementById("y3_services").value));
+				var year3CostTotal = y3_software + y3_services;
 				
 				if(isNaN(year3CostTotal) == true) {
 					year3CostTotal = 0;
