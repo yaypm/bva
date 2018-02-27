@@ -410,12 +410,6 @@ module.exports = function(app, db) {
 				res.sendFile(path.join(__dirname + '/landing.html'));
 			}
 		}	
-	});	
-
-	app.get('/email', (req, res) => {
-
-		res.sendFile(path.join(__dirname + '/email.html'));
-
 	});		
 	
 	app.get('/workflow', (req, res) => {
