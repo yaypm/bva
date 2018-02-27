@@ -412,11 +412,11 @@ module.exports = function(app, db) {
 		}	
 	});	
 
-	app.get('/options', (req, res) => {
+	app.get('/email', (req, res) => {
 
-		res.sendFile(path.join(__dirname + '/options.html'));
+		res.sendFile(path.join(__dirname + '/email.html'));
 
-	});	
+	});		
 	
 	app.get('/workflow', (req, res) => {
 		if (requiresLogin(req, res) == false) {
@@ -513,7 +513,7 @@ module.exports = function(app, db) {
 								var email = username;
 								var subject = "Your new account"
 								var text = "";
-								var html = "Dear " + firstName + ", <br /><br /> Your temporary password is: " + passwd + "<br /><br />Please login to change it as soon as possible! <br /><br /> <a href='https://dynatrace.ai/bva'>https://dynatrace.ai/ba</a><br /><br />Many thanks, <br /><br />Dynatrace";
+								var html = "Dear " + firstName + ", <br /><br /> Thank you for creating an account for your business value assessment.<br /><br />Your temporary password is: " + passwd + "<br /><br />Please login to change it as soon as possible! <br /><br /> <a href='http://dynatrace.ai/bva'>https://dynatrace.ai/ba</a><br /><br />Many thanks, <br /><br />Dynatrace<br /><br />";
 								
 								sendMail(email, subject, text, html);
 								console.log("inserted " + username);   
@@ -899,7 +899,7 @@ module.exports = function(app, db) {
 							var email = username;
 							var subject = "Reset your password"
 							var text = "";
-							var html = "Dear " + items[0].firstName + ", <br /><br />Please use this link to reset your password: <a href='https://bva.herokuapp.com/resetpassword?token=" + resetLink + "'>https://bva.herokuapp.com/resetpassword?token=" + resetLink + "</a><br /><br />Many thanks,<br /><br />Dynatrace";
+							var html = "Dear " + items[0].firstName + ", <br /><br />Please use this link to reset your password: <a href='http://bva.herokuapp.com/resetpassword?token=" + resetLink + "'>https://bva.herokuapp.com/resetpassword?token=" + resetLink + "</a><br /><br />Many thanks,<br /><br />Dynatrace<br /><br />";
 								
 							sendMail(email, subject, text, html);
 							
@@ -960,7 +960,7 @@ module.exports = function(app, db) {
 										var email = username_share;
 										var subject = "You have a new assessment!"
 										var text = "";
-										var html = "Hello,<br /><br />You have a new assessment that has been shared by " + username + ", titled \"" + company + ".\"<br /><br />Please access this at <a href='https://www.dynatrace.ai/bva'>https://www.dynatrace.ai/bva</a><br /><br />Many thanks,<br /><br />Dynatrace";
+										var html = "Hello,<br /><br />You have a new assessment that has been shared by " + username + ", titled \"" + company + ".\"<br /><br />Please access this at <a href='http://www.dynatrace.ai/bva'>https://www.dynatrace.ai/bva</a><br /><br />Many thanks,<br /><br />Dynatrace<br /><br />";
 									
 										sendMail(email, subject, text, html);
 										
