@@ -1176,7 +1176,7 @@ function drawResults() {
 					document.getElementById("devYear1").innerHTML = processMoney(devY1.toString());
 					document.getElementById("devYear2").innerHTML = processMoney(devY2.toString());
 					document.getElementById("devYear3").innerHTML = processMoney(devY3.toString());
-					document.getElementById("devTotal").innerHTML = processMoney(devTotal.toString());
+					document.getElementById("devTotal").innerHTML = "<b>" + processMoney(devTotal.toString()) + "</b>";
 				}
 			}
 			
