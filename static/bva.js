@@ -1359,10 +1359,10 @@ function drawResults() {
 				},
 				series: [{
 					name: 'Development',
-					data: [devY1, devY1, devY1]
+					data: [devY1, devY2, devY3]
 				}, {
 					name: 'Operations',
-					data: [operationsY1, operationsY1, operationsY1]
+					data: [operationsY1, operationsY2, operationsY3]
 				}, {
 					name: 'Business',
 					data: [revenueGainY1, revenueGainY2, revenueGainY3]
