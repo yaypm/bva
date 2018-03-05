@@ -985,7 +985,7 @@ function drawResults() {
 			benefit_config = parseInt(getNumbers(document.getElementById("benefit_config").value));	
 			benefit_config = benefit_config / 100;	
 
-			if(isNaN(no_fte_existing) == true || no_fte_existing == 0 || isNaN(no_apps_e2e) == true || no_apps_e2e == 0 || isNaN(no_t1t2_apps) == true || no_t1t2_apps == 0 || isNaN(benefit_config) == true || benefit_config == 0) {
+			if(isNaN(no_fte_existing) == true || no_fte_existing == 0 || isNaN(no_apps_e2e) == true || no_apps_e2e == 0 || isNaN(no_t1t2_apps) == true || no_t1t2_apps == 0 || isNaN(benefit_config) == true || benefit_config == 0 || isNaN(growth) == true) {
 				effortSavingY1 = 0;
 				effortSavingY2 = 0;
 				effortSavingY3 = 0;
@@ -1051,7 +1051,7 @@ function drawResults() {
 			
 			qa_cost = parseInt(getNumbers(document.getElementById("qa_cost").value));
 			
-			if(isNaN(cycles_per_year) == true || cycles_per_year == 0 || isNaN(cycle_days) == true || cycle_days == 0 || isNaN(test_per_cycle) == true || test_per_cycle == 0 || isNaN(qa_time_per_cycle) == true || qa_time_per_cycle == 0 || isNaN(qa_people_per_cycle) == true || qa_people_per_cycle == 0 || isNaN(dev_time_per_cycle) == true || dev_time_per_cycle == 0 || isNaN(dev_people_per_cycle) == true || dev_people_per_cycle == 0 || isNaN(benefit_fix_qa) == true || benefit_fix_qa == 0 || isNaN(qa_cost) == true || qa_cost == 0) {
+			if(isNaN(cycles_per_year) == true || cycles_per_year == 0 || isNaN(cycle_days) == true || cycle_days == 0 || isNaN(test_per_cycle) == true || test_per_cycle == 0 || isNaN(qa_time_per_cycle) == true || qa_time_per_cycle == 0 || isNaN(qa_people_per_cycle) == true || qa_people_per_cycle == 0 || isNaN(dev_time_per_cycle) == true || dev_time_per_cycle == 0 || isNaN(dev_people_per_cycle) == true || dev_people_per_cycle == 0 || isNaN(benefit_fix_qa) == true || benefit_fix_qa == 0 || isNaN(qa_cost) == true || qa_cost == 0 || isNaN(growth) == true) {
 				devQaY1 = 0;
 				devQaY2 = 0;
 				devQaY3 = 0;
@@ -1107,7 +1107,7 @@ function drawResults() {
 			benefit_prod_reduction = parseInt(getNumbers(document.getElementById("benefit_prod_reduction").value));
 			benefit_prod_reduction = benefit_prod_reduction / 100;
 			
-			if(isNaN(incidentsYear) == true || incidentsYear == 0 || isNaN(opsHours) == true || opsHours == 0 || isNaN(opsCost) == true || opsCost == 0 || isNaN(devHours) == true || devHours == 0 || isNaN(devCost) == true || devCost == 0 || isNaN(incidentCost) == true || incidentCost == 0 || isNaN(benefit_prod_reduction) == true || benefit_prod_reduction == 0 || isNaN(incidents_month) == true || incidents_month == 0 || isNaN(no_ops_troubleshoot) == true || no_ops_troubleshoot == 0 || isNaN(no_dev_troubleshoot) == true || no_dev_troubleshoot == 0 || isNaN(work_hours) == true || work_hours == 0 || isNaN(mttr) == true || mttr == 0 || isNaN(growth) == true || growth == 0) {
+			if(isNaN(incidentsYear) == true || incidentsYear == 0 || isNaN(opsHours) == true || opsHours == 0 || isNaN(opsCost) == true || opsCost == 0 || isNaN(devHours) == true || devHours == 0 || isNaN(devCost) == true || devCost == 0 || isNaN(incidentCost) == true || incidentCost == 0 || isNaN(benefit_prod_reduction) == true || benefit_prod_reduction == 0 || isNaN(incidents_month) == true || incidents_month == 0 || isNaN(no_ops_troubleshoot) == true || no_ops_troubleshoot == 0 || isNaN(no_dev_troubleshoot) == true || no_dev_troubleshoot == 0 || isNaN(work_hours) == true || work_hours == 0 || isNaN(mttr) == true || mttr == 0 || isNaN(growth) == true) {
 				devLowerIncidentsY1 = 0;
 				devLowerIncidentsY2 = 0;
 				devLowerIncidentsY3 = 0;
@@ -1226,7 +1226,7 @@ function drawResults() {
 					document.getElementById("opsYear1").innerHTML = processMoney(operationsY1.toString());
 					document.getElementById("opsYear2").innerHTML = processMoney(operationsY2.toString());
 					document.getElementById("opsYear3").innerHTML = processMoney(operationsY3.toString());
-					document.getElementById("opsTotal").innerHTML = processMoney(operationsTotal.toString());
+					document.getElementById("opsTotal").innerHTML = "<b>" + processMoney(operationsTotal.toString()) + "</b>";
 				}
 			}
 			
@@ -1273,7 +1273,7 @@ function drawResults() {
 					document.getElementById("bizYear1").innerHTML = processMoney(revenueGainY1.toString());
 					document.getElementById("bizYear2").innerHTML = processMoney(revenueGainY2.toString());
 					document.getElementById("bizYear3").innerHTML = processMoney(revenueGainY3.toString());
-					document.getElementById("bizTotal").innerHTML = processMoney(revenueGainTotal.toString());
+					document.getElementById("bizTotal").innerHTML = "<b>" + processMoney(revenueGainTotal.toString()) + "</b>";
 				}
 			}
 			
