@@ -932,7 +932,7 @@ function drawResults() {
 			
 			work_hours = parseInt(getNumbers(document.getElementById("work_hours").value));
 			
-			if(isNaN(incidents_month) == true || incidents_month == 0 || isNaN(growth) == true || growth == 0 || isNaN(no_ops_troubleshoot) == true || isNaN(no_dev_troubleshoot) == true || isNaN(mttr) == true || mttr == 0 || isNaN(benefit_incident_reduction) == true || benefit_incident_reduction == 0 || isNaN(benefit_mttr) == true || benefit_mttr == 0 || isNaN(ops_cost) == true || ops_cost == 0 || isNaN(dev_cost) == true || dev_cost == 0 || isNaN(work_hours) == true || work_hours == 0) {
+			if(isNaN(incidents_month) == true || incidents_month == 0 || isNaN(growth) == true || isNaN(no_ops_troubleshoot) == true || isNaN(no_dev_troubleshoot) == true || isNaN(mttr) == true || mttr == 0 || isNaN(benefit_incident_reduction) == true || benefit_incident_reduction == 0 || isNaN(benefit_mttr) == true || benefit_mttr == 0 || isNaN(ops_cost) == true || ops_cost == 0 || isNaN(dev_cost) == true || dev_cost == 0 || isNaN(work_hours) == true || work_hours == 0) {
 				opsIncidentCostY1 = 0;
 				opsIncidentCostY2 = 0;
 				opsIncidentCostY3 = 0;
