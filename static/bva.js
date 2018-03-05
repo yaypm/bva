@@ -905,9 +905,14 @@ function drawResults() {
 			//OPERATIONS - incident reduction
 			incidents_month = parseInt(getNumbers(document.getElementById("incidents_month").value));
 			
-			growth = parseInt(getNumbers(document.getElementById("projected_growth").value));
-			growth = growth / 100;	
-			
+			if(document.getElementById("projected_growth").value == "") {
+				growth = 0;
+			}
+			else {
+				growth = parseInt(getNumbers(document.getElementById("projected_growth").value));
+				growth = growth / 100;	
+			}
+		
 			no_ops_troubleshoot = parseInt(getNumbers(document.getElementById("no_ops_troubleshoot").value));
 			
 			no_dev_troubleshoot = parseInt(getNumbers(document.getElementById("no_dev_troubleshoot").value));
