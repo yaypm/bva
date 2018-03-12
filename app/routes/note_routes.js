@@ -62,7 +62,7 @@ module.exports = function(app, db) {
 		else {
 			MongoClient.connect(connectionOptions, function(err, db) {
 				var collection = db.collection('user_assessments');
-				collection.findOne({username:username, id:bva_id}, function(err, result) {
+				collection.findOne({username:username, id:bva_id}, {collation:{ locale: "en", strength: 2 }}, function(err, result) {
 					if (err) throw err;
 						if(result != null) {
 							db.close();
@@ -89,7 +89,7 @@ module.exports = function(app, db) {
 		else {
 			MongoClient.connect(connectionOptions, function(err, db) {
 				var collection = db.collection('user_assessments');
-				collection.findOne({username:username, id:bva_id}, function(err, result) {
+				collection.findOne({username:username, id:bva_id}, {collation:{ locale: "en", strength: 2 }}, function(err, result) {
 					if (err) throw err;
 						if(result != null) {
 							db.close();
@@ -116,7 +116,7 @@ module.exports = function(app, db) {
 		else {
 			MongoClient.connect(connectionOptions, function(err, db) {
 				var collection = db.collection('user_assessments');
-				collection.findOne({username:username, id:bva_id}, function(err, result) {
+				collection.findOne({username:username, id:bva_id}, {collation:{ locale: "en", strength: 2 }}, function(err, result) {
 					if (err) throw err;
 						if(result != null) {
 							db.close();
@@ -142,7 +142,7 @@ module.exports = function(app, db) {
 		else {
 			MongoClient.connect(connectionOptions, function(err, db) {
 				var collection = db.collection('user_assessments');
-				collection.findOne({username:username, id:bva_id}, function(err, result) {
+				collection.findOne({username:username, id:bva_id}, {collation:{ locale: "en", strength: 2 }}, function(err, result) {
 					if (err) {
 						console.log(err);
 						res.redirect('/share?bva_id=' + bva_id + '&staus=failed');
@@ -544,7 +544,7 @@ module.exports = function(app, db) {
 
 				else {
 					var collection = db.collection('users');
-					var results = collection.find({_id:username}).toArray(function(err, items) {
+					var results = collection.find({_id:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 						if(items[0] == undefined) {
 							db.close();
 							res.redirect('/?status=failed');
@@ -703,7 +703,7 @@ module.exports = function(app, db) {
 			var companyAssessment;
 			
 			var collection = db.collection('user_assessments');
-			var results = collection.find({username:username}).toArray(function(err, items) {				
+			var results = collection.find({username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {				
 				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
 				res.end(JSON.stringify(items));
 				db.close();
@@ -869,7 +869,7 @@ module.exports = function(app, db) {
 
 				else {
 					var collection = db.collection('users');
-					var results = collection.find({_id:username}).toArray(function(err, items) {
+					var results = collection.find({_id:username})..collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 						if(items[0] == undefined) {
 							res.redirect('/reset?status=failed');
 							db.close();
@@ -926,7 +926,7 @@ module.exports = function(app, db) {
 
 			else {
 				var collection = db.collection('user_assessments');
-				var results = collection.find({id:id, username:username_share}).toArray(function(err, items) {	
+				var results = collection.find({id:id, username:username_share}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {	
 					if(err) {
 						console.log(err);
 						res.redirect('/share?bva_id=' + id + "&status=failed");
@@ -934,7 +934,7 @@ module.exports = function(app, db) {
 					else {
 						if(items[0] == undefined) {
 							var collection = db.collection('user_assessments');
-							var results = collection.find({id:id, username:username}).toArray(function(err, items) {	
+							var results = collection.find({id:id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {	
 							
 								var company = items[0].company;
 			
@@ -1002,7 +1002,7 @@ module.exports = function(app, db) {
 			else {
 			
 				var collection = db.collection('user_assessments');
-				var results = collection.find({id:id, username:username}).toArray(function(err, items) {
+				var results = collection.find({id:id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 					
 					if(items[0] != undefined) {
 						res.end(JSON.stringify(failBody));
@@ -1057,7 +1057,7 @@ module.exports = function(app, db) {
 
 				else {
 					var collection = db.collection('user_assessments');
-					var results = collection.find({id:id, username:username}).toArray(function(err, items) {	
+					var results = collection.find({id:id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {	
 						if(err) {
 							console.log(err);
 							res.redirect('/edit?bva_id=' + id + "&status=failed");
@@ -1099,7 +1099,7 @@ module.exports = function(app, db) {
 
 				else {
 					var collection = db.collection('user_assessments');
-					var results = collection.find({id:id, username:username}).toArray(function(err, items) {	
+					var results = collection.find({id:id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {	
 						if(err) {
 							console.log(err);
 							res.redirect('/edit?bva_id=' + id + "&status=failed");
@@ -1156,7 +1156,7 @@ module.exports = function(app, db) {
 				}	
 				
 				var collection = db.collection('user_assessments');
-				var results = collection.find({'username':emailSearch}).toArray(function(err, items) {
+				var results = collection.find({'username':emailSearch}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 					if(err || items[0] == undefined) {
 						var response = {"status":"failed"};
 						res.end(JSON.stringify(response));
@@ -1172,7 +1172,7 @@ module.exports = function(app, db) {
 							resultArray.push(resultItem);
 						}
 						var collection = db.collection('assessments');
-						var results = collection.find({$or:resultArray}).toArray(function(err, items) {
+						var results = collection.find({$or:resultArray}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 							
 							res.end(JSON.stringify(items));
 							db.close();
