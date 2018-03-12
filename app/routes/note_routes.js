@@ -325,7 +325,7 @@ module.exports = function(app, db) {
 								if(dat < items[0].expiry) {
 									var username = items[0].username;
 									var collection = db.collection('users');
-									collection.update({'_id':username},{collation:{ locale: "en", strength: 2 }},{$set:{'password':hash}});
+									collection.update({'_id':username},{$set:{'password':hash}},{collation:{ locale: "en", strength: 2 }});
 									
 									var collection = db.collection('user_reset');
 									collection.remove({reset: token}, function(err, result) {
@@ -378,7 +378,7 @@ module.exports = function(app, db) {
 								if(result == true) {
 									bcrypt.hash(newpassword, 10, function (err, hash){
 										var collection = db.collection('users');
-										collection.update({'_id':username}, {collation:{ locale: "en", strength: 2 }}, {$set:{'password':hash}});
+										collection.update({'_id':username}, {$set:{'password':hash}}, {collation:{ locale: "en", strength: 2 }});
 										db.close();	
 										res.redirect('/changepassword?status=success');
 									})
