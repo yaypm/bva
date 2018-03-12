@@ -869,7 +869,7 @@ module.exports = function(app, db) {
 
 				else {
 					var collection = db.collection('users');
-					var results = collection.find({_id:username})..collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+					var results = collection.find({_id:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 						if(items[0] == undefined) {
 							res.redirect('/reset?status=failed');
 							db.close();
