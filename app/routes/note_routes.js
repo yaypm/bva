@@ -325,7 +325,7 @@ module.exports = function(app, db) {
 								if(dat < items[0].expiry) {
 									var username = items[0].username;
 									var collection = db.collection('users');
-									collection.update({'_id':username},{$set:{'password':hash}});
+									collection.update({'_id':username},{collation:{ locale: "en", strength: 2 }},{$set:{'password':hash}});
 									
 									var collection = db.collection('user_reset');
 									collection.remove({reset: token}, function(err, result) {
@@ -359,7 +359,7 @@ module.exports = function(app, db) {
 		else {
 		MongoClient.connect(connectionOptions, function(err, db) {	
 				var collection = db.collection('users');
-				var results = collection.find({_id:username}).toArray(function(err, items) {
+				var results = collection.find({_id:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 					if(items[0] == undefined) {
 						db.close();	
 						res.redirect('/changepassword?status=failed');
@@ -378,7 +378,7 @@ module.exports = function(app, db) {
 								if(result == true) {
 									bcrypt.hash(newpassword, 10, function (err, hash){
 										var collection = db.collection('users');
-										collection.update({'_id':username},{$set:{'password':hash}});
+										collection.update({'_id':username}, {collation:{ locale: "en", strength: 2 }}, {$set:{'password':hash}});
 										db.close();	
 										res.redirect('/changepassword?status=success');
 									})
