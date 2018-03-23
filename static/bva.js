@@ -1119,7 +1119,7 @@ function drawResults() {
 			}
 			
 			else {
-				devLowerIncidentsY1 = parseInt(incidentCost * benefit_prod_reduction);
+				devLowerIncidentsY1 = parseInt(incidentCost * (1 - benefit_prod_reduction));
 				devLowerIncidentsY2 = parseInt(devLowerIncidentsY1 * (1+growth));
 				devLowerIncidentsY3 = parseInt(devLowerIncidentsY2 * (1+growth));
 				devLowerIncidentsTotal = devLowerIncidentsY1 + devLowerIncidentsY2 + devLowerIncidentsY3;
