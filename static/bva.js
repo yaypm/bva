@@ -245,9 +245,14 @@ function userSearch() {
 					pricingCheckNo = "selected=\"selected\"";
 				}
 				
-				if(jsonResponse[i].currency == "pound") { var currency = "&pound;" }
-				if(jsonResponse[i].currency == "dollar") { var currency = "&dollar;" }
-				if(jsonResponse[i].currency == "euro") { var currency = "&euro;" }
+				if(jsonResponse[i].currency == "uk") { var currency = "&pound;" }
+				if(jsonResponse[i].currency == "ireland") { var currency = "&euro;" }
+				if(jsonResponse[i].currency == "us") { var currency = "&dollar;" }
+				if(jsonResponse[i].currency == "spain") { var currency = "&euro;" }
+				if(jsonResponse[i].currency == "benelux") { var currency = "&euro;" }
+				if(jsonResponse[i].currency == "germany") { var currency = "&euro;" }
+				if(jsonResponse[i].currency == "france") { var currency = "&euro;" }
+				if(jsonResponse[i].currency == "italy") { var currency = "&euro;" }
 				
 				newHtml += "<div class=\"searchResult\"><h2>" + jsonResponse[i].company + "</h2><div class=\"result-block\"><label for=\"currency\" class=\"label\" >Currency</label><input name=\"currency\" disabled type=\"text\" class=\"inputfield currency-result\" value=\"" + currency + "\"/></div><div class=\"result-block\"><label for=\"pricing\" class=\"label\">Seen pricing?</label><select class=\"select pricing-result\" name=\"" + jsonResponse[i]._id + "_pricing\"><option value=\"Yes\" " + pricingCheckYes + ">Yes</option><option value=\"No\" " + pricingCheckNo + ">No</option></select></div><div class=\"result-block\"><label for=\"add\" class=\"label\">Add to yours</label><button type=\"button\" class=\"btn btn--primary theme--dark add-button\" id=\"" + jsonResponse[i]._id + "\"><img src=\"/static/add-white.png\" height=\"40px\" width=\"40px\" /></button></div><br /><br /><div style=\"block\"><label for=\"sfdc\" class=\"label\">Salesforce link</label><input type=\"text\" class=\"inputfield sfdc-result\" placeholder=\"SFDC link\" name=\"" + jsonResponse[i]._id + "_sfdc\" value=\"" + jsonResponse[i].sfdc + "\"/><button id=\"landing_box_password\" type=\"button\" class=\"btn btn--secondary theme--dark landing-bva-button openlink sfdc-link\"><img src=\"/static/external-link-white.png\" height=\"40px\" width=\"40px\"/></button></div></div><br />";
 			}
@@ -567,9 +572,14 @@ function getTabs() {
 	})	
 	
 	.then(function(jsonObj) {
-		if(jsonObj.currency == "pound") { var currency = "£" }
-		if(jsonObj.currency == "dollar") { var currency = "$" }
-		if(jsonObj.currency == "euro") { var currency = "€" }		
+		if(jsonObj.currency == "uk") { var currency = "£" }
+		if(jsonObj.currency == "ireland") { var currency = "€" }
+		if(jsonObj.currency == "us") { var currency = "$" }		
+		if(jsonObj.currency == "spain") { var currency = "€" }
+		if(jsonObj.currency == "benelux") { var currency = "€" }
+		if(jsonObj.currency == "germany") { var currency = "€" }	
+		if(jsonObj.currency == "france") { var currency = "€" }
+		if(jsonObj.currency == "italy") { var currency = "€" }		
 		
 		document.getElementById("currency").value=currency;
 		
