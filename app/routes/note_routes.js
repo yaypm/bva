@@ -622,6 +622,17 @@ module.exports = function(app, db) {
 				username: req.session.username
 			}
 			
+			if(currency == "uk") { var operations = '34000'; var developers = '39000'; var qas = '25000'; }
+			if(currency == "ireland") { var operations = '40000'; var developers = '41000'; var qas = '33000'; }
+			if(currency == "us") { var operations = '64000'; var developers = '79000'; var qas = '60000'; }
+			if(currency == "france") { var operations = '40000'; var developers = '44000'; var qas = '50000'; }
+			if(currency == "benelux") { var operations = '48000'; var developers = '48000'; var qas = '48000'; }
+			if(currency == "germany") { var operations = '48000'; var developers = '50000'; var qas = '58000'; }
+			if(currency == "spain") { var operations = '22000'; var developers = '25000'; var qas = '33000'; }
+			if(currency == "italy") { var operations = '24000'; var developers = '25000'; var qas = '30000'; }
+
+			
+			
 			var assessment_data = {
 				_id: id,
 				company_revenue: '',
@@ -644,9 +655,9 @@ module.exports = function(app, db) {
 				qa_people_per_cycle: '',
 				dev_time_per_cycle: '',
 				dev_people_per_cycle: '',
-				operation_cost: '55000',
-				developer_cost: '56000',
-				qa_cost: '46000',
+				operation_cost: operations,
+				developer_cost: developers,
+				qa_cost: qas,
 				work_hours: '1950',
 				benefit_conversion: '0.5',
 				benefit_incident_reduction: '30',
