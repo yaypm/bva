@@ -3800,12 +3800,12 @@ ol.list ol ul ul li:before {
 
 .create-company	{
 	display: inline-block; 
-	width: 70%
+	width: 60%
 }
 
 .create-currency {
 	display: inline-block; 
-	width: 28%; 
+	width: 38%; 
 	height: 50px; 
 	font-size: 1.2em
 }
