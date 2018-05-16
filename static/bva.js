@@ -817,7 +817,13 @@ function drawResults() {
 				
 				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/ops-reduced-tools.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Reduction of existing monitoring tools</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(existingTotal.toString()) + "</b></dd></dl></div></div>";
 				
-				document.getElementById("ops-reduced-tools").innerHTML=newHtml;			
+				document.getElementById("ops-reduced-tools").innerHTML=newHtml;	
+				
+				if($('#operations').css('display') == "none") {
+					$('#operations').fadeIn(); 
+				}
+				
+				var opsCase1 = 1;
 			}	
 		
 			//BUSINESS - revenue increase
@@ -1191,10 +1197,12 @@ function drawResults() {
 			}
 			
 			else {
-				devYear1 = null;
-				devYear2 = null;
-				devYear3 = null;
+				devY1 = null;
+				devY2 = null;
+				devY3 = null;
 				devTotal = null;
+				
+				$('#developmentRow').remove();
 			}				
 			
 			
@@ -1245,6 +1253,8 @@ function drawResults() {
 				operationsY2 = null;
 				operationsY3 = null;
 				operationsTotal = null;
+				
+				$('#operationsRow').remove();
 			}			
 			
 			//BUSINESS - total
@@ -1292,6 +1302,8 @@ function drawResults() {
 				revenueGainY2 = null;
 				revenueGainY3 = null;
 				revenueGainTotal = null;
+				
+				$('#businessRow').remove();
 			}
 			
 			//Something to draw?
