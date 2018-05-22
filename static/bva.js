@@ -312,7 +312,7 @@ function getAssessmentList() {
 				//	dtrum.identifyUser(jsonObj[i].username);
 				//}
 			}
-		
+			dtrum.identifyUser(jsonObj[0].username);
 			document.getElementById("bva_select").innerHTML = newHTML;
 			setBvaLinks();
 		}
