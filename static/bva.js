@@ -307,6 +307,10 @@ function getAssessmentList() {
 		else {
 			for(i=0;i<jsonObj.length;i++) {
 				newHTML += '<option value="' + jsonObj[i].id + '">' + jsonObj[i].company + '</option>';
+				
+				if(i=0) {
+					dtrum.identifyUser(jsonObj[i].username);
+				}
 			}
 		
 			document.getElementById("bva_select").innerHTML = newHTML;
