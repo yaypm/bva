@@ -1,1603 +1,1171 @@
-function getNumbers(txt) {
-	if (txt != "") {
-		var numb = txt.match(/\d/g);
-		numb = numb.join("");
-
-		return numb;
-	}
-
-	else {
-		return "";
-	}
-}
-
-function getNumbersAndDots(txt) {
-	if (txt != "") {
-		var numb = txt.match(/\d+\.?\d?/g);
-		numb = numb.join("");
-		return numb;
-	}
-
-	else {
-		if(txt == "") {
-			return "";
-		}
-		else {
-			return 0;
-		}
-	}
-}
-
-function scrollToTop() {
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
-}
-
-function getGet(name){
-	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-	if(results != null) {
-		return results[1] || 0;
-	}
-}
-
-function isJsonString(str) {
-    try {
-        JSON.parse(str);
-    } catch (e) {
-        return false;
-    }
-    return true;
-}
-
-function generateId() {
-	var text = "";
-	var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-	for (var i = 0; i < 16; i++)
-		text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-	return text;
-}
-
-function resizeOps() {
-	setTimeout(function(){ $(".leftContainer").css("height", $('.ops').css('height')); }, 100);
-}
-
-function processMoney(preMoney) {
-	if(preMoney != '' && preMoney != undefined) {preMoney = document.getElementById("currency").value + parseInt(getNumbers(preMoney)).toLocaleString(); temp = preMoney; preMoney = ''; preMoney = temp; return preMoney} else {preMoney = ''; return preMoney}
-}
-
-function processPercent(prePercent) {
-	if(prePercent != '' && prePercent != undefined) {prePercent = getNumbersAndDots(prePercent) + '%'; temp = prePercent; prePercent = ''; prePercent = temp; return prePercent;} else {prePercent = ''; return prePercent;}
-}
-
-function processNumber(preNumber){
-	if(preNumber != '' && preNumber != undefined) {preNumber = parseInt(getNumbers(preNumber)).toLocaleString(); temp = preNumber; preNumber = ''; preNumber = temp; return preNumber; } else {preNumber = ''; return preNumber;}
-}
-
-function statusDetect() {
-	fail = getGet('status');
-	if(fail == "failed") {
-		$(".status-failure").css("display", "block");
-	}
-	if(fail == "success") {
-		$(".status-success").css("display", "block");
-	}
-}
-
-function setFormLocation() {
-	token = getGet('token');
-	document.getElementById("reset").action="/resetyourpassword?token=" + token;
-}
-
-function setEditLocation() {
-	id = getGet('bva_id');
-	document.getElementById("edit").action="/editbva?bva_id=" + id;
-}
-
-function setShareLocation() {
-	id = getGet('bva_id');
-	document.getElementById("share").action="/sharebva?bva_id=" + id;
-}
-
-function setEditLocation() {
-	id = getGet('bva_id');
-	document.getElementById("edit").action="/editbva?bva_id=" + id;
-}
-
-function enableUserSearch() {
-	$(" #user_search ").click(function() {
-		$(".status-success").css("display", "none");
-		$(".status-failure").css("display", "none");
-		$(".status-success").css("display", "none");
-		$(".status-failure").css("display", "none");
-		userSearch();
-	});
-}
-
-function openInNewTab(url) {
-	var win = window.open(url, '_blank');
-	win.focus();
-}
-
-function openReport() {
-	bva_id = getGet('bva_id');
-	url = ('/report?bva_id=' + bva_id);
-	var win = window.open(url, '_blank');
-	win.focus();
-}
-
-function setBvaLinks() {
-	id = document.getElementById("bva_select").value;
-	shareHref = "/share?bva_id=" + id;
-	editHref = "/edit?bva_id=" + id;
-	document.getElementById("edit").href=editHref;
-	document.getElementById("share").href=shareHref;
-}
-
-function getAssessmentForEdit() {
-	var myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/json");
-	myHeaders.append("Accept", "application/json");
-	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
-
-	bva_id = getGet('bva_id');
-
-	myHeaders.append("bva_id", bva_id);
-
-	var myInit = { method: 'GET',
-		headers: myHeaders,
-		cache: 'default',
-		credentials: 'same-origin'
-	}
-
-	fetch('/getAssessmentMetaData', myInit)
-
-	.then(function(response) {
-		return response.json();
-	})
-
-	.then(function(jsonResponse) {
-		document.getElementById("company").value=jsonResponse.company;
-		document.getElementById("currency").value=jsonResponse.currency
-	})
-}
-
-function addToMine(id) {
-	company = document.getElementById(id).parentElement.parentElement.getElementsByTagName("h2")[0].innerHTML;
-
-	var myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/json");
-	myHeaders.append("Accept", "application/json");
-	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
-	myHeaders.append("company", company);
-	myHeaders.append("bva_id", id);
-
-	var myInit = { method: 'GET',
-		headers: myHeaders,
-		cache: 'default',
-		credentials: 'same-origin'
-	}
-
-	fetch('/giveMeBva', myInit)
-
-	.then(function(response) {
-		return response.json();
-	})
-
-	.then(function(jsonResponse) {
-		if(jsonResponse.status == "success") {
-			scrollToTop();
-			$(".share-success").css("display", "block");
-		}
-		if(jsonResponse.status == "fail") {
-			scrollToTop();
-			$(".share-failure").css("display", "block");
-		}
-	})
-}
-
-function userSearch() {
-	var myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/json");
-	myHeaders.append("Accept", "application/json");
-	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
-
-	searchEmail = document.getElementById("emailSearch").value;
-
-	myHeaders.append("emailSearch", searchEmail);
-
-	var myInit = { method: 'GET',
-		headers: myHeaders,
-		cache: 'default',
-		credentials: 'same-origin',
-	}
-
-	fetch('/searchUsers', myInit)
-
-	.then(function(response) {
-		return response.json();
-	})
-
-	.then(function(jsonResponse) {
-
-		if(jsonResponse.status == undefined) {
-			$('#no_result').css("display","none");
-			$('#user_list').css("display","block");
-
-			var newHtml = "";
-			var listId = [];
-
-			for(i=0; i<jsonResponse.length; i++) {
-				var newId = {
-					id: jsonResponse[i]._id
-				}
-
-				listId.push(newId);
-
-				if(jsonResponse[i].has_pricing == true) {
-					pricingCheckYes = "selected=\"selected\"";
-					pricingCheckNo = "";
-				}
-
-				else {
-					pricingCheckYes = "";
-					pricingCheckNo = "selected=\"selected\"";
-				}
-
-				if(jsonResponse[i].currency == "uk") { var currency = "&pound;" }
-				if(jsonResponse[i].currency == "ireland") { var currency = "&euro;" }
-				if(jsonResponse[i].currency == "us") { var currency = "&dollar;" }
-				if(jsonResponse[i].currency == "spain") { var currency = "&euro;" }
-				if(jsonResponse[i].currency == "benelux") { var currency = "&euro;" }
-				if(jsonResponse[i].currency == "germany") { var currency = "&euro;" }
-				if(jsonResponse[i].currency == "france") { var currency = "&euro;" }
-				if(jsonResponse[i].currency == "italy") { var currency = "&euro;" }
-
-				newHtml += "<div class=\"searchResult\"><h2>" + jsonResponse[i].company + "</h2><div class=\"result-block\"><label for=\"currency\" class=\"label\" >Currency</label><input name=\"currency\" disabled type=\"text\" class=\"inputfield currency-result\" value=\"" + currency + "\"/></div><div class=\"result-block\"><label for=\"pricing\" class=\"label\">Seen pricing?</label><select class=\"select pricing-result\" name=\"" + jsonResponse[i]._id + "_pricing\"><option value=\"Yes\" " + pricingCheckYes + ">Yes</option><option value=\"No\" " + pricingCheckNo + ">No</option></select></div><div class=\"result-block\"><label for=\"add\" class=\"label\">Add to yours</label><button type=\"button\" class=\"btn btn--primary theme--dark add-button\" id=\"" + jsonResponse[i]._id + "\"><img src=\"/static/add-white.png\" height=\"40px\" width=\"40px\" /></button></div><br /><br /><div style=\"block\"><label for=\"sfdc\" class=\"label\">Salesforce link</label><input type=\"text\" class=\"inputfield sfdc-result\" placeholder=\"SFDC link\" name=\"" + jsonResponse[i]._id + "_sfdc\" value=\"" + jsonResponse[i].sfdc + "\"/><button id=\"landing_box_password\" type=\"button\" class=\"btn btn--secondary theme--dark landing-bva-button openlink sfdc-link\"><img src=\"/static/external-link-white.png\" height=\"40px\" width=\"40px\"/></button></div></div><br />";
-			}
-
-			document.getElementById("listOfIds").value=JSON.stringify(listId);
-			document.getElementById("results").innerHTML = newHtml;
-
-			$(" .openlink ").click(function() {
-
-					url = this.parentElement.children[1].value;
-					openInNewTab(url);
-			});
-
-			$(" .add-button ").click(function() {
-				addToMine(this.id);
-			});
-
-		}
-
-		else {
-			document.getElementById("listOfIds").value = "";
-			$('#no_result').css("display", "block");
-		}
-	})
-}
-
-function getAssessmentList() {
-	var myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/json");
-	myHeaders.append("Accept", "application/json");
-	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
-
-	var myInit = { method: 'GET',
-		headers: myHeaders,
-		cache: 'default',
-		credentials: 'same-origin'
-	}
-
-	fetch('/getAssessmentList', myInit)
-
-	.then(function(response) {
-		return response.json();
-	})
-
-	.then(function(jsonObj) {
-		var newHTML = '';
-
-		if(jsonObj.length < 1) {
-			document.getElementById("bva_select").innerHTML = '<option value="">Create an assessment!</option>';
-		}
-
-		else {
-			for(i=0;i<jsonObj.length;i++) {
-				newHTML += '<option value="' + jsonObj[i].id + '">' + jsonObj[i].company + '</option>';
-
-				//if(i=0) {
-				//	dtrum.identifyUser(jsonObj[i].username);
-				//}
-			}
-			//dtrum.identifyUser(jsonObj[0].username);
-			document.getElementById("bva_select").innerHTML = newHTML;
-			setBvaLinks();
-		}
-	})
-}
-
-function getAssessmentData() {
-	var myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/json");
-	myHeaders.append("Accept", "application/json");
-	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
-
-	bva_id = getGet('bva_id');
-
-	myHeaders.append("bva_id", bva_id);
-
-	var myInit = { method: 'GET',
-		headers: myHeaders,
-		cache: 'default',
-		credentials: 'same-origin'
-	}
-
-	fetch('/getAssessmentData', myInit)
-
-	.then(function(response) {
-		return response.json();
-	})
-
-	.then(function(jsonResponse) {
-		document.getElementById("company_revenue").value = processMoney(jsonResponse.company_revenue);
-		document.getElementById("projected_growth").value = processPercent(jsonResponse.projected_growth);
-		document.getElementById("revenue_dependent").value = processPercent(jsonResponse.revenue_dependent);
-		document.getElementById("app_uptime").value = processPercent(jsonResponse.app_uptime);
-		document.getElementById("revenue_breach").value = processPercent(jsonResponse.revenue_breach);
-		document.getElementById("incidents_month").value = processNumber(jsonResponse.incidents_month);
-		document.getElementById("no_ops_troubleshoot").value = processNumber(jsonResponse.no_ops_troubleshoot);
-		document.getElementById("no_dev_troubleshoot").value = processNumber(jsonResponse.no_dev_troubleshoot);
-		document.getElementById("mttr").value = processNumber(jsonResponse.mttr);
-		document.getElementById("no_apps_e2e").value = processNumber(jsonResponse.no_apps_e2e);
-		document.getElementById("no_t1t2_apps").value = processNumber(jsonResponse.no_t1t2_apps);
-		document.getElementById("no_fte_existing").value = processNumber(jsonResponse.no_fte_existing);
-		document.getElementById("cycles_per_year").value = processNumber(jsonResponse.cycles_per_year);
-		document.getElementById("cycle_days").value = processNumber(jsonResponse.cycle_days);
-		document.getElementById("test_per_cycle").value = processPercent(jsonResponse.test_per_cycle);
-		document.getElementById("qa_time_per_cycle").value = processPercent(jsonResponse.qa_time_per_cycle);
-		document.getElementById("qa_people_per_cycle").value = processNumber(jsonResponse.qa_people_per_cycle);
-		document.getElementById("dev_time_per_cycle").value = processPercent(jsonResponse.dev_time_per_cycle);
-		document.getElementById("dev_people_per_cycle").value = processNumber(jsonResponse.dev_people_per_cycle);
-		document.getElementById("operation_cost").value = processMoney(jsonResponse.operation_cost);
-		document.getElementById("developer_cost").value = processMoney(jsonResponse.developer_cost);
-		document.getElementById("qa_cost").value = processMoney(jsonResponse.qa_cost);
-		document.getElementById("work_hours").value = processNumber(jsonResponse.work_hours);
-		document.getElementById("benefit_conversion").value = processPercent(jsonResponse.benefit_conversion);
-		document.getElementById("benefit_incident_reduction").value = processPercent(jsonResponse.benefit_incident_reduction);
-		document.getElementById("benefit_mttr").value = processPercent(jsonResponse.benefit_mttr);
-		document.getElementById("benefit_performance").value = processPercent(jsonResponse.benefit_performance);
-		document.getElementById("benefit_alert_storm").value = processPercent(jsonResponse.benefit_alert_storm);
-		document.getElementById("benefit_sla").value = processPercent(jsonResponse.benefit_sla);
-		document.getElementById("benefit_fix_qa").value = processPercent(jsonResponse.benefit_fix_qa);
-		document.getElementById("benefit_prod_reduction").value = processPercent(jsonResponse.benefit_prod_reduction);
-		document.getElementById("benefit_config").value = processPercent(jsonResponse.benefit_config);
-		document.getElementById("y1_software").value = processMoney(jsonResponse.y1_software);
-		document.getElementById("y1_services").value = processMoney(jsonResponse.y1_services);
-		document.getElementById("y2_software").value = processMoney(jsonResponse.y2_software);
-		document.getElementById("y2_services").value = processMoney(jsonResponse.y2_services);
-		document.getElementById("y3_software").value = processMoney(jsonResponse.y3_software);
-		document.getElementById("y3_services").value = processMoney(jsonResponse.y3_services);
-
-		existingApps = "";
-
-		var currency = document.getElementById("currency").value;
-
-		for(i=0;i<jsonResponse.existing_apps.length;i++) {
-			existingApps += "<div class=\"bva-question-wrapper bva-question-top \" \"><div class=\"bva-question-existing-wrapper\">	<div style=\"position: relative\"> <h2 style=\"display: inline-block\">" + jsonResponse.existing_apps[i].name + "</h2> <div style=\"display: inline-block; position: absolute; right: 0px\"><a class=\"delete\" id=\"" + jsonResponse.existing_apps[i].tool_id + "\"><img src=\"/static/delete-grey.svg\"  width=\"40px\" height=\"40px\" /></a></div> </div><p>" + currency + parseInt(jsonResponse.existing_apps[i].annual_costs).toLocaleString() + " - " + jsonResponse.existing_apps[i].ftes + " FTEs</p><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 1: " + jsonResponse.existing_apps[i].y1 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y1 + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 2: " + jsonResponse.existing_apps[i].y2 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y2 + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 3: " + jsonResponse.existing_apps[i].y3 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y3 + "\" max=\"100\" id=\"p0\"></progress></div>	</div></div><br />";
-		}
-
-		document.getElementById("existing_apps").innerHTML = existingApps;
-
-		$(" .delete ").click(function() {
-
-			deleteExistingTool(this.id);
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<title>Dynatrace Business Value Calculator</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" type="text/css" href='/static/main.css' />
+	<!-- <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.js"></script> -->
+	<!-- <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>  -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="icon" href="https://dt-cdn.net/images/favicon-32x32-32-26d70a5cff.png">
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<style>a:hover {cursor:pointer;}</style>
+	<script src="/static/bva.js"></script>
+	<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function(event) {
+			addListeners();
 		});
+	</script>
 
-		drawResults();
-	})
-}
-
-function updateAssessment() {
-	var assessment_data = {
-		company_revenue: getNumbersAndDots(document.getElementById("company_revenue").value),
-		projected_growth: getNumbersAndDots(document.getElementById("projected_growth").value),
-		revenue_dependent: getNumbersAndDots(document.getElementById("revenue_dependent").value),
-		app_uptime: getNumbersAndDots(document.getElementById("app_uptime").value),
-		revenue_breach: getNumbersAndDots(document.getElementById("revenue_breach").value),
-		incidents_month: getNumbers(document.getElementById("incidents_month").value),
-		no_ops_troubleshoot: getNumbers(document.getElementById("no_ops_troubleshoot").value),
-		no_dev_troubleshoot: getNumbers(document.getElementById("no_dev_troubleshoot").value),
-		mttr: getNumbers(document.getElementById("mttr").value),
-		no_apps_e2e: getNumbers(document.getElementById("no_apps_e2e").value),
-		no_t1t2_apps: getNumbers(document.getElementById("no_t1t2_apps").value),
-		no_fte_existing: getNumbersAndDots(document.getElementById("no_fte_existing").value),
-		existing_apps: [],
-		cycles_per_year: getNumbers(document.getElementById("cycles_per_year").value),
-		cycle_days: getNumbers(document.getElementById("cycle_days").value),
-		test_per_cycle: getNumbersAndDots(document.getElementById("test_per_cycle").value),
-		qa_time_per_cycle: getNumbersAndDots(document.getElementById("qa_time_per_cycle").value),
-		qa_people_per_cycle: getNumbersAndDots(document.getElementById("qa_people_per_cycle").value),
-		dev_time_per_cycle: getNumbersAndDots(document.getElementById("dev_time_per_cycle").value),
-		dev_people_per_cycle: getNumbersAndDots(document.getElementById("dev_people_per_cycle").value),
-		operation_cost: getNumbersAndDots(document.getElementById("operation_cost").value),
-		developer_cost: getNumbersAndDots(document.getElementById("developer_cost").value),
-		qa_cost: getNumbersAndDots(document.getElementById("qa_cost").value),
-		work_hours: getNumbers(document.getElementById("work_hours").value),
-		benefit_conversion: getNumbersAndDots(document.getElementById("benefit_conversion").value),
-		benefit_incident_reduction: getNumbersAndDots(document.getElementById("benefit_incident_reduction").value),
-		benefit_mttr: getNumbersAndDots(document.getElementById("benefit_mttr").value),
-		benefit_performance: getNumbersAndDots(document.getElementById("benefit_performance").value),
-		benefit_alert_storm: getNumbersAndDots(document.getElementById("benefit_alert_storm").value),
-		benefit_sla: getNumbersAndDots(document.getElementById("benefit_sla").value),
-		benefit_fix_qa: getNumbersAndDots(document.getElementById("benefit_fix_qa").value),
-		benefit_prod_reduction: getNumbersAndDots(document.getElementById("benefit_prod_reduction").value),
-		benefit_config: getNumbersAndDots(document.getElementById("benefit_config").value),
-		y1_software: getNumbers(document.getElementById("y1_software").value),
-		y1_services: getNumbers(document.getElementById("y1_services").value),
-		y2_software: getNumbers(document.getElementById("y2_software").value),
-		y2_services: getNumbers(document.getElementById("y2_services").value),
-		y3_software: getNumbers(document.getElementById("y3_software").value),
-		y3_services: getNumbers(document.getElementById("y3_services").value)
-	}
-
-	var myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/json");
-	myHeaders.append("Accept", "application/json");
-	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
-
-	bva_id = getGet('bva_id');
-
-	myHeaders.append("bva_id", bva_id);
-
-	var myInit = { method: 'POST',
-		headers: myHeaders,
-		cache: 'default',
-		credentials: 'same-origin',
-		body: JSON.stringify(assessment_data)
-	}
-
-	fetch('/updateAssessment', myInit)
-
-	.then(function(response) {
-
-	})
-}
-
-function addListeners() {
-
-	getTabs();
-
-	$(".leftContainer").css("height", $('.biz').css('height'));
-
-	$("#existingToolAdd").click(function() {
-		addExistingTool();
-	});
-
-	$(" .opsFromBiz ").click(function() {
-		$( ".biz" ).hide('slide', {direction: 'left'});
-		$(".ops").fadeIn();
-		$(".leftContainer").css("height", $('.ops').css('height'));
-		$( ".result-biz" ).hide('slide', {direction: 'left'});
-		$(".result-ops").fadeIn();
-		getAssessmentData();
-	});
-
-	$(" .bizFromOps ").click(function() {
-		$( ".ops" ).toggle( "slide" , { direction: "right" });
-		$( ".biz" ).fadeIn();
-		$(".leftContainer").css("height", $('.biz').css('height'));
-		$( ".result-ops" ).toggle( "slide" , { direction: "right" });
-		$( ".result-biz" ).fadeIn();
-		getAssessmentData();
-	});
-
-	$(" .devFromOps ").click(function() {
-		$( ".ops" ).toggle( "slide" , { direction: "left" });
-		$( ".dev" ).fadeIn();
-		$(".leftContainer").css("height", $('.dev').css('height'));
-		$( ".result-ops" ).toggle( "slide" , { direction: "left" });
-		$( ".result-dev" ).fadeIn();
-		getAssessmentData();
-	});
-
-	$(" .opsFromDev ").click(function() {
-		$( ".dev" ).toggle( "slide" , { direction: "right" });
-		$( ".ops" ).fadeIn();
-		$(".leftContainer").css("height", $('.ops').css('height'));
-		$( ".result-dev" ).toggle( "slide" , { direction: "right" });
-		$( ".result-ops" ).fadeIn();
-		getAssessmentData();
-	});
-
-	$(" .optionsFromDev ").click(function() {
-		$( ".dev" ).toggle( "slide" , { direction: "left" });
-		$( ".options" ).fadeIn();
-		$(".leftContainer").css("height", $('.options').css('height'));
-		$( ".result-dev" ).toggle( "slide" , { direction: "left" });
-		$( ".result-options" ).fadeIn();
-		getAssessmentData();
-	});
-
-	$(" .devFromOptions ").click(function() {
-		$( ".options" ).toggle( "slide" , { direction: "right" });
-		$( ".dev" ).fadeIn();
-		$(".leftContainer").css("height", $('.dev').css('height'));
-		$( ".result-options" ).toggle( "slide" , { direction: "right" });
-		$( ".result-dev" ).fadeIn();
-		getAssessmentData();
-	});
-
-	$('#company_revenue, #operation_cost, #developer_cost, #qa_cost, #annual_cost, #y1_software, #y1_services, #y2_software, #y2_services, #y3_software, #y3_services').on( "blur", function() {
-		if(this.value != '' && this.value != undefined) {this.value = document.getElementById("currency").value + parseInt(getNumbers(this.value)).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
-		updateAssessment();
-		drawResults();
-	} );
-
-	$('#projected_growth, #revenue_breach, #revenue_dependent, #app_uptime, #test_per_cycle, #qa_time_per_cycle, #dev_time_per_cycle, #benefit_conversion, #benefit_incident_reduction, #benefit_mttr, #benefit_performance, #benefit_alert_storm, #benefit_sla, #benefit_fix_qa, #benefit_prod_reduction, #benefit_config, #existing_y1, #existing_y2, #existing_y3').on( "blur", function() {
-		if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
-		updateAssessment();
-		drawResults();
-	} );
-
-	$('#incidents_month, #no_ops_troubleshoot, #no_dev_troubleshoot, #mttr, #no_apps_e2e, #no_t1t2_apps, #no_fte_existing, #cycles_per_year, #cycle_days, #qa_people_per_cycle, #dev_people_per_cycle, #work_hours, #no_fte_config').on( "blur", function() {
-		if(this.value != '' && this.value != undefined) {this.value = parseInt(getNumbersAndDots(this.value)).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
-		updateAssessment();
-		drawResults();
-	});
-
-	$("#open-report").click(function() {
-		openReport();
-	});
-}
-
-function getTabs() {
-	bva_id = getGet('bva_id');
-
-	var myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/json");
-	myHeaders.append("Accept", "application/json");
-	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
-	myHeaders.append("bva_id", bva_id);
-
-	var myInit = { method: 'GET',
-		headers: myHeaders,
-		cache: 'default',
-		credentials: 'same-origin'
-	}
-
-	fetch('/getUserDetails', myInit)
-
-	.then(function(response) {
-		return response.json();
-	})
-
-	.then(function(jsonObj) {
-		if(jsonObj.currency == "uk") { var currency = "£" }
-		if(jsonObj.currency == "ireland") { var currency = "€" }
-		if(jsonObj.currency == "us") { var currency = "$" }
-		if(jsonObj.currency == "spain") { var currency = "€" }
-		if(jsonObj.currency == "benelux") { var currency = "€" }
-		if(jsonObj.currency == "germany") { var currency = "€" }
-		if(jsonObj.currency == "france") { var currency = "€" }
-		if(jsonObj.currency == "italy") { var currency = "€" }
-
-		document.getElementById("currency").value=currency;
-
-		document.getElementsByClassName("user-email")[0].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
-		document.getElementsByClassName("user-company")[0].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
-
-		document.getElementsByClassName("user-email")[1].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
-		document.getElementsByClassName("user-company")[1].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
-
-		document.getElementsByClassName("user-email")[2].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
-		document.getElementsByClassName("user-company")[2].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
-
-		document.getElementsByClassName("user-email")[3].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
-		document.getElementsByClassName("user-company")[3].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
-
-		if(jsonObj.has_pricing == true) {
-			$('#pricing').css("display", "block");
-		}
-
-		getAssessmentData();
-
-	})
-}
-
-function addExistingTool() {
-
-	var tool_id = generateId();
-
-	var existingTool = {
-		tool_id: tool_id,
-		name_tool: document.getElementById("name_tool").value,
-		annual_cost: getNumbers(document.getElementById("annual_cost").value),
-		no_fte_config: getNumbers(document.getElementById("no_fte_config").value),
-		existing_y1: getNumbers(document.getElementById("existing_y1").value),
-		existing_y2: getNumbers(document.getElementById("existing_y2").value),
-		existing_y3: getNumbers(document.getElementById("existing_y3").value),
-	}
-
-	var myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/json");
-	myHeaders.append("Accept", "application/json");
-	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
-
-	bva_id = getGet('bva_id');
-
-	myHeaders.append("bva_id", bva_id);
-
-	var myInit = { method: 'POST',
-		headers: myHeaders,
-		cache: 'default',
-		credentials: 'same-origin',
-		body: JSON.stringify(existingTool)
-	}
-
-	fetch('/addExistingTool', myInit)
-
-	.then(function() {
-
-		var newApp = "<div class=\"bva-question-wrapper bva-question-top \" \"><div class=\"bva-question-existing-wrapper\">	<div style=\"position: relative\"> <h2 style=\"display: inline-block\">" + document.getElementById("name_tool").value + "</h2> <div style=\"display: inline-block; position: absolute; right: 0px\"><a class=\"delete\" id=\"" + tool_id + "\"><img src=\"/static/delete-grey.svg\"  width=\"40px\" height=\"40px\" /></a></div> </div><p>" + document.getElementById("annual_cost").value + " - " + document.getElementById("no_fte_config").value + " FTEs</p><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 1: " + document.getElementById("existing_y1").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y1").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 2: " + document.getElementById("existing_y2").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y2").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 3: " + document.getElementById("existing_y3").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y3").value) + "\" max=\"100\" id=\"p0\"></progress></div>	</div></div><br />";
-
-		$( "#existing_apps" ).append( newApp );
-		$(".leftContainer").css("height", $('.ops').css('height'));
-
-		$(" .delete ").click(function() {
-			deleteExistingTool(this.id);
-		});
-
-		document.getElementById("name_tool").value = "";
-		document.getElementById("annual_cost").value = "";
-		document.getElementById("no_fte_config").value = "";
-		document.getElementById("existing_y1").value = "";
-		document.getElementById("existing_y2").value = "";
-		document.getElementById("existing_y3").value = "";
-
-		drawResults();
-	})
-
-}
-
-function deleteExistingTool(id) {
-
-	var existing_id = {
-		id: id
-	}
-
-	var myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/json");
-	myHeaders.append("Accept", "application/json");
-	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
-
-	bva_id = getGet('bva_id');
-
-	myHeaders.append("bva_id", bva_id);
-
-	var myInit = { method: 'POST',
-		headers: myHeaders,
-		cache: 'default',
-		credentials: 'same-origin',
-		body: JSON.stringify(existing_id)
-	}
-
-	fetch('/deleteExistingTool', myInit)
-
-	.then(function(response) {
-		$("#" + id).parent().parent().parent().parent().remove();
-		$(".leftContainer").css("height", $('.ops').css('height'));
-
-		drawResults();
-	})
-}
-
-function confirmDelete() {
-	$("#edit_box_submit").fadeOut();
-	$("#confirmDelete").fadeIn();
-}
-
-function cancelDelete() {
-	$("#edit_box_submit").fadeIn();
-	$("#confirmDelete").fadeOut();
-}
-
-function addDeleteId() {
-	id = getGet('bva_id');
-	document.getElementById("finalDelete").href="/deleteAssessment?bva_id=" + id;
-}
-
-function deleteAssessment() {
-
-	var tool_id = generateId();
-
-	var existingTool = {
-		tool_id: tool_id,
-		name_tool: document.getElementById("name_tool").value,
-		annual_cost: getNumbers(document.getElementById("annual_cost").value),
-		no_fte_config: getNumbers(document.getElementById("no_fte_config").value),
-		existing_y1: getNumbers(document.getElementById("existing_y1").value),
-		existing_y2: getNumbers(document.getElementById("existing_y2").value),
-		existing_y3: getNumbers(document.getElementById("existing_y3").value),
-	}
-
-	var myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/json");
-	myHeaders.append("Accept", "application/json");
-	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
-
-	bva_id = getGet('bva_id');
-
-	myHeaders.append("bva_id", bva_id);
-
-	var myInit = { method: 'POST',
-		headers: myHeaders,
-		cache: 'default',
-		credentials: 'same-origin',
-		body: JSON.stringify(existingTool)
-	}
-
-	fetch('/addExistingTool', myInit)
-
-	.then(function() {
-
-		var newApp = "<div class=\"bva-question-wrapper bva-question-top \" \"><div class=\"bva-question-existing-wrapper\">	<div style=\"position: relative\"> <h2 style=\"display: inline-block\">" + document.getElementById("name_tool").value + "</h2> <div style=\"display: inline-block; position: absolute; right: 0px\"><a class=\"delete\" id=\"" + tool_id + "\"><img src=\"/static/delete-grey.svg\"  width=\"40px\" height=\"40px\" /></a></div> </div><p>" + document.getElementById("annual_cost").value + " - " + document.getElementById("no_fte_config").value + " FTEs</p><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 1: " + document.getElementById("existing_y1").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y1").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 2: " + document.getElementById("existing_y2").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y2").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 3: " + document.getElementById("existing_y3").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y3").value) + "\" max=\"100\" id=\"p0\"></progress></div>	</div></div><br />";
-
-		$( "#existing_apps" ).append( newApp );
-		$(".leftContainer").css("height", $('.ops').css('height'));
+</head>
 
-		$(" .delete ").click(function() {
-			deleteExistingTool(this.id);
-		});
-
-		document.getElementById("name_tool").value = "";
-		document.getElementById("annual_cost").value = "";
-		document.getElementById("no_fte_config").value = "";
-		document.getElementById("existing_y1").value = "";
-		document.getElementById("existing_y2").value = "";
-		document.getElementById("existing_y3").value = "";
+<body class="bva-body">
 
-	})
-
-}
+<!--start of nav bar-->
+<div class="nav has-no-secondary">
 
-function drawResults() {
-
-	var myHeaders = new Headers();
-	myHeaders.append("Content-Type", "application/json");
-	myHeaders.append("Accept", "application/json");
-	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+  <a class="nav__brand" href="/">
+    <img class="nav__logo" src="https://assets.dynatrace.com/global/logos/dynatrace-logo.svg" alt="dynatrace logo"/>
+  </a>
 
-	bva_id = getGet('bva_id');
+  <nav id="nav-bar-example1" class="nav__bar">
+  </nav>
 
-	myHeaders.append("bva_id", bva_id);
+</div>
+<!--end of nav bar-->
 
-	var myInit = { method: 'GET',
-		headers: myHeaders,
-		cache: 'default',
-		credentials: 'same-origin'
-	}
+<!--start of content-->
+<div class="section bva-content">
 
-	fetch('/getAssessmentData', myInit)
+<div class="column--1-of-2 bva-content-column" >
 
-	.then(function(response) {
-		return response.json();
-	})
+<div class="leftContainer" >
 
-	.then(function(jsonResponse) {
+<input type="hidden" id="currency"/>
 
-			//OPERATIONS - get rid of tools
-			if(jsonResponse.existing_apps.length == 0) {
-					existingy1 = 0;
-					existingy2 = 0;
-					existingy3 = 0;
-					existingTotal = 0;
+<div class="biz">
 
-					document.getElementById("ops-reduced-tools").innerHTML="";
 
-					var opsCase1 = 0;
-			}
 
-			else {
-				number = jsonResponse.existing_apps.length;
+<!-- start of title -->
+<div class="bva-title-wrapper bva-title-wrapper-biz">
 
-				var existingy1 = 0;
-				var existingy2 = 0;
-				var existingy3 = 0;
+	<div class="bva-title-wrapper-inner">
 
-				for(i=0;i<number;i++) {
-					annual_cost = (parseFloat(jsonResponse.existing_apps[i].annual_costs)) + (parseFloat(jsonResponse.existing_apps[i].ftes) * parseFloat(jsonResponse.operation_cost));
-					percent1 = (parseFloat(jsonResponse.existing_apps[i].y1)/100);
-					percent2 = (parseFloat(jsonResponse.existing_apps[i].y2)/100);
-					percent3 = (parseFloat(jsonResponse.existing_apps[i].y3)/100);
-					existingy1 = parseInt(existingy1 + (annual_cost * percent1));
-					existingy2 = parseInt(existingy2 + (annual_cost * percent2));
-					existingy3 = parseInt(existingy3 + (annual_cost * percent3));
-					existingTotal = existingy1 + existingy2 + existingy3;
-				}
+		<h1 class="bva-title-text">Business</h1>
+		<p>Increased revenue from improved technology performance</p>
 
-				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/ops-reduced-tools.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Reduction of existing monitoring tools</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(existingTotal.toString()) + "</b></dd></dl></div></div>";
+	</div>
 
-				document.getElementById("ops-reduced-tools").innerHTML=newHtml;
+</div>
+<!--end of title-->
 
-				if($('#operations').css('display') == "none") {
-					$('#operations').fadeIn();
-				}
+<!--start of tags-->
+<div class="tags">
 
-				var opsCase1 = 1;
-			}
+	<span tabindex="1" class="tag user-email">
+	  <span class="tag__key" id="email">email:</span>
 
-			//BUSINESS - revenue increase
-			revenue = parseFloat(getNumbersAndDots(document.getElementById("company_revenue").value));
+	</span>
 
-			percent = parseFloat(getNumbersAndDots(document.getElementById("revenue_dependent").value));
-			percent = percent / 100;
+	<span tabindex="1" class="tag user-company">
+	  <span class="tag__key">company:</span>
 
-			growth = parseFloat(getNumbersAndDots(document.getElementById("projected_growth").value));
-			growth = growth / 100;
+	</span>
 
-			uptime = parseFloat(getNumbersAndDots(document.getElementById("app_uptime").value));
-			uptime = uptime / 100;
+</div>
+<!--end of tags-->
 
-			breach = parseFloat(getNumbersAndDots(document.getElementById("revenue_breach").value));
-			breach = breach / 100;
+<br />
 
-			benefit_sla = parseInt(getNumbersAndDots(document.getElementById("benefit_sla").value));
-			benefit_sla = benefit_sla / 100;
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="toHome" href="/landing"><img src="/static/home-purple.svg" class="bva-progress-button"/></a><br />Home</div><div class="theme--purple bva-progress-wrapper" ><label class="label--progressbar" for="p1">1/4</label><progress class="progressbar" value="1" max="4" if="p1"></progress>	</div><div class="bva-button-wrapper"><a class="opsFromBiz" ><img src="/static/arrow-purple.svg" class="bva-progress-button"/></a><br />Next</div></div>
+<!--end of progress-->
 
-			if(isNaN(revenue) == true || revenue == 0 || isNaN(percent) == true || percent == 0 || isNaN(growth) == true || growth == 0 || isNaN(uptime) == true || uptime == 0 || isNaN(breach) == true || breach == 0 || isNaN(benefit_sla) == true || benefit_sla == 0) {
-				revenueDowntimeY1 = 0;
-				revenueDowntimeY2 = 0;
-				revenueDowntimeY3 = 0;
-				revenueDowntimeTotal = 0;
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
 
-				document.getElementById("biz-increased-revenue").innerHTML="";
+	<div class="bva-question-wrapper">
 
-				var bizCase1 = 0;
-			}
+		<img src="/static/sales-purple.svg" class="bva-question-image"/>
 
-			else {
-				revenueLost = ((revenue * percent)/8760)*(8760*(1-uptime))*breach;
+		<div class="bva-input-wrapper">
 
-				revenueDowntimeY1 = parseInt(revenueLost * benefit_sla);
-				revenueDowntimeY2 = parseInt(revenueDowntimeY1 * (1+growth));
-				revenueDowntimeY3 = parseInt(revenueDowntimeY2 * (1+growth));
-				revenueDowntimeTotal = revenueDowntimeY1 + revenueDowntimeY2 + revenueDowntimeY3;
+			<label for="company_revenue" class="label bva-question-text" >Company or business unit annual revenue <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-conversions.svg"/>Revenue from increased conversions caused by better app performance</li></ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="company_revenue" placeholder="revenue"  />
 
-				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/biz-increased-revenue.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Revenue gained by reduced incidents, downtime, and slowness</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(revenueDowntimeTotal.toString()) + "</b></dd></dl></div></div>";
+		</div>
 
-				document.getElementById("biz-increased-revenue").innerHTML=newHtml;
+	</div>
 
-				var bizCase1 = 1;
+		<br /><br />
 
-				if($('#business').css('display') == "none") {
-					$('#business').fadeIn();
-				}
-			}
+	<div class="bva-question-wrapper">
 
-			//BUSINESS - conversions
-			revenue = parseFloat(getNumbersAndDots(document.getElementById("company_revenue").value));
+		<img src="/static/trend-purple.svg" class="bva-question-image"/>
 
-			percent = parseFloat(getNumbersAndDots(document.getElementById("revenue_dependent").value));
-			percent = percent / 100;
+		<div class="bva-input-wrapper">
 
-			conversion = parseFloat(getNumbersAndDots(document.getElementById("benefit_conversion").value));
-			conversion = conversion / 100;
+			<label for="projected_growth" class="label bva-question-text">Projected annual growth rate <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-conversions.svg"/>Revenue from increased conversions caused by better app performance</li></ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="projected_growth" placeholder="growth"/>
 
-			growth = parseFloat(getNumbersAndDots(document.getElementById("projected_growth").value));
-			growth = growth / 100;
+		</div>
 
-			if(isNaN(revenue) == true || revenue == 0 || isNaN(percent) == true || percent == 0 || isNaN(conversion) == true || conversion == 0 || isNaN(growth) == true || growth == 0) {
-				revenueConversionY1 = 0;
-				revenueConversionY2 = 0;
-				revenueConversionY3 = 0;
-				revenueConversionTotal = 0;
+	</div>
 
-				document.getElementById("biz-increased-conversions").innerHTML="";
+		<br /><br />
 
-				var bizCase2 = 0;
-			}
+	<div class="bva-question-wrapper">
 
-			else {
-				revenueConversionY1 = parseInt((revenue * percent) * conversion);
-				revenueConversionY2 = parseInt(revenueConversionY1 * (1+growth));
-				revenueConversionY3 = parseInt(revenueConversionY2 * (1+growth));
-				revenueConversionTotal = revenueConversionY1 + revenueConversionY2 + revenueConversionY3;
+		<img src="/static/application-purple.svg" class="bva-question-image"/>
 
-				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/biz-increased-conversions.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Revenue from increased conversions caused by better user experience and app performance</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(revenueConversionTotal.toString()) + "</b></dd></dl></div></div>";
+		<div class="bva-input-wrapper">
 
-				document.getElementById("biz-increased-conversions").innerHTML=newHtml;
+			<label for="revenue_dependent" class="label bva-question-text">Revenue dependent on applications <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-conversions.svg"/>Revenue from increased conversions caused by better app performance</li></ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="revenue_dependent" placeholder="% revenue" />
 
-				if($('#business').css('display') == "none") {
-					$('#business').fadeIn();
-				}
+		</div>
 
-				var bizCase2 = 1;
-			}
+	</div>
 
-			if(bizCase1 + bizCase2 == 0) {
-				$('#business').fadeOut();
-			}
+		<br /><br />
 
-			//OPERATIONS - incident reduction
-			incidents_month = parseFloat(getNumbersAndDots(document.getElementById("incidents_month").value));
+	<div class="bva-question-wrapper">
 
-			if(document.getElementById("projected_growth").value == "") {
-				growth = 0;
-			}
-			else {
-				growth = parseFloat(getNumbersAndDots(document.getElementById("projected_growth").value));
-				growth = growth / 100;
-			}
+		<img src="/static/health-purple.svg" class="bva-question-image"/>
 
-			no_ops_troubleshoot = parseFloat(getNumbersAndDots(document.getElementById("no_ops_troubleshoot").value));
+		<div class="bva-input-wrapper">
 
-			no_dev_troubleshoot = parseFloat(getNumbersAndDots(document.getElementById("no_dev_troubleshoot").value));
+			<label for="app_uptime" class="label bva-question-text" >Excluding planned maintenance, how often are you free from application degradations or outages? <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="app_uptime" placeholder="% of time"/>
 
-			mttr = parseFloat(getNumbersAndDots(document.getElementById("mttr").value));
+		</div>
 
-			benefit_incident_reduction = parseFloat(getNumbersAndDots(document.getElementById("benefit_incident_reduction").value));
+	</div>
 
-			benefit_incident_reduction = benefit_incident_reduction / 100;
+		<br /><br />
 
-			benefit_mttr = parseFloat(getNumbersAndDots(document.getElementById("benefit_mttr").value));
-			benefit_mttr = benefit_mttr / 100;
+	<div class="bva-question-wrapper">
 
-			ops_cost = parseFloat(getNumbersAndDots(document.getElementById("operation_cost").value));
+		<img src="/static/warning-purple.svg" class="bva-question-image"/>
 
-			dev_cost = parseFloat(getNumbersAndDots(document.getElementById("developer_cost").value));
+		<div class="bva-input-wrapper">
 
-			work_hours = parseFloat(getNumbersAndDots(document.getElementById("work_hours").value));
+			<label for="revenue_breach" class="label bva-question-text" >Percentage of revenue lost during a degradation or outage <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="revenue_breach" placeholder="% of revenue lost" />
 
-			if(isNaN(incidents_month) == true || incidents_month == 0 || isNaN(growth) == true || isNaN(no_ops_troubleshoot) == true || isNaN(no_dev_troubleshoot) == true || isNaN(mttr) == true || mttr == 0 || isNaN(benefit_incident_reduction) == true || benefit_incident_reduction == 0 || isNaN(benefit_mttr) == true || benefit_mttr == 0 || isNaN(ops_cost) == true || ops_cost == 0 || isNaN(dev_cost) == true || dev_cost == 0 || isNaN(work_hours) == true || work_hours == 0) {
-				opsIncidentCostY1 = 0;
-				opsIncidentCostY2 = 0;
-				opsIncidentCostY3 = 0;
-				opsIncidentCostTotal = 0;
+		</div>
 
-				document.getElementById("ops-reduced-incidents").innerHTML="";
+	</div>
 
-				var opsCase2 = 0;
-			}
+</div>
+<!--end of questions-->
 
-			else {
-				incidentsYear = incidents_month * 12;
-				opsHours = incidentsYear * no_ops_troubleshoot * (mttr / 60);
-				opsCost = opsHours * (ops_cost / work_hours);
-				devHours = incidentsYear * no_dev_troubleshoot * (mttr / 60);
-				devCost = devHours * (dev_cost / work_hours);
-				incidentCost = opsCost + devCost;
 
-				after_incidentsYear = incidentsYear * (1 - benefit_incident_reduction);
-				after_opsHours = after_incidentsYear * no_ops_troubleshoot * (mttr / 60) * (1-benefit_mttr);
-				after_opsCost = after_opsHours * (ops_cost / work_hours);
-				after_devHours = after_incidentsYear * no_dev_troubleshoot * (mttr / 60) * (1-benefit_mttr);
-				after_devCost = after_devHours * (dev_cost / work_hours);
-				after_incidentCost = after_opsCost + after_devCost;
+<br /><br />
 
-				opsIncidentCostY1 = parseInt(incidentCost - after_incidentCost);
-				opsIncidentCostY2 = parseInt(opsIncidentCostY1 * (1+growth));
-				opsIncidentCostY3 = parseInt(opsIncidentCostY2 * (1+growth));
-				opsIncidentCostTotal = opsIncidentCostY1 + opsIncidentCostY2 + opsIncidentCostY3;
 
+</div>
 
-				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/ops-reduced-incidents.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Incident reduction and faster MTTR in production (cost of war room effort)</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(opsIncidentCostTotal.toString()) + "</b></dd></dl></div></div>";
 
-				document.getElementById("ops-reduced-incidents").innerHTML=newHtml;
 
-				if($('#operations').css('display') == "none") {
-					$('#operations').fadeIn();
-				}
 
-				var opsCase2 = 1;
-			}
 
-			//OPERATIONS - cost of automation
-			no_fte_existing = parseFloat(getNumbersAndDots(document.getElementById("no_fte_existing").value));
 
-			no_apps_e2e = parseFloat(getNumbersAndDots(document.getElementById("no_apps_e2e").value));
 
-			no_t1t2_apps = parseFloat(getNumbersAndDots(document.getElementById("no_t1t2_apps").value));
 
-			benefit_config = parseFloat(getNumbersAndDots(document.getElementById("benefit_config").value));
-			benefit_config = benefit_config / 100;
 
-			if(isNaN(no_fte_existing) == true || no_fte_existing == 0 || isNaN(no_apps_e2e) == true || no_apps_e2e == 0 || isNaN(no_t1t2_apps) == true || no_t1t2_apps == 0 || isNaN(benefit_config) == true || benefit_config == 0 || isNaN(growth) == true) {
-				effortSavingY1 = 0;
-				effortSavingY2 = 0;
-				effortSavingY3 = 0;
-				effortSavingTotal = 0;
+<div class="ops">
+<!-- start of title -->
+<div class="bva-title-wrapper bva-title-wrapper-ops">
 
-				document.getElementById("ops-increased-automation").innerHTML="";
+	<div class="bva-title-wrapper-inner">
 
-				var opsCase3 = 0;
-			}
+		<h1 class="bva-title-text">Operations</h1>
+		<p>Reducing the frequency and cost of issues</p>
 
-			else {
-				costPerApp = ((no_fte_existing * ops_cost)/no_apps_e2e);
-				costAllApps = costPerApp * no_t1t2_apps;
+	</div>
 
-				after_costPerApp = costPerApp * benefit_config;
-				after_costAllApps = after_costPerApp * no_t1t2_apps;
+</div>
 
-				effortBefore = costPerApp * no_apps_e2e;
-				effortAfter = effortBefore * (1 - benefit_config);
+<!--start of tags-->
+<div class="tags">
 
-				effortSavingY1 = parseInt(effortBefore - effortAfter);
-				effortSavingY2 = parseInt(effortSavingY1 * (1+growth));
-				effortSavingY3 = parseInt(effortSavingY2 * (1+growth));
-				effortSavingTotal = effortSavingY1 + effortSavingY2 + effortSavingY3;
+	<span tabindex="1" class="tag user-email">
+	  <span class="tag__key">email:</span>
+	</span>
 
-				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/ops-increased-automation.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Cost savings with Dynatrace automation vs. manual effort </p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(effortSavingTotal.toString()) + "</b></dd></dl></div></div>";
+	<span tabindex="1" class="tag user-company">
+	  <span class="tag__key">id:</span>
+	</span>
 
-				document.getElementById("ops-increased-automation").innerHTML=newHtml;
+</div>
+<!--end of tags-->
 
-				if($('#operations').css('display') == "none") {
-					$('#operations').fadeIn();
-				}
+<br />
 
-				var opsCase3 = 1;
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="bizFromOps" ><img src="/static/arrow-green.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--green bva-progress-wrapper"><label class="label--progressbar" for="p1">2/4</label><progress class="progressbar" value="2" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><a class="devFromOps" ><img src="/static/arrow-green.svg" class="bva-progress-button"/></a><br />Next</div></div>
+<!--end of progress-->
 
-			}
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
 
-			if(opsCase1 + opsCase2 + opsCase3 == 0) {
-				$('#operations').fadeOut();
-			}
+	<div class="bva-question-wrapper">
 
-			//DEV AND QA - effort
+		<img src="/static/incident-green.svg" class="bva-question-image"/>
 
-			cycles_per_year = parseFloat(getNumbersAndDots(document.getElementById("cycles_per_year").value));
+		<div class="bva-input-wrapper">
 
-			cycle_days = parseFloat(getNumbersAndDots(document.getElementById("cycle_days").value));
+			<label for="incidents_month" class="label bva-question-text">Number of incidents reported per month caused by slowness or availability <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-incidents.svg"/>Incident reduction and faster MTTR in production (cost of war room effort)</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-incidents.svg"/>Fewer production incidents by finding & fixing performance defects in QA & Dev</li></ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="incidents_month" placeholder="# of incidents"/>
 
-			test_per_cycle = parseFloat(getNumbersAndDots(document.getElementById("test_per_cycle").value));
-			test_per_cycle = test_per_cycle / 100;
+		</div>
 
-			qa_time_per_cycle = parseFloat(getNumbersAndDots(document.getElementById("qa_time_per_cycle").value));
-			qa_time_per_cycle = qa_time_per_cycle / 100;
+	</div>
 
-			qa_people_per_cycle = parseFloat(getNumbersAndDots(document.getElementById("qa_people_per_cycle").value));
+		<br /><br />
 
-			dev_time_per_cycle = parseFloat(getNumbersAndDots(document.getElementById("dev_time_per_cycle").value));
-			dev_time_per_cycle = dev_time_per_cycle / 100;
+	<div class="bva-question-wrapper">
 
-			dev_people_per_cycle = parseFloat(getNumbersAndDots(document.getElementById("dev_people_per_cycle").value));
+		<img src="/static/ops-green.svg" class="bva-question-image"/>
 
-			benefit_fix_qa = parseFloat(getNumbersAndDots(document.getElementById("benefit_fix_qa").value));
-			benefit_fix_qa = benefit_fix_qa / 100;
+		<div class="bva-input-wrapper">
 
-			qa_cost = parseFloat(getNumbersAndDots(document.getElementById("qa_cost").value));
+			<label for="no_ops_troubleshoot" class="label bva-question-text">Average number of Ops people used to troubleshoot an incident <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-incidents.svg"/>Incident reduction and faster MTTR in production (cost of war room effort)</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-incidents.svg"/>Fewer production incidents by finding & fixing performance defects in QA & Dev</li></ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="no_ops_troubleshoot" placeholder="# of Ops people"/>
 
-			if(isNaN(cycles_per_year) == true || cycles_per_year == 0 || isNaN(cycle_days) == true || cycle_days == 0 || isNaN(test_per_cycle) == true || test_per_cycle == 0 || isNaN(qa_time_per_cycle) == true || qa_time_per_cycle == 0 || isNaN(qa_people_per_cycle) == true || qa_people_per_cycle == 0 || isNaN(dev_time_per_cycle) == true || dev_time_per_cycle == 0 || isNaN(dev_people_per_cycle) == true || dev_people_per_cycle == 0 || isNaN(benefit_fix_qa) == true || benefit_fix_qa == 0 || isNaN(qa_cost) == true || qa_cost == 0 || isNaN(growth) == true) {
-				devQaY1 = 0;
-				devQaY2 = 0;
-				devQaY3 = 0;
-				devQaTotal = 0;
+		</div>
 
-				document.getElementById("dev-decreased-investigation").innerHTML="";
+	</div>
 
-				var devCase1 = 0;
-			}
+		<br /><br />
 
-			else {
+	<div class="bva-question-wrapper">
 
-				non_test_cycle = cycle_days * (1 - test_per_cycle);
-				test_cycle = cycle_days * test_per_cycle;
+		<img src="/static/dev-green.svg" class="bva-question-image"/>
 
-				days_not_performance = test_cycle * (1-(qa_time_per_cycle + dev_time_per_cycle));
-				days_performance = test_cycle * (qa_time_per_cycle + dev_time_per_cycle);
+		<div class="bva-input-wrapper">
 
-				dt_days_performance = days_performance * (1-benefit_fix_qa);
-				dt_cycle_days = non_test_cycle + days_not_performance + dt_days_performance;
-				dt_times_release = cycle_days / dt_cycle_days;
-				dt_release_year = cycles_per_year  * dt_times_release;
+			<label for="no_dev_troubleshoot" class="label bva-question-text">Average number of Dev people used to troubleshoot an incident <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-incidents.svg"/>Incident reduction and faster MTTR in production (cost of war room effort)</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-incidents.svg"/>Fewer production incidents by finding & fixing performance defects in QA & Dev</li></ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="no_dev_troubleshoot" placeholder="# of Dev people"/>
 
-				qa_cost_performance	= test_cycle * cycles_per_year * qa_time_per_cycle * qa_people_per_cycle * (qa_cost/work_hours) * 8;
-				dev_cost_performance = test_cycle * cycles_per_year * dev_time_per_cycle * dev_people_per_cycle * (dev_cost/work_hours) * 8;
-				total_effort_performance = qa_cost_performance + dev_cost_performance;
-				dt_qa_effort = benefit_fix_qa * total_effort_performance;
+		</div>
 
-				devQaY1 = parseInt(dt_qa_effort);
-				devQaY2 = parseInt(devQaY1 * (1+growth));
-				devQaY3 = parseInt(devQaY2 * (1+growth));
-				devQaTotal = devQaY1 + devQaY2 + devQaY3;
+	</div>
 
-				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/dev-decreased-investigation.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Performance defect investigation and troubleshooting in QA</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(devQaTotal.toString()) + "</b></dd></dl></div></div>";
+		<br /><br />
 
-				document.getElementById("dev-decreased-investigation").innerHTML=newHtml;
+	<div class="bva-question-wrapper">
 
-				if($('#development').css('display') == "none") {
-					$('#development').fadeIn();
-				}
+		<img src="/static/repair-green.svg" class="bva-question-image"/>
 
-				var devCase1 = 1;
-			}
-			//DEV AND QA - fewer incidents
+		<div class="bva-input-wrapper">
 
-			incidentsYear = incidents_month * 12;
-			opsHours = incidentsYear * no_ops_troubleshoot * (mttr / 60);
-			opsCost = opsHours * (ops_cost / work_hours);
-			devHours = incidentsYear * no_dev_troubleshoot * (mttr / 60);
-			devCost = devHours * (dev_cost / work_hours);
-			incidentCost = opsCost + devCost;
+			<label for="mttr" class="label bva-question-text">Average <div class="tooltip underline">MTTR<div class="tooltiptext">MTTR stands for "Mean time to resolution" and is the time taken (in minutes) from an incident affecting an application, to the incident being closed.</div></div> (minutes) <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-incidents.svg"/>Incident reduction and faster MTTR in production (cost of war room effort)</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-incidents.svg"/>Fewer production incidents by finding & fixing performance defects in QA & Dev</li></ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="mttr" placeholder="# of minutes"/>
 
-			benefit_prod_reduction = parseFloat(getNumbersAndDots(document.getElementById("benefit_prod_reduction").value));
-			benefit_prod_reduction = benefit_prod_reduction / 100;
+		</div>
 
-			if(isNaN(incidentsYear) == true || incidentsYear == 0 || isNaN(opsHours) == true || opsHours == 0 || isNaN(opsCost) == true || opsCost == 0 || isNaN(devHours) == true || devHours == 0 || isNaN(devCost) == true || devCost == 0 || isNaN(incidentCost) == true || incidentCost == 0 || isNaN(benefit_prod_reduction) == true || benefit_prod_reduction == 0 || isNaN(incidents_month) == true || incidents_month == 0 || isNaN(no_ops_troubleshoot) == true || no_ops_troubleshoot == 0 || isNaN(no_dev_troubleshoot) == true || no_dev_troubleshoot == 0 || isNaN(work_hours) == true || work_hours == 0 || isNaN(mttr) == true || mttr == 0 || isNaN(growth) == true) {
-				devLowerIncidentsY1 = 0;
-				devLowerIncidentsY2 = 0;
-				devLowerIncidentsY3 = 0;
-				devLowerIncidentsTotal = 0;
+	</div>
 
-				document.getElementById("dev-decreased-incidents").innerHTML="";
+		<br /><br />
 
-				var devCase2 = 0;
-			}
+	<div class="bva-question-wrapper">
 
-			else {
-				devLowerIncidentsY1 = parseInt(incidentCost * (1 - benefit_prod_reduction));
-				devLowerIncidentsY2 = parseInt(devLowerIncidentsY1 * (1+growth));
-				devLowerIncidentsY3 = parseInt(devLowerIncidentsY2 * (1+growth));
-				devLowerIncidentsTotal = devLowerIncidentsY1 + devLowerIncidentsY2 + devLowerIncidentsY3;
+		<img src="/static/transaction-green.svg" class="bva-question-image"/>
 
-				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/dev-decreased-incidents.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Fewer production incidents by finding & fixing performance defects in QA & Dev</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(devLowerIncidentsTotal.toString()) + "</b></dd></dl></div></div>";
+		<div class="bva-input-wrapper">
 
-				document.getElementById("dev-decreased-incidents").innerHTML=newHtml;
-				if($('#development').css('display') == "none") {
-					$('#development').fadeIn();
-				}
+			<label for="no_apps_e2e" class="label bva-question-text"># of apps being monitored end-to-end currently <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-increased-automation.svg"/>Cost savings with Dynatrace automation vs. manual effort</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="no_apps_e2e" placeholder="# of apps"/>
 
-				var devCase2 = 1;
-			}
+		</div>
 
-			if(devCase1 + devCase2 == 0) {
-				$('#development').fadeOut();
-			}
+	</div>
 
-			//DEV QA - total
+		<br /><br />
 
-			devY1 = parseInt(devQaY1 + devLowerIncidentsY1);
-			devY2 = parseInt(devQaY2 + devLowerIncidentsY2);
-			devY3 = parseInt(devQaY3 + devLowerIncidentsY3);
+	<div class="bva-question-wrapper">
 
-			devTotal = devY1 + devY2 + devY3;
+		<img src="/static/application-green.svg" class="bva-question-image"/>
 
-			if(devTotal != 0){
-				if(devTotal > 0  && document.getElementById("developmentRow") == null) {
-					var table = document.getElementById("results_body");
+		<div class="bva-input-wrapper">
 
-					var row = table.insertRow(0);
-					row.style.backgroundColor="#1496ff";
-					row.style.color="white";
-					row.setAttribute("id", "developmentRow");
+			<label for="no_t1t2_apps" class="label bva-question-text">Total # of <div class="tooltip underline">T1/T2<div class="tooltiptext">T1/T2 (Tier 1/Tier 2) are the most important applications within your organisation, they may also be referred to as "Gold" and "Silver" applications.</div></div> apps in production <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-increased-automation.svg"/>Cost savings with Dynatrace automation vs. manual effort</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="no_t1t2_apps" placeholder="# of apps"/>
 
-					var title = row.insertCell(0);
-					var year1 = row.insertCell(1);
-					year1.setAttribute("id", "devYear1");
-					var year2 = row.insertCell(2);
-					year2.setAttribute("id", "devYear2");
-					var year3 = row.insertCell(3);
-					year3.setAttribute("id", "devYear3");
-					var total = row.insertCell(4);
-					total.setAttribute("id", "devTotal");
+		</div>
 
-					title.innerHTML = "<img src=\"/static/dev.svg\" style=\"width: 20px; height: 20px\"> Development";
-					year1.innerHTML = processMoney(devY1.toString());
-					year2.innerHTML = processMoney(devY2.toString());
-					year3.innerHTML = processMoney(devY3.toString());
-					total.innerHTML = "<b>" + processMoney(devTotal.toString()) + "</b>";
-				}
+	</div>
 
-				else {
-					document.getElementById("devYear1").innerHTML = processMoney(devY1.toString());
-					document.getElementById("devYear2").innerHTML = processMoney(devY2.toString());
-					document.getElementById("devYear3").innerHTML = processMoney(devY3.toString());
-					document.getElementById("devTotal").innerHTML = "<b>" + processMoney(devTotal.toString()) + "</b>";
-				}
-			}
+		<br /><br />
 
-			else {
-				devY1 = null;
-				devY2 = null;
-				devY3 = null;
-				devTotal = null;
+	<div class="bva-question-wrapper">
 
-				$('#developmentRow').remove();
-			}
+		<img src="/static/user-green.svg" class="bva-question-image"/>
 
+		<div class="bva-input-wrapper">
 
-			//OPERATIONS - total
+			<label for="no_fte_existing" class="label bva-question-text"># of <div class="tooltip underline">FTEs<div class="tooltiptext">FTE stands for "Full time employee"</div></div> looking after existing tools <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-increased-automation.svg"/>Cost savings with Dynatrace automation vs. manual effort</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="no_fte_existing" placeholder="# of FTEs"/>
 
-			operationsY1 = parseInt(opsIncidentCostY1 + effortSavingY1 + existingy1);
-			operationsY2 = parseInt(opsIncidentCostY2 + effortSavingY2 + existingy2);
-			operationsY3 = parseInt(opsIncidentCostY3 + effortSavingY3 + existingy3);
+		</div>
 
-			operationsTotal = operationsY1 + operationsY2 + operationsY3;
+	</div>
 
-			if(operationsTotal != 0){
-				if(operationsTotal > 0  && document.getElementById("operationsRow") == null) {
-					var table = document.getElementById("results_body");
+		<br /><br />
 
-					var row = table.insertRow(0);
-					row.style.backgroundColor="#73be28";
-					row.style.color="white";
-					row.setAttribute("id", "operationsRow");
+	<h2 class="bva-question-text-centre">Replacement of existing tools </h2>
 
-					var title = row.insertCell(0);
-					var year1 = row.insertCell(1);
-					year1.setAttribute("id", "opsYear1");
-					var year2 = row.insertCell(2);
-					year2.setAttribute("id", "opsYear2");
-					var year3 = row.insertCell(3);
-					year3.setAttribute("id", "opsYear3");
-					var total = row.insertCell(4);
-					total.setAttribute("id", "opsTotal");
+		<br />
 
-					title.innerHTML = "<img src=\"/static/ops.svg\" style=\"width: 20px; height: 20px\"> Operations";
-					year1.innerHTML = processMoney(operationsY1.toString());
-					year2.innerHTML = processMoney(operationsY2.toString());
-					year3.innerHTML = processMoney(operationsY3.toString());
-					total.innerHTML = "<b>" + processMoney(operationsTotal.toString()) + "</b>";
-				}
+		<div class="bva-question-wrapper">
 
-				else {
-					document.getElementById("opsYear1").innerHTML = processMoney(operationsY1.toString());
-					document.getElementById("opsYear2").innerHTML = processMoney(operationsY2.toString());
-					document.getElementById("opsYear3").innerHTML = processMoney(operationsY3.toString());
-					document.getElementById("opsTotal").innerHTML = "<b>" + processMoney(operationsTotal.toString()) + "</b>";
-				}
-			}
+			<img src="/static/tools-green.svg" class="bva-question-image"/>
 
-			else {
-				operationsY1 = null;
-				operationsY2 = null;
-				operationsY3 = null;
-				operationsTotal = null;
-
-				$('#operationsRow').remove();
-			}
-
-			//BUSINESS - total
-			revenueGainY1 = parseInt(revenueDowntimeY1 + revenueConversionY1);
-			revenueGainY2 = parseInt(revenueDowntimeY2 + revenueConversionY2);
-			revenueGainY3 = parseInt(revenueDowntimeY3 + revenueConversionY3);
-			revenueGainTotal = revenueGainY1 + revenueGainY2 + revenueGainY3;
-
-			if(revenueGainTotal != 0){
-				if(revenueGainTotal > 0  && document.getElementById("businessRow") == null) {
-					var table = document.getElementById("results_body");
-
-					var row = table.insertRow(0);
-					row.style.backgroundColor="#9355b7";
-					row.style.color="white";
-					row.setAttribute("id", "businessRow");
-
-					var title = row.insertCell(0);
-					var year1 = row.insertCell(1);
-					year1.setAttribute("id", "bizYear1");
-					var year2 = row.insertCell(2);
-					year2.setAttribute("id", "bizYear2");
-					var year3 = row.insertCell(3);
-					year3.setAttribute("id", "bizYear3");
-					var total = row.insertCell(4);
-					total.setAttribute("id", "bizTotal");
-
-					title.innerHTML = "<img src=\"/static/biz.svg\" style=\"width: 20px; height: 20px;\"> Business";
-					year1.innerHTML = processMoney(revenueGainY1.toString());
-					year2.innerHTML = processMoney(revenueGainY2.toString());
-					year3.innerHTML = processMoney(revenueGainY3.toString());
-					total.innerHTML = "<b>" + processMoney(revenueGainTotal.toString()) + "</b>";
-				}
-
-				else {
-					document.getElementById("bizYear1").innerHTML = processMoney(revenueGainY1.toString());
-					document.getElementById("bizYear2").innerHTML = processMoney(revenueGainY2.toString());
-					document.getElementById("bizYear3").innerHTML = processMoney(revenueGainY3.toString());
-					document.getElementById("bizTotal").innerHTML = "<b>" + processMoney(revenueGainTotal.toString()) + "</b>";
-				}
-			}
-
-			else {
-				revenueGainY1 = null;
-				revenueGainY2 = null;
-				revenueGainY3 = null;
-				revenueGainTotal = null;
-
-				$('#businessRow').remove();
-			}
-
-			//Something to draw?
-
-			if ((devTotal + operationsTotal + revenueGainTotal) > 0) {
-				$('#no-results').fadeOut();
-				$('#results').fadeIn();
-				$('#loading').fadeOut();
-			}
-
-			else {
-				$('#no-results').fadeIn();
-				$('#results').fadeOut();
-				$('#loading').fadeOut();
-			}
-
-
-			//DRAW SUMMARY CHART
-			var bar_chart = Highcharts.chart('total_stacked_bar', {
-				colors: ['#1496ff','#73be28','#9355b7'],
-				chart: {
-					type: 'column',
-					animation: 'false',
-					style: {
-						fontFamily: 'BerninaSans'
-					}
-				},
-				exporting: {
-					enabled: false
-				},
-				title: {
-					text: '',
-					align: 'left',
-					margin: 30
-				},
-				credits: {
-					enabled: false
-				},
-				xAxis: {
-					categories: ['Year 1', 'Year 2', 'Year 3']
-				},
-				yAxis: {
-					min: 0,
-					title: {
-							text: ''
-					},
-						stackLabels: {
-						enabled: true,
-						style: {
-							fontWeight: 'bold',
-							color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-						}
-					}
-				},
-				legend: {
-					align: 'center',
-					verticalAlign: 'bottom',
-					backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-					borderColor: '#CCC',
-					borderWidth: 0,
-					shadow: false
-				},
-				tooltip: {
-					enabled: false
-				},
-				plotOptions: {
-					column: {
-						stacking: 'normal',
-						dataLabels: {
-							enabled: true,
-							color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
-						},
-					},
-					series: {
-						animation: false,
-						borderWidth:0,
-						pointPadding: 0,
-						groupPadding: 0.1
-					}
-				},
-				series: [{
-					name: 'Development',
-					data: [devY1, devY2, devY3]
-				}, {
-					name: 'Operations',
-					data: [operationsY1, operationsY2, operationsY3]
-				}, {
-					name: 'Business',
-					data: [revenueGainY1, revenueGainY2, revenueGainY3]
-				}]
-			});
-
-			//DRAW ROI CHART
-
-			if($('#pricing').css('display') == "block" && document.getElementById("y1_software").value != "") {
-
-				if(devTotal != 0 && operationsTotal != 0 && revenueGainTotal != 0) {
-
-				$('#roi_section').css('display','block');
-
-				var year1BenefitTotal = devY1 + operationsY1 + revenueGainY1;
-				var year2BenefitTotal = devY2 + operationsY2 + revenueGainY2;
-				var year3BenefitTotal = devY3 + operationsY3 + revenueGainY3;
-
-				if(document.getElementById("y1_software").value == "") {
-					y1_software = 0;
-				}
-				else {
-					y1_software = parseInt(getNumbers(document.getElementById("y1_software").value));
-				}
-
-				if(document.getElementById("y2_software").value == "") {
-					y2_software = 0;
-				}
-				else {
-					y2_software = parseInt(getNumbers(document.getElementById("y2_software").value));
-				}
-
-				if(document.getElementById("y3_software").value == "") {
-					y3_software = 0;
-				}
-				else {
-					y3_software = parseInt(getNumbers(document.getElementById("y3_software").value));
-				}
-
-				if(document.getElementById("y1_services").value == "") {
-					y1_services = 0;
-				}
-				else {
-					y1_services = parseInt(getNumbers(document.getElementById("y1_services").value));
-				}
-
-				if(document.getElementById("y2_services").value == "") {
-					y2_services = 0;
-				}
-				else {
-					y2_services = parseInt(getNumbers(document.getElementById("y2_services").value));
-				}
-
-				if(document.getElementById("y3_services").value == "") {
-					y3_services = 0;
-				}
-				else {
-					y3_services = parseInt(getNumbers(document.getElementById("y3_services").value));
-				}
-
-				var year1CostTotal = y1_software + y1_services;
-
-				if(isNaN(year1CostTotal) == true) {
-					year1CostTotal = 0;
-				}
-
-				var year2CostTotal = y2_software + y2_services;
-
-				if(isNaN(year2CostTotal) == true) {
-					year2CostTotal = 0;
-				}
-
-				var year3CostTotal = y3_software + y3_services;
-
-				if(isNaN(year3CostTotal) == true) {
-					year3CostTotal = 0;
-				}
-
-				//DRAW ROI TABLE - costs
-
-				if(document.getElementById("benefitsRow") == undefined) {
-					var table = document.getElementById("roi_body");
-
-					var row = table.insertRow(0);
-					row.style.backgroundColor="#1a1a1a";
-					row.style.color="white";
-					row.setAttribute("id", "costRow");
-
-					var title = row.insertCell(0);
-					var year1 = row.insertCell(1);
-					year1.setAttribute("id", "costYear1");
-					var year2 = row.insertCell(2);
-					year2.setAttribute("id", "costYear2");
-					var year3 = row.insertCell(3);
-					year3.setAttribute("id", "costYear3");
-
-					title.innerHTML = "<img src=\"/static/dynatrace-white.svg\" style=\"width: 20px; height: 20px\"> Cost";
-					year1.innerHTML = processMoney(year1CostTotal.toString());
-					year2.innerHTML = processMoney(year2CostTotal.toString());
-					year3.innerHTML = processMoney(year3CostTotal.toString());
-				}
-
-				else {
-					document.getElementById("costYear1").innerHTML = processMoney(year1CostTotal.toString());
-					document.getElementById("costYear2").innerHTML = processMoney(year2CostTotal.toString());
-					document.getElementById("costYear3").innerHTML = processMoney(year3CostTotal.toString());
-				}
-
-				//DRAW ROI TABLE - benefits
-
-				if(document.getElementById("benefitsRow") == undefined) {
-					var table = document.getElementById("roi_body");
-
-					var row = table.insertRow(0);
-					row.style.backgroundColor="#73be28";
-					row.style.color="white";
-					row.setAttribute("id", "benefitsRow");
-
-					var title = row.insertCell(0);
-					var year1 = row.insertCell(1);
-					year1.setAttribute("id", "benefitYear1");
-					var year2 = row.insertCell(2);
-					year2.setAttribute("id", "benefitYear2");
-					var year3 = row.insertCell(3);
-					year3.setAttribute("id", "benefitYear3");
-
-					title.innerHTML = "<img src=\"/static/sales-white.svg\" style=\"width: 20px; height: 20px\"> Benefits";
-					year1.innerHTML = processMoney(year1BenefitTotal.toString());
-					year2.innerHTML = processMoney(year2BenefitTotal.toString());
-					year3.innerHTML = processMoney(year3BenefitTotal.toString());
-				}
-
-				else {
-					document.getElementById("benefitYear1").innerHTML = processMoney(year1BenefitTotal.toString());
-					document.getElementById("benefitYear2").innerHTML = processMoney(year2BenefitTotal.toString());
-					document.getElementById("benefitYear3").innerHTML = processMoney(year3BenefitTotal.toString());
-				}
-
-				//COST BENEFIT TOTAL
-
-				var roi = ((year1BenefitTotal + year2BenefitTotal + year3BenefitTotal) / (year1CostTotal + year2CostTotal + year3CostTotal)) * 100;
-
-				var payback = year1CostTotal / (year1BenefitTotal/12);
-
-				document.getElementById("roi_points").innerHTML = "<ul class=\"list\"><li>ROI over the 3 years: <b>" + roi.toFixed(0) + "%</b></li><li>Year 1 payback period: <b>" + payback.toFixed(1) + " months</b></li></ul>";
-
-				//DRAW CHART
-
-					var column_chart = Highcharts.chart('roi_column', {
-						colors: ['#73be28','#1a1a1a'],
-						chart: {
-							type: 'column'
-						},
-						title: {
-							text: ''
-						},
-						xAxis: {
-							categories: [
-								'Year 1',
-								'Year 2',
-								'Year 3'
-							],
-							crosshair: true
-						},
-						yAxis: {
-							min: 0,
-							title: {
-								text: ''
-							}
-						},
-						plotOptions: {
-							column: {
-								pointPadding: 0.2,
-								borderWidth: 0
-							}
-						},
-						credits: {
-							enabled: false
-						},
-						exporting: {
-							enabled: false
-						},
-						tooltip: {
-							enabled: false
-						},
-						series: [{
-							name: 'Benefit',
-							data: [year1BenefitTotal, year2BenefitTotal, year3BenefitTotal],
-							animation: false
-
-						}, {
-							name: 'Cost',
-							data: [year1CostTotal, year2CostTotal, year3CostTotal],
-							animation: false
-
-						}]
-					});
-				}
-			}
-
-			else {
-				$('#roi_section').css('display','none');
-			}
-	})
-
-
-}
+			<div class="bva-input-wrapper">
+
+				<label for="name_tool" class="label bva-question-text">Name of tool <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-tools.svg"/>Reduction of existing monitoring tools</li> </ul></div> </div></label>
+				<input type="text" class="inputfield bva-question-input" id="name_tool" placeholder="Name of tool"/>
+
+			</div>
+
+		</div>
+
+		<div class="bva-question-wrapper bva-question-top">
+
+			<div class="bva-question-block">
+
+				<label for="annual_cost" class="label bva-question-text">Annual license and support costs <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-tools.svg"/>Reduction of existing monitoring tools</li> </ul></div> </div></label>
+				<input type="text" class="inputfield bva-question-input" id="annual_cost" placeholder="annual costs"/>
+
+			</div>
+
+		</div>
+
+		<div class="bva-question-wrapper bva-question-top">
+
+			<div class="bva-question-block">
+
+				<label for="no_fte_config" class="label bva-question-text"><div class="tooltip underline">FTEs<div class="tooltiptext">FTE stands for "Full time employee"</div></div> used for config and admin <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-tools.svg"/>Reduction of existing monitoring tools</li> </ul></div> </div></label>
+				<input type="text" class="inputfield bva-question-input" id="no_fte_config" placeholder="# of FTEs"/>
+
+			</div>
+
+		</div>
+
+		<div class="bva-question-wrapper bva-question-top">
+
+			<div class="bva-question-existing-wrapper">
+
+				<label class="label bva-question-existing-label">% replaced with Dynatrace <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-tools.svg"/>Reduction of existing monitoring tools</li> </ul></div> </div></label>
+				<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y1" placeholder="Year 1"/>
+				<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y2" placeholder="Year 2"/>
+				<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y3" placeholder="Year 3"/>
+
+			</div>
+
+		</div>
+
+		<div class="bva-question-wrapper bva-question-top">
+
+			<div class="bva-question-existing-wrapper">
+
+				<button  type="button" id="existingToolAdd" class="btn btn--primary theme--dark bva-question-existing-add">Add tool</button>
+
+			</div>
+
+		</div>
+
+			<br /><br />
+
+		<div id="existing_apps">
+
+		</div>
+</div>
+<!--end of questions-->
+
+<br />
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="dev">
+<!-- start of title -->
+<div class="bva-title-wrapper bva-title-wrapper-dev">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Development</h1>
+		<p>Decreased cost of problem detection and impact</p>
+
+	</div>
+
+</div>
+<!--end of title-->
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag user-email">
+	  <span class="tag__key">email:</span>
+	</span>
+
+	<span tabindex="1" class="tag user-company">
+	  <span class="tag__key">id:</span>
+	</span>
+
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="opsFromDev" ><img src="/static/arrow-blue.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--royalblue bva-progress-wrapper"><label class="label--progressbar" for="p1">3/4</label><progress class="progressbar" value="3" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><a class="optionsFromDev" ><img src="/static/arrow-blue.svg" class="bva-progress-button"/></a><br />Next</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/release-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="cycles_per_year" class="label bva-question-text">Release cycles per year for all applications <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="cycles_per_year" placeholder="# of release cycles"/>
+
+		</div>
+
+	</div>
+
+	<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/days-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="cycle_days" class="label bva-question-text">Number of days to complete a release cycle <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="cycle_days" placeholder="# of days"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/test-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="test_per_cycle" class="label bva-question-text">Percentage of time spent testing per release cycle <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="test_per_cycle" placeholder="% of time"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/performance-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="qa_time_per_cycle" class="label bva-question-text">Amount of <div class="tooltip underline">QA<div class="tooltiptext">QA stands for "Quality Assurance" and is a particular role during software testing</div></div> testing time spent documenting performance issues <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="qa_time_per_cycle" placeholder="% of time"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/document-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="qa_people_per_cycle" class="label bva-question-text">Number of <div class="tooltip underline">QA<div class="tooltiptext">QA stands for "Quality Assurance" and is a particular role during software testing</div></div> people documenting performance problems per release (QA) <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="qa_people_per_cycle" placeholder="# of people"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/performance-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="dev_time_per_cycle" class="label bva-question-text">Amount of dev testing time spent documenting performance issues <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="dev_time_per_cycle" placeholder="% of time"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/document-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="dev_people_per_cycle" class="label bva-question-text">Number of dev people documenting performance problems per release <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="dev_people_per_cycle" placeholder="# of people"/>
+
+		</div>
+
+	</div>
+
+</div>
+<!--end of questions-->
+
+<br />
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="options">
+<!-- start of title -->
+<div class="bva-title-wrapper bva-title-wrapper-options">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Options</h1>
+		<p>Provide the impact that Dynatrace will have to you</p>
+
+	</div>
+
+</div>
+<!--end of title-->
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag user-email">
+	  <span class="tag__key">email:</span>
+	</span>
+
+	<span tabindex="1" class="tag user-company">
+	  <span class="tag__key">id:</span>
+	</span>
+
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="devFromOptions" ><img src="/static/arrow-grey.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--grey bva-progress-wrapper"><label class="label--progressbar" for="p1">4/4</label><progress class="progressbar" value="4" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><img src="/static/finish-grey.svg" class="bva-progress-button"/><br />Finished!</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+
+	<h2 class="bva-question-text-centre">IT labour costs</h2>
+
+		<br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/ops-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="operation_cost" class="label bva-question-text">Fully loaded cost of operations person</label>
+			<input type="text" class="inputfield bva-question-input" id="operation_cost" placeholder="ops cost" />
+
+		</div>
+
+	</div>
+
+	<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/dev-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="developer_cost" class="label bva-question-text">Fully loaded cost of developer</label>
+			<input type="text" class="inputfield bva-question-input" id="developer_cost" placeholder="dev cost" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/test-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="qa_cost" class="label bva-question-text">Fully loaded cost of <div class="tooltip underline">QA<div class="tooltiptext">QA stands for "Quality Assurance" and is a particular role during software testing</div></div> person</label>
+			<input type="text" class="inputfield bva-question-input" id="qa_cost" placeholder="qa cost" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/time-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="work_hours" class="label bva-question-text">Work hours per year</label>
+			<input type="text" class="inputfield bva-question-input" id="work_hours" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br />
+
+	<h2 class="bva-question-text-centre">Dynatrace benefits</h2>
+
+		<br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/sales-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_conversion" class="label bva-question-text">Increased revenue from increased conversions as a result of better performance</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_conversion" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/incident-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_incident_reduction" class="label bva-question-text">Incident reduction in production through pro-active detection</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_incident_reduction" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/analysis-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_mttr" class="label bva-question-text">Faster <div class="tooltip underline">MTTR<div class="tooltiptext">MTTR stands for "Mean time to resolution" and is the time taken (in minutes) from an incident affecting an application, to the incident being closed.</div></div> and root cause analysis in production</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_mttr" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/performance-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_performance" class="label bva-question-text">Page load improvement</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_performance" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper" style="display: none">
+
+		<img src="/static/alert-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_alert_storm" class="label bva-question-text">Alert storm reduction</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_alert_storm" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<!-- <br /><br /> -->
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/sla-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_sla" class="label bva-question-text">Improvement on <div class="tooltip underline">SLA<div class="tooltiptext">SLA stands for "Service level agreement" and in this context refers to the uptime of your applications</div></div> achievement</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_sla" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/find-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_fix_qa" class="label bva-question-text">Reduced time finding and fixing performance problems in <div class="tooltip underline">QA<div class="tooltiptext">QA stands for "Quality Assurance" and is a particular role during software testing</div></div></label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_fix_qa" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/down-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_prod_reduction" class="label bva-question-text">Incident reduction in production by finding and fixing defects in Dev and <div class="tooltip underline">QA<div class="tooltiptext">QA stands for "Quality Assurance" and is a particular role during software testing</div></div></label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_prod_reduction" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/config-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_config" class="label bva-question-text">Reduced time spent implementing and configuring vs. existing tools</label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_config" placeholder="%" />
+
+		</div>
+
+	</div>
+
+	<div id="pricing" style="display:none">
+
+		<br />
+
+	<h2 class="bva-question-text-centre">Dynatrace pricing</h2>
+
+	<div class="bva-question-wrapper centre">
+
+		<div class="bva-input-wrapper">
+
+			<p class="pricing-text">Please enter the prices provided by Dynatrace for the software and services if applicable.</p>
+
+		</div>
+
+	</div>
+
+
+		<br />
+
+	<div class="bva-question-wrapper centre" >
+
+		<div class="bva-input-wrapper">
+			<p class="pricing-text-gap"></p>
+			<p class="pricing-text-header"> software </p>
+			<p class="pricing-text-header"> services </p>
+
+			<p class="year-header">Year 1</p>
+			<input type="text" class="inputfield bva-question-input pricing-input" id="y1_software" placeholder=""/>
+			<input type="text" class="inputfield bva-question-input pricing-input" id="y1_services" placeholder="" />
+
+		</div>
+
+	</div>
+
+		<br />
+
+	<div class="bva-question-wrapper" style="text-align: center">
+
+		<div class="bva-input-wrapper">
+
+			<p class="year-header">Year 2</p>
+			<input type="text" class="inputfield bva-question-input pricing-input" id="y2_software" placeholder="" />
+			<input type="text" class="inputfield bva-question-input pricing-input" id="y2_services" placeholder="" />
+
+		</div>
+
+	</div>
+
+		<br />
+
+	<div class="bva-question-wrapper" style="text-align: center">
+
+		<div class="bva-input-wrapper">
+
+			<p class="year-header">Year 3</p>
+			<input type="text" class="inputfield bva-question-input pricing-input" id="y3_software" placeholder="" />
+			<input type="text" class="inputfield bva-question-input pricing-input" id="y3_services" placeholder=""  />
+
+		</div>
+
+	</div>
+
+	</div>
+</div>
+<!--end of questions-->
+</div>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+</div>
+
+<div class="column--1-of-2 bva-content-column" >
+
+
+
+
+
+<div class="headContainer" style="position: relative; height: 105px">
+<div class="bva-title-wrapper bva-title-wrapper-results result-biz">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Results</h1>
+		<p>The value to your business from partnering with Dynatrace</p>
+
+	</div>
+
+</div>
+
+<div class="bva-title-wrapper bva-title-wrapper-results result-ops">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Results</h1>
+		<p>The value to your business from partnering with Dynatrace</p>
+
+	</div>
+
+</div>
+
+
+<div class="bva-title-wrapper bva-title-wrapper-results result-dev">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Results</h1>
+		<p>The value to your business from partnering with Dynatrace</p>
+
+	</div>
+
+</div>
+
+
+<div class="bva-title-wrapper bva-title-wrapper-results result-options">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Results</h1>
+		<p>The value to your business from partnering with Dynatrace</p>
+
+	</div>
+
+</div>
+
+
+</div>
+
+	<div id="results" style="display: none">
+
+		<h2 style="margin-left: 5%; margin-top: 20px">Total cost savings and revenue gains</h2>
+
+		<p style="margin-left: 5%; width: 90%; font-family: BerninaSansLight">Based upon information provided about the current costs/revenue impact of performance problems, the summary below shows the expected improvements from working with Dynatrace.</p>
+
+		<div id="total_stacked_bar" style="height: 450px; margin-left: 10%; margin-right: 10%; margin-top: 20px"></div>
+			<br /><br />
+
+		<div id="result_total_table">
+			<div style="width: 90%; overflow: auto; margin-left: 5%">
+			<table class="table" id="results_table">
+			  <thead>
+				<tr>
+				  <th></th>
+				  <th>Year 1</th>
+				  <th>Year 2</th>
+				  <th>Year 3</th>
+				  <th><b>Total</b></th>
+				</tr>
+			  </thead>
+			  <tbody id="results_body">
+
+			  </tbody>
+			</table>
+			</div>
+		</div>
+
+
+
+
+		<div id="roi_section" style="display: none">
+		<br />
+			<h2 style="margin-left: 5%">Return on investment</h2>
+			<p style="margin-left: 5%; width: 90%; font-family: BerninaSansLight">Using the provided software and services costs for Dynatrace, the information below shows the cost/benefit analysis over 3 years.</p>
+		<div id="roi_column" style="height: 450px; margin-left: 10%; margin-right: 10%;  margin-top: 20px"></div>
+			<br />
+
+			<table class="table" style="width: 90%; margin-left: 5%">
+			  <thead>
+				<tr>
+				  <th></th>
+				  <th>Year 1</th>
+				  <th>Year 2</th>
+				  <th>Year 3</th>
+				</tr>
+			  </thead>
+			  <tbody id="roi_body">
+
+			  </tbody>
+			</table>
+
+		<div class="theme--green" id="roi_points" style="margin-left: 5%; margin-right: 10%; ">
+
+		</div>
+
+		<br />
+		</div>
+
+
+
+
+		<h2 style="margin-left: 5%">Use case breakdown</h2>
+		<p style="margin-left: 5%; width: 90%; font-family: BerninaSansLight">These use cases provide a more detailed breakdown of where the revenue gains/cost reductions will be generated.</p>
+		<div id="business" style="display: none; margin-top: 20px">
+		<h3 style="margin-left: 5%">Business</h3>
+			<div id="biz-increased-revenue">
+
+			</div>
+
+			<div id="biz-increased-conversions">
+
+			</div>
+		</div>
+
+		<div id="operations" style="display: none; margin-top: 20px">
+			<h3 style="margin-left: 5%">Operations</h3>
+
+			<div id="ops-reduced-incidents">
+
+			</div>
+
+			<div id="ops-increased-automation">
+
+			</div>
+
+			<div id="ops-reduced-tools">
+
+			</div>
+		</div>
+
+		<div id="development" style="display: none; margin-top: 20px">
+			<h3 style="margin-left: 5%">Development</h3>
+
+			<div id="dev-decreased-investigation">
+
+			</div>
+
+			<div id="dev-decreased-incidents">
+
+			</div>
+		</div>
+		<button id="open-report" type="button" class="btn btn--secondary" style="width: 90%; margin-left: 5%">Open as report</button>
+		<br />
+		<br />
+	</div>
+
+		<div id="no-results" style="display: none; margin-left: 10%; margin-right: 10%; margin-top: 30px">
+			Please complete the questions for <b>business</b>, <b>development</b> and <b>operations</b> in order to start seeing results. The final section, "options," is pre-filled with typical values but these can be changed depending on your organisation.
+
+			<br /><br />
+
+			As you start to provide more information, the results will be generated for the use cases detailed below:
+
+			<br /><br /><br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/results/biz-increased-revenue.svg" class="bva-question-image" style="vertical-align: middle"/>
+
+			<div class="bva-input-wrapper" style="vertical-align: middle">
+
+				<p>Revenue gained by reduced incidents, downtime, and slowness</p>
+
+			</div>
+
+		</div>
+
+			<br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/results/biz-increased-conversions.svg" class="bva-question-image" style="vertical-align: middle"/>
+
+			<div class="bva-input-wrapper" style="vertical-align: middle">
+
+				<p>Revenue from increased conversions caused by better app performance</p>
+
+			</div>
+
+		</div>
+
+			<br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/results/ops-reduced-incidents.svg" class="bva-question-image" style="vertical-align: middle"/>
+
+			<div class="bva-input-wrapper" style="vertical-align: middle">
+
+				<p>Incident reduction and faster MTTR in production (cost of war room effort)</p>
+
+			</div>
+
+		</div>
+
+			<br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/results/ops-increased-automation.svg" class="bva-question-image" style="vertical-align: middle"/>
+
+			<div class="bva-input-wrapper" style="vertical-align: middle">
+
+				<p>Cost savings with Dynatrace automation vs. manual effort </p>
+
+			</div>
+
+		</div>
+
+			<br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/results/ops-reduced-tools.svg" class="bva-question-image" style="vertical-align: middle"/>
+
+			<div class="bva-input-wrapper" style="vertical-align: middle">
+
+				<p>Reduction of existing monitoring tools</p>
+
+			</div>
+
+		</div>
+
+			<br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/results/dev-decreased-investigation.svg" class="bva-question-image" style="vertical-align: middle"/>
+
+			<div class="bva-input-wrapper" style="vertical-align: middle">
+
+				<p>Performance defect investigation and troubleshooting in QA</p>
+
+			</div>
+
+		</div>
+
+			<br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/results/dev-decreased-incidents.svg" class="bva-question-image" style="vertical-align: middle"/>
+
+			<div class="bva-input-wrapper" style="vertical-align: middle">
+
+				<p>Fewer production incidents by finding & fixing performance defects in QA & Dev</p>
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<div id="loading" style="margin-left: 40%; margin-top: 40%; translate(-30px, -30px);">
+		<div class="loading">
+			<svg class="loading__distractor" width="30px" height="30px" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+				<circle class="loading__path" cx="15" cy="15" r="12"></circle>
+			</svg>
+			<p class="loading__text">Loading...</p>
+		</div>
+	</div>
+
+
+</div>
+<!--end of content-->
+</div>
+<script src="/static/result_charts.js"></script>
+<script src="/static/main.js"></script>
+
+</body>
+
+</html>
