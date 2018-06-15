@@ -9,7 +9,7 @@ const MongoStore = require('connect-mongo')(session);
 const nodemailer = require('nodemailer');
 
 module.exports = function(app, db) {
-	
+
 	connectionOptions = process.env.MONGO_URI;
 
 	app.use(bodyParser.urlencoded({ extended: true }))
@@ -25,14 +25,14 @@ module.exports = function(app, db) {
 	function requiresLogin(req, res) {
 		if (req.session && req.session.username) {
 			return true;
-		} 
-		
+		}
+
 		else {
 			console.log("Not logged in user attempted access");
 			return false;
 		}
 	}
-	
+
 	function generateId() {
 		var text = "";
 		var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -41,24 +41,24 @@ module.exports = function(app, db) {
 			text += possible.charAt(Math.floor(Math.random() * possible.length));
 
 		return text;
-	}	
+	}
 
 	function validateEmail(mail) {
 		if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/.test(mail)) {
 			return (true)
 		}
-		
+
 		return (false)
 	}
-	
+
 	function checkAssessmentStatus(req, res) {
 		var username = req.session.username;
 		var bva_id = req.query.bva_id;
-		
+
 		if(bva_id == ""){
 			res.redirect('/landing');
 		}
-		
+
 		else {
 			MongoClient.connect(connectionOptions, function(err, db) {
 				var collection = db.collection('user_assessments');
@@ -75,17 +75,17 @@ module.exports = function(app, db) {
 						}
 				});
 			})
-		}	
+		}
 	}
-	
+
 	function checkReportStatus(req, res) {
 		var username = req.session.username;
 		var bva_id = req.query.bva_id;
-		
+
 		if(bva_id == ""){
 			res.redirect('/landing');
 		}
-		
+
 		else {
 			MongoClient.connect(connectionOptions, function(err, db) {
 				var collection = db.collection('user_assessments');
@@ -102,17 +102,17 @@ module.exports = function(app, db) {
 						}
 				});
 			})
-		}	
-	}	
+		}
+	}
 
 	function checkEditStatus(req, res) {
 		var username = req.session.username;
 		var bva_id = req.query.bva_id;
-		
+
 		if(username == "" || bva_id == "") {
 			res.redirect('/landing');
 		}
-		
+
 		else {
 			MongoClient.connect(connectionOptions, function(err, db) {
 				var collection = db.collection('user_assessments');
@@ -125,20 +125,20 @@ module.exports = function(app, db) {
 						else {
 							db.close();
 							res.redirect('/landing');
-						}		
+						}
 				});
 			})
-		}		
+		}
 	}
 
 	function checkShareStatus(req, res) {
 		var username = req.session.username;
 		var bva_id = req.query.bva_id;
-		
+
 		if(username == "" || bva_id == "") {
 			res.redirect('/landing');
 		}
-		
+
 		else {
 			MongoClient.connect(connectionOptions, function(err, db) {
 				var collection = db.collection('user_assessments');
@@ -147,30 +147,30 @@ module.exports = function(app, db) {
 						console.log(err);
 						res.redirect('/share?bva_id=' + bva_id + '&staus=failed');
 					}
-					
+
 					else {
 						if(result != null) {
 							db.close();
 							res.sendFile(path.join(__dirname + '/share.html'));
 						}
-						
+
 						else {
 							db.close();
 							res.redirect('/landing');
 						}
-					}	
+					}
 				});
 			})
-		}	
+		}
 	}
-	
+
 	function sendMail(email, subject, text, html) {
 		nodemailer.createTestAccount((err, account) => {
-		
+
 		var transporter = nodemailer.createTransport({
-			host: 'smtp.office365.com', 
-			port: 587,     
-			secure: false, 
+			host: 'smtp.office365.com',
+			port: 587,
+			secure: false,
 			requireTLS: true,
 			auth: {
 				user: process.env.EMAIL_USER,
@@ -179,103 +179,110 @@ module.exports = function(app, db) {
 			tls: {
 				ciphers: 'SSLv3'
 			}
-		});	
+		});
 
 		let mailOptions = {
-			from: '"Dynatrace Business Value Assessment" <alistair.emslie@dynatrace.com>', 
-			to: email, 
-			subject: subject, 
-			text: text, 
-			html: html 
-		};	
+			from: '"Dynatrace Business Value Assessment" <alistair.emslie@dynatrace.com>',
+			to: email,
+			subject: subject,
+			text: text,
+			html: html
+		};
 
 		transporter.sendMail(mailOptions, (error, info) => {
 			if (error) {
 				return console.log(error);
 			}
 		});
-	
-		});	
+
+		});
 	}
-	
+
 	app.get('/', (req, res) => {
-		
+
+	if (requiresLogin(req, res) == false) {
 		res.sendFile(path.join(__dirname + '/index.html'));
+	}
+	else {
+		res.redirect('/landing');
+	}
+
+
 
 	});
-	
+
 	app.get('/reset', (req, res) => {
-		
+
 		res.sendFile(path.join(__dirname + '/reset.html'));
 
-	});	
+	});
 
 	app.get('/signup', (req, res) => {
-		
+
 		res.sendFile(path.join(__dirname + '/signup.html'));
 
-	});		
-	
+	});
+
 	app.get('/changepassword', (req, res) => {
-		
+
 		if (requiresLogin(req, res) == false) {
 			res.redirect('/');
 		}
 		else {
 			res.sendFile(path.join(__dirname + '/changepassword.html'));
-		}	
+		}
 
-	});		
+	});
 
 	app.get('/createnew', (req, res) => {
-		
+
 		if (requiresLogin(req, res) == false) {
 			res.redirect('/');
 		}
 		else {
 			res.sendFile(path.join(__dirname + '/createnew.html'));
-		}	
+		}
 
-	});	
+	});
 
 	app.get('/editassessment', (req, res) => {
-		
+
 		if (requiresLogin(req, res) == false) {
 			res.redirect('/');
 		}
 		else {
 			var results = new RegExp('(@dynatrace.com)').exec(req.session.username);
-			
+
 			if(results != undefined) {
 				res.sendFile(path.join(__dirname + '/editassessment.html'));
 			}
 			else {
 				res.redirect('/landing');
 			}
-		}	
+		}
 
-	});	
-	
+	});
+
 	app.get('/resetpassword', (req, res) => {
 		var token = req.query.token;
 
 		if(token == "") {
 			res.redirect('/');
 		}
-		
+
 		else {
-			
+
 			MongoClient.connect(connectionOptions, function(err, db) {
 
-				if(err) { 
+				if(err) {
 					console.log(err);
-					db.close();					
-					res.redirect('/');				
-				}	
-				
-				else { 
+					db.close();
+					res.redirect('/');
+				}
+
+				else {
 					var collection = db.collection('user_reset');
-					var results = collection.find({reset:token}).toArray(function(err, items) {	
+					var results = collection.find({reset:token}).toArray(function(err, items) {
 						if(items[0] == undefined) {
 							db.close();
 							res.redirect('/');
@@ -286,132 +293,132 @@ module.exports = function(app, db) {
 						}
 					})
 				}
-			})	
+			})
 		}
-	});	
+	});
 
 	app.post('/resetyourpassword', (req, res) => {
 		var password = req.body.password;
 		var token = req.query.token;
 		var dat = new Date();
-		
+
 		if(password == "") {
 			res.redirect('/resetpassword?token=' + token + '&status=failed');
 		}
-		
+
 		else {
-			
+
 			bcrypt.hash(password, 10, function (err, hash){
-			
+
 				MongoClient.connect(connectionOptions, function(err, db) {
 
-					if(err) { 
-						console.log(err); 
-						db.close();	
-						res.redirect('/resetpassword?token=' + token + '&status=failed');			
-					}	
-					
-					else { 
-			
+					if(err) {
+						console.log(err);
+						db.close();
+						res.redirect('/resetpassword?token=' + token + '&status=failed');
+					}
+
+					else {
+
 						var collection = db.collection('user_reset');
 						var results = collection.find({reset:token}).toArray(function(err, items) {
-							
+
 							if(err){
-								db.close();	
+								db.close();
 								res.redirect('/resetpassword?token=' + token + '&status=failed');
 							}
-							
+
 							if(items != null) {
 								if(dat < items[0].expiry) {
 									var username = items[0].username;
 									var collection = db.collection('users');
 									collection.update({'_id':username},{$set:{'password':hash}},{collation:{ locale: "en", strength: 2 }});
-									
+
 									var collection = db.collection('user_reset');
 									collection.remove({reset: token}, function(err, result) {
-										db.close();	
+										db.close();
 										res.redirect('/resetpassword?status=success');
 									})
 								}
 							}
-							
+
 							else {
-								db.close();	
+								db.close();
 								res.redirect('/resetpassword?token=' + token + '&status=failed');
 							}
-						})		
+						})
 					}
-				})	
+				})
 			})
 		}
-	});		
+	});
 
 	app.post('/changeyourpassword', (req, res) => {
 		var currentpassword = req.body.currentpassword;
 		var newpassword = req.body.newpassword;
 		var newpasswordconfirm = req.body.newpasswordconfirm;
 		var username = req.session.username;
-		
+
 		if(currentpassword == "" || newpassword == "" || newpasswordconfirm == "" || newpassword != newpasswordconfirm) {
 			res.redirect('/changepassword?status=failed');
 		}
-		
+
 		else {
-		MongoClient.connect(connectionOptions, function(err, db) {	
+		MongoClient.connect(connectionOptions, function(err, db) {
 				var collection = db.collection('users');
 				var results = collection.find({_id:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 					if(items[0] == undefined) {
-						db.close();	
+						db.close();
 						res.redirect('/changepassword?status=failed');
 					}
-					
+
 					else {
 						bcrypt.compare(currentpassword, items[0].password, function(err, result) {
-						
-							if (err) { 
-								db.close();			
+
+							if (err) {
+								db.close();
 								res.redirect('/changepassword?status=failed');
 							}
-							
+
 							else {
-								
+
 								if(result == true) {
 									bcrypt.hash(newpassword, 10, function (err, hash){
 										var collection = db.collection('users');
 										collection.update({'_id':username}, {$set:{'password':hash}}, {collation:{ locale: "en", strength: 2 }});
-										db.close();	
+										db.close();
 										res.redirect('/changepassword?status=success');
 									})
 								}
 								else {
-									db.close();	
+									db.close();
 									res.redirect('/changepassword?status=failed');
 								}
 							}
-						}) 
+						})
 					}
 				});
 			})
 		}
-	});		
-	
+	});
+
 	app.get('/landing', (req, res) => {
 		if (requiresLogin(req, res) == false) {
 			res.redirect('/');
 		}
 		else {
 			var results = new RegExp('(@dynatrace.com)').exec(req.session.username);
-		
+
 			if(results != undefined) {
 				res.sendFile(path.join(__dirname + '/landing_admin.html'));
 			}
-		
+
 			else {
 				res.sendFile(path.join(__dirname + '/landing.html'));
 			}
-		}	
-	});		
-	
+		}
+	});
+
 	app.get('/workflow', (req, res) => {
 		if (requiresLogin(req, res) == false) {
 			res.redirect('/');
@@ -420,8 +427,8 @@ module.exports = function(app, db) {
 			checkAssessmentStatus(req, res);
 		}
 
-	});		
-	
+	});
+
 	app.get('/report', (req, res) => {
 		if (requiresLogin(req, res) == false) {
 			res.redirect('/');
@@ -430,7 +437,7 @@ module.exports = function(app, db) {
 			checkReportStatus(req, res);
 		}
 
-	});			
+	});
 
 	app.get('/edit', (req, res) => {
 		if (requiresLogin(req, res) == false) {
@@ -440,7 +447,7 @@ module.exports = function(app, db) {
 			checkEditStatus(req, res);
 		}
 
-	});	
+	});
 
 	app.get('/share', (req, res) => {
 		if (requiresLogin(req, res) == false) {
@@ -450,40 +457,40 @@ module.exports = function(app, db) {
 			checkShareStatus(req, res);
 		}
 
-	});		
-	
-	app.post('/createUser', (req, res) => {	
+	});
+
+	app.post('/createUser', (req, res) => {
 		var firstName = req.body.firstName;
 		var lastName = req.body.lastName;
 		var username = req.body.username;
 		var passwd = generateId();
-		
+
 		if(firstName == "" || lastName == "" || username == "" || validateEmail(username) == false) {
 			res.redirect('/signup?status=failed');
 		}
-		
+
 		else {
-			
+
 			var results = new RegExp('(@dynatrace.com)').exec(username);
-		
+
 			if(results != undefined) {
 				var status = "dynatrace";
 			}
-			
+
 			else {
 				var status = "customer";
 			}
-			
+
 			bcrypt.hash(passwd, 10, function (err, hash){
-		
+
 				if (err) {
-					
+
 					return err;
-		
+
 				}
 
 				hashPw = hash;
-				
+
 				var user = {
 					_id: req.body.username,
 					firstName: firstName,
@@ -491,39 +498,39 @@ module.exports = function(app, db) {
 					status: status,
 					password: hashPw
 				}
-			
+
 				MongoClient.connect(connectionOptions, function(err, db) {
 					if(err) { return console.dir(err); }
 
 						var collection = db.collection('users');
-						collection.insert(user, {w:1}, function(err, result) { 
-						
+						collection.insert(user, {w:1}, function(err, result) {
+
 							if(err!=null){
-								db.close();									
+								db.close();
 								res.redirect('/signup?status=failed');
-							}   
-							
-							else {													
+							}
+
+							else {
 								var email = username;
 								var subject = "Your new account"
 								var text = "";
 								var html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\"><html style=\"background-color: #ececec; color: #454646; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 300; height: 100%; margin: 0; padding: 0;\"> <head> <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"> <title></title> <style>@media only screen and (max-width: 580px){body{font-size: 16px !important;}table.container{width: 100% !important;}.button{font-size: 16px !important; line-height: 24px !important; border-top: 10px solid #00a1b2 !important; border-bottom: 10px solid #00a1b2 !important; border-right: 26px solid #00a1b2 !important; border-left: 26px solid #00a1b2 !important;}.cta-button{background-color: #7dc540 !important; border-top: 8px solid #7dc540 !important; border-bottom: 8px solid #7dc540 !important; border-right: 60px solid #7dc540 !important; border-left: 60px solid #7dc540 !important;}}</style> </head> <body style=\"background-color: #ececec; color: #454646; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 300; height: 100%; margin: 0; padding: 0;\"> <table class=\"body\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; padding: 0; border: 0; background-color: #ececec; border-collapse: collapse; margin: 0 auto; height: 100%; width: 100%!important;\" height=\"100%\" bgcolor=\"#ececec\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td align=\"center\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"container\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"580\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #ffffff; border-collapse: collapse; width: 580px;\" bgcolor=\"#ffffff\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"header\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #242424; border-collapse: collapse; color: #ffffff; width: 100%!important;\" bgcolor=\"#242424\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 15px 30px;\" valign=\"top\"><img src=\"http://assets.dynatrace.com/global/logos/dynatrace_web-224x40.png\" alt=\"Dynatrace Logo\" style=\"display: block; max-width: 100%; height: 30px; margin: 0;\" height=\"30\"></td></tr></table> </td></tr><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"content\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; width: 100%;\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"section\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #ffffff; width: 100%!important;\" bgcolor=\"#ffffff\"><tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"><td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 40px 30px 60px;\" valign=\"top\"><h1 id=\"your-new-account\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; margin-bottom: 15px;\">Your new account</h1><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Hi " + firstName + ",</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Thank you for creating an account for your business value assessment.</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Your temporary password is: <b>" + passwd + "</b></p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Please login <a href=\"http://dynatrace.ai/bva\" style=\"color: #00a1b2; text-decoration: none;\">here</a> to change it as soon as possible! </p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Many thanks,</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">The BVA (Business Value Assessment) team</p></td></tr></tbody></table> </td></tr></tbody> </table> </td></tr><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"footer\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #353535; color: #ffffff; font-size: 12px; text-align: center; width: 100%!important;\" bgcolor=\"#353535\" align=\"center\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 15px;\" valign=\"top\"> <p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px; color: #ffffff;\">© 2018 Dynatrace LLC. All Rights Reserved<br><a href=\"https://www.dynatrace.com/\" style=\"color: #ffffff; text-decoration: underline;\">dynatrace.com</a></p></td></tr></tbody> </table> </td></tr></tbody> </table> </td></tr></tbody> </table> </body></html>";
-								
+
 								sendMail(email, subject, text, html);
-								console.log("inserted " + username);   
+								console.log("inserted " + username);
 								db.close();
 								res.redirect('/signup?status=success');
-							}	
-						});	
+							}
+						});
 				});
 			});
 		}
 	});
-	
-	app.post('/login', (req, res, next) => {	
+
+	app.post('/login', (req, res, next) => {
 		var username = req.body.username;
 		var password = req.body.password;
-		
+
 		var user = {
 			_id: req.body.username,
 			password: req.body.password
@@ -532,14 +539,14 @@ module.exports = function(app, db) {
 		if(validateEmail(username) == false) {
 			res.redirect('/?status=failed');
 		}
-		
+
 		else {
-			
+
 			MongoClient.connect(connectionOptions, function(err, db) {
-				if(err) { 
+				if(err) {
 					console.log(err);
 					db.close();
-					res.redirect('/?status=failed');			
+					res.redirect('/?status=failed');
 				}
 
 				else {
@@ -549,17 +556,17 @@ module.exports = function(app, db) {
 							db.close();
 							res.redirect('/?status=failed');
 						}
-						
+
 						else {
 						bcrypt.compare(password, items[0].password, function(err, result) {
-						
-							if (err) { 
+
+							if (err) {
 								db.close();
-								res.redirect('/?status=failed'); 
+								res.redirect('/?status=failed');
 							}
-							
+
 							else {
-								
+
 								if(result == true) {
 									db.close();
 									req.session.username = username;
@@ -574,54 +581,54 @@ module.exports = function(app, db) {
 							}
 						}) }
 					});
-				}	
+				}
 			});
-		}	
-	});	
-	
-	app.post('/gimmePassword', (req, res) => {	
+		}
+	});
+
+	app.post('/gimmePassword', (req, res) => {
 		pass = req.body.password;
-	
+
 		bcrypt.hash(pass, 10, function (err, hash){
-    
+
 			if (err) {
-				
+
 				return err;
-    
+
 			}
-    
+
 			password = hash;
-			
+
 			res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
 			res.end(password);
 		})
 	});
 
-	app.post('/createAssessment', (req, res) => {	
-			
+	app.post('/createAssessment', (req, res) => {
+
 		var company = req.body.company;
 		var currency = req.body.currency;
-		var id = generateId();		
-		
+		var id = generateId();
+
 		if(company == ""){
-			res.redirect('/createnew?status=failed');	
+			res.redirect('/createnew?status=failed');
 		}
-		
+
 		else {
 			var assessment = {
 				_id: id,
-				company: company,	
+				company: company,
 				has_pricing: false,
 				sfdc: "",
 				currency: currency
 			}
-			
+
 			var user_assessments = {
 				id: id,
 				company: company,
 				username: req.session.username
 			}
-			
+
 			if(currency == "uk") { var operations = '34000'; var developers = '39000'; var qas = '25000'; }
 			if(currency == "ireland") { var operations = '40000'; var developers = '41000'; var qas = '33000'; }
 			if(currency == "us") { var operations = '64000'; var developers = '79000'; var qas = '60000'; }
@@ -631,8 +638,8 @@ module.exports = function(app, db) {
 			if(currency == "spain") { var operations = '22000'; var developers = '25000'; var qas = '33000'; }
 			if(currency == "italy") { var operations = '24000'; var developers = '25000'; var qas = '30000'; }
 
-			
-			
+
+
 			var assessment_data = {
 				_id: id,
 				company_revenue: '',
@@ -662,8 +669,6 @@ module.exports = function(app, db) {
 				benefit_conversion: '0.5',
 				benefit_incident_reduction: '30',
 				benefit_mttr: '90',
-				benefit_performance: '25',
-				benefit_alert_storm: '88',
 				benefit_sla: '75',
 				benefit_fix_qa: '90',
 				benefit_prod_reduction: '55',
@@ -675,12 +680,12 @@ module.exports = function(app, db) {
 				y3_software: '',
 				y3_services: ''
 			}
-			
+
 			MongoClient.connect(connectionOptions, function(err, db) {
-				if(err) { 
+				if(err) {
 					db.close();
 					console.log(err);
-					res.redirect('/createnew?status=failed');				
+					res.redirect('/createnew?status=failed');
 				}
 
 				else {
@@ -690,114 +695,114 @@ module.exports = function(app, db) {
 					collection.insert(user_assessments, {w:1}, function(err, result) { if(err!=null){console.log(err);}   });
 					var collection = db.collection('assessment_data');
 					collection.insert(assessment_data, {w:1}, function(err, result) { if(err!=null){console.log(err);}        });
-					
-					res.redirect('/workflow?bva_id=' + id);
-					db.close();				
-				}
-			});	
-		}
-	
-	});	
 
-	app.get('/getAssessmentList', (req, res) => {	
+					res.redirect('/workflow?bva_id=' + id);
+					db.close();
+				}
+			});
+		}
+
+	});
+
+	app.get('/getAssessmentList', (req, res) => {
 
 		var username = req.session.username;
 		MongoClient.connect(connectionOptions, function(err, db) {
 
-			if(err) { 
-				return console.dir(err); 
+			if(err) {
+				return console.dir(err);
 				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("failure");
-				db.close();				
-			}	
+				db.close();
+			}
 
 			var companyAssessment;
-			
+
 			var collection = db.collection('user_assessments');
-			var results = collection.find({username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {				
+			var results = collection.find({username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
 				res.end(JSON.stringify(items));
 				db.close();
-			})		
-		})	
-	});	
+			})
+		})
+	});
 
-	app.post('/updateAssessment', (req, res) => {	
-		
+	app.post('/updateAssessment', (req, res) => {
+
 		MongoClient.connect(connectionOptions, function(err, db) {
-			if(err) { 
-				return console.dir(err); 
+			if(err) {
+				return console.dir(err);
 				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("failure");
-				db.close();				
+				db.close();
 			}
 
 			else {
 				var collection = db.collection('assessment_data');
-				collection.update({'_id':req.header('bva_id')},{$set:{'company_revenue':req.body.company_revenue,'projected_growth':req.body.projected_growth,'revenue_dependent':req.body.revenue_dependent,'app_uptime':req.body.app_uptime,'revenue_breach':req.body.revenue_breach,'incidents_month':req.body.incidents_month,'no_ops_troubleshoot':req.body.no_ops_troubleshoot,'no_dev_troubleshoot':req.body.no_dev_troubleshoot,'mttr':req.body.mttr,'no_apps_e2e':req.body.no_apps_e2e,'no_t1t2_apps':req.body.no_t1t2_apps, 'no_fte_existing':req.body.no_fte_existing, 'cycles_per_year':req.body.cycles_per_year, 'cycle_days':req.body.cycle_days, 'test_per_cycle':req.body.test_per_cycle, 'qa_time_per_cycle':req.body.qa_time_per_cycle, 'qa_people_per_cycle': req.body.qa_people_per_cycle, 'dev_time_per_cycle':req.body.dev_time_per_cycle, 'dev_people_per_cycle':req.body.dev_people_per_cycle, 'operation_cost':req.body.operation_cost, 'developer_cost':req.body.developer_cost, 'qa_cost':req.body.qa_cost, 'work_hours':req.body.work_hours, 'benefit_conversion': req.body.benefit_conversion, 'benefit_incident_reduction':req.body.benefit_incident_reduction, 'benefit_mttr':req.body.benefit_mttr, 'benefit_performance':req.body.benefit_performance, 'benefit_alert_storm':req.body.benefit_alert_storm, 'benefit_sla':req.body.benefit_sla, 'benefit_fix_qa':req.body.benefit_fix_qa, 'benefit_prod_reduction': req.body.benefit_prod_reduction, 'benefit_config': req.body.benefit_config, 'y1_software':req.body.y1_software, 'y1_services':req.body.y1_services, 'y2_software':req.body.y2_software, 'y2_services':req.body.y2_services, 'y3_software':req.body.y3_software, 'y3_services':req.body.y3_services}});			
+				collection.update({'_id':req.header('bva_id')},{$set:{'company_revenue':req.body.company_revenue,'projected_growth':req.body.projected_growth,'revenue_dependent':req.body.revenue_dependent,'app_uptime':req.body.app_uptime,'revenue_breach':req.body.revenue_breach,'incidents_month':req.body.incidents_month,'no_ops_troubleshoot':req.body.no_ops_troubleshoot,'no_dev_troubleshoot':req.body.no_dev_troubleshoot,'mttr':req.body.mttr,'no_apps_e2e':req.body.no_apps_e2e,'no_t1t2_apps':req.body.no_t1t2_apps, 'no_fte_existing':req.body.no_fte_existing, 'cycles_per_year':req.body.cycles_per_year, 'cycle_days':req.body.cycle_days, 'test_per_cycle':req.body.test_per_cycle, 'qa_time_per_cycle':req.body.qa_time_per_cycle, 'qa_people_per_cycle': req.body.qa_people_per_cycle, 'dev_time_per_cycle':req.body.dev_time_per_cycle, 'dev_people_per_cycle':req.body.dev_people_per_cycle, 'operation_cost':req.body.operation_cost, 'developer_cost':req.body.developer_cost, 'qa_cost':req.body.qa_cost, 'work_hours':req.body.work_hours, 'benefit_conversion': req.body.benefit_conversion, 'benefit_incident_reduction':req.body.benefit_incident_reduction, 'benefit_mttr':req.body.benefit_mttr, 'benefit_sla':req.body.benefit_sla, 'benefit_fix_qa':req.body.benefit_fix_qa, 'benefit_prod_reduction': req.body.benefit_prod_reduction, 'benefit_config': req.body.benefit_config, 'y1_software':req.body.y1_software, 'y1_services':req.body.y1_services, 'y2_software':req.body.y2_software, 'y2_services':req.body.y2_services, 'y3_software':req.body.y3_software, 'y3_services':req.body.y3_services}});
 
 				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("success");
-				db.close();					
+				db.close();
 			}
-		});			
-	});		
+		});
+	});
 
-	app.get('/getAssessmentData', (req, res) => {	
+	app.get('/getAssessmentData', (req, res) => {
 
 		var username = req.session.username;
 		MongoClient.connect(connectionOptions, function(err, db) {
 
-			if(err) { 
-				return console.dir(err); 
+			if(err) {
+				return console.dir(err);
 				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("failure");
-				db.close();				
-			}	
-			
+				db.close();
+			}
+
 			var collection = db.collection('assessment_data');
 			var results = collection.find({'_id':req.header('bva_id')}).toArray(function(err, items) {
 				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
 				res.end(JSON.stringify(items[0]));
 				db.close();
-			})		
-		})	
-	});	
-	
-	app.get('/getAssessmentMetaData', (req, res) => {	
+			})
+		})
+	});
+
+	app.get('/getAssessmentMetaData', (req, res) => {
 
 		var username = req.session.username;
 		MongoClient.connect(connectionOptions, function(err, db) {
 
-			if(err) { 
-				return console.dir(err); 
+			if(err) {
+				return console.dir(err);
 				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("failure");
-				db.close();				
-			}	
-			
+				db.close();
+			}
+
 			var collection = db.collection('assessments');
 			var results = collection.find({'_id':req.header('bva_id')}).toArray(function(err, items) {
 				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
 				res.end(JSON.stringify(items[0]));
 				db.close();
-			})		
-		})	
-	});		
-	
-	app.get('/getUserDetails', (req, res) => {	
+			})
+		})
+	});
+
+	app.get('/getUserDetails', (req, res) => {
 
 		var theUsername = req.session.username;
 
 		MongoClient.connect(connectionOptions, function(err, db) {
 
-			if(err) { 
-				return console.dir(err); 
+			if(err) {
+				return console.dir(err);
 				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("failure");
-				db.close();				
-			}	
-			
+				db.close();
+			}
+
 			var collection = db.collection('user_assessments');
 			var results = collection.find({'id':req.header('bva_id')}).toArray(function(err, items) {
 				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
@@ -812,70 +817,70 @@ module.exports = function(app, db) {
 					res.end(JSON.stringify(userDetails));
 					db.close();
 				})
-			})				
-		})	
-	});	
+			})
+		})
+	});
 
-	app.post('/addExistingTool', (req, res) => {	
-		
+	app.post('/addExistingTool', (req, res) => {
+
 		MongoClient.connect(connectionOptions, function(err, db) {
-			if(err) { 
-				return console.dir(err); 
+			if(err) {
+				return console.dir(err);
 				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("failure");
-				db.close();				
+				db.close();
 			}
 
 			else {
 				var collection = db.collection('assessment_data');
-				collection.update({'_id':req.header('bva_id')},{$push:{'existing_apps':{"tool_id": req.body.tool_id, "name": req.body.name_tool, "annual_costs": req.body.annual_cost, "ftes":req.body.no_fte_config, "y1":req.body.existing_y1, "y2": req.body.existing_y2, "y3": req.body.existing_y3} }});			
+				collection.update({'_id':req.header('bva_id')},{$push:{'existing_apps':{"tool_id": req.body.tool_id, "name": req.body.name_tool, "annual_costs": req.body.annual_cost, "ftes":req.body.no_fte_config, "y1":req.body.existing_y1, "y2": req.body.existing_y2, "y3": req.body.existing_y3} }});
 				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("success");
-				db.close();					
+				db.close();
 			}
-		});			
-	});		
+		});
+	});
 
-	app.post('/deleteExistingTool', (req, res) => {	
-		
+	app.post('/deleteExistingTool', (req, res) => {
+
 		var id = req.body.id;
-		
+
 		MongoClient.connect(connectionOptions, function(err, db) {
-			if(err) { 
-				return console.dir(err); 
+			if(err) {
+				return console.dir(err);
 				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("failure");
-				db.close();				
+				db.close();
 			}
 
 			else {
 				var collection = db.collection('assessment_data');
-				collection.update({'_id':req.header('bva_id')},{$pull:{'existing_apps':{"tool_id": id} }});			
+				collection.update({'_id':req.header('bva_id')},{$pull:{'existing_apps':{"tool_id": id} }});
 				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("success");
-				db.close();					
+				db.close();
 			}
-		});			
-	});		
+		});
+	});
 
-	app.post('/reset', (req, res, next) => {	
+	app.post('/reset', (req, res, next) => {
 		var username = req.body.username;
 		var resetLink = generateId();
-		
+
 		if(username == "" || validateEmail(username) == false) {
 			res.redirect('/reset?status=failed');
 		}
-		
+
 		else {
-			
+
 			var dat = new Date();
 			var dat = dat.setDate(dat.getDate() + 1);
-					
+
 			MongoClient.connect(connectionOptions, function(err, db) {
-				if(err) { 
-					return console.dir(err); 
+				if(err) {
+					return console.dir(err);
 					res.redirect('/reset?status=failed');
-					db.close();				
+					db.close();
 				}
 
 				else {
@@ -885,59 +890,59 @@ module.exports = function(app, db) {
 							res.redirect('/reset?status=failed');
 							db.close();
 						}
-						
+
 						else {
 							var resetRecord = {
 								username: username,
 								reset: resetLink,
 								expiry: dat
 							}
-							
+
 							var collection = db.collection('user_reset');
-							collection.insert(resetRecord, {w:1}, function(err, result) { 
+							collection.insert(resetRecord, {w:1}, function(err, result) {
 								if(err!=null){
 									console.log(err);
 									res.redirect('/reset?status=failed');
-								}    
+								}
 							});
-							
+
 							var email = username;
 							var subject = "Reset your password"
 							var text = "";
 							var html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\"><html style=\"background-color: #ececec; color: #454646; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 300; height: 100%; margin: 0; padding: 0;\"> <head> <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"> <title></title> <style>@media only screen and (max-width: 580px){body{font-size: 16px !important;}table.container{width: 100% !important;}.button{font-size: 16px !important; line-height: 24px !important; border-top: 10px solid #00a1b2 !important; border-bottom: 10px solid #00a1b2 !important; border-right: 26px solid #00a1b2 !important; border-left: 26px solid #00a1b2 !important;}.cta-button{background-color: #7dc540 !important; border-top: 8px solid #7dc540 !important; border-bottom: 8px solid #7dc540 !important; border-right: 60px solid #7dc540 !important; border-left: 60px solid #7dc540 !important;}}</style> </head> <body style=\"background-color: #ececec; color: #454646; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 300; height: 100%; margin: 0; padding: 0;\"> <table class=\"body\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; padding: 0; border: 0; background-color: #ececec; border-collapse: collapse; margin: 0 auto; height: 100%; width: 100%!important;\" height=\"100%\" bgcolor=\"#ececec\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td align=\"center\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"container\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"580\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #ffffff; border-collapse: collapse; width: 580px;\" bgcolor=\"#ffffff\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"header\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #242424; border-collapse: collapse; color: #ffffff; width: 100%!important;\" bgcolor=\"#242424\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 15px 30px;\" valign=\"top\"><img src=\"http://assets.dynatrace.com/global/logos/dynatrace_web-224x40.png\" alt=\"Dynatrace Logo\" style=\"display: block; max-width: 100%; height: 30px; margin: 0;\" height=\"30\"></td></tr></table> </td></tr><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"content\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; width: 100%;\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"section\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #ffffff; width: 100%!important;\" bgcolor=\"#ffffff\"><tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"><td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 40px 30px 60px;\" valign=\"top\"><h1 id=\"reset-your-password\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; margin-bottom: 15px;\">Reset your password</h1><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Hi " + items[0].firstName + ",</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">A password reset has been requested for your account, please use this link to reset your password within the next 24 hours: <a href=\"https://bva.herokuapp.com/resetpassword?token=" + resetLink + "\" style=\"color: #00a1b2; text-decoration: none;\">https://bva.herokuapp.com/resetpassword?token=" + resetLink + "</a></p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Many thanks,</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">The BVA (Business Value Assessment) team</p></td></tr></tbody></table> </td></tr></tbody> </table> </td></tr><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"footer\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #353535; color: #ffffff; font-size: 12px; text-align: center; width: 100%!important;\" bgcolor=\"#353535\" align=\"center\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 15px;\" valign=\"top\"> <p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px; color: #ffffff;\">© 2018 Dynatrace LLC. All Rights Reserved<br><a href=\"https://www.dynatrace.com/\" style=\"color: #ffffff; text-decoration: underline;\">dynatrace.com</a></p></td></tr></tbody> </table> </td></tr></tbody> </table> </td></tr></tbody> </table> </body></html>";
-								
+
 							sendMail(email, subject, text, html);
-							
+
 							res.redirect('/reset?status=success');
-							db.close(); 
+							db.close();
 						}
 					});
-				}	
+				}
 			});
-		}	
+		}
 	});
 
-	app.post('/sharebva', (req, res) => {	
+	app.post('/sharebva', (req, res) => {
 		var id = req.query.bva_id;
 		var username = req.session.username;
 		var username_share = req.body.username_share;
-		
+
 		if(username_share == "" || validateEmail(username_share) == false) {
 			res.redirect('/share?bva_id=' + id + '&status=failed');
 		}
-		
+
 		else {
 		MongoClient.connect(connectionOptions, function(err, db) {
-			if(err) { 
-				return console.dir(err); 
+			if(err) {
+				return console.dir(err);
 				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("failure");
-				db.close();				
+				db.close();
 			}
 
 			else {
 				var collection = db.collection('user_assessments');
-				var results = collection.find({id:id, username:username_share}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {	
+				var results = collection.find({id:id, username:username_share}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 					if(err) {
 						console.log(err);
 						res.redirect('/share?bva_id=' + id + "&status=failed");
@@ -945,10 +950,10 @@ module.exports = function(app, db) {
 					else {
 						if(items[0] == undefined) {
 							var collection = db.collection('user_assessments');
-							var results = collection.find({id:id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {	
-							
+							var results = collection.find({id:id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+
 								var company = items[0].company;
-			
+
 								var newShare = {
 									id:id,
 									company: company,
@@ -956,19 +961,19 @@ module.exports = function(app, db) {
 								}
 
 								var collection = db.collection('user_assessments');
-								collection.insert(newShare, {w:1}, function(err, result) { 						
+								collection.insert(newShare, {w:1}, function(err, result) {
 									if(err!=null){
 										console.log(err);
 										res.redirect('/share?bva_id=' + id + "&status=failed");
-									}    
+									}
 									else {
 										var email = username_share;
 										var subject = "You have a new assessment!"
 										var text = "";
 										var html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\"><html style=\"background-color: #ececec; color: #454646; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 300; height: 100%; margin: 0; padding: 0;\"> <head> <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"> <title></title> <style>@media only screen and (max-width: 580px){body{font-size: 16px !important;}table.container{width: 100% !important;}.button{font-size: 16px !important; line-height: 24px !important; border-top: 10px solid #00a1b2 !important; border-bottom: 10px solid #00a1b2 !important; border-right: 26px solid #00a1b2 !important; border-left: 26px solid #00a1b2 !important;}.cta-button{background-color: #7dc540 !important; border-top: 8px solid #7dc540 !important; border-bottom: 8px solid #7dc540 !important; border-right: 60px solid #7dc540 !important; border-left: 60px solid #7dc540 !important;}}</style> </head> <body style=\"background-color: #ececec; color: #454646; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 300; height: 100%; margin: 0; padding: 0;\"> <table class=\"body\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; padding: 0; border: 0; background-color: #ececec; border-collapse: collapse; margin: 0 auto; height: 100%; width: 100%!important;\" height=\"100%\" bgcolor=\"#ececec\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td align=\"center\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"container\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"580\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #ffffff; border-collapse: collapse; width: 580px;\" bgcolor=\"#ffffff\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"header\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #242424; border-collapse: collapse; color: #ffffff; width: 100%!important;\" bgcolor=\"#242424\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 15px 30px;\" valign=\"top\"><img src=\"http://assets.dynatrace.com/global/logos/dynatrace_web-224x40.png\" alt=\"Dynatrace Logo\" style=\"display: block; max-width: 100%; height: 30px; margin: 0;\" height=\"30\"></td></tr></table> </td></tr><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"content\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; width: 100%;\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"section\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #ffffff; width: 100%!important;\" bgcolor=\"#ffffff\"><tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"><td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 40px 30px 60px;\" valign=\"top\"><h1 id=\"a-new-assessment\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; margin-bottom: 15px;\">A new assessment</h1><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Hi,</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">You have a new assessment that has been shared by " + username + ", titled \"" + company + ".\"</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Please login to access <a href=\"http://dynatrace.ai/bva\" style=\"color: #00a1b2; text-decoration: none;\">here</a>, or if you don't have an account create one first!</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Many thanks,</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">The BVA (Business Value Assessment) team</p></td></tr></tbody></table> </td></tr></tbody> </table> </td></tr><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"footer\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #353535; color: #ffffff; font-size: 12px; text-align: center; width: 100%!important;\" bgcolor=\"#353535\" align=\"center\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 15px;\" valign=\"top\"> <p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px; color: #ffffff;\">© 2018 Dynatrace LLC. All Rights Reserved<br><a href=\"https://www.dynatrace.com/\" style=\"color: #ffffff; text-decoration: underline;\">dynatrace.com</a></p></td></tr></tbody> </table> </td></tr></tbody> </table> </td></tr></tbody> </table> </body></html>";
-									
+
 										sendMail(email, subject, text, html);
-										
+
 										res.redirect('/share?bva_id=' + id + "&status=success");
 									}
 								});
@@ -980,60 +985,60 @@ module.exports = function(app, db) {
 					}
 				})
 			}
-		});	
+		});
 
-		}	
-	});		
+		}
+	});
 
-	app.get('/giveMeBva', (req, res) => {	
+	app.get('/giveMeBva', (req, res) => {
 		var id = req.header('bva_id');
 		var company = req.header('company');
 		var username = req.session.username;
-		
+
 		var successBody = {
 			status: "success"
 		}
-		
+
 		var failBody = {
 			status: "fail"
 		}
-		
+
 		if(id == "") {
 			res.end(JSON.stringify(failBody));
 		}
-		
+
 		else {
 		MongoClient.connect(connectionOptions, function(err, db) {
-			if(err) { 
-				return console.dir(err); 
+			if(err) {
+				return console.dir(err);
 				res.end(JSON.stringify(failBody));
-				db.close();				
+				db.close();
 			}
 
 			else {
-			
+
 				var collection = db.collection('user_assessments');
 				var results = collection.find({id:id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
-					
+
 					if(items[0] != undefined) {
 						res.end(JSON.stringify(failBody));
 						db.close();
-					}					
-					
+					}
+
 					else {
 						newShare = {
 							id: id,
 							company: company,
-							username: username					
+							username: username
 						}
-						
+
 						var collection = db.collection('user_assessments');
-						collection.insert(newShare, {w:1}, function(err, result) { 						
+						collection.insert(newShare, {w:1}, function(err, result) {
 							if(err!=null){
 								console.log(err);
 								db.close();
 								res.end(JSON.stringify(failBody));
-							}    
+							}
 							else {
 								db.close();
 								res.end(JSON.stringify(successBody));
@@ -1042,33 +1047,33 @@ module.exports = function(app, db) {
 					}
 				})
 			}
-		});	
+		});
 
-		}	
-	});			
-	
-	app.post('/editbva', (req, res) => {	
+		}
+	});
+
+	app.post('/editbva', (req, res) => {
 		var id = req.query.bva_id;
 		var username = req.session.username;
 		var company = req.body.company;
 		var currency = req.body.currency;
-		
+
 		if(username == "" || company == "" || currency == "") {
 			res.redirect('/edit?bva_id=' + id + '&status=failed');
 		}
-		
+
 		else {
 			MongoClient.connect(connectionOptions, function(err, db) {
-				if(err) { 
-					return console.dir(err); 
+				if(err) {
+					return console.dir(err);
 					res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
 					res.end("failure");
-					db.close();				
+					db.close();
 				}
 
 				else {
 					var collection = db.collection('user_assessments');
-					var results = collection.find({id:id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {	
+					var results = collection.find({id:id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 						if(err) {
 							console.log(err);
 							res.redirect('/edit?bva_id=' + id + "&status=failed");
@@ -1080,37 +1085,37 @@ module.exports = function(app, db) {
 							else {
 								var collection = db.collection('assessments');
 								collection.update({'_id':id},{$set:{'company':company, 'currency':currency}});
-								
+
 								var collection = db.collection('user_assessments');
 								collection.update({'id':id},{$set:{'company':company}});
-								
+
 								res.redirect('/edit?bva_id=' + id + "&status=success");
-							}	
+							}
 						}
 					})
 				}
-			});	
-		}	
-	});		
+			});
+		}
+	});
 
-	app.get('/deleteAssessment', (req, res) => {	
+	app.get('/deleteAssessment', (req, res) => {
 		var id = req.query.bva_id;
 		var username = req.session.username;
-		
+
 		if(id == "") {
 			res.redirect('/landing');
 		}
-		
+
 		else {
 			MongoClient.connect(connectionOptions, function(err, db) {
-				if(err) { 
+				if(err) {
 					res.redirect('/edit?bva_id=' + id + '&status=failed');
-					db.close();				
+					db.close();
 				}
 
 				else {
 					var collection = db.collection('user_assessments');
-					var results = collection.find({id:id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {	
+					var results = collection.find({id:id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 						if(err) {
 							console.log(err);
 							res.redirect('/edit?bva_id=' + id + "&status=failed");
@@ -1119,53 +1124,53 @@ module.exports = function(app, db) {
 							if(items[0] == undefined){
 								res.redirect('/landing');
 							}
-							
+
 							else {
 								var collection = db.collection('assessments');
 								collection.remove({_id: id}, function(err, result) {
-									
+
 								})
-								
+
 								var collection = db.collection('user_assessments');
 								collection.remove({id: id}, function(err, result) {
-									
+
 								})
 
 								var collection = db.collection('assessment_data');
 								collection.remove({_id: id}, function(err, result) {
-									
-								})						
-							
-								
+
+								})
+
+
 								res.redirect("/landing");
-							}	
+							}
 						}
 					})
 				}
-			});	
+			});
 
-		}	
-	});		
+		}
+	});
 
-	app.get('/searchUsers', (req, res) => {	
-	
-		var username = req.session.username;	
+	app.get('/searchUsers', (req, res) => {
+
+		var username = req.session.username;
 		var emailSearch = req.header('emailSearch');
 		var results = new RegExp('(@dynatrace.com)').exec(username);
-		
+
 		if(username == "" || results == false) {
 			res.redirect('/');
 		}
-		
+
 		else {
 			MongoClient.connect(connectionOptions, function(err, db) {
 
-				if(err) { 
+				if(err) {
 					var response = {"status":"failed"};
 					res.end(JSON.stringify(response));
-					db.close();				
-				}	
-				
+					db.close();
+				}
+
 				var collection = db.collection('user_assessments');
 				var results = collection.find({'username':emailSearch}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 					if(err || items[0] == undefined) {
@@ -1184,16 +1189,16 @@ module.exports = function(app, db) {
 						}
 						var collection = db.collection('assessments');
 						var results = collection.find({$or:resultArray}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
-							
+
 							res.end(JSON.stringify(items));
 							db.close();
 						})
 					}
-				})		
-			})	
+				})
+			})
 		}
 	});
-	
+
 	app.get('/logout', function(req, res) {
 		req.session.destroy();
 		res.redirect('/');
@@ -1203,60 +1208,55 @@ module.exports = function(app, db) {
 		if(req.body.listOfIds == "") {
 			res.redirect('/editassessment?status=failed');
 		}
-		
+
 		else {
 		var id = JSON.parse(req.body.listOfIds);
 
 		var assessmentUpdate = [];
-		
+
 		for(i=0;i<id.length;i++){
 			var has_pricing = req.body[id[i].id + "_pricing"];
-			
+
 			if(has_pricing == "Yes") {
 				has_pricing = true;
 			}
-			
+
 			else {
 				has_pricing = false;
 			}
-			
+
 			var sfdc = req.body[id[i].id + "_sfdc"];
 
-			
+
 			var add = {
 				has_pricing: has_pricing,
 				sfdc: sfdc
 			}
-			
+
 			assessmentUpdate.push(add);
 		}
-		
+
 		MongoClient.connect(connectionOptions, function(err, db) {
-			if(err) { 
-				return console.dir(err); 
+			if(err) {
+				return console.dir(err);
 				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("failure");
-				db.close();				
+				db.close();
 			}
 
 			else {
 				var collection = db.collection('assessments');
-				
+
 				for(i=0;i<id.length;i++) {
 					var has_pricing = assessmentUpdate[i].has_pricing;
 					var sfdc = assessmentUpdate[i].sfdc;
 					collection.update({'_id':id[i].id},{$set:{"has_pricing": has_pricing, "sfdc":sfdc}});
 				}
-				
+
 				res.redirect('/editassessment?status=success');
 			}
-		});		
+		});
 
 		}
-	});			
+	});
 };
-
-
-
-	
-
