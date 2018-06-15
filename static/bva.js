@@ -368,8 +368,6 @@ function getAssessmentData() {
 		document.getElementById("benefit_conversion").value = processPercent(jsonResponse.benefit_conversion);
 		document.getElementById("benefit_incident_reduction").value = processPercent(jsonResponse.benefit_incident_reduction);
 		document.getElementById("benefit_mttr").value = processPercent(jsonResponse.benefit_mttr);
-		document.getElementById("benefit_performance").value = processPercent(jsonResponse.benefit_performance);
-		document.getElementById("benefit_alert_storm").value = processPercent(jsonResponse.benefit_alert_storm);
 		document.getElementById("benefit_sla").value = processPercent(jsonResponse.benefit_sla);
 		document.getElementById("benefit_fix_qa").value = processPercent(jsonResponse.benefit_fix_qa);
 		document.getElementById("benefit_prod_reduction").value = processPercent(jsonResponse.benefit_prod_reduction);
@@ -430,8 +428,6 @@ function updateAssessment() {
 		benefit_conversion: getNumbersAndDots(document.getElementById("benefit_conversion").value),
 		benefit_incident_reduction: getNumbersAndDots(document.getElementById("benefit_incident_reduction").value),
 		benefit_mttr: getNumbersAndDots(document.getElementById("benefit_mttr").value),
-		benefit_performance: getNumbersAndDots(document.getElementById("benefit_performance").value),
-		benefit_alert_storm: getNumbersAndDots(document.getElementById("benefit_alert_storm").value),
 		benefit_sla: getNumbersAndDots(document.getElementById("benefit_sla").value),
 		benefit_fix_qa: getNumbersAndDots(document.getElementById("benefit_fix_qa").value),
 		benefit_prod_reduction: getNumbersAndDots(document.getElementById("benefit_prod_reduction").value),
@@ -473,63 +469,47 @@ function addListeners() {
 
 	$(".leftContainer").css("height", $('.biz').css('height'));
 
+		function goToAnchor(anchor) {
+		  var loc = document.location.toString().split('#')[0];
+		  document.location = loc + '#' + anchor;
+		  return false;
+		}
+
 	$("#existingToolAdd").click(function() {
 		addExistingTool();
 	});
 
 	$(" .opsFromBiz ").click(function() {
-		$( ".biz" ).hide('slide', {direction: 'left'});
-		$(".ops").fadeIn();
-		$(".leftContainer").css("height", $('.ops').css('height'));
-		$( ".result-biz" ).hide('slide', {direction: 'left'});
-		$(".result-ops").fadeIn();
+		goToAnchor("ops");
 		getAssessmentData();
 	});
 
 	$(" .bizFromOps ").click(function() {
-		$( ".ops" ).toggle( "slide" , { direction: "right" });
-		$( ".biz" ).fadeIn();
-		$(".leftContainer").css("height", $('.biz').css('height'));
-		$( ".result-ops" ).toggle( "slide" , { direction: "right" });
-		$( ".result-biz" ).fadeIn();
+		goToAnchor("biz");
 		getAssessmentData();
 	});
 
 	$(" .devFromOps ").click(function() {
-		$( ".ops" ).toggle( "slide" , { direction: "left" });
-		$( ".dev" ).fadeIn();
-		$(".leftContainer").css("height", $('.dev').css('height'));
-		$( ".result-ops" ).toggle( "slide" , { direction: "left" });
-		$( ".result-dev" ).fadeIn();
+		goToAnchor("dev");
 		getAssessmentData();
 	});
 
 	$(" .opsFromDev ").click(function() {
-		$( ".dev" ).toggle( "slide" , { direction: "right" });
-		$( ".ops" ).fadeIn();
-		$(".leftContainer").css("height", $('.ops').css('height'));
-		$( ".result-dev" ).toggle( "slide" , { direction: "right" });
-		$( ".result-ops" ).fadeIn();
+		goToAnchor("ops");
 		getAssessmentData();
 	});
 
 	$(" .optionsFromDev ").click(function() {
-		$( ".dev" ).toggle( "slide" , { direction: "left" });
-		$( ".options" ).fadeIn();
-		$(".leftContainer").css("height", $('.options').css('height'));
-		$( ".result-dev" ).toggle( "slide" , { direction: "left" });
-		$( ".result-options" ).fadeIn();
+		goToAnchor("options");
 		getAssessmentData();
 	});
 
 	$(" .devFromOptions ").click(function() {
-		$( ".options" ).toggle( "slide" , { direction: "right" });
-		$( ".dev" ).fadeIn();
-		$(".leftContainer").css("height", $('.dev').css('height'));
-		$( ".result-options" ).toggle( "slide" , { direction: "right" });
-		$( ".result-dev" ).fadeIn();
+		goToAnchor("dev");
 		getAssessmentData();
 	});
+
+	showContent();
 
 	$('#company_revenue, #operation_cost, #developer_cost, #qa_cost, #annual_cost, #y1_software, #y1_services, #y2_software, #y2_services, #y3_software, #y3_services').on( "blur", function() {
 		if(this.value != '' && this.value != undefined) {this.value = document.getElementById("currency").value + parseInt(getNumbers(this.value)).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
@@ -537,7 +517,7 @@ function addListeners() {
 		drawResults();
 	} );
 
-	$('#projected_growth, #revenue_breach, #revenue_dependent, #app_uptime, #test_per_cycle, #qa_time_per_cycle, #dev_time_per_cycle, #benefit_conversion, #benefit_incident_reduction, #benefit_mttr, #benefit_performance, #benefit_alert_storm, #benefit_sla, #benefit_fix_qa, #benefit_prod_reduction, #benefit_config, #existing_y1, #existing_y2, #existing_y3').on( "blur", function() {
+	$('#projected_growth, #revenue_breach, #revenue_dependent, #app_uptime, #test_per_cycle, #qa_time_per_cycle, #dev_time_per_cycle, #benefit_conversion, #benefit_incident_reduction, #benefit_mttr, #benefit_sla, #benefit_fix_qa, #benefit_prod_reduction, #benefit_config').on( "blur", function() {
 		if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
 		updateAssessment();
 		drawResults();
@@ -552,6 +532,34 @@ function addListeners() {
 	$("#open-report").click(function() {
 		openReport();
 	});
+}
+
+function showContent() {
+
+		if ($(location).attr('hash').substr(1) == "biz") {
+				$(".biz, .result-biz").fadeIn();
+				$(".ops, .result-ops, .dev, .result-dev, .options, .result-options").fadeOut();
+				$(".leftContainer").css("height", $('.biz').css('height'));
+		}
+
+		if ($(location).attr('hash').substr(1) == "ops") {
+			$(".ops, .result-ops").fadeIn();
+			$(".biz, .result-biz, .dev, .result-dev, .options, .result-options").fadeOut();
+			$(".leftContainer").css("height", $('.ops').css('height'));
+		}
+
+		if ($(location).attr('hash').substr(1) == "dev") {
+			$(".dev, .result-dev").fadeIn();
+			$(".biz, .result-biz, .ops, .result-ops, .options, .result-options").fadeOut();
+			$(".leftContainer").css("height", $('.dev').css('height'));
+		}
+
+		if ($(location).attr('hash').substr(1) == "options") {
+			$(".options, .result-options").fadeIn();
+			$(".biz, .result-biz, .ops, .result-ops, .dev, .result-dev").fadeOut();
+			$(".leftContainer").css("height", $('.options').css('height'));
+		}
+
 }
 
 function getTabs() {
@@ -642,7 +650,7 @@ function addExistingTool() {
 
 	.then(function() {
 
-		var newApp = "<div class=\"bva-question-wrapper bva-question-top \" \"><div class=\"bva-question-existing-wrapper\">	<div style=\"position: relative\"> <h2 style=\"display: inline-block\">" + document.getElementById("name_tool").value + "</h2> <div style=\"display: inline-block; position: absolute; right: 0px\"><a class=\"delete\" id=\"" + tool_id + "\"><img src=\"/static/delete-grey.svg\"  width=\"40px\" height=\"40px\" /></a></div> </div><p>" + document.getElementById("annual_cost").value + " - " + document.getElementById("no_fte_config").value + " FTEs</p><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 1: " + document.getElementById("existing_y1").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y1").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 2: " + document.getElementById("existing_y2").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y2").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 3: " + document.getElementById("existing_y3").value + "</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y3").value) + "\" max=\"100\" id=\"p0\"></progress></div>	</div></div><br />";
+		var newApp = "<div class=\"bva-question-wrapper bva-question-top \" \"><div class=\"bva-question-existing-wrapper\">	<div style=\"position: relative\"> <h2 style=\"display: inline-block\">" + document.getElementById("name_tool").value + "</h2> <div style=\"display: inline-block; position: absolute; right: 0px\"><a class=\"delete\" id=\"" + tool_id + "\"><img src=\"/static/delete-grey.svg\"  width=\"40px\" height=\"40px\" /></a></div> </div><p>" + document.getElementById("annual_cost").value + " - " + document.getElementById("no_fte_config").value + " FTEs</p><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 1: " + document.getElementById("existing_y1").value + "%</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y1").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 2: " + document.getElementById("existing_y2").value + "%</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y2").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 3: " + document.getElementById("existing_y3").value + "%</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y3").value) + "\" max=\"100\" id=\"p0\"></progress></div>	</div></div><br />";
 
 		$( "#existing_apps" ).append( newApp );
 		$(".leftContainer").css("height", $('.ops').css('height'));
@@ -654,9 +662,9 @@ function addExistingTool() {
 		document.getElementById("name_tool").value = "";
 		document.getElementById("annual_cost").value = "";
 		document.getElementById("no_fte_config").value = "";
-		document.getElementById("existing_y1").value = "";
-		document.getElementById("existing_y2").value = "";
-		document.getElementById("existing_y3").value = "";
+		document.getElementById("existing_y1").value = "100";
+		document.getElementById("existing_y2").value = "100";
+		document.getElementById("existing_y3").value = "100";
 
 		drawResults();
 	})
