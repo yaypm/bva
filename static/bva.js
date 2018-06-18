@@ -300,19 +300,16 @@ function getAssessmentList() {
 	.then(function(jsonObj) {
 		var newHTML = '';
 
-		if(jsonObj.length < 1) {
+		if(jsonObj[0]._id == "new") {
 			document.getElementById("bva_select").innerHTML = '<option value="">Create an assessment!</option>';
+			dtrum.identifyUser(jsonObj[0].username);
 		}
 
 		else {
 			for(i=0;i<jsonObj.length;i++) {
 				newHTML += '<option value="' + jsonObj[i].id + '">' + jsonObj[i].company + '</option>';
-
-				//if(i=0) {
-				//	dtrum.identifyUser(jsonObj[i].username);
-				//}
 			}
-			//dtrum.identifyUser(jsonObj[0].username);
+			dtrum.identifyUser(jsonObj[0].username);
 			document.getElementById("bva_select").innerHTML = newHTML;
 			setBvaLinks();
 		}
