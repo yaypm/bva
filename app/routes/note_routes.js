@@ -720,9 +720,18 @@ module.exports = function(app, db) {
 
 			var collection = db.collection('user_assessments');
 			var results = collection.find({username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
-				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
-				res.end(JSON.stringify(items));
-				db.close();
+				if(items.length == 0) {
+					res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+					var body = [{_id: "new", username: req.session.username}];
+					res.end(JSON.stringify(body));
+					db.close();
+				}
+
+				if(items.length > 0) {
+					res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+					res.end(JSON.stringify(items));
+					db.close();
+				}
 			})
 		})
 	});
