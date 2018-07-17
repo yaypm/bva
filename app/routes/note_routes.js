@@ -536,53 +536,60 @@ module.exports = function(app, db) {
 			password: req.body.password
 		}
 
-		if(validateEmail(username) == false) {
-			res.redirect('/?status=failed');
-		}
+		if(req.body.ie == "no") {
+			
+			if(validateEmail(username) == false) {
+				res.redirect('/?status=failed');
+			}
 
-		else {
+			else {
 
-			MongoClient.connect(connectionOptions, function(err, db) {
-				if(err) {
-					console.log(err);
-					db.close();
-					res.redirect('/?status=failed');
-				}
+				MongoClient.connect(connectionOptions, function(err, db) {
+					if(err) {
+						console.log(err);
+						db.close();
+						res.redirect('/?status=failed');
+					}
 
-				else {
-					var collection = db.collection('users');
-					var results = collection.find({_id:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
-						if(items[0] == undefined) {
-							db.close();
-							res.redirect('/?status=failed');
-						}
-
-						else {
-						bcrypt.compare(password, items[0].password, function(err, result) {
-
-							if (err) {
+					else {
+						var collection = db.collection('users');
+						var results = collection.find({_id:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+							if(items[0] == undefined) {
 								db.close();
 								res.redirect('/?status=failed');
 							}
 
 							else {
+							bcrypt.compare(password, items[0].password, function(err, result) {
 
-								if(result == true) {
-									db.close();
-									req.session.username = username;
-									req.session.save();
-									console.log(req.session.username + " has logged in.");
-									res.redirect('/landing');
-								}
-								else {
+								if (err) {
 									db.close();
 									res.redirect('/?status=failed');
 								}
-							}
-						}) }
-					});
-				}
-			});
+
+								else {
+
+									if(result == true) {
+										db.close();
+										req.session.username = username;
+										req.session.save();
+										console.log(req.session.username + " has logged in.");
+										res.redirect('/landing');
+									}
+									else {
+										db.close();
+										res.redirect('/?status=failed');
+									}
+								}
+							}) }
+						});
+					}
+				});
+			}
+		}	
+		
+		else {
+			res.redirect('/?browser=ie');
 		}
 	});
 
