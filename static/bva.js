@@ -85,6 +85,19 @@ function statusDetect() {
 	}
 }
 
+function browserDetect() {
+	if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1))	{
+		$(".status-ie").css("display", "block");
+		$(".signup-forgot").css("display", "none");
+		document.getElementById("ie").value="yes";
+	}
+
+	else {
+		document.getElementById("ie").value="no";
+	}
+}
+
+
 function setFormLocation() {
 	token = getGet('token');
 	document.getElementById("reset").action="/resetyourpassword?token=" + token;
