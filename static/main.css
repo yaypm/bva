@@ -3594,6 +3594,17 @@ ol.list ol ul ul li:before {
 	width: 350px;
 	text-align: center;}
 
+.status-ie {
+	display: none;
+	color: white;
+	background-color: #1a1a1a;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 15px;
+	padding-right: 15px;
+	width: 350px;
+	text-align: left;}
+
 .status-success {
 	display: none;
 	color: white;
