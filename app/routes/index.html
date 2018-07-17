@@ -15,6 +15,7 @@
 	<script type="text/javascript">
 		document.addEventListener("DOMContentLoaded", function(event) {
 			statusDetect();
+			browserDetect();
 		});
 	</script>
 
@@ -32,6 +33,7 @@
 	<div class="incorrect-password">
 	
 		<div class="status-failure">Username/password is incorrect</div>
+		<div class="status-ie">Unfortunately, Internet Explorer is not supported - please use Chrome, Edge or Firefox to proceed.</div>
 	
 	</div>
 		
@@ -50,6 +52,8 @@
 		<button id="intro_box_submit" type="submit" class="btn btn--primary theme--dark">Login</button>
 		
 			<br /><br />
+		
+		<input type="hidden" id="ie" name="ie" >
 		
 	</form>
 	
