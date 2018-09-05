@@ -640,7 +640,7 @@ function addExistingTool() {
 		tool_id: tool_id,
 		name_tool: document.getElementById("name_tool").value,
 		annual_cost: getNumbers(document.getElementById("annual_cost").value),
-		no_fte_config: getNumbers(document.getElementById("no_fte_config").value),
+		no_fte_config: getNumbersAndDots(document.getElementById("no_fte_config").value),
 		existing_y1: getNumbers(document.getElementById("existing_y1").value),
 		existing_y2: getNumbers(document.getElementById("existing_y2").value),
 		existing_y3: getNumbers(document.getElementById("existing_y3").value),
