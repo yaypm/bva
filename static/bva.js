@@ -533,12 +533,18 @@ function addListeners() {
 		drawResults();
 	} );
 
-	$('#incidents_month, #no_ops_troubleshoot, #no_dev_troubleshoot, #mttr, #no_apps_e2e, #no_t1t2_apps, #no_fte_existing, #cycles_per_year, #cycle_days, #qa_people_per_cycle, #dev_people_per_cycle, #work_hours, #no_fte_config').on( "blur", function() {
+	$('#incidents_month, #no_ops_troubleshoot, #no_dev_troubleshoot, #mttr, #no_apps_e2e, #no_t1t2_apps, #no_fte_existing, #cycles_per_year, #cycle_days, #qa_people_per_cycle, #dev_people_per_cycle, #work_hours').on( "blur", function() {
 		if(this.value != '' && this.value != undefined) {this.value = parseInt(getNumbersAndDots(this.value)).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
 		updateAssessment();
 		drawResults();
 	});
 
+	$('#no_fte_config').on( "blur", function() {
+		if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
+		updateAssessment();
+		drawResults();
+	});		
+	
 	$("#open-report").click(function() {
 		openReport();
 	});
