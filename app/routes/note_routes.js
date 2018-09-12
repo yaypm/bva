@@ -78,6 +78,35 @@ module.exports = function(app, db) {
 		}
 	}
 
+	function checkSEAssessmentStatus(req, res) {
+		var username = req.session.username;
+		var se_id = req.query.se_id;
+
+		if(se_id == ""){
+			console.log("no se id");
+			res.redirect('/landing_se');
+		}
+
+		else {
+			MongoClient.connect(connectionOptions, function(err, db) {
+				var collection = db.collection('se_user_assessments');
+				collection.findOne({username:username, id:se_id}, {collation:{ locale: "en", strength: 2 }}, function(err, result) {
+					if (err) throw err;
+						if(result != null) {
+							db.close();
+							res.sendFile(path.join(__dirname + '/workflow_se.html'));
+						}
+						else {
+							db.close();
+							console.log("no results");
+							res.redirect('/landing_se');
+							//console.log(username + " tried to access a bva they don't have access to: " + bva_id);
+						}
+				});
+			})
+		}
+	}
+
 	function checkReportStatus(req, res) {
 		var username = req.session.username;
 		var bva_id = req.query.bva_id;
@@ -131,6 +160,32 @@ module.exports = function(app, db) {
 		}
 	}
 
+	function checkSeEditStatus(req, res) {
+		var username = req.session.username;
+		var se_id = req.query.se_id;
+
+		if(username == "" || se_id == "") {
+			res.redirect('/landing_se');
+		}
+
+		else {
+			MongoClient.connect(connectionOptions, function(err, db) {
+				var collection = db.collection('se_user_assessments');
+				collection.findOne({username:username, id:se_id}, {collation:{ locale: "en", strength: 2 }}, function(err, result) {
+					if (err) throw err;
+						if(result != null) {
+							db.close();
+							res.sendFile(path.join(__dirname + '/edit_se.html'));
+						}
+						else {
+							db.close();
+							res.redirect('/landing_se');
+						}
+				});
+			})
+		}
+	}
+
 	function checkShareStatus(req, res) {
 		var username = req.session.username;
 		var bva_id = req.query.bva_id;
@@ -157,6 +212,39 @@ module.exports = function(app, db) {
 						else {
 							db.close();
 							res.redirect('/landing');
+						}
+					}
+				});
+			})
+		}
+	}
+
+	function checkSeShareStatus(req, res) {
+		var username = req.session.username;
+		var se_id = req.query.se_id;
+
+		if(username == "" || se_id == "") {
+			res.redirect('/landing_se');
+		}
+
+		else {
+			MongoClient.connect(connectionOptions, function(err, db) {
+				var collection = db.collection('se_user_assessments');
+				collection.findOne({username:username, id:se_id}, {collation:{ locale: "en", strength: 2 }}, function(err, result) {
+					if (err) {
+						console.log(err);
+						res.redirect('/share_se?se_id=' + se_id + '&staus=failed');
+					}
+
+					else {
+						if(result != null) {
+							db.close();
+							res.sendFile(path.join(__dirname + '/share_se.html'));
+						}
+
+						else {
+							db.close();
+							res.redirect('/landing_se');
 						}
 					}
 				});
@@ -207,9 +295,14 @@ module.exports = function(app, db) {
 		res.redirect('/landing');
 	}
 
-
-
 	});
+	
+	app.get('/test', (req, res) => {
+
+	 res.sendFile(path.join(__dirname + '/test.html'));
+
+
+	 });
 
 	app.get('/reset', (req, res) => {
 
@@ -245,6 +338,41 @@ module.exports = function(app, db) {
 
 	});
 
+	app.get('/createnew_se', (req, res) => {
+
+		if (requiresLogin(req, res) == false) {
+			console.log("apparently not logged in");
+			res.redirect('/');
+		}
+		else {
+			var username = req.session.username;
+			if(username == ""){
+				console.log("apparently no username");
+				res.redirect('/landing');
+			}
+
+			else {
+				MongoClient.connect(connectionOptions, function(err, db) {
+					var collection = db.collection('se');
+					collection.findOne({"email":username}, {collation:{ locale: "en", strength: 2 }}, function(err, result) {
+						if (err) throw err;
+							if(result == null) {
+								db.close();
+								console.log("apparently no results");
+								res.redirect('/landing');
+							}
+							else {
+								db.close();
+								res.sendFile(path.join(__dirname + '/createnew_se.html'));
+								//console.log(username + " tried to access a bva they don't have access to: " + bva_id);
+							}
+					});
+				})
+			}
+		}
+
+	});
+
 	app.get('/editassessment', (req, res) => {
 
 		if (requiresLogin(req, res) == false) {
@@ -258,6 +386,24 @@ module.exports = function(app, db) {
 			}
 			else {
 				res.redirect('/landing');
+			}
+		}
+
+	});
+
+	app.get('/search_se', (req, res) => {
+
+		if (requiresLogin(req, res) == false) {
+			res.redirect('/');
+		}
+		else {
+			var results = new RegExp('(@dynatrace.com)').exec(req.session.username);
+
+			if(results != undefined) {
+				res.sendFile(path.join(__dirname + '/search_se.html'));
+			}
+			else {
+				res.redirect('/landing_se');
 			}
 		}
 
@@ -419,12 +565,46 @@ module.exports = function(app, db) {
 		}
 	});
 
+	app.get('/landing_se', (req, res) => {
+
+		if (requiresLogin(req, res) == false) {
+			res.redirect('/');
+		}
+		else {
+			var username = req.session.username;
+			MongoClient.connect(connectionOptions, function(err, db) {
+				var collection = db.collection('se');
+				collection.findOne({"email":username}, {collation:{ locale: "en", strength: 2 }}, function(err, result) {
+					if (err) throw err;
+						if(result == null) {
+							db.close();
+							res.redirect('/');
+						}
+						else {
+							db.close();
+							res.sendFile(path.join(__dirname + '/landing_se.html'));
+						}
+					});
+				})
+		}
+	});
+
 	app.get('/workflow', (req, res) => {
 		if (requiresLogin(req, res) == false) {
 			res.redirect('/');
 		}
 		else {
 			checkAssessmentStatus(req, res);
+		}
+
+	});
+
+	app.get('/workflow_se', (req, res) => {
+		if (requiresLogin(req, res) == false) {
+			res.redirect('/');
+		}
+		else {
+			checkSEAssessmentStatus(req, res);
 		}
 
 	});
@@ -449,12 +629,32 @@ module.exports = function(app, db) {
 
 	});
 
+	app.get('/edit_se', (req, res) => {
+		if (requiresLogin(req, res) == false) {
+			res.redirect('/');
+		}
+		else {
+			checkSeEditStatus(req, res);
+		}
+
+	});
+
 	app.get('/share', (req, res) => {
 		if (requiresLogin(req, res) == false) {
 			res.redirect('/');
 		}
 		else {
 			checkShareStatus(req, res);
+		}
+
+	});
+
+	app.get('/share_se', (req, res) => {
+		if (requiresLogin(req, res) == false) {
+			res.redirect('/');
+		}
+		else {
+			checkSeShareStatus(req, res);
 		}
 
 	});
@@ -537,7 +737,7 @@ module.exports = function(app, db) {
 		}
 
 		if(req.body.ie == "no") {
-			
+
 			if(validateEmail(username) == false) {
 				res.redirect('/?status=failed');
 			}
@@ -586,8 +786,8 @@ module.exports = function(app, db) {
 					}
 				});
 			}
-		}	
-		
+		}
+
 		else {
 			res.redirect('/?browser=ie');
 		}
@@ -673,7 +873,7 @@ module.exports = function(app, db) {
 				developer_cost: developers,
 				qa_cost: qas,
 				work_hours: '1950',
-				benefit_conversion: '0.05',
+				benefit_conversion: '0.5',
 				benefit_incident_reduction: '30',
 				benefit_mttr: '90',
 				benefit_sla: '75',
@@ -704,6 +904,158 @@ module.exports = function(app, db) {
 					collection.insert(assessment_data, {w:1}, function(err, result) { if(err!=null){console.log(err);}        });
 
 					res.redirect('/workflow?bva_id=' + id);
+					db.close();
+				}
+			});
+		}
+
+	});
+
+	app.post('/createSeAssessment', (req, res) => {
+
+		var company = req.body.company;
+		if(req.body.seBvaSearch == undefined) {
+				var seBvaSearch = '';
+		}
+		else {
+				var seBvaSearch = req.body.seBvaSearch;
+		}
+		var id = generateId();
+
+		if(company == ""){
+			res.redirect('/createnew?status=failed');
+		}
+
+		else {
+			var se_assessments = {
+				_id: id,
+				company: company,
+				bva_id: seBvaSearch
+			}
+
+			var se_user_assessments = {
+				id: id,
+				company: company,
+				username: req.session.username
+			}
+
+			var se_assessment_data = {
+				_id: id,
+				company: company,
+				trends: 0,
+				trends_prio: "low",
+				causation: 0,
+				causation_prio: "low",
+				outcomes_appowner_feedback: "",
+				digital: 0,
+				digital_prio: "low",
+				bi: 0,
+				bi_prio: "low",
+				market: 0,
+				market_prio: "low",
+				outcomes_cxo_feedback: "",
+				driving: 0,
+				driving_prio: "low",
+				healing: 0,
+				healing_prio: "low",
+				culture: 0,
+				culture_prio: "low",
+				automation: 0,
+				automation_prio: "low",
+				bill: 0,
+				bill_prio: "low",
+				autonomous_appowner_feedback: "",
+				tool_cons: 0,
+				tool_cons_prio: "low",
+				devops: 0,
+				devops_prio: "low",
+				ai: 0,
+				ai_prio: "low",
+				integrations: 0,
+				integrations_prio: "low",
+				fullstack_ops_feedback: "",
+				release: 0,
+				release_prio: "low",
+				lifecycle: 0,
+				lifecycle_prio: "low",
+				shift: 0,
+				shift_prio: "low",
+				fullstack_dev_feedback: "",
+				perfect: 0,
+				perfect_prio: "low",
+				migration: 0,
+				migration_prio: "low",
+				transaction: 0,
+				transaction_prio: "low",
+				fullstack_appowner_feedback: "",
+				lead_sales: "",
+				lead_se: "",
+				business_champion: "",
+				technical_champion: "",
+				saas: false,
+				managed: false,
+				offline: false,
+				tenant: "",
+				windows: false,
+				linux: false,
+				aix: false,
+				solaris: false,
+				vmware: false,
+				azure: false,
+				aws: false,
+				openshift: false,
+				cloudfoundry: false,
+				ibmcloud: false,
+				oraclecloud: false,
+				gcp: false,
+				heroku: false,
+				openstack: false,
+				kubernetes: false,
+				iaas: false,
+				paas: false,
+				faas: false,
+				softaas: false,
+				java: false,
+				dotnet: false,
+				php: false,
+				nodejs: false,
+				messaging: false,
+				c: false,
+				dotnetcore: false,
+				webserver: false,
+				golang: false,
+				mainframe: false,
+				web: false,
+				mobileapp: false,
+				thick: false,
+				citrix: false,
+				browser: false,
+				http: false,
+				external: false,
+				oaplugins: false,
+				cnd: false,
+				agplugins: false,
+				externalevents: false,
+				incidents: false,
+				cmdb: false,
+			};
+
+			MongoClient.connect(connectionOptions, function(err, db) {
+				if(err) {
+					db.close();
+					console.log(err);
+					res.redirect('/createnew_se?status=failed');
+				}
+
+				else {
+					var collection = db.collection('se_assessments');
+					collection.insert(se_assessments, {w:1}, function(err, result) { if(err!=null){console.log(err);}   });
+					var collection = db.collection('se_user_assessments');
+					collection.insert(se_user_assessments, {w:1}, function(err, result) { if(err!=null){console.log(err);}   });
+					var collection = db.collection('se_assessment_data');
+					collection.insert(se_assessment_data, {w:1}, function(err, result) { if(err!=null){console.log(err);}        });
+
+					res.redirect('/landing_se');
 					db.close();
 				}
 			});
@@ -743,6 +1095,38 @@ module.exports = function(app, db) {
 		})
 	});
 
+	app.get('/getSEAssessmentList', (req, res) => {
+
+		var username = req.session.username;
+		MongoClient.connect(connectionOptions, function(err, db) {
+
+			if(err) {
+				return console.dir(err);
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();
+			}
+
+			var companyAssessment;
+
+			var collection = db.collection('se_user_assessments');
+			var results = collection.find({"username":username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+				if(items.length == 0) {
+					res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+					var body = [{_id: "new", username: req.session.username}];
+					res.end(JSON.stringify(body));
+					db.close();
+				}
+
+				if(items.length > 0) {
+					res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+					res.end(JSON.stringify(items));
+					db.close();
+				}
+			})
+		})
+	});
+
 	app.post('/updateAssessment', (req, res) => {
 
 		MongoClient.connect(connectionOptions, function(err, db) {
@@ -763,6 +1147,27 @@ module.exports = function(app, db) {
 			}
 		});
 	});
+	
+	app.post('/updateSeAssessment', (req, res) => {
+
+		MongoClient.connect(connectionOptions, function(err, db) {
+			if(err) {
+				return console.dir(err);
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();
+			}
+
+			else {
+				var collection = db.collection('se_assessment_data');
+				collection.update({'_id':req.header('se_id')},{$set:req.body});
+
+				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("success");
+				db.close();
+			}
+		});
+	});	
 
 	app.get('/getAssessmentData', (req, res) => {
 
@@ -785,6 +1190,27 @@ module.exports = function(app, db) {
 		})
 	});
 
+	app.get('/getSeAssessmentData', (req, res) => {
+
+		var username = req.session.username;
+		MongoClient.connect(connectionOptions, function(err, db) {
+
+			if(err) {
+				return console.dir(err);
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();
+			}
+
+			var collection = db.collection('se_assessment_data');
+			var results = collection.find({'_id':req.header('se_id')}).toArray(function(err, items) {
+				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+				res.end(JSON.stringify(items[0]));
+				db.close();
+			})
+		})
+	});	
+	
 	app.get('/getAssessmentMetaData', (req, res) => {
 
 		var username = req.session.username;
@@ -799,6 +1225,27 @@ module.exports = function(app, db) {
 
 			var collection = db.collection('assessments');
 			var results = collection.find({'_id':req.header('bva_id')}).toArray(function(err, items) {
+				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+				res.end(JSON.stringify(items[0]));
+				db.close();
+			})
+		})
+	});
+
+	app.get('/getSeAssessmentMetaData', (req, res) => {
+
+		var username = req.session.username;
+		MongoClient.connect(connectionOptions, function(err, db) {
+
+			if(err) {
+				return console.dir(err);
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();
+			}
+
+			var collection = db.collection('se_assessments');
+			var results = collection.find({'_id':req.header('se_id')}).toArray(function(err, items) {
 				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
 				res.end(JSON.stringify(items[0]));
 				db.close();
@@ -836,6 +1283,32 @@ module.exports = function(app, db) {
 			})
 		})
 	});
+	
+	app.get('/getSeUserDetails', (req, res) => {
+
+		var theUsername = req.session.username;
+
+		MongoClient.connect(connectionOptions, function(err, db) {
+
+			if(err) {
+				return console.dir(err);
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();
+			}
+
+			var collection = db.collection('se_user_assessments');
+			var results = collection.find({'id':req.header('se_id')}).toArray(function(err, items) {
+				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+				userDetails = {
+					company: items[0].company,
+					username: theUsername
+				}
+				res.end(JSON.stringify(userDetails));
+				db.close();
+			})
+		})
+	});	
 
 	app.post('/addExistingTool', (req, res) => {
 
@@ -1006,6 +1479,89 @@ module.exports = function(app, db) {
 		}
 	});
 
+	app.post('/shareSeBva', (req, res) => {
+		var id = req.query.se_id;
+		var username = req.session.username;
+		var username_share = req.body.username_share;
+
+		if(username_share == "" || validateEmail(username_share) == false) {
+			res.redirect('/share_se?se_id=' + id + '&status=failed');
+		}
+
+		else {
+		MongoClient.connect(connectionOptions, function(err, db) {
+			if(err) {
+				return console.dir(err);
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();
+			}
+
+			else {
+				var collection = db.collection('se_user_assessments');
+				var results = collection.find({id:id, username:username_share}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+					if(err) {
+						console.log(err);
+						db.close();
+						res.redirect('/share_se?se_id=' + id + "&status=failed");
+					}
+					else {
+						if(items[0] == undefined) {
+
+							var collection = db.collection('se');
+							var results = collection.find({email:username_share}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+
+							if(items[0] != undefined) {
+								var collection = db.collection('se_user_assessments');
+								var results = collection.find({id:id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+
+								var company = items[0].company;
+
+								var newShare = {
+									id:id,
+									company: company,
+									username: username_share
+								}
+
+								var collection = db.collection('se_user_assessments');
+								collection.insert(newShare, {w:1}, function(err, result) {
+									if(err!=null){
+										console.log(err);
+										db.close();
+										res.redirect('/share_se?se_id=' + id + "&status=failed");
+									}
+									else {
+										var email = username_share;
+										var subject = "You have a new assessment!"
+										var text = "";
+										var html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\"><html style=\"background-color: #ececec; color: #454646; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 300; height: 100%; margin: 0; padding: 0;\"> <head> <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"> <title></title> <style>@media only screen and (max-width: 580px){body{font-size: 16px !important;}table.container{width: 100% !important;}.button{font-size: 16px !important; line-height: 24px !important; border-top: 10px solid #00a1b2 !important; border-bottom: 10px solid #00a1b2 !important; border-right: 26px solid #00a1b2 !important; border-left: 26px solid #00a1b2 !important;}.cta-button{background-color: #7dc540 !important; border-top: 8px solid #7dc540 !important; border-bottom: 8px solid #7dc540 !important; border-right: 60px solid #7dc540 !important; border-left: 60px solid #7dc540 !important;}}</style> </head> <body style=\"background-color: #ececec; color: #454646; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 300; height: 100%; margin: 0; padding: 0;\"> <table class=\"body\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; padding: 0; border: 0; background-color: #ececec; border-collapse: collapse; margin: 0 auto; height: 100%; width: 100%!important;\" height=\"100%\" bgcolor=\"#ececec\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td align=\"center\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"container\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"580\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #ffffff; border-collapse: collapse; width: 580px;\" bgcolor=\"#ffffff\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"header\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #242424; border-collapse: collapse; color: #ffffff; width: 100%!important;\" bgcolor=\"#242424\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 15px 30px;\" valign=\"top\"><img src=\"http://assets.dynatrace.com/global/logos/dynatrace_web-224x40.png\" alt=\"Dynatrace Logo\" style=\"display: block; max-width: 100%; height: 30px; margin: 0;\" height=\"30\"></td></tr></table> </td></tr><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"content\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; width: 100%;\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"section\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #ffffff; width: 100%!important;\" bgcolor=\"#ffffff\"><tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"><td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 40px 30px 60px;\" valign=\"top\"><h1 id=\"a-new-assessment\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; margin-bottom: 15px;\">A new assessment</h1><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Hi,</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">You have a new assessment that has been shared by " + username + ", titled \"" + company + ".\"</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Please login to access <a href=\"http://dynatrace.ai/bva\" style=\"color: #00a1b2; text-decoration: none;\">here</a>, or if you don't have an account create one first!</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Many thanks,</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">The BVA (Business Value Assessment) team</p></td></tr></tbody></table> </td></tr></tbody> </table> </td></tr><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"footer\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #353535; color: #ffffff; font-size: 12px; text-align: center; width: 100%!important;\" bgcolor=\"#353535\" align=\"center\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 15px;\" valign=\"top\"> <p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px; color: #ffffff;\">© 2018 Dynatrace LLC. All Rights Reserved<br><a href=\"https://www.dynatrace.com/\" style=\"color: #ffffff; text-decoration: underline;\">dynatrace.com</a></p></td></tr></tbody> </table> </td></tr></tbody> </table> </td></tr></tbody> </table> </body></html>";
+
+										sendMail(email, subject, text, html);
+
+										res.redirect('/share_se?se_id=' + id + "&status=success");
+										db.close();
+									}
+								});
+							})
+							}
+							else {
+								res.redirect('/share_se?se_id=' + id + "&status=failed");
+								db.close();
+							}
+							})
+						}
+						else {
+							res.redirect('/share_se?se_id=' + id + "&status=failed");
+							db.close();
+						}
+					}
+				})
+			}
+		});
+
+		}
+	});
+
 	app.get('/giveMeBva', (req, res) => {
 		var id = req.header('bva_id');
 		var company = req.header('company');
@@ -1114,6 +1670,56 @@ module.exports = function(app, db) {
 		}
 	});
 
+	app.post('/editSeBva', (req, res) => {
+		var bva_id = req.body.bva_id;
+		var username = req.session.username;
+		var company = req.body.company;
+		var se_id = req.query.se_id;
+
+		console.log(bva_id);
+		console.log(company);
+		console.log(se_id);
+
+		if(username == "" || company == "" || bva_id == "") {
+			res.redirect('/edit_se?se_id=' + id + '&status=failed');
+		}
+
+		else {
+			MongoClient.connect(connectionOptions, function(err, db) {
+				if(err) {
+					return console.dir(err);
+					res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+					res.end("failure");
+					db.close();
+				}
+
+				else {
+					var collection = db.collection('se_user_assessments');
+					var results = collection.find({id:se_id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+						if(err) {
+							console.log(err);
+							res.redirect('/edit_se?bva_id=' + id + "&status=failed");
+						}
+						else {
+							if(items[0] == undefined) {
+								res.redirect('/landing_se');
+							}
+							else {
+								var collection = db.collection('se_assessments');
+								collection.update({'_id':se_id},{$set:{'company':company, 'bva_id':bva_id}});
+
+								var collection = db.collection('se_user_assessments');
+								collection.update({'id':se_id},{$set:{'company':company}});
+
+								res.redirect('/edit_se?se_id=' + se_id + "&status=success");
+							}
+						}
+					})
+				}
+			});
+		}
+	});
+
 	app.get('/deleteAssessment', (req, res) => {
 		var id = req.query.bva_id;
 		var username = req.session.username;
@@ -1168,6 +1774,60 @@ module.exports = function(app, db) {
 		}
 	});
 
+	app.get('/deleteSeAssessment', (req, res) => {
+		var id = req.query.se_id;
+		var username = req.session.username;
+
+		if(id == "") {
+			res.redirect('/landing_se');
+		}
+
+		else {
+			MongoClient.connect(connectionOptions, function(err, db) {
+				if(err) {
+					res.redirect('/edit_se?se_id=' + id + '&status=failed');
+					db.close();
+				}
+
+				else {
+					var collection = db.collection('se_user_assessments');
+					var results = collection.find({id:id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+						if(err) {
+							console.log(err);
+							res.redirect('/edit_se?se_id=' + id + "&status=failed");
+						}
+						else {
+							if(items[0] == undefined){
+								res.redirect('/landing_se');
+							}
+
+							else {
+								var collection = db.collection('se_assessments');
+								collection.remove({_id: id}, function(err, result) {
+
+								})
+
+								var collection = db.collection('se_user_assessments');
+								collection.remove({id: id}, function(err, result) {
+
+								})
+
+								var collection = db.collection('se_assessment_data');
+								collection.remove({_id: id}, function(err, result) {
+
+								})
+
+
+								res.redirect("/landing_se");
+							}
+						}
+					})
+				}
+			});
+
+		}
+	});
+
 	app.get('/searchUsers', (req, res) => {
 
 		var username = req.session.username;
@@ -1179,6 +1839,12 @@ module.exports = function(app, db) {
 		}
 
 		else {
+
+			var queryRegex = new RegExp('.*' + emailSearch + '.*');
+			var queryRegex2 = {$regex : queryRegex, $options: 'i'};
+			
+			var query = {username: queryRegex2};
+
 			MongoClient.connect(connectionOptions, function(err, db) {
 
 				if(err) {
@@ -1188,7 +1854,7 @@ module.exports = function(app, db) {
 				}
 
 				var collection = db.collection('user_assessments');
-				var results = collection.find({'username':emailSearch}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+				var results = collection.find(query).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 					if(err || items[0] == undefined) {
 						var response = {"status":"failed"};
 						res.end(JSON.stringify(response));
@@ -1213,6 +1879,145 @@ module.exports = function(app, db) {
 				})
 			})
 		}
+	});
+
+	app.post('/seOppSearch', (req, res) => {
+		console.log(req.body);
+		var searchTerms = req.body;
+
+		//companyRegex = new RegExp('.*' + req.body.company + '.*');
+		salesRegex = new RegExp('.*' + req.body.lead_sales + '.*');
+		seRegex = new RegExp('.*' + req.body.lead_se + '.*');
+		busRegex = new RegExp('.*' + req.body.business_champion + '.*');
+		techRegex = new RegExp('.*' + req.body.technical_champion + '.*');
+		tenantRegex = new RegExp('.*' + req.body.tenant + '.*');
+
+		//searchTerms.company = {$regex : companyRegex, $options: 'i'};
+		searchTerms.lead_sales = {$regex : salesRegex, $options: 'i'};
+		searchTerms.lead_se = {$regex : seRegex, $options: 'i'};
+		searchTerms.business_champion = {$regex : busRegex, $options: 'i'};
+		searchTerms.technical_champion = {$regex : techRegex, $options: 'i'};
+		searchTerms.tenant = {$regex : tenantRegex, $options: 'i'};
+
+		options = ["saas","managed","offline","windows","linux","aix","solaris","vmware","azure","aws","openshift","cloudfoundry","ibmcloud","oraclecloud","gcp","heroku","openstack","kubernetes","iaas","paas","faas","softaas","java","dotnet","php","nodejs","messaging","c","dotnetcore","webserver","golang","mainframe","web","mobileapp","thick","citrix","browser","http","external","oaplugins","cnd","agplugins","externalevents","incidents","cmdb"];
+
+		for(i=0;i<options.length;i++) {
+			if(searchTerms[options[i]] != undefined) {
+				searchTerms[options[i]] = true;
+			}
+		}
+
+		console.log(searchTerms);
+
+		MongoClient.connect(connectionOptions, function(err, db) {
+
+			if(err) {
+				var response = {"status":"failed"};
+				res.end(JSON.stringify(response));
+				db.close();
+			}
+
+			var collection = db.collection('se_assessment_data');
+			var results = collection.find(searchTerms).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+				if(err || items[0] == undefined) {
+					console.log("no results");
+					var response = {"status":"failed"};
+					res.end(JSON.stringify(response));
+					db.close();
+				}
+
+				else {
+					res.end(JSON.stringify(items));
+					db.close();
+					
+				}
+			})
+		})
+
+
+
+
+
+
+
+
+		//res.end(JSON.stringify(test));
+	});
+
+	app.get('/seBvaSearch', (req, res) => {
+
+		var username = req.session.username;
+		var search = req.header('Search');
+		var results = new RegExp('(@dynatrace.com)').exec(username);
+
+		if(username == "" || results == false) {
+			res.redirect('/');
+		}
+
+		else {
+			MongoClient.connect(connectionOptions, function(err, db) {
+
+				if(err) {
+					var response = {"status":"failed"};
+					res.end(JSON.stringify(response));
+					db.close();
+				}
+
+				var queryRegex = new RegExp('.*' + search + '.*');
+				var queryRegex2 = {$regex : queryRegex, $options: 'i'};
+				
+				var query = {company: queryRegex2};
+
+				var collection = db.collection('assessments');
+				var results = collection.find(query).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+					if(err) {
+						var response = {"status":"failed"};
+						res.end(JSON.stringify(response));
+						db.close();
+					}
+
+					if(items[0] != undefined) {
+						resultArray = [];
+						for(i=0;i<items.length;i++) {
+							resultItem = {
+								_id: items[i]._id,
+								company: items[i].company
+							}
+							resultArray.push(resultItem);
+						}
+
+						//var collection = db.collection('assessments');
+						//var results = collection.find({$or:resultArray}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+
+							res.end(JSON.stringify(items));
+							db.close();
+						}
+
+						if(items[0] == undefined) {
+							var query = { _id: new RegExp('^' +  search)};
+							var results = collection.find(query).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+								if(items[0] != undefined) {
+									resultArray = [];
+									for(i=0;i<items.length;i++) {
+										resultItem = {
+											_id: items[i]._id,
+											company: items[i].company
+										}
+										resultArray.push(resultItem);
+									}
+									res.end(JSON.stringify(items));
+									db.close();
+								}
+								else {
+									var response = {"status":"failed"};
+									res.end(JSON.stringify(response));
+									db.close();
+								}
+							})
+						}
+					})
+				})
+			}
 	});
 
 	app.get('/logout', function(req, res) {
@@ -1275,4 +2080,579 @@ module.exports = function(app, db) {
 
 		}
 	});
+
+	app.get('/seCheck', (req, res) => {
+		var username = req.session.username;
+		var results = new RegExp('(@dynatrace.com)').exec(username);
+
+		if(username == "" || results == false) {
+			console.log("first");
+			return false;
+		}
+
+		else {
+			MongoClient.connect(connectionOptions, function(err, db) {
+				var collection = db.collection('se');
+				collection.findOne({"email":username}, {collation:{ locale: "en", strength: 2 }}, function(err, result) {
+					if (err) throw err;
+						if(result == null) {
+							db.close();
+							var response = {"status":"other"};
+							res.end(JSON.stringify(response));
+						}
+						else {
+							db.close();
+							var response = {"status":"se"};
+							res.end(JSON.stringify(response));
+						}
+					});
+				})
+		}
+
+	});
+	
+	app.get('/users', (req, res) => {
+
+		MongoClient.connect(connectionOptions, function(err, db) {
+			var query = { benefit_config: new RegExp('\w*')};
+					var collection = db.collection('assessment_data');
+					var results = collection.find(query).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+						if(err) {
+							console.log(err);
+						}
+						else {
+
+						
+						
+						
+						
+						
+						
+function getNumbers(txt) {
+	if (txt != "" && txt != null) {
+		var numb = txt.match(/\d/g);
+		numb = numb.join("");
+
+		return numb;
+	}
+
+	else {
+		return "";
+	}
+}
+
+function getNumbersAndDots(txt) {
+	if (txt != "" && txt != null) {
+		var numb = txt.match(/\d+\.?\d?/g);
+		numb = numb.join("");
+		return numb;
+	}
+
+	else {
+		if(txt == "") {
+			return "";
+		}
+		else {
+			return 0;
+		}
+	}
+}						
+				
+				
+			revenueDowntimeTotalNum	= 0;
+			revenueConversionTotalNum = 0;	
+				
+			existingTotalNum = 0;	
+			opsIncidentCostTotalNum = 0;	
+			effortSavingTotalNum = 0;	
+				
+			devQaTotalNum = 0;	
+			devLowerIncidentsTotalNum = 0;	
+				
+				
+				
+			revenueDowntimeTot = 0;
+			revenueConversionTot = 0;
+			
+			existingTot = 0;
+			opsIncidentCostTot = 0;
+			effortSavingTot = 0;
+			
+			devQaTot = 0;
+			devLowerIncidentsTot = 0;
+
+			for(i=0;i<items.length;i++) {
+			//OPERATIONS - get rid of tools
+			if(items[i].existing_apps.length == 0) {
+					existingy1 = 0;
+					existingy2 = 0;
+					existingy3 = 0;
+					existingTotal = 0;
+
+					var opsCase1 = 0;
+			}
+
+			else {
+				number = items[i].existing_apps.length;
+
+				var existingy1 = 0;
+				var existingy2 = 0;
+				var existingy3 = 0;
+
+				for(x=0;x<number;x++) {
+					annual_cost = (parseFloat(items[i].existing_apps[x].annual_costs)) + (parseFloat(items[i].existing_apps[x].ftes) * parseFloat(items[i].operation_cost));
+					percent1 = (parseFloat(items[i].existing_apps[x].y1)/100);
+					percent2 = (parseFloat(items[i].existing_apps[x].y2)/100);
+					percent3 = (parseFloat(items[i].existing_apps[x].y3)/100);
+					existingy1 = parseInt(existingy1 + (annual_cost * percent1));
+					existingy2 = parseInt(existingy2 + (annual_cost * percent2));
+					existingy3 = parseInt(existingy3 + (annual_cost * percent3));
+					existingTotal = existingy1 + existingy2 + existingy3;
+				}
+
+				var opsCase1 = 1;
+				
+				if(existingTotal != 0) {
+					
+				}
+			}
+
+			//BUSINESS - revenue increase
+			revenue = parseFloat(getNumbersAndDots(items[i].company_revenue));
+
+			percent = parseFloat(getNumbersAndDots(items[i].revenue_dependent));
+			percent = percent / 100;
+
+			growth = parseFloat(getNumbersAndDots(items[i].projected_growth));
+			growth = growth / 100;
+
+			uptime = parseFloat(getNumbersAndDots(items[i].app_uptime));
+			uptime = uptime / 100;
+
+			breach = parseFloat(getNumbersAndDots(items[i].revenue_breach));
+			breach = breach / 100;
+
+			benefit_sla = parseInt(getNumbersAndDots(items[i].benefit_sla));
+			benefit_sla = benefit_sla / 100;
+
+			if(isNaN(revenue) == true || revenue == 0 || isNaN(percent) == true || percent == 0 || isNaN(growth) == true || growth == 0 || isNaN(uptime) == true || uptime == 0 || isNaN(breach) == true || breach == 0 || isNaN(benefit_sla) == true || benefit_sla == 0) {
+				revenueDowntimeY1 = 0;
+				revenueDowntimeY2 = 0;
+				revenueDowntimeY3 = 0;
+				revenueDowntimeTotal = 0;
+
+				var bizCase1 = 0;
+			}
+
+			else {
+				revenueLost = ((revenue * percent)/8760)*(8760*(1-uptime))*breach;
+
+				revenueDowntimeY1 = parseInt(revenueLost * benefit_sla);
+				revenueDowntimeY2 = parseInt(revenueDowntimeY1 * (1+growth));
+				revenueDowntimeY3 = parseInt(revenueDowntimeY2 * (1+growth));
+				revenueDowntimeTotal = revenueDowntimeY1 + revenueDowntimeY2 + revenueDowntimeY3;
+
+				var bizCase1 = 1;
+
+			}
+
+			//BUSINESS - conversions
+			revenue = parseFloat(getNumbersAndDots(items[i].company_revenue));
+
+			percent = parseFloat(getNumbersAndDots(items[i].revenue_dependent));
+			percent = percent / 100;
+
+			conversion = parseFloat(getNumbersAndDots(items[i].benefit_conversion));
+			conversion = conversion / 100;
+
+			growth = parseFloat(getNumbersAndDots(items[i].projected_growth));
+			growth = growth / 100;
+
+			if(isNaN(revenue) == true || revenue == 0 || isNaN(percent) == true || percent == 0 || isNaN(conversion) == true || conversion == 0 || isNaN(growth) == true || growth == 0) {
+				revenueConversionY1 = 0;
+				revenueConversionY2 = 0;
+				revenueConversionY3 = 0;
+				revenueConversionTotal = 0;
+
+				var bizCase2 = 0;
+			}
+
+			else {
+				revenueConversionY1 = parseInt((revenue * percent) * conversion);
+				revenueConversionY2 = parseInt(revenueConversionY1 * (1+growth));
+				revenueConversionY3 = parseInt(revenueConversionY2 * (1+growth));
+				revenueConversionTotal = revenueConversionY1 + revenueConversionY2 + revenueConversionY3;
+
+				var bizCase2 = 1;
+			}
+
+			//OPERATIONS - incident reduction
+			incidents_month = parseFloat(getNumbersAndDots(items[i].incidents_month));
+
+			if(items[i].projected_growth == "") {
+				growth = 0;
+			}
+			else {
+				growth = parseFloat(getNumbersAndDots(items[i].projected_growth));
+				growth = growth / 100;
+			}
+
+			no_ops_troubleshoot = parseFloat(getNumbersAndDots(items[i].no_ops_troubleshoot));
+
+			no_dev_troubleshoot = parseFloat(getNumbersAndDots(items[i].no_dev_troubleshoot));
+
+			mttr = parseFloat(getNumbersAndDots(items[i].mttr));
+
+			benefit_incident_reduction = parseFloat(getNumbersAndDots(items[i].benefit_incident_reduction));
+
+			benefit_incident_reduction = benefit_incident_reduction / 100;
+
+			benefit_mttr = parseFloat(getNumbersAndDots(items[i].benefit_mttr));
+			benefit_mttr = benefit_mttr / 100;
+
+			ops_cost = parseFloat(getNumbersAndDots(items[i].operation_cost));
+
+			dev_cost = parseFloat(getNumbersAndDots(items[i].developer_cost));
+
+			work_hours = parseFloat(getNumbersAndDots(items[i].work_hours));
+
+			if(isNaN(incidents_month) == true || incidents_month == 0 || isNaN(growth) == true || isNaN(no_ops_troubleshoot) == true || isNaN(no_dev_troubleshoot) == true || isNaN(mttr) == true || mttr == 0 || isNaN(benefit_incident_reduction) == true || benefit_incident_reduction == 0 || isNaN(benefit_mttr) == true || benefit_mttr == 0 || isNaN(ops_cost) == true || ops_cost == 0 || isNaN(dev_cost) == true || dev_cost == 0 || isNaN(work_hours) == true || work_hours == 0) {
+				opsIncidentCostY1 = 0;
+				opsIncidentCostY2 = 0;
+				opsIncidentCostY3 = 0;
+				opsIncidentCostTotal = 0;
+
+				var opsCase2 = 0;
+			}
+
+			else {
+				incidentsYear = incidents_month * 12;
+				opsHours = incidentsYear * no_ops_troubleshoot * (mttr / 60);
+				opsCost = opsHours * (ops_cost / work_hours);
+				devHours = incidentsYear * no_dev_troubleshoot * (mttr / 60);
+				devCost = devHours * (dev_cost / work_hours);
+				incidentCost = opsCost + devCost;
+
+				after_incidentsYear = incidentsYear * (1 - benefit_incident_reduction);
+				after_opsHours = after_incidentsYear * no_ops_troubleshoot * (mttr / 60) * (1-benefit_mttr);
+				after_opsCost = after_opsHours * (ops_cost / work_hours);
+				after_devHours = after_incidentsYear * no_dev_troubleshoot * (mttr / 60) * (1-benefit_mttr);
+				after_devCost = after_devHours * (dev_cost / work_hours);
+				after_incidentCost = after_opsCost + after_devCost;
+
+				opsIncidentCostY1 = parseInt(incidentCost - after_incidentCost);
+				opsIncidentCostY2 = parseInt(opsIncidentCostY1 * (1+growth));
+				opsIncidentCostY3 = parseInt(opsIncidentCostY2 * (1+growth));
+				opsIncidentCostTotal = opsIncidentCostY1 + opsIncidentCostY2 + opsIncidentCostY3;
+
+				var opsCase2 = 1;
+			}
+
+			//OPERATIONS - cost of automation
+			no_fte_existing = parseFloat(getNumbersAndDots(items[i].no_fte_existing));
+
+			no_apps_e2e = parseFloat(getNumbersAndDots(items[i].no_apps_e2e));
+
+			no_t1t2_apps = parseFloat(getNumbersAndDots(items[i].no_t1t2_apps));
+
+			benefit_config = parseFloat(getNumbersAndDots(items[i].benefit_config));
+			benefit_config = benefit_config / 100;
+
+			if(isNaN(no_fte_existing) == true || no_fte_existing == 0 || isNaN(no_apps_e2e) == true || no_apps_e2e == 0 || isNaN(no_t1t2_apps) == true || no_t1t2_apps == 0 || isNaN(benefit_config) == true || benefit_config == 0 || isNaN(growth) == true) {
+				effortSavingY1 = 0;
+				effortSavingY2 = 0;
+				effortSavingY3 = 0;
+				effortSavingTotal = 0;
+
+				var opsCase3 = 0;
+			}
+
+			else {
+				costPerApp = ((no_fte_existing * ops_cost)/no_apps_e2e);
+				costAllApps = costPerApp * no_t1t2_apps;
+
+				after_costPerApp = costPerApp * benefit_config;
+				after_costAllApps = after_costPerApp * no_t1t2_apps;
+
+				effortBefore = costPerApp * no_apps_e2e;
+				effortAfter = effortBefore * (1 - benefit_config);
+
+				effortSavingY1 = parseInt(effortBefore - effortAfter);
+				effortSavingY2 = parseInt(effortSavingY1 * (1+growth));
+				effortSavingY3 = parseInt(effortSavingY2 * (1+growth));
+				effortSavingTotal = effortSavingY1 + effortSavingY2 + effortSavingY3;
+
+				var opsCase3 = 1;
+
+			}
+
+			//DEV AND QA - effort
+
+			cycles_per_year = parseFloat(getNumbersAndDots(items[i].cycles_per_year));
+
+			cycle_days = parseFloat(getNumbersAndDots(items[i].cycle_days));
+
+			test_per_cycle = parseFloat(getNumbersAndDots(items[i].test_per_cycle));
+			test_per_cycle = test_per_cycle / 100;
+
+			qa_time_per_cycle = parseFloat(getNumbersAndDots(items[i].qa_time_per_cycle));
+			qa_time_per_cycle = qa_time_per_cycle / 100;
+
+			qa_people_per_cycle = parseFloat(getNumbersAndDots(items[i].qa_people_per_cycle));
+
+			dev_time_per_cycle = parseFloat(getNumbersAndDots(items[i].dev_time_per_cycle));
+			dev_time_per_cycle = dev_time_per_cycle / 100;
+
+			dev_people_per_cycle = parseFloat(getNumbersAndDots(items[i].dev_people_per_cycle));
+
+			benefit_fix_qa = parseFloat(getNumbersAndDots(items[i].benefit_fix_qa));
+			benefit_fix_qa = benefit_fix_qa / 100;
+
+			qa_cost = parseFloat(getNumbersAndDots(items[i].qa_cost));
+
+			if(isNaN(cycles_per_year) == true || cycles_per_year == 0 || isNaN(cycle_days) == true || cycle_days == 0 || isNaN(test_per_cycle) == true || test_per_cycle == 0 || isNaN(qa_time_per_cycle) == true || qa_time_per_cycle == 0 || isNaN(qa_people_per_cycle) == true || qa_people_per_cycle == 0 || isNaN(dev_time_per_cycle) == true || dev_time_per_cycle == 0 || isNaN(dev_people_per_cycle) == true || dev_people_per_cycle == 0 || isNaN(benefit_fix_qa) == true || benefit_fix_qa == 0 || isNaN(qa_cost) == true || qa_cost == 0 || isNaN(growth) == true) {
+				devQaY1 = 0;
+				devQaY2 = 0;
+				devQaY3 = 0;
+				devQaTotal = 0;
+
+				var devCase1 = 0;
+			}
+
+			else {
+
+				non_test_cycle = cycle_days * (1 - test_per_cycle);
+				test_cycle = cycle_days * test_per_cycle;
+
+				days_not_performance = test_cycle * (1-(qa_time_per_cycle + dev_time_per_cycle));
+				days_performance = test_cycle * (qa_time_per_cycle + dev_time_per_cycle);
+
+				dt_days_performance = days_performance * (1-benefit_fix_qa);
+				dt_cycle_days = non_test_cycle + days_not_performance + dt_days_performance;
+				dt_times_release = cycle_days / dt_cycle_days;
+				dt_release_year = cycles_per_year  * dt_times_release;
+
+				qa_cost_performance	= test_cycle * cycles_per_year * qa_time_per_cycle * qa_people_per_cycle * (qa_cost/work_hours) * 8;
+				dev_cost_performance = test_cycle * cycles_per_year * dev_time_per_cycle * dev_people_per_cycle * (dev_cost/work_hours) * 8;
+				total_effort_performance = qa_cost_performance + dev_cost_performance;
+				dt_qa_effort = benefit_fix_qa * total_effort_performance;
+
+				devQaY1 = parseInt(dt_qa_effort);
+				devQaY2 = parseInt(devQaY1 * (1+growth));
+				devQaY3 = parseInt(devQaY2 * (1+growth));
+				devQaTotal = devQaY1 + devQaY2 + devQaY3;
+
+				var devCase1 = 1;
+			}
+			//DEV AND QA - fewer incidents
+
+			incidentsYear = incidents_month * 12;
+			opsHours = incidentsYear * no_ops_troubleshoot * (mttr / 60);
+			opsCost = opsHours * (ops_cost / work_hours);
+			devHours = incidentsYear * no_dev_troubleshoot * (mttr / 60);
+			devCost = devHours * (dev_cost / work_hours);
+			incidentCost = opsCost + devCost;
+
+			benefit_prod_reduction = parseFloat(getNumbersAndDots(items[i].benefit_prod_reduction));
+			benefit_prod_reduction = benefit_prod_reduction / 100;
+
+			if(isNaN(incidentsYear) == true || incidentsYear == 0 || isNaN(opsHours) == true || opsHours == 0 || isNaN(opsCost) == true || opsCost == 0 || isNaN(devHours) == true || devHours == 0 || isNaN(devCost) == true || devCost == 0 || isNaN(incidentCost) == true || incidentCost == 0 || isNaN(benefit_prod_reduction) == true || benefit_prod_reduction == 0 || isNaN(incidents_month) == true || incidents_month == 0 || isNaN(no_ops_troubleshoot) == true || no_ops_troubleshoot == 0 || isNaN(no_dev_troubleshoot) == true || no_dev_troubleshoot == 0 || isNaN(work_hours) == true || work_hours == 0 || isNaN(mttr) == true || mttr == 0 || isNaN(growth) == true) {
+				devLowerIncidentsY1 = 0;
+				devLowerIncidentsY2 = 0;
+				devLowerIncidentsY3 = 0;
+				devLowerIncidentsTotal = 0;
+
+				var devCase2 = 0;
+			}
+
+			else {
+				devLowerIncidentsY1 = parseInt(incidentCost * (1 - benefit_prod_reduction));
+				devLowerIncidentsY2 = parseInt(devLowerIncidentsY1 * (1+growth));
+				devLowerIncidentsY3 = parseInt(devLowerIncidentsY2 * (1+growth));
+				devLowerIncidentsTotal = devLowerIncidentsY1 + devLowerIncidentsY2 + devLowerIncidentsY3;
+
+				var devCase2 = 1;
+			}
+
+			//DEV QA - total
+
+			devY1 = parseInt(devQaY1 + devLowerIncidentsY1);
+			devY2 = parseInt(devQaY2 + devLowerIncidentsY2);
+			devY3 = parseInt(devQaY3 + devLowerIncidentsY3);
+
+			devTotal = devY1 + devY2 + devY3;
+
+			//console.log("dev total is " + devTotal);
+			
+			//OPERATIONS - total
+
+			operationsY1 = parseInt(opsIncidentCostY1 + effortSavingY1 + existingy1);
+			operationsY2 = parseInt(opsIncidentCostY2 + effortSavingY2 + existingy2);
+			operationsY3 = parseInt(opsIncidentCostY3 + effortSavingY3 + existingy3);
+
+			operationsTotal = operationsY1 + operationsY2 + operationsY3;
+
+			//console.log("ops total is " + operationsTotal);
+			
+			//BUSINESS - total
+			revenueGainY1 = parseInt(revenueDowntimeY1 + revenueConversionY1);
+			revenueGainY2 = parseInt(revenueDowntimeY2 + revenueConversionY2);
+			revenueGainY3 = parseInt(revenueDowntimeY3 + revenueConversionY3);
+			revenueGainTotal = revenueGainY1 + revenueGainY2 + revenueGainY3;
+
+			//console.log("biz total is " + revenueGainTotal);
+			
+				var year1BenefitTotal = devY1 + operationsY1 + revenueGainY1;
+				var year2BenefitTotal = devY2 + operationsY2 + revenueGainY2;
+				var year3BenefitTotal = devY3 + operationsY3 + revenueGainY3;
+
+				if(items[i].y1_software == "") {
+					y1_software = 0;
+				}
+				else {
+					y1_software = parseInt(getNumbers(items[i].y1_software));
+				}
+
+				if(items[i].y2_software == "") {
+					y2_software = 0;
+				}
+				else {
+					y2_software = parseInt(getNumbers(items[i].y2_software));
+				}
+
+				if(items[i].y3_software == "") {
+					y3_software = 0;
+				}
+				else {
+					y3_software = parseInt(getNumbers(items[i].y3_software));
+				}
+
+				if(items[i].y1_services == "") {
+					y1_services = 0;
+				}
+				else {
+					y1_services = parseInt(getNumbers(items[i].y1_services));
+				}
+
+				if(items[i].y2_services == "") {
+					y2_services = 0;
+				}
+				else {
+					y2_services = parseInt(getNumbers(items[i].y2_services));
+				}
+
+				if(items[i].y3_services == "") {
+					y3_services = 0;
+				}
+				else {
+					y3_services = parseInt(getNumbers(items[i].y3_services));
+				}
+
+				var year1CostTotal = y1_software + y1_services;
+
+				if(isNaN(year1CostTotal) == true) {
+					year1CostTotal = 0;
+				}
+
+				var year2CostTotal = y2_software + y2_services;
+
+				if(isNaN(year2CostTotal) == true) {
+					year2CostTotal = 0;
+				}
+
+				var year3CostTotal = y3_software + y3_services;
+
+				if(isNaN(year3CostTotal) == true) {
+					year3CostTotal = 0;
+				}
+
+				//DRAW ROI TABLE - costs
+
+				//DRAW ROI TABLE - benefits
+
+				//COST BENEFIT TOTAL
+
+				var roi = ((year1BenefitTotal + year2BenefitTotal + year3BenefitTotal) / (year1CostTotal + year2CostTotal + year3CostTotal)) * 100;
+
+				var payback = year1CostTotal / (year1BenefitTotal/12);
+
+				//console.log("ROI is " + roi);
+				//console.log("payback is " + payback);						
+						
+				
+				if (revenueDowntimeTotal > 0 && revenueDowntimeTotal < 10000000) {revenueDowntimeTotalNum++; revenueDowntimeTot += revenueDowntimeTotal};
+
+				if (revenueConversionTotal > 0 && revenueConversionTotal < 10000000) {revenueConversionTotalNum++; revenueConversionTot += revenueConversionTotal};
+				
+				
+				if (existingTotal > 0 && existingTotal < 10000000) {existingTotalNum++; existingTot += existingTotal};
+				
+				if (opsIncidentCostTotal > 0 && opsIncidentCostTotal < 10000000) {opsIncidentCostTotalNum++; opsIncidentCostTot += opsIncidentCostTotal};	
+
+				if (effortSavingTotal > 0 && effortSavingTotal < 10000000) {effortSavingTotalNum++; effortSavingTot += effortSavingTotal};					
+
+
+				if (devQaTotal > 0 && devQaTotal < 10000000) {devQaTotalNum++; devQaTot += devQaTotal};					
+
+				if (devLowerIncidentsTotal > 0 && devLowerIncidentsTotal < 10000000) {devLowerIncidentsTotalNum++; devLowerIncidentsTot += devLowerIncidentsTotal};					
+				
+				// existingTotalNum = 0;	
+				// opsIncidentCostTotalNum = 0;	
+				// effortSavingTotalNum = 0;	
+				
+				// devQaTotalNum = 0;	
+				// devLowerIncidentsTotalNum = 0;	
+				
+				
+				
+				// revenueDowntimeTot = 0;
+				// revenueConversionTot = 0;
+			
+				// existingTot = 0;
+				// opsIncidentCostTot = 0;
+				// effortSavingTot = 0;
+			
+				// devQaTot = 0;
+				// devLowerIncidentsTot = 0;	
+				
+						
+						
+			}	
+						revDown = revenueDowntimeTot / revenueDowntimeTotalNum;
+						revConv = revenueConversionTot / revenueConversionTotalNum;
+						
+						existing = existingTot / existingTotalNum;
+						opsIncident = opsIncidentCostTot / opsIncidentCostTotalNum;
+						effortSav = effortSavingTot / effortSavingTotalNum;
+						
+						devQas = devQaTot / devQaTotalNum;
+						devLower = devLowerIncidentsTot / devLowerIncidentsTotalNum;
+						
+						console.log("avg rev down is " + revDown);
+						console.log("avg rev conv is " + revConv);
+						
+						console.log("avg existing is " + existing);
+						console.log("avg ops incident is " + opsIncident);
+						console.log("avg effort sav is " + effortSav);
+						
+						console.log("avg dev time is " + devQas);
+						console.log("avg dev lower is " + devLower);
+						
+						
+						
+						
+						
+						
+						
+							res.end("hello");
+						}
+					})
+		})
+	
+	
+	
+		
+
+	});	
+
 };

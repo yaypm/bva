@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<title>Dynatrace Business Value Calculator</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" type="text/css" href='/static/main.css' />
+	<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="icon" href="https://dt-cdn.net/images/favicon-32x32-32-26d70a5cff.png">
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<style>a:hover {cursor:pointer;}</style>
+	<script src="/static/bva.js"></script>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function(event) {
+				getSEAssessmentList();
+				setSeLinks();
+
+				$('#se_id').change(function() {
+					setSeLinks();
+				});
+		});
+
+	</script>
+
+</head>
+
+<body class="landing-body">
+
+<!--start of content-->
+<div id="content" class="main-content">
+
+<div id="content_box">
+
+	<div class="inner_box centre">
+
+		<div class="landing-box">
+
+		<h2 class="menu-title">Your account <a href="/landing"><button role="button" type="button" class="btn btn--secondary theme--dark">SE mode</button></a> </h2>
+
+		<p>Successful opportunies require us to engage with multiple layers of the organisation. These SE assessments will help to track what interactions have happened, and which are yet to come.</p>
+
+			<br />
+
+			<form action="/workflow_se#outcomes" method="get" enctype="application/x-www-form-urlencoded" id="se_continue">
+
+				<select class="select bva-select" name="se_id" id="se_id">
+					<option value="">
+						Loading...
+					</option>
+				</select>
+
+				<a id="edit" href=""><button id="edit_submit" type="button" class="btn btn--secondary theme--dark landing-bva-button"><img src="/static/edit-white.svg" /></button></a>
+
+				<a id="share" href=""><button id="share_submit" type="button" class="btn btn--secondary theme--dark landing-bva-button"><img src="/static/share-white.svg" /></button></a>
+
+					<br /><br />
+
+				<button id="landing_box_submit" type="submit" class="btn btn--primary theme--dark" >Continue</button>
+
+					<br /><br />
+
+				<a href="/createnew_se"><button id="landing_box_submit" type="button" class="btn btn--secondary theme--dark ">Start a new assessment</button></a>
+				
+				<br /><br />
+
+				<a href="/search_se"><button id="landing_box_submit" type="button" class="btn btn--secondary theme--dark ">Search</button></a>
+			</form>
+
+			<br />
+
+		<div class="landing-logout">
+
+			<a href="/logout" class="white">Logout</a><br />
+
+		</div>
+
+		</div>
+
+	</div>
+
+		<br />
+
+</div>
+
+</div>
+<!--end of content-->
+
+<script src="/static/main.js"></script>
+
+</body>
+
+</html>

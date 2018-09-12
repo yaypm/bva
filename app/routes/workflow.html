@@ -4,9 +4,10 @@
 
 	<title>Dynatrace Business Value Calculator</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<link rel="stylesheet" type="text/css" href='/static/main.css' />
-	<!-- <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.js"></script> -->
-	<!-- <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>  -->
+	<link rel="stylesheet" type="text/css" href='/static/main_og.css' />
+	<link rel="stylesheet" type="text/css" href='/static/bva.css' />
+	<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<link rel="icon" href="https://dt-cdn.net/images/favicon-32x32-32-26d70a5cff.png">
 	<script src="https://code.highcharts.com/highcharts.js"></script>
@@ -140,7 +141,7 @@
 
 		<div class="bva-input-wrapper">
 
-			<label for="app_uptime" class="label bva-question-text" >Excluding planned maintenance, what is your overall uptime free from performance degradations or outages? <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</ul></div> </div></label>
+			<label for="app_uptime" class="label bva-question-text" >Excluding planned maintenance, how often are you free from application degradations or outages? <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</ul></div> </div></label>
 			<input type="text" class="inputfield bva-question-input" id="app_uptime" placeholder="% of time"/>
 
 		</div>
@@ -155,7 +156,7 @@
 
 		<div class="bva-input-wrapper">
 
-			<label for="revenue_breach" class="label bva-question-text" >Of the revenue made through applications, how much is lost due to performance/availability issues? <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</ul></div> </div></label>
+			<label for="revenue_breach" class="label bva-question-text" >Percentage of revenue lost during a degradation or outage <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</ul></div> </div></label>
 			<input type="text" class="inputfield bva-question-input" id="revenue_breach" placeholder="% of revenue lost" />
 
 		</div>
@@ -757,7 +758,7 @@
 
 		<div class="bva-input-wrapper">
 
-			<label for="benefit_sla" class="label bva-question-text">Improvement on your uptime achievement <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</li>  </ul></div> </div></label>
+			<label for="benefit_sla" class="label bva-question-text">Improvement on <div class="tooltip underline">SLA<div class="tooltiptext">SLA stands for "Service level agreement" and in this context refers to the uptime of your applications</div></div> achievement <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</li>  </ul></div> </div></label>
 			<input type="text" class="inputfield bva-question-input" id="benefit_sla" placeholder="%" />
 
 		</div>
@@ -1160,7 +1161,7 @@
 
 	</div>
 
-	<div id="loading" style="margin-left: 40%; margin-top: 40%; translate(-30px, -30px);">
+	<div id="loading" style="margin-left: 40%; margin-top: 40%; transform:translate(-30px, -30px);">
 		<div class="loading">
 			<svg class="loading__distractor" width="30px" height="30px" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
 				<circle class="loading__path" cx="15" cy="15" r="12"></circle>

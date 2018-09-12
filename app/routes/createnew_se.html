@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<title>Dynatrace Business Value Calculator</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" type="text/css" href='/static/main.css' />
+	<!-- <script src='/static/es6-promise.auto.js'></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="icon" href="https://dt-cdn.net/images/favicon-32x32-32-26d70a5cff.png">
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<style>a:hover {cursor:pointer;}</style>
+	<script src="/static/bva.js"></script>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function(event) {
+			statusDetect();
+			enableSeBvaSearch();
+		});
+	</script>
+
+</head>
+
+<body class="landing-body">
+
+<!--start of content-->
+<div id="content" >
+
+<div id="content_box_admin">
+
+	<div class="inner_box centre">
+
+		<div class="menu-box">
+
+			<h2 class="menu-title">Create a new SE assessment</h2>
+
+			<p>Enter the name of the company and link it to a BVA if relevant.</p>
+			</p>
+
+			<div class="status-failure">There was a problem creating your assessment.</div><br />
+
+				<form action="/createSeAssessment" method="post" enctype="application/x-www-form-urlencoded" class="createacc_box">
+
+					<input type="text" name="company" class="inputfield bigInput" id="company" placeholder="company name - project"/>
+
+						<br /><br />
+
+					<input type="text" name="bva_search" class="inputfield bigInput search-email" id="bva_search" placeholder="search by name or ID	" />
+
+					<button id="user_search" type="button" class="btn btn--primary theme--dark landing-bva-button search-button" ><img src="/static/search-white.svg" /></button>
+
+					<p id="no_result" style="display: none"><br/ >No assessments found!</p>
+					<p id="many_result" style="display: none"><br/ >Too many assessments found! Please be more specific.</p>
+
+					<div id="results">
+					</div>
+
+						<br />
+
+					<a href="/landing_se"><button id="landing_box_new" type="button" class="btn btn--secondary theme--dark landing-button">Back</button></a> <button role="button" id="landing_box_password" type="submit" class="btn btn--primary theme--dark landing-button">Start</button>
+
+						<br /><br />
+
+				</form>
+
+		</div>
+
+	</div>
+
+		<br />
+
+</div>
+
+</div>
+<!--end of content-->
+
+<script src="/static/main.js"></script>
+
+</body>
+
+</html>

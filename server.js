@@ -1,10 +1,10 @@
 try {
-    require('@dynatrace/oneagent')({
-        environmentid: process.env.TENANT_ID,
-        apitoken: process.env.API_KEY,
-    });
+  require('@dynatrace/oneagent')({
+      environmentid: process.env.TENANT_ID,
+      apitoken: process.env.API_KEY,
+  });
 } catch(err) {
-    console.log(err.toString());
+  console.log(err.toString());
 }
 
 var Promise = require('es6-promise').Promise;
@@ -25,5 +25,5 @@ app.use(bodyParser.urlencoded({ extended: true }));
 require('./app/routes')(app, {});	
 
 app.listen(process.env.PORT, () => {
-  console.log('We are live on ' + process.env.PORT);
+console.log('We are live on ' + process.env.PORT);
 });	

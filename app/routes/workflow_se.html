@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<title>Dynatrace Business Value Calculator</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="//assets.dynatrace.com/groundhog/v6.1.1/css/main.css" />
+	<link rel="stylesheet" type="text/css" href='/static/bva.css' />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="icon" href="https://dt-cdn.net/images/favicon-32x32-32-26d70a5cff.png">
+	<!-- <script src="https://code.highcharts.com/highcharts.js"></script> -->
+	<!-- <script src="https://code.highcharts.com/modules/exporting.js"></script> -->
+	<style>a:hover {cursor:pointer;}</style>
+	<script src="/static/bva.js"></script>
+	 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	 <script type="text/javascript">
+	 document.addEventListener("DOMContentLoaded", function(event) {
+	 addSeListeners();
+	 });
+	</script>
+
+</head>
+
+<body class="bva-body" onhashchange="showSeContent()">
+
+
+<!--start of nav bar-->
+<div class="nav has-no-secondary">
+
+  <a class="nav__brand" href="/landing_se">
+    <img class="nav__logo" src="https://assets.dynatrace.com/global/logos/dynatrace-logo.svg" alt="dynatrace logo"/>
+  </a>
+
+  <nav id="nav-bar-example1" class="nav__bar">
+  </nav>
+
+</div>
+<!--end of nav bar-->
+
+<!--start of content-->
+<div class="section bva-content">
+
+<div class="column--1-of-2 bva-content-column" >
+
+<div class="leftContainer" >
+
+<input type="hidden" id="currency"/>
+
+<div class="biz">
+
+
+
+<!-- start of title -->
+<div class="bva-title-wrapper se-title-wrapper-biz">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h2 class="se-title-text">Demonstrating the outcomes to business owners</h2>
+		<!-- <p>Increased revenue from improved technology performance</p> -->
+
+	</div>
+
+</div>
+<!--end of title-->
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag user-email">
+	  <span class="tag__key" id="email">email:</span>
+
+	</span>
+
+	<span tabindex="1" class="tag user-company">
+	  <span class="tag__key">company:</span>
+
+	</span>
+
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="toHome" href="/landing_se"><img src="/static/home-purple.svg" class="bva-progress-button"/></a><br />Home</div><div class="theme--purple bva-progress-wrapper" ><label class="label--progressbar" for="p1">1/4</label><progress class="progressbar" value="1" max="4" if="p1"></progress>	</div><div class="bva-button-wrapper"><a class="opsFromBiz" ><img src="/static/arrow-purple.svg" class="bva-progress-button"/></a><br />Next</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+
+	<h2 class="bva-question-text-centre">Application owners</h2>
+	
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<div class="divTable">
+		<div class="divTableBody">
+		<div class="divTableRow">
+		<div class="divTableCell">&nbsp;</div>
+		<div class="divTableCell"><img src="/static/info-purple.png" class="se-question-image"/><b>Not started</b></div>
+		<div class="divTableCell"><img src="/static/discuss-purple.png" class="se-question-image"/><br /><b>Discuss</b></div>
+		<div class="divTableCell"><img src="/static/demo-purple.png" class="se-question-image"/><br />&nbsp;<b>Demo</b></div>
+		<div class="divTableCell"><img src="/static/trial-purple.png" class="se-question-image"/><br />&nbsp;<b>POC</b></div>
+		</div>
+		<div class="divTableRow se-row-grey">
+		<div class="divTableCell"><br />Improvement trends due to tuning and transaction monitoring<label for="trends_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="trends_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="trends" type="radio" class="radio" id="trends_na" value="not"/><label for="trends_na" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="trends" type="radio" class="radio" id="trends_discuss" value="discuss"/><label for="trends_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="trends" type="radio" class="radio" id="trends_demo" value="demo"/><label for="trends_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="trends" type="radio" class="radio" id="trends_poc" value="poc"/><label for="trends_poc" class="radio__label"></label></div></div>
+		
+		</div>
+		
+		
+		<div class="divTableRow">
+		<div class="divTableCell"><br />Correlation vs. causation<label for="causation_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="causation_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select></div>
+		<div class="divTableCell"><div class="se-radio"><input name="causation" type="radio" class="radio" id="causation_na" value="not"/><label for="causation_na" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="causation" type="radio" class="radio" id="causation_discuss" value="discuss"/><label for="causation_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="causation" type="radio" class="radio" id="causation_demo" value="demo"/><label for="causation_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="causation" type="radio" class="radio" id="causation_poc" value="poc"/><label for="causation_poc" class="radio__label"></label></div></div>
+		</div>
+
+		</div>
+		</div>	
+		
+	</div>	
+
+		<br />
+	
+	<div class="bva-question-wrapper">
+
+		<!-- <div class="bva-input-wrapper"> -->
+
+			<label for="outcomes_appowner_feedback" class="label bva-question-text"><img src="/static/feedback-purple.png" class="se-question-image"/>Feedback</label>
+			<textarea rows="4" cols="100" class="textarea" id="outcomes_appowner_feedback"></textarea>
+		<!-- </div> -->
+
+	</div>
+
+		<br /><br />
+
+
+	<h2 class="bva-question-text-centre">CxO</h2>
+	
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<div class="divTable">
+		<div class="divTableBody">
+		<div class="divTableRow">
+		<div class="divTableCell">&nbsp;</div>
+		<div class="divTableCell"><img src="/static/info-purple.png" class="se-question-image"/><b>Not started</b></div>
+		<div class="divTableCell"><img src="/static/discuss-purple.png" class="se-question-image"/><br /><b>Discuss</b></div>
+		<div class="divTableCell"><img src="/static/demo-purple.png" class="se-question-image"/><br />&nbsp;<b>Demo</b></div>
+		<div class="divTableCell"><img src="/static/trial-purple.png" class="se-question-image"/><br />&nbsp;<b>POC</b></div>
+		</div>
+		<div class="divTableRow se-row-grey">
+		<div class="divTableCell"><br />Digital experience insights<label for="digital_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="digital_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="digital" type="radio" class="radio" id="digital_na" value="not"/><label for="digital_na" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="digital" type="radio" class="radio" id="digital_discuss" value="discuss"/><label for="digital_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="digital" type="radio" class="radio" id="digital_demo" value="demo"/><label for="digital_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="digital" type="radio" class="radio" id="digital_poc" value="poc"/><label for="digital_poc" class="radio__label"></label></div></div>
+		</div>
+		<div class="divTableRow">
+		<div class="divTableCell"><br />Integrate with BI solutions<label for="bi_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="bi_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="bi" type="radio" class="radio" id="bi_na" value="discuss"/><label for="bi_na" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="bi" type="radio" class="radio" id="bi_discuss" value="discuss"/><label for="bi_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="bi" type="radio" class="radio" id="bi_demo" value="demo"/><label for="bi_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="bi" type="radio" class="radio" id="bi_poc" value="poc"/><label for="bi_poc" class="radio__label"></label></div></div>
+		</div>
+		<div class="divTableRow se-row-grey">
+		<div class="divTableCell"><br />Market insights via DT One<label for="market_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="market_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="market" type="radio" class="radio" id="market_na" value="discuss"/><label for="market_na" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="market" type="radio" class="radio" id="market_discuss" value="discuss"/><label for="market_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="market" type="radio" class="radio" id="market_demo" value="demo"/><label for="market_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="market" type="radio" class="radio" id="market_poc" value="poc"/><label for="market_poc" class="radio__label"></label></div></div>
+		</div>
+
+		</div>
+		</div>	
+		
+	</div>	
+
+		<br />
+	
+	<div class="bva-question-wrapper">
+
+		<!-- <div class="bva-input-wrapper"> -->
+
+			<label for="outcomes_cxo_feedback" class="label bva-question-text"><img src="/static/feedback-purple.png" class="se-question-image"/>Feedback</label>
+			<textarea rows="4" cols="100" class="textarea" id="outcomes_cxo_feedback"></textarea>
+		<!-- </div> -->
+
+	</div>
+
+		<br /><br />		
+
+</div>
+<!--end of questions-->
+
+
+<br /><br />
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="ops">
+<!-- start of title -->
+<div class="bva-title-wrapper se-title-wrapper-ops">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h2 class="se-title-text">The journey towards the autonomous cloud</h2>
+
+	</div>
+
+</div>
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag user-email">
+	  <span class="tag__key">email:</span>
+	</span>
+
+	<span tabindex="1" class="tag user-company">
+	  <span class="tag__key">id:</span>
+	</span>
+
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="bizFromOps" ><img src="/static/arrow-green.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--green bva-progress-wrapper"><label class="label--progressbar" for="p1">2/4</label><progress class="progressbar" value="2" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><a class="devFromOps" ><img src="/static/arrow-green.svg" class="bva-progress-button"/></a><br />Next</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+
+	<h2 class="bva-question-text-centre">CxO/Application owner</h2>
+	
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<div class="divTable">
+		<div class="divTableBody">
+		<div class="divTableRow">
+		<div class="divTableCell">&nbsp;</div>
+		<div class="divTableCell"><img src="/static/info-green.png" class="se-question-image"/><b>Not started</b></div>
+		<div class="divTableCell"><img src="/static/discuss-green.png" class="se-question-image"/><br /><b>Discuss</b></div>
+		<div class="divTableCell"><img src="/static/demo-green.png" class="se-question-image"/><br />&nbsp;<b>Demo</b></div>
+		<div class="divTableCell"><img src="/static/trial-green.png" class="se-question-image"/><br />&nbsp;<b>POC</b></div>
+		</div>
+		<div class="divTableRow se-row-grey">
+		<div class="divTableCell"><br />Self-driving IT<label for="driving_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="driving_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="driving" type="radio" class="radio" id="driving_na" value="demo"/><label for="driving_na" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="driving" type="radio" class="radio" id="driving_discuss" value="discuss"/><label for="driving_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="driving" type="radio" class="radio" id="driving_demo" value="demo"/><label for="driving_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="driving" type="radio" class="radio" id="driving_poc" value="poc"/><label for="driving_poc" class="radio__label"></label></div></div>
+		</div>
+		<div class="divTableRow">
+		<div class="divTableCell"><br />Self-healing<label for="healing_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="healing_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="healing" type="radio" class="radio" id="healing_na" value="discuss"/><label for="healing_na" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="healing" type="radio" class="radio" id="healing_discuss" value="discuss"/><label for="healing_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="healing" type="radio" class="radio" id="healing_demo" value="demo"/><label for="healing_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="healing" type="radio" class="radio" id="healing_poc" value="poc"/><label for="healing_poc" class="radio__label"></label></div></div>
+		</div>
+		<div class="divTableRow se-row-grey">
+		<div class="divTableCell"><br />Culture change<label for="culture_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="culture_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="culture" type="radio" class="radio" id="culture_na" value="discuss"/><label for="culture_na" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="culture" type="radio" class="radio" id="culture_discuss" value="discuss"/><label for="culture_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="culture" type="radio" class="radio" id="culture_demo" value="demo"/><label for="culture_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="culture" type="radio" class="radio" id="culture_poc" value="poc"/><label for="culture_poc" class="radio__label"></label></div></div>
+		</div>
+		<div class="divTableRow">
+		<div class="divTableCell"><br />Automation<label for="automation_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="automation_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="automation" type="radio" class="radio" id="automation_na" value="discuss"/><label for="automation_na" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="automation" type="radio" class="radio" id="automation_discuss" value="discuss"/><label for="automation_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="automation" type="radio" class="radio" id="automation_demo" value="demo"/><label for="automation_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="automation" type="radio" class="radio" id="automation_poc" value="poc"/><label for="automation_poc" class="radio__label"></label></div></div>
+		</div>
+		<div class="divTableRow se-row-grey">
+		<div class="divTableCell"><br />Managing your cloud bill<label for="bill_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="bill_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div> 
+		<div class="divTableCell"><div class="se-radio"><input name="bill" type="radio" class="radio" id="bill_na" value="discuss"/><label for="bill_na" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="bill" type="radio" class="radio" id="bill_discuss" value="discuss"/><label for="bill_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="bill" type="radio" class="radio" id="bill_demo" value="demo"/><label for="bill_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="bill" type="radio" class="radio" id="bill_poc" value="poc"/><label for="bill_poc" class="radio__label"></label></div></div>
+		</div>
+		</div>
+		</div>	
+		
+	</div>	
+
+		<br />
+	
+	<div class="bva-question-wrapper">
+
+		<!-- <div class="bva-input-wrapper"> -->
+
+			<label for="autonomous_appowner_feedback" class="label bva-question-text"><img src="/static/feedback-green.png" class="se-question-image"/>Feedback</label>
+			<textarea rows="4" cols="100" class="textarea" id="autonomous_appowner_feedback"></textarea>
+		<!-- </div> -->
+
+	</div>
+
+		<br /><br />
+</div>
+<!--end of questions-->
+
+<br />
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="dev">
+<!-- start of title -->
+<div class="bva-title-wrapper se-title-wrapper-dev">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h2 class="se-title-text">Full-stack monitoring of the new enterprise cloud</h2>
+
+	</div>
+
+</div>
+<!--end of title-->
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag user-email">
+	  <span class="tag__key">email:</span>
+	</span>
+
+	<span tabindex="1" class="tag user-company">
+	  <span class="tag__key">id:</span>
+	</span>
+
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="opsFromDev" ><img src="/static/arrow-blue.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--royalblue bva-progress-wrapper"><label class="label--progressbar" for="p1">3/4</label><progress class="progressbar" value="3" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><a class="optionsFromDev" ><img src="/static/arrow-blue.svg" class="bva-progress-button"/></a><br />Next</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+
+	<h2 class="bva-question-text-centre">Operations team</h2>
+	
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<div class="divTable">
+		<div class="divTableBody">
+		<div class="divTableRow">
+		<div class="divTableCell">&nbsp;</div>
+		<div class="divTableCell"><img src="/static/info-blue.png" class="se-question-image"/><b>Not started</b></div>
+		<div class="divTableCell"><img src="/static/discuss-blue.png" class="se-question-image"/><br /><b>Discuss</b></div>
+		<div class="divTableCell"><img src="/static/demo-blue.png" class="se-question-image"/><br />&nbsp;<b>Demo</b></div>
+		<div class="divTableCell"><img src="/static/trial-blue.png" class="se-question-image"/><br />&nbsp;<b>POC</b></div>
+		</div>
+		<div class="divTableRow se-row-grey">
+		<div class="divTableCell"><br />Tool consolidation<label for="tool_cons_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="tool_cons_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="tool_cons" type="radio" class="radio" id="tool_cons_na" value="discuss"/><label for="tool_cons_na" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="tool_cons" type="radio" class="radio" id="tool_cons_discuss" value="discuss"/><label for="tool_cons_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="tool_cons" type="radio" class="radio" id="tool_cons_demo" value="demo"/><label for="tool_cons_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="tool_cons" type="radio" class="radio" id="tool_cons_poc" value="poc"/><label for="tool_cons_poc" class="radio__label"></label></div></div>
+		</div>
+		<div class="divTableRow">
+		<div class="divTableCell"><br />Scaling for DevOps<label for="devops_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="devops_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="devops" type="radio" class="radio" id="devops_na" value="discuss"/><label for="devops_na" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="devops" type="radio" class="radio" id="devops_discuss" value="discuss"/><label for="devops_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="devops" type="radio" class="radio" id="devops_demo" value="demo"/><label for="devops_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="devops" type="radio" class="radio" id="devops_poc" value="poc"/><label for="devops_poc" class="radio__label"></label></div></div>
+		</div>
+		<div class="divTableRow se-row-grey">
+		<div class="divTableCell"><br />AI driven actions<label for="ai_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="ai_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="ai" type="radio" class="radio" id="ai_na" value="discuss"/><label for="ai_na" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="ai" type="radio" class="radio" id="ai_discuss" value="discuss"/><label for="ai_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="ai" type="radio" class="radio" id="ai_demo" value="demo"/><label for="ai_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="ai" type="radio" class="radio" id="ai_poc" value="poc"/><label for="ai_poc" class="radio__label"></label></div></div>
+		</div>
+		<div class="divTableRow">
+		<div class="divTableCell"><br />Integrations and automation<label for="integrations_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="integrations_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="integrations" type="radio" class="radio" id="integrations_na" value="discuss"/><label for="integrations_na" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="integrations" type="radio" class="radio" id="integrations_discuss" value="discuss"/><label for="integrations_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="integrations" type="radio" class="radio" id="integrations_demo" value="demo"/><label for="integrations_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="integrations" type="radio" class="radio" id="integrations_poc" value="poc"/><label for="integrations_poc" class="radio__label"></label></div></div>
+		</div>
+		</div>
+		</div>	
+		
+	</div>	
+
+		<br />
+	
+	<div class="bva-question-wrapper">
+
+		<!-- <div class="bva-input-wrapper"> -->
+
+			<label for="fullstack_ops_feedback" class="label bva-question-text"><img src="/static/feedback-blue.png" class="se-question-image"/>Feedback</label>
+			<textarea rows="4" cols="100" class="textarea" id="fullstack_ops_feedback"></textarea>
+		<!-- </div> -->
+
+	</div>
+
+		<br /><br />
+
+		
+	<h2 class="bva-question-text-centre">Development team</h2>
+	
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<div class="divTable">
+		<div class="divTableBody">
+		<div class="divTableRow">
+		<div class="divTableCell">&nbsp;</div>
+		<div class="divTableCell"><img src="/static/info-blue.png" class="se-question-image"/><b>Not started</b></div>
+		<div class="divTableCell"><img src="/static/discuss-blue.png" class="se-question-image"/><br /><b>Discuss</b></div>
+		<div class="divTableCell"><img src="/static/demo-blue.png" class="se-question-image"/><br />&nbsp;<b>Demo</b></div>
+		<div class="divTableCell"><img src="/static/trial-blue.png" class="se-question-image"/><br />&nbsp;<b>POC</b></div>
+		</div>
+		<div class="divTableRow se-row-grey">
+		<div class="divTableCell"><br />How to release software faster<label for="release_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="release_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="release" type="radio" class="radio" id="release_ba" value="discuss"/><label for="release_ba" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="release" type="radio" class="radio" id="release_discuss" value="discuss"/><label for="release_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="release" type="radio" class="radio" id="release_demo" value="demo"/><label for="release_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="release" type="radio" class="radio" id="release_poc" value="poc"/><label for="release_poc" class="radio__label"></label></div></div>
+		</div>
+		<div class="divTableRow">
+		<div class="divTableCell"><br />Integrate across application lifecycle<label for="lifecycle_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="lifecycle_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="lifecycle" type="radio" class="radio" id="lifecycle_ba" value="discuss"/><label for="lifecycle_ba" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="lifecycle" type="radio" class="radio" id="lifecycle_discuss" value="discuss"/><label for="lifecycle_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="lifecycle" type="radio" class="radio" id="lifecycle_demo" value="demo"/><label for="lifecycle_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="lifecycle" type="radio" class="radio" id="lifecycle_poc" value="poc"/><label for="lifecycle_poc" class="radio__label"></label></div></div>
+		</div>
+		<div class="divTableRow se-row-grey">
+		<div class="divTableCell"><br />DevOps - shifting left<label for="shift_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="shift_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="shift" type="radio" class="radio" id="shift_ba" value="discuss"/><label for="shift_ba" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="shift" type="radio" class="radio" id="shift_discuss" value="discuss"/><label for="shift_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="shift" type="radio" class="radio" id="shift_demo" value="demo"/><label for="shift_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="shift" type="radio" class="radio" id="shift_poc" value="poc"/><label for="shift_poc" class="radio__label"></label></div></div>
+		</div>
+		</div>
+		</div>	
+		
+	</div>	
+
+		<br />
+	
+	<div class="bva-question-wrapper">
+
+		<!-- <div class="bva-input-wrapper"> -->
+
+			<label for="fullstack_dev_feedback" class="label bva-question-text"><img src="/static/feedback-blue.png" class="se-question-image"/>Feedback</label>
+			<textarea rows="4" cols="100" class="textarea" id="fullstack_dev_feedback"></textarea>
+		<!-- </div> -->
+
+	</div>
+
+		<br /><br />
+
+	<h2 class="bva-question-text-centre">Application owner</h2>
+	
+		<br /><br />
+	
+	<div class="bva-question-wrapper">
+	
+		<div class="divTable">
+		<div class="divTableBody">
+		<div class="divTableRow">
+		<div class="divTableCell">&nbsp;</div>
+		<div class="divTableCell"><img src="/static/info-blue.png" class="se-question-image"/><b>Not started</b></div>
+		<div class="divTableCell"><img src="/static/discuss-blue.png" class="se-question-image"/><br /><b>Discuss</b></div>
+		<div class="divTableCell"><img src="/static/demo-blue.png" class="se-question-image"/><br />&nbsp;<b>Demo</b></div>
+		<div class="divTableCell"><img src="/static/trial-blue.png" class="se-question-image"/><br />&nbsp;<b>POC</b></div>
+		</div>
+		<div class="divTableRow se-row-grey">
+		<div class="divTableCell"><br />Deliver the perfect software experience<label for="perfect_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="perfect_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="perfect" type="radio" class="radio" id="perfect_ba" value="discuss"/><label for="perfect_ba" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="perfect" type="radio" class="radio" id="perfect_discuss" value="discuss"/><label for="perfect_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="perfect" type="radio" class="radio" id="perfect_demo" value="demo"/><label for="perfect_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="perfect" type="radio" class="radio" id="perfect_poc" value="poc"/><label for="perfect_poc" class="radio__label"></label></div></div>
+		</div>
+		<div class="divTableRow">
+		<div class="divTableCell"><br />Cloud migration<label for="migration_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="migration_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="migration" type="radio" class="radio" id="migration_ba" value="discuss"/><label for="migration_ba" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="migration" type="radio" class="radio" id="migration_discuss" value="discuss"/><label for="migration_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="migration" type="radio" class="radio" id="migration_demo" value="demo"/><label for="migration_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="migration" type="radio" class="radio" id="migration_poc" value="poc"/><label for="migration_poc" class="radio__label"></label></div></div>
+		</div>
+		<div class="divTableRow se-row-grey">
+		<div class="divTableCell"><br />Business transaction monitoring<label for="transaction_prio" class="label"><br /><b>Priority</b></label><select class="select se-width" id="transaction_prio"><option value="low" selected="selected">Low</option><option value="medium">Medium</option><option value="high">High</option></select><br /><br /></div>
+		<div class="divTableCell"><div class="se-radio"><input name="transaction" type="radio" class="radio" id="transaction_ba" value="discuss"/><label for="transaction_ba" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="transaction" type="radio" class="radio" id="transaction_discuss" value="discuss"/><label for="transaction_discuss" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="transaction" type="radio" class="radio" id="transaction_demo" value="demo"/><label for="transaction_demo" class="radio__label"></label></div></div>
+		<div class="divTableCell"><div class="se-radio"><input name="transaction" type="radio" class="radio" id="transaction_poc" value="poc"/><label for="transaction_poc" class="radio__label"></label></div></div>
+		</div>
+		</div>
+		</div>	
+		
+	</div>	
+
+		<br />
+	
+	<div class="bva-question-wrapper">
+
+		
+
+			<label for="fullstack_appowner_feedback" class="label bva-question-text"><img src="/static/feedback-blue.png" class="se-question-image"/>Feedback</label>
+			<textarea rows="4" cols="100" class="textarea" id="fullstack_appowner_feedback"></textarea>
+		
+
+	</div>
+
+		<br /><br />		
+</div>
+<!--end of questions-->
+
+<br />
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="options">
+<!-- start of title -->
+<div class="bva-title-wrapper se-title-wrapper-options">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h2 class="se-title-text">Technical summary</h2>
+
+	</div>
+
+</div>
+<!--end of title-->
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag user-email">
+	  <span class="tag__key">email:</span>
+	</span>
+
+	<span tabindex="1" class="tag user-company">
+	  <span class="tag__key">id:</span>
+	</span>
+
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="devFromOptions" ><img src="/static/arrow-grey.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--grey bva-progress-wrapper"><label class="label--progressbar" for="p1">4/4</label><progress class="progressbar" value="4" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><img src="/static/finish-grey.svg" class="bva-progress-button"/><br />Finished!</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+
+
+<h2 class="bva-question-text-centre">Dynatrace team</h2>
+
+		<br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/sales-grey.png" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="lead_sales" class="label bva-question-text">Lead sales</label>
+			<input type="text" class="inputfield bva-question-input" id="lead_sales" placeholder="name"/>
+
+		</div>
+
+	</div>
+	
+		<br />
+	
+	<div class="bva-question-wrapper">
+
+		<img src="/static/repair-grey.png" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="lead_se" class="label bva-question-text">Lead SE</label>
+			<input type="text" class="inputfield bva-question-input" id="lead_se" placeholder="name"/>
+
+		</div>
+
+	</div>	
+
+	<br />
+
+<h2 class="bva-question-text-centre">Customer champions</h2>
+
+		<br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/business-grey.png" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="business_champion" class="label bva-question-text">Business champion</label>
+			<input type="text" class="inputfield bva-question-input" id="business_champion" placeholder="name"/>
+
+		</div>
+
+	</div>
+	
+		<br />
+	
+	<div class="bva-question-wrapper">
+
+		<img src="/static/technical-grey.png" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="technical_champion" class="label bva-question-text">Technical champion</label>
+			<input type="text" class="inputfield bva-question-input" id="technical_champion" placeholder="name"/>
+
+		</div>
+
+	</div>	
+
+	<br />
+
+<h2 class="bva-question-text-centre">Dynatrace approach</h2>
+
+		<br />
+
+	<div class="bva-question-wrapper">	
+	
+		<div class="divTable">
+		<div class="divTableBody">
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><img src="/static/saas-grey.png" class="se-question-image"/><br /><b>SaaS</b></div>
+		<div class="divTableCell se-center"><img src="/static/managed-grey.png" class="se-question-image"/><br /><b>Managed</b></div>
+		<div class="divTableCell se-center"><img src="/static/offline-grey.png" class="se-question-image"/><br /><b>Offline</b></div>
+		<div class="divTableCell se-center"></div>
+		</div>
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="saas"><label class="checkbox__label" for="saas"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="managed"><label class="checkbox__label" for="managed"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="offline"><label class="checkbox__label" for="offline"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"></div>
+		</div>		
+		
+		</div>
+		</div>
+		
+	</div>
+
+		<br />
+	
+	<div class="bva-question-wrapper">
+
+		<img src="/static/lock-grey.png" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<input type="text" class="inputfield bva-question-input" id="tenant" placeholder="tenant id/cluster name"/>
+
+		</div>
+
+	</div>	
+
+		<br />
+	
+<h2 class="bva-question-text-centre">Operating systems</h2>
+
+		<br />
+
+	<div class="bva-question-wrapper">	
+	
+		<div class="divTable">
+		<div class="divTableBody">
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><img src="/static/windows-grey.png" class="se-question-image"/><br /><b>Windows</b></div>
+		<div class="divTableCell se-center"><img src="/static/linux-grey.png" class="se-question-image"/><br /><b>Linux</b></div>
+		<div class="divTableCell se-center"><img src="/static/aix-grey.png" class="se-question-image"/><br /><b>AIX</b></div>
+		<div class="divTableCell se-center"><img src="/static/solaris-grey.png" class="se-question-image"/><br /><b>Solaris</b></div>
+		</div>
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="windows"><label class="checkbox__label" for="windows"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="linux"><label class="checkbox__label" for="linux"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="aix"><label class="checkbox__label" for="aix"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="solaris"><label class="checkbox__label" for="solaris"><span class="checkbox__caption"></span></label></div></div>
+		</div>		
+		
+		</div>
+		</div>
+		
+	</div>
+		
+	<br />
+
+		<h2 class="bva-question-text-centre">Platforms</h2>
+
+		<br />
+
+	<div class="bva-question-wrapper">	
+	
+		<div class="divTable">
+		
+		<div class="divTableBody">
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><img src="/static/vmware-grey.png" class="se-question-image"/><br /><b>VMWare</b></div>
+		<div class="divTableCell se-center"><img src="/static/azure-grey.png" class="se-question-image"/><br /><b>Azure</b></div>
+		<div class="divTableCell se-center"><img src="/static/amazon-grey.png" class="se-question-image"/><br /><b>AWS</b></div>
+		<div class="divTableCell se-center"><img src="/static/openshift-grey.png" class="se-question-image"/><br /><b>OpenShift</b></div>
+		</div>
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="vmware"><label class="checkbox__label" for="vmware"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="azure"><label class="checkbox__label" for="azure"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="aws"><label class="checkbox__label" for="aws"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="openshift"><label class="checkbox__label" for="openshift"><span class="checkbox__caption"></span></label></div></div>
+		</div>		
+		
+
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><br /><img src="/static/cloudfoundry-grey.png" class="se-question-image"/><br /><b>Cloudfoundry</b></div>
+		<div class="divTableCell se-center"><br /><img src="/static/ibmcloud-grey.png" class="se-question-image"/><br /><b>IBM cloud</b></div>
+		<div class="divTableCell se-center"><br /><img src="/static/oraclecloud-grey.png" class="se-question-image"/><br /><b>Oracle cloud</b></div>
+		<div class="divTableCell se-center"><br /><img src="/static/gcp-grey.png" class="se-question-image"/><br /><b>Google cloud</b></div>
+		</div>
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="cloudfoundry"><label class="checkbox__label" for="cloudfoundry"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="ibmcloud"><label class="checkbox__label" for="ibmcloud"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="oraclecloud"><label class="checkbox__label" for="oraclecloud"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="gcp"><label class="checkbox__label" for="gcp"><span class="checkbox__caption"></span></label></div></div>
+		</div>	
+
+
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><br /><img src="/static/heroku-grey.png" class="se-question-image"/><br /><b>Heroku</b></div>
+		<div class="divTableCell se-center"><br /><img src="/static/openstack-grey.png" class="se-question-image"/><br /><b>Openstack</b></div>
+		<div class="divTableCell se-center"><br /><img src="/static/kubernetes-grey.png" class="se-question-image"/><br /><b>Kubernetes</b></div>
+		<div class="divTableCell se-center"></div>
+		</div>
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="heroku"><label class="checkbox__label" for="heroku"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="openstack"><label class="checkbox__label" for="openstack"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="kubernetes"><label class="checkbox__label" for="kubernetes"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"></div>
+		</div>	
+		
+		
+		</div>
+				
+		</div>
+		
+	</div>
+
+		<br />
+
+
+<h2 class="bva-question-text-centre">Deployment method</h2>
+
+		<br />
+
+	<div class="bva-question-wrapper">	
+	
+		<div class="divTable">
+		<div class="divTableBody">
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><img src="/static/iaas-grey.png" class="se-question-image"/><br /><b>IaaS</b></div>
+		<div class="divTableCell se-center"><img src="/static/paas-grey.png" class="se-question-image"/><br /><b>PaaS</b></div>
+		<div class="divTableCell se-center"><img src="/static/faas-grey.png" class="se-question-image"/><br /><b>FaaS</b></div>
+		<div class="divTableCell se-center"><img src="/static/saas-grey.png" class="se-question-image"/><br /><b>SaaS</b></div>
+		</div>
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="iaas"><label class="checkbox__label" for="iaas"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="paas"><label class="checkbox__label" for="paas"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="faas"><label class="checkbox__label" for="faas"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="softaas"><label class="checkbox__label" for="softaas"><span class="checkbox__caption"></span></label></div></div>
+		</div>		
+		
+		</div>
+		</div>
+		
+	</div>
+
+		<br />		
+		
+		
+<h2 class="bva-question-text-centre">Languages</h2>
+
+		<br />
+
+	<div class="bva-question-wrapper">	
+	
+		<div class="divTable">
+		<div class="divTableBody">
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><img src="/static/java-grey.png" class="se-question-image"/><br /><b>Java</b></div>
+		<div class="divTableCell se-center"><img src="/static/dotnet-grey.png" class="se-question-image"/><br /><b>.NET</b></div>
+		<div class="divTableCell se-center"><img src="/static/php-grey.png" class="se-question-image"/><br /><b>PHP</b></div>
+		<div class="divTableCell se-center"><img src="/static/nodejs-grey.png" class="se-question-image"/><br /><b>NodeJS</b></div>
+		</div>
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="java"><label class="checkbox__label" for="java"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="dotnet"><label class="checkbox__label" for="dotnet"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="php"><label class="checkbox__label" for="php"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="nodejs"><label class="checkbox__label" for="nodejs"><span class="checkbox__caption"></span></label></div></div>
+		</div>		
+	
+
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><br /><img src="/static/messaging-grey.png" class="se-question-image"/><br /><b>Messaging</b></div>
+		<div class="divTableCell se-center"><br /><img src="/static/c-grey.png" class="se-question-image"/><br /><b>C/C++</b></div>
+		<div class="divTableCell se-center"><br /><img src="/static/dotnet-grey.png" class="se-question-image"/><br /><b>.NET core</b></div>
+		<div class="divTableCell se-center"><br /><img src="/static/webserver-grey.png" class="se-question-image"/><br /><b>Web server</b></div>
+		</div>
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="messaging"><label class="checkbox__label" for="messaging"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="c"><label class="checkbox__label" for="c"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="dotnetcore"><label class="checkbox__label" for="dotnetcore"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="webserver"><label class="checkbox__label" for="webserver"><span class="checkbox__caption"></span></label></div></div>
+		</div>	
+		
+
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><br /><img src="/static/golang-grey.png" class="se-question-image"/><br /><b>Go</b></div>
+		<div class="divTableCell se-center"><br /><img src="/static/mainframe-grey.png" class="se-question-image"/><br /><b>Mainframe</b></div>
+		<div class="divTableCell se-center"><br /></div>
+		<div class="divTableCell se-center"><br /></div>
+		</div>
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="golang"><label class="checkbox__label" for="golang"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="mainframe"><label class="checkbox__label" for="mainframe"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"></div>
+		<div class="divTableCell se-center"></div>
+		</div>			
+
+	
+		</div>
+		</div>
+		
+	</div>	
+	
+
+		<br />
+
+<h2 class="bva-question-text-centre">User interface</h2>
+
+		<br />
+
+	<div class="bva-question-wrapper">	
+	
+		<div class="divTable">
+		<div class="divTableBody">
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><img src="/static/browser-grey.png" class="se-question-image"/><br /><b>Web</b></div>
+		<div class="divTableCell se-center"><img src="/static/mobileapp-grey.png" class="se-question-image"/><br /><b>Native app</b></div>
+		<div class="divTableCell se-center"><img src="/static/iot-grey.png" class="se-question-image"/><br /><b>Thick client</b></div>
+		<div class="divTableCell se-center"><img src="/static/citrix-grey.png" class="se-question-image"/><br /><b>Citrix</b></div>
+		</div>
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="web"><label class="checkbox__label" for="web"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="mobileapp"><label class="checkbox__label" for="mobileapp"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="thick"><label class="checkbox__label" for="thick"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="citrix"><label class="checkbox__label" for="citrix"><span class="checkbox__caption"></span></label></div></div>
+		</div>		
+		
+		</div>
+		</div>
+		
+	</div>
+
+		<br />
+		
+<h2 class="bva-question-text-centre">Synthetic</h2>
+
+		<br />
+
+	<div class="bva-question-wrapper">	
+	
+		<div class="divTable">
+		<div class="divTableBody">
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><img src="/static/browser-grey.png" class="se-question-image"/><br /><b>Browser</b></div>
+		<div class="divTableCell se-center"><img src="/static/webrequest-grey.png" class="se-question-image"/><br /><b>HTTP</b></div>
+		<div class="divTableCell se-center"><img src="/static/events-grey.png" class="se-question-image"/><br /><b>External</b></div>
+		<div class="divTableCell se-center"></div>
+		</div>
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="browser"><label class="checkbox__label" for="browser"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="http"><label class="checkbox__label" for="http"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="external"><label class="checkbox__label" for="external"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"></div>
+		</div>		
+		
+		</div>
+		</div>
+		
+	</div>
+
+		<br />		
+
+		
+		<h2 class="bva-question-text-centre">Extending Dynatrace</h2>
+
+		<br />
+
+	<div class="bva-question-wrapper">	
+	
+		<div class="divTable">
+		<div class="divTableBody">
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><br /><img src="/static/plugin-grey.png" class="se-question-image"/><br /><b>OneAgent plugins</b></div>
+		<div class="divTableCell se-center"><br /><img src="/static/iot-grey.png" class="se-question-image"/><br /><b>Custom devices</b></div>
+		<div class="divTableCell se-center"><br /><img src="/static/activegateplugin-grey.png" class="se-question-image"/><br /><b>ActiveGate plugins</b></div>
+		<div class="divTableCell se-center"><br /><img src="/static/events-grey.png" class="se-question-image"/><br /><b>External events</b></div>
+		</div>
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="oaplugins"><label class="checkbox__label" for="oaplugins"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="cnd"><label class="checkbox__label" for="cnd"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="agplugins"><label class="checkbox__label" for="agplugins"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="externalevents"><label class="checkbox__label" for="externalevents"><span class="checkbox__caption"></span></label></div></div>
+		</div>	
+
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><br /><img src="/static/incident-grey.png" class="se-question-image"/><br /><b>Incidents</b></div>
+		<div class="divTableCell se-center"><br /><img src="/static/cmdb-grey.png" class="se-question-image"/><br /><b>CMDB</b></div>
+		<div class="divTableCell se-center"></div>
+		<div class="divTableCell se-center"></div>
+		</div>
+		
+		<div class="divTableRow">
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="incidents"><label class="checkbox__label" for="incidents"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" class="checkbox" id="cmdb"><label class="checkbox__label" for="cmdb"><span class="checkbox__caption"></span></label></div></div>
+		<div class="divTableCell se-center"></div>
+		<div class="divTableCell se-center"></div>
+		</div>			
+		
+		</div>
+		</div>
+		
+	</div>
+
+		<br />	
+
+
+
+</div>
+<!--end of questions-->
+</div>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+</div>
+
+<div class="column--1-of-2 bva-content-column" >
+
+
+
+
+
+<div class="headContainer" style="position: relative; height: 105px">
+<div class="bva-title-wrapper bva-title-wrapper-results result-biz">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Overview</h1>
+		<p>What is completed, what actions are next</p>
+
+	</div>
+
+</div>
+
+<div class="bva-title-wrapper bva-title-wrapper-results result-ops">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Overview</h1>
+		<p>What is completed, what actions are next</p>
+
+	</div>
+
+</div>
+
+
+<div class="bva-title-wrapper bva-title-wrapper-results result-dev">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Overview</h1>
+		<p>What is completed, what actions are next</p>
+
+	</div>
+
+</div>
+
+
+<div class="bva-title-wrapper bva-title-wrapper-results result-options">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Results</h1>
+		<p>What is completed, what actions are next</p>
+
+	</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+	<div id="results">
+
+	<h2 style="margin-left: 5%; margin-top: 20px">Conversation coverage</h2>
+	
+		<br /><br />
+	
+	<div style="margin-left: 10%; margin-right: 10%; margin-top: 20px">
+	
+<div class="divTable" style="width: 100%">
+<div class="divTableBody">
+<div class="divTableRow" id="resultCircles" style="width: 100%">
+<div class="divTableCell" style="width: 30%">
+
+
+</div>
+<div class="divTableCell" style="width: 30%">
+
+</div>
+<div class="divTableCell" style="width: 30%">
+
+</div>
+</div>
+
+<div class="divTableRow" id="resultPercent" style="width: 100%">
+<div class="divTableCell se-center" style="width: 33%">
+
+</div>
+<div class="divTableCell se-center" style="width: 33%">
+
+</div>
+<div class="divTableCell se-center" style="width: 33%">
+
+</div>
+</div>
+
+
+</div>
+</div>		
+	
+	</div>
+	
+
+
+	<br /><br />
+	<h2 style="margin-left: 5%; margin-top: 20px">Priority activities</h2>
+	
+		<br /><br />
+
+		
+	<div style="margin-left: 5%; margin-right: 5%; margin-top: 20px; width: inherit">
+	
+<div class="divTable" style="width: 100%">
+<div class="divTableBody">
+<div class="divTableRow" id="conversationPriority" style="width: 100%">
+<div class="divTableCell" style="width: 34%">
+	
+
+</div>
+<div class="divTableCell" style="width: 33%">
+
+</div>
+<div class="divTableCell" style="width: 33%">
+
+</div>
+</div>
+
+
+</div>
+</div>		
+	
+	</div>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+
+		<div id="no-results" style="display: none; margin-left: 10%; margin-right: 10%; margin-top: 30px">
+		
+		
+
+	</div>
+
+
+</div>
+<!--end of content-->
+</div>
+<!-- <script src="/static/result_charts.js"></script> -->
+<script type="text/javascript" src="//assets.dynatrace.com/groundhog/v6.1.1/js/main.js"></script>
+<!-- <script src="/static/main.js"></script> -->
+
+</body>
+
+</html>

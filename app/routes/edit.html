@@ -18,8 +18,8 @@
 			getAssessmentForEdit();
 			setEditLocation();
 			$("#edit_box_submit").click(function() {
-				confirmDelete(); 	  	  
-			});	
+				confirmDelete();
+			});
 			$("#noDelete").click(function() {
 				cancelDelete();
 			});
@@ -35,49 +35,49 @@
 <div id="content" class="main-content">
 
 <div id="content_box">
-	
+
 	<div class="inner_box centre">
-	
+
 		<div class="menu-box">
-		
+
 			<h2 style="font-size: 2.2em">Edit assessment</h2>
-			
-			<p>Edit the name of your assessment, or delete it completely.</p>	
+
+			<p>Edit the name of your assessment, or delete it completely.</p>
 			</p>
-			
+
 			<div class="status-success">Assessment successfully updated!</div>
-			<div class="status-failure">Unable to update assessment.</div>	
-			
+			<div class="status-failure">Unable to update assessment.</div>
+
 				<br />
-			
+
 				<form id="edit" action="/editbva" method="post" enctype="application/x-www-form-urlencoded">
-				
+
 					<input type="text" name="company" class="edit-company inputfield bigInput" id="company" placeholder="loading..."/>
 					<select class="edit-currency select pricing-result" id="currency" name="currency"><option value="uk">UK</option><option value="ireland">Ireland</option><option value="us">US</option><option value="spain">Spain</option><option value="benelux">Benelux</option><option value="germany">Germany</option><option value="france">France</option><option value="italy">Italy</option></select>
-					
-						<br /><br /> 	
-					
-					<div class="delete-container">
-					
-						<button id="edit_box_submit" type="button" class="delete-button btn btn--primary theme--dark reset-button" style="background-color:red" >Delete</button>
-						
-						<div id="confirmDelete" class="absolute"><button id="noDelete" type="button" class="btn btn--secondary theme--dark reset-button">No</button> <a id="finalDelete" href=""><button id="yesDelete" type="button" class="btn btn--primary theme--dark reset-button" style="background-color: red">Yes</button></a></div>
-						
-					</div>	
-					
-						<br />
-						
-					<a href="/landing"><button id="deleteBva" type="button" class="btn btn--secondary theme--dark reset-button">Back</button></a> <button id="landing_box_password" type="submit" class="btn btn--primary theme--dark reset-button">Confirm</button>
-					
+
 						<br /><br />
-					
-				</form>	
-					
+
+					<div class="delete-container">
+
+						<button id="edit_box_submit" type="button" class="delete-button btn btn--primary theme--dark reset-button" style="background-color:red" >Delete</button>
+
+						<div id="confirmDelete" class="absolute"><button id="noDelete" type="button" class="btn btn--secondary theme--dark reset-button">No</button> <a id="finalDelete" href=""><button id="yesDelete" type="button" class="btn btn--primary theme--dark reset-button" style="background-color: red">Yes</button></a></div>
+
+					</div>
+
+						<br />
+
+					<a href="/landing"><button id="deleteBva" type="button" class="btn btn--secondary theme--dark reset-button">Back</button></a> <button id="landing_box_password" type="submit" class="btn btn--primary theme--dark reset-button">Confirm</button>
+
+						<br /><br />
+
+				</form>
+
 		</div>
-	
+
 	</div>
-	
-</div> 
+
+</div>
 
 </div>
 <!--end of content-->

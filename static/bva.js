@@ -1,3 +1,217 @@
+function seCheck() {
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	//myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+
+	var myInit = { method: 'GET',
+		headers: myHeaders,
+		cache: 'default',
+		mode: 'no-cors',
+		credentials: 'same-origin'
+	}
+
+	fetch('/seCheck', myInit)
+
+	.then(function(response) {
+		return response.json();
+	})
+
+	.then(function(jsonResponse) {
+		if(jsonResponse.status == "se") {
+
+		}
+	})
+}
+
+function sortMe(arr) {
+	var sortable = [];
+	for (var conv in arr) {
+	 sortable.push([conv, arr[conv]]);
+	}
+
+	sortable.sort(function(a, b) {
+	 return a[1] - b[1];
+	});	
+	
+	return sortable;
+}
+
+function sortMeOpps(arr) {
+	arr.sort(function(obj1, obj2) {
+		return obj1.total - obj2.total;
+	});
+}
+
+function enableSeOppSearch() {
+	$(" #se_search ").click(function() {
+		$(".status-success").css("display", "none");
+		$(".status-failure").css("display", "none");
+		seOppSearch();
+	});
+}
+
+function seOppSearch() {
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+
+	var search={lead_sales: document.getElementById("lead_sales").value,
+			lead_se: document.getElementById("lead_se").value,
+			business_champion: document.getElementById("business_champion").value,
+			technical_champion: document.getElementById("technical_champion").value,
+			tenant: document.getElementById("tenant").value};
+
+	options = ["saas","managed","offline","windows","linux","aix","solaris","vmware","azure","aws","openshift","cloudfoundry","ibmcloud","oraclecloud","gcp","heroku","openstack","kubernetes","iaas","paas","faas","softaas","java","dotnet","php","nodejs","messaging","c","dotnetcore","webserver","golang","mainframe","web","mobileapp","thick","citrix","browser","http","external","oaplugins","cnd","agplugins","externalevents","incidents","cmdb"];
+
+	for(i=0;i<options.length;i++) {
+		if(document.getElementById(options[i]).checked == true) {
+			search[options[i]] = true;
+		}
+	}
+
+	var myInit = { method: 'POST',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin',
+		body: JSON.stringify(search)
+	}
+
+	fetch('/seOppSearch', myInit)
+
+	.then(function(response) {
+		return response.json();
+	})
+
+	.then(function(jsonResponse) {
+
+		$('#search_results').css("display", "block");
+
+		for(i=0;i<document.getElementById("opp_results").tBodies.length;i++) {
+			if(jsonResponse[i] != undefined) {
+				var outcomesTotal = jsonResponse[i].trends + jsonResponse[i].causation + jsonResponse[i].digital + jsonResponse[i].bi + jsonResponse[i].market;
+				var outcomesProg = Math.ceil((outcomesTotal / 15) * 100);
+				
+				var autonomousTotal = jsonResponse[i].driving + jsonResponse[i].healing + jsonResponse[i].culture + jsonResponse[i].automation + jsonResponse[i].bill;
+				var autonomousProg = Math.ceil((autonomousTotal / 15) * 100);
+				
+				var fullStackTotal = jsonResponse[i].tool_cons + jsonResponse[i].devops + jsonResponse[i].ai + jsonResponse[i].integrations + jsonResponse[i].release + jsonResponse[i].lifecycle + jsonResponse[i].shift + jsonResponse[i].perfect + jsonResponse[i].migration + jsonResponse[i].transaction;
+				var fullStackProg = Math.ceil((fullStackTotal / 30) * 100);
+
+				jsonResponse[i].total = outcomesTotal + autonomousTotal + fullStackTotal;
+			}
+		}
+
+		orderedOpps = jsonResponse.sort(function(obj1, obj2) {
+			return obj2.total - obj1.total;
+		});	
+
+		for(i=0;i<document.getElementById("opp_results").tBodies.length;i++) {
+			if(orderedOpps[i] != undefined) {
+				document.getElementById("opp_results").tBodies[i].style.display="table-row-group";
+				var outcomesTotal = orderedOpps[i].trends + orderedOpps[i].causation + orderedOpps[i].digital + orderedOpps[i].bi + orderedOpps[i].market;
+				var outcomesProg = Math.ceil((outcomesTotal / 15) * 100);
+				
+				var autonomousTotal = orderedOpps[i].driving + orderedOpps[i].healing + orderedOpps[i].culture + orderedOpps[i].automation + orderedOpps[i].bill;
+				var autonomousProg = Math.ceil((autonomousTotal / 15) * 100);
+				
+				var fullStackTotal = orderedOpps[i].tool_cons + orderedOpps[i].devops + orderedOpps[i].ai + orderedOpps[i].integrations + orderedOpps[i].release + orderedOpps[i].lifecycle + orderedOpps[i].shift + orderedOpps[i].perfect + orderedOpps[i].migration + orderedOpps[i].transaction;
+				var fullStackProg = Math.ceil((fullStackTotal / 30) * 100);
+
+				document.getElementById("opp_results").tBodies[i].children[0].children[0].innerHTML=orderedOpps[i].company;
+				document.getElementById("opp_results").tBodies[i].children[0].children[1].innerHTML="<div class=\"theme--purple\"><label class=\"label--purple\" for=\"p0\">" + outcomesTotal + "/15</label><progress class=\"progressbar\" value=\"" + outcomesProg + "\" max=\"100\" id=\"p0\"></progress></div>";
+				document.getElementById("opp_results").tBodies[i].children[0].children[2].innerHTML="<div class=\"theme--green\"><label class=\"label--purple\" for=\"p0\">" + autonomousTotal + "/15</label><progress class=\"progressbar\" value=\"" + autonomousProg + "\" max=\"100\" id=\"p0\"></progress></div>";
+				document.getElementById("opp_results").tBodies[i].children[0].children[3].innerHTML="<div class=\"theme--blue\"><label class=\"label--purple\" for=\"p0\">" + fullStackTotal + "/30</label><progress class=\"progressbar\" value=\"" + fullStackProg + "\" max=\"100\" id=\"p0\"></progress></div>";
+				
+				if(orderedOpps[i].lead_sales != "") {
+					lead_sales = orderedOpps[i].lead_sales;
+				}
+				else {
+					lead_sales = "n/a";
+				}
+
+				if(orderedOpps[i].lead_se != "") {
+					lead_se = orderedOpps[i].lead_se;
+				}
+				else {
+					lead_se = "n/a";
+				}				
+
+				document.getElementById("opp_results").tBodies[i].children[1].children[0].innerHTML="<div class=\"divTable\" style=\"font-size: 1.2em\"><div class=\"divTableBody\"><div class=\"divTableRow\"><div class=\"divTableCell\"><b>Lead sales</b> <br /><div style=\"font-size: 1.5em\">" + lead_sales + "</div></div><div class=\"divTableCell\"><b>Lead SE</b><br /><div style=\"font-size: 1.5em\">" + lead_se + "</div></div><div class=\"divTableCell\"></div></div></div>";
+		
+			}
+		
+		
+			else {
+				document.getElementById("opp_results").tBodies[i].style.display="none";
+			}			
+		}
+
+		document.getElementById("search_results").scrollIntoView();
+
+	})
+}
+
+function enableSeBvaSearch() {
+	$(" #user_search ").click(function() {
+		$(".status-success").css("display", "none");
+		$(".status-failure").css("display", "none");
+		document.getElementById("many_result").style.display = "none";
+		document.getElementById("no_result").style.display = "none";
+		document.getElementById("results").innerHTML = "";
+		seBvaSearch();
+	});
+}
+
+function seBvaSearch() {
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Search", document.getElementById("bva_search").value);
+	//myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+
+	var myInit = { method: 'GET',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin'
+	}
+
+	fetch('/seBvaSearch', myInit)
+
+	.then(function(response) {
+		return response.json();
+	})
+
+	.then(function(jsonResponse) {
+
+		if(jsonResponse.length > 0 && jsonResponse.length < 6) {
+			var newHtml = "";
+			jsonResponse.forEach(function (value, i) {
+				//console.log(i + " " + jsonResponse[i].company + jsonResponse[i]._id);
+				newHtml += "<br /><div id=\"result\" class=\"searchResult\"><input name=\"seBvaSearch\" value=\"" + jsonResponse[i]._id + "\" type=\"radio\" class=\"radio\" id=\"" + jsonResponse[i]._id + "\"/><label for=\"" + jsonResponse[i]._id + "\" class=\"radio__label theme--dark\"><span class=\"radio__caption\"></span></label>" + jsonResponse[i].company + " <i>(" + jsonResponse[i]._id + ")</i></div>";
+			});
+			document.getElementById("results").innerHTML = newHtml;
+
+			var results = new RegExp('(edit_se)').exec(window.location.href);
+
+			if(results != null) {
+				$(".radio").click(function() {
+					document.getElementById("bva_id").value = this.id;
+					console.log("worked");
+						//userSearch();
+				});
+			}
+		}
+		if(jsonResponse.length == 0 || jsonResponse.status != undefined) {
+				$('#no_result').css("display", "block");
+		}
+		if(jsonResponse.length > 5) {
+				$('#many_result').css("display", "block");
+		}
+	})
+}
+
+
 function getNumbers(txt) {
 	if (txt != "") {
 		var numb = txt.match(/\d/g);
@@ -71,6 +285,10 @@ function processPercent(prePercent) {
 	if(prePercent != '' && prePercent != undefined) {prePercent = getNumbersAndDots(prePercent) + '%'; temp = prePercent; prePercent = ''; prePercent = temp; return prePercent;} else {prePercent = ''; return prePercent;}
 }
 
+function processDecimals(prePercent) {
+	if(prePercent != '' && prePercent != undefined) {prePercent = getNumbersAndDots(prePercent); temp = prePercent; prePercent = ''; prePercent = temp; return prePercent;} else {prePercent = ''; return prePercent;}
+}
+
 function processNumber(preNumber){
 	if(preNumber != '' && preNumber != undefined) {preNumber = parseInt(getNumbers(preNumber)).toLocaleString(); temp = preNumber; preNumber = ''; preNumber = temp; return preNumber; } else {preNumber = ''; return preNumber;}
 }
@@ -97,7 +315,6 @@ function browserDetect() {
 	}
 }
 
-
 function setFormLocation() {
 	token = getGet('token');
 	document.getElementById("reset").action="/resetyourpassword?token=" + token;
@@ -108,15 +325,21 @@ function setEditLocation() {
 	document.getElementById("edit").action="/editbva?bva_id=" + id;
 }
 
+function setSeEditLocation() {
+	id = getGet('se_id');
+	document.getElementById("edit").action="/editSeBva?se_id=" + id;
+}
+
 function setShareLocation() {
 	id = getGet('bva_id');
 	document.getElementById("share").action="/sharebva?bva_id=" + id;
 }
 
-function setEditLocation() {
-	id = getGet('bva_id');
-	document.getElementById("edit").action="/editbva?bva_id=" + id;
+function setSeShareLocation() {
+	id = getGet('se_id');
+	document.getElementById("share").action="/shareSeBva?se_id=" + id;
 }
+
 
 function enableUserSearch() {
 	$(" #user_search ").click(function() {
@@ -148,6 +371,23 @@ function setBvaLinks() {
 	document.getElementById("share").href=shareHref;
 }
 
+function setSeLinks() {
+	id = document.getElementById("se_id").value;
+	shareHref = "/share_se?se_id=" + id;
+	editHref = "/edit_se?se_id=" + id;
+	//document.getElementById("se_continue").action="/workflow_se?se_id=" + id + "#outcomes";
+	document.getElementById("edit").href=editHref;
+	document.getElementById("share").href=shareHref;
+}
+
+function setFilters() {
+	newId = document.getElementById("filters").value;
+	document.getElementsByClassName("show-me")[0].style.display="none";
+	document.getElementsByClassName("show-me")[0].classList.remove("show-me");
+	document.getElementById(newId).classList.add("show-me");
+	document.getElementById(newId).style.display="block";
+}
+
 function getAssessmentForEdit() {
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
@@ -172,7 +412,60 @@ function getAssessmentForEdit() {
 
 	.then(function(jsonResponse) {
 		document.getElementById("company").value=jsonResponse.company;
-		document.getElementById("currency").value=jsonResponse.currency
+		document.getElementById("currency").value=jsonResponse.currency;
+	})
+}
+
+function getSeAssessmentForEdit() {
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+
+	se_id = getGet('se_id');
+
+	myHeaders.append("se_id", se_id);
+
+	var myInit = { method: 'GET',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin'
+	}
+
+	fetch('/getSeAssessmentMetaData', myInit)
+
+	.then(function(response) {
+		return response.json();
+	})
+
+	.then(function(jsonResponse) {
+		document.getElementById("company").value=jsonResponse.company;
+
+		var bvaHeaders = new Headers();
+		bvaHeaders.append("Content-Type", "application/json");
+		bvaHeaders.append("Accept", "application/json");
+		bvaHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+
+		bva_id = jsonResponse.bva_id;
+
+		bvaHeaders.append("bva_id", bva_id);
+
+		var myInit = { method: 'GET',
+			headers: bvaHeaders,
+			cache: 'default',
+			credentials: 'same-origin'
+		}
+
+		fetch('/getAssessmentMetaData', myInit)
+
+		.then(function(response) {
+			return response.json();
+		})
+
+		.then(function(jsonResponse) {
+			document.getElementById("bva_search").value=jsonResponse.company;
+			document.getElementById("bva_id").value=jsonResponse._id;
+		})
 	})
 }
 
@@ -315,16 +608,53 @@ function getAssessmentList() {
 
 		if(jsonObj[0]._id == "new") {
 			document.getElementById("bva_select").innerHTML = '<option value="">Create an assessment!</option>';
-			dtrum.identifyUser(jsonObj[0].username);
+			//dtrum.identifyUser(jsonObj[0].username);
 		}
 
 		else {
 			for(i=0;i<jsonObj.length;i++) {
 				newHTML += '<option value="' + jsonObj[i].id + '">' + jsonObj[i].company + '</option>';
 			}
-			dtrum.identifyUser(jsonObj[0].username);
+			//dtrum.identifyUser(jsonObj[0].username);
 			document.getElementById("bva_select").innerHTML = newHTML;
 			setBvaLinks();
+		}
+	})
+}
+
+function getSEAssessmentList() {
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+
+	var myInit = { method: 'GET',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin'
+	}
+
+	fetch('/getSEAssessmentList', myInit)
+
+	.then(function(response) {
+		return response.json();
+	})
+
+	.then(function(jsonObj) {
+		var newHTML = '';
+
+		if(jsonObj[0]._id == "new") {
+			document.getElementById("se_id").innerHTML = '<option value="">Create an assessment!</option>';
+			//dtrum.identifyUser(jsonObj[0].username);
+		}
+
+		else {
+			for(i=0;i<jsonObj.length;i++) {
+				newHTML += '<option value="' + jsonObj[i].id + '">' + jsonObj[i].company + '</option>';
+			}
+			//dtrum.identifyUser(jsonObj[0].username);
+			document.getElementById("se_id").innerHTML = newHTML;
+			setSeLinks();
 		}
 	})
 }
@@ -409,6 +739,145 @@ function getAssessmentData() {
 	})
 }
 
+function radioInput(name, id) {
+	if(name == null) {
+		
+	}
+	else {
+		document.getElementsByName(name)[id].checked = true;
+	}
+}
+
+function checkInput(name, value) {
+	if(value == true) {
+		document.getElementById(name).checked = true;
+	}
+}
+
+function getSeAssessmentData() {
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+
+	bva_id = getGet('se_id');
+
+	myHeaders.append("se_id", se_id);
+
+	var myInit = { method: 'GET',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin'
+	}
+
+	fetch('/getSeAssessmentData', myInit)
+
+	.then(function(response) {
+		return response.json();
+	})
+
+	.then(function(jsonResponse) {
+		
+		radioInput("trends", jsonResponse.trends);
+		document.getElementById("trends_prio").value = jsonResponse.trends_prio;
+		radioInput("causation", jsonResponse.causation);
+		document.getElementById("causation_prio").value = jsonResponse.causation_prio;
+		document.getElementById("outcomes_appowner_feedback").value = jsonResponse.outcomes_appowner_feedback;
+		radioInput("digital", jsonResponse.digital);
+		document.getElementById("digital_prio").value = jsonResponse.digital_prio;
+		radioInput("bi", jsonResponse.bi);
+		document.getElementById("bi_prio").value = jsonResponse.bi_prio;
+		radioInput("market", jsonResponse.market);
+		document.getElementById("market_prio").value = jsonResponse.market_prio;
+		document.getElementById("outcomes_cxo_feedback").value = jsonResponse.outcomes_cxo_feedback;
+		radioInput("driving", jsonResponse.driving);
+		document.getElementById("driving_prio").value = jsonResponse.driving_prio;
+		radioInput("healing", jsonResponse.healing);
+		document.getElementById("healing_prio").value = jsonResponse.healing_prio;
+		radioInput("culture", jsonResponse.culture);
+		document.getElementById("culture_prio").value = jsonResponse.culture_prio;
+		radioInput("automation", jsonResponse.automation);
+		document.getElementById("automation_prio").value = jsonResponse.automation_prio;
+		radioInput("bill", jsonResponse.bill);
+		document.getElementById("bill_prio").value = jsonResponse.bill_prio;
+		document.getElementById("autonomous_appowner_feedback").value = jsonResponse.autonomous_appowner_feedback;
+		radioInput("tool_cons", jsonResponse.tool_cons);
+		document.getElementById("tool_cons_prio").value = jsonResponse.tool_cons_prio;
+		radioInput("devops", jsonResponse.devops);
+		document.getElementById("devops_prio").value = jsonResponse.devops_prio;
+		radioInput("ai", jsonResponse.ai);
+		document.getElementById("ai_prio").value = jsonResponse.ai_prio;
+		radioInput("integrations", jsonResponse.integrations);
+		document.getElementById("integrations_prio").value = jsonResponse.integrations_prio;
+		document.getElementById("fullstack_ops_feedback").value = jsonResponse.fullstack_ops_feedback;
+		radioInput("release", jsonResponse.release);
+		document.getElementById("release_prio").value = jsonResponse.release_prio;
+		radioInput("lifecycle", jsonResponse.lifecycle);
+		document.getElementById("lifecycle_prio").value = jsonResponse.lifecycle_prio;
+		radioInput("shift", jsonResponse.shift);
+		document.getElementById("shift_prio").value = jsonResponse.shift_prio;
+		document.getElementById("fullstack_dev_feedback").value = jsonResponse.fullstack_dev_feedback;
+		radioInput("perfect", jsonResponse.perfect);
+		document.getElementById("perfect_prio").value = jsonResponse.perfect_prio;
+		radioInput("migration", jsonResponse.migration);
+		document.getElementById("migration_prio").value = jsonResponse.migration_prio;
+		radioInput("transaction", jsonResponse.transaction);
+		document.getElementById("transaction_prio").value = jsonResponse.transaction_prio;
+		document.getElementById("fullstack_appowner_feedback").value = jsonResponse.fullstack_appowner_feedback;
+		document.getElementById("lead_sales").value = jsonResponse.lead_sales;
+		document.getElementById("lead_se").value = jsonResponse.lead_se;
+		document.getElementById("business_champion").value = jsonResponse.business_champion;
+		document.getElementById("technical_champion").value = jsonResponse.technical_champion;
+		checkInput("saas", jsonResponse.saas);
+		checkInput("managed", jsonResponse.managed);
+		checkInput("offline", jsonResponse.offline);
+		document.getElementById("tenant").value = jsonResponse.tenant;
+		checkInput("windows", jsonResponse.windows);
+		checkInput("linux", jsonResponse.linux);
+		checkInput("aix", jsonResponse.aix);
+		checkInput("solaris", jsonResponse.solaris);
+		checkInput("vmware", jsonResponse.vmware);
+		checkInput("azure", jsonResponse.azure);
+		checkInput("aws", jsonResponse.aws);
+		checkInput("openshift", jsonResponse.openshift);
+		checkInput("cloudfoundry", jsonResponse.cloudfoundry);
+		checkInput("ibmcloud", jsonResponse.ibmcloud);
+		checkInput("oraclecloud", jsonResponse.oraclecloud);
+		checkInput("gcp", jsonResponse.gcp);
+		checkInput("heroku", jsonResponse.heroku);
+		checkInput("openstack", jsonResponse.openstack);
+		checkInput("kubernetes", jsonResponse.kubernetes);
+		checkInput("iaas", jsonResponse.iaas);
+		checkInput("paas", jsonResponse.paas);
+		checkInput("softaas", jsonResponse.softaas);
+		checkInput("faas", jsonResponse.faas);		
+		checkInput("java", jsonResponse.java);
+		checkInput("dotnet", jsonResponse.dotnet);
+		checkInput("php", jsonResponse.php);
+		checkInput("nodejs", jsonResponse.nodejs);	
+		checkInput("messaging", jsonResponse.messaging);
+		checkInput("c", jsonResponse.c);
+		checkInput("dotnetcore", jsonResponse.dotnetcore);
+		checkInput("webserver", jsonResponse.webserver);
+		checkInput("golang", jsonResponse.golang);
+		checkInput("mainframe", jsonResponse.mainframe);	
+		checkInput("web", jsonResponse.web);
+		checkInput("mobileapp", jsonResponse.mobileapp);
+		checkInput("thick", jsonResponse.thick);
+		checkInput("citrix", jsonResponse.citrix);		
+		checkInput("browser", jsonResponse.browser);
+		checkInput("http", jsonResponse.http);	
+		checkInput("external", jsonResponse.external);
+		checkInput("oaplugins", jsonResponse.oaplugins);
+		checkInput("cnd", jsonResponse.cnd);
+		checkInput("agplugins", jsonResponse.agplugins);
+		checkInput("externalevents", jsonResponse.externalevents);
+		checkInput("incidents", jsonResponse.incidents);
+		checkInput("cmdb", jsonResponse.cmdb);		
+		drawSeResults();
+	})
+}
+
 function updateAssessment() {
 	var assessment_data = {
 		company_revenue: getNumbersAndDots(document.getElementById("company_revenue").value),
@@ -467,6 +936,140 @@ function updateAssessment() {
 	}
 
 	fetch('/updateAssessment', myInit)
+
+	.then(function(response) {
+
+	})
+}
+
+function getRadioValue(name) {
+	var radios = document.getElementsByName(name);
+	for (i=0 ; i < radios.length ; i++) {
+		if(radios[i].checked == true) {
+			return i;
+		}
+	}
+}
+
+function updateSeAssessment() {
+	var assessment_data = {
+		trends: getRadioValue("trends"),
+		trends_prio: document.getElementById("trends_prio").value,
+		causation: getRadioValue("causation"),
+		causation_prio: document.getElementById("causation_prio").value,
+		outcomes_appowner_feedback: document.getElementById("outcomes_appowner_feedback").value,
+		digital: getRadioValue("digital"),
+		digital_prio: document.getElementById("digital_prio").value,
+		bi: getRadioValue("bi"),
+		bi_prio: document.getElementById("bi_prio").value,
+		market: getRadioValue("market"),
+		market_prio: document.getElementById("market_prio").value,
+		outcomes_cxo_feedback: document.getElementById("outcomes_cxo_feedback").value,
+		driving: getRadioValue("driving"),
+		driving_prio: document.getElementById("driving_prio").value,
+		healing: getRadioValue("healing"),
+		healing_prio: document.getElementById("healing_prio").value,
+		culture: getRadioValue("culture"),
+		culture_prio: document.getElementById("culture_prio").value,
+		automation: getRadioValue("automation"),
+		automation_prio: document.getElementById("automation_prio").value,
+		bill: getRadioValue("bill"),
+		bill_prio: document.getElementById("bill_prio").value,
+		autonomous_appowner_feedback: document.getElementById("autonomous_appowner_feedback").value,
+		tool_cons: getRadioValue("tool_cons"),
+		tool_cons_prio: document.getElementById("tool_cons_prio").value,
+		devops: getRadioValue("devops"),
+		devops_prio: document.getElementById("devops_prio").value,
+		ai: getRadioValue("ai"),
+		ai_prio: document.getElementById("ai_prio").value,
+		integrations: getRadioValue("integrations"),
+		integrations_prio: document.getElementById("integrations_prio").value,
+		fullstack_ops_feedback: document.getElementById("fullstack_ops_feedback").value,
+		release: getRadioValue("release"),
+		release_prio: document.getElementById("release_prio").value,
+		lifecycle: getRadioValue("lifecycle"),
+		lifecycle_prio: document.getElementById("lifecycle_prio").value,
+		shift: getRadioValue("shift"),
+		shift_prio: document.getElementById("shift_prio").value,
+		fullstack_dev_feedback: document.getElementById("fullstack_dev_feedback").value,
+		perfect: getRadioValue("perfect"),
+		perfect_prio: document.getElementById("perfect_prio").value,
+		migration: getRadioValue("migration"),
+		migration_prio: document.getElementById("migration_prio").value,
+		transaction: getRadioValue("transaction"),
+		transaction_prio: document.getElementById("transaction_prio").value,
+		fullstack_appowner_feedback: document.getElementById("fullstack_appowner_feedback").value,
+		lead_sales: document.getElementById("lead_sales").value,
+		lead_se: document.getElementById("lead_se").value,
+		business_champion: document.getElementById("business_champion").value,
+		technical_champion: document.getElementById("technical_champion").value,
+		saas: document.getElementById("saas").checked,
+		managed: document.getElementById("managed").checked,
+		offline: document.getElementById("offline").checked,
+		tenant: document.getElementById("tenant").value,
+		windows: document.getElementById("windows").checked,
+		linux: document.getElementById("linux").checked,
+		aix: document.getElementById("aix").checked,
+		solaris: document.getElementById("solaris").checked,
+		vmware: document.getElementById("vmware").checked,
+		azure: document.getElementById("azure").checked,
+		aws: document.getElementById("aws").checked,
+		openshift: document.getElementById("openshift").checked,
+		cloudfoundry: document.getElementById("cloudfoundry").checked,
+		ibmcloud: document.getElementById("ibmcloud").checked,
+		oraclecloud: document.getElementById("oraclecloud").checked,
+		gcp: document.getElementById("gcp").checked,
+		heroku: document.getElementById("heroku").checked,
+		openstack: document.getElementById("openstack").checked,
+		kubernetes: document.getElementById("kubernetes").checked,
+		iaas: document.getElementById("iaas").checked,
+		paas: document.getElementById("paas").checked,
+		faas: document.getElementById("faas").checked,
+		softaas: document.getElementById("softaas").checked,
+		java: document.getElementById("java").checked,
+		dotnet: document.getElementById("dotnet").checked,
+		php: document.getElementById("php").checked,
+		nodejs: document.getElementById("nodejs").checked,
+		messaging: document.getElementById("messaging").checked,
+		c: document.getElementById("c").checked,
+		dotnetcore: document.getElementById("dotnetcore").checked,
+		webserver: document.getElementById("webserver").checked,
+		golang: document.getElementById("golang").checked,
+		mainframe: document.getElementById("mainframe").checked,
+		web: document.getElementById("web").checked,
+		mobileapp: document.getElementById("mobileapp").checked,
+		thick: document.getElementById("thick").checked,
+		citrix: document.getElementById("citrix").checked,
+		browser: document.getElementById("browser").checked,
+		http: document.getElementById("http").checked,
+		external: document.getElementById("external").checked,
+		oaplugins: document.getElementById("oaplugins").checked,
+		cnd: document.getElementById("cnd").checked,
+		agplugins: document.getElementById("agplugins").checked,
+		externalevents: document.getElementById("externalevents").checked,
+		incidents: document.getElementById("incidents").checked,
+		cmdb: document.getElementById("cmdb").checked,
+	}
+
+	console.log(assessment_data);
+	
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+
+	se_id = getGet('se_id');
+
+	myHeaders.append("se_id", se_id);
+
+	var myInit = { method: 'POST',
+	 headers: myHeaders,
+	 cache: 'default',
+	 credentials: 'same-origin',
+	 body: JSON.stringify(assessment_data)
+	}
+
+	fetch('/updateSeAssessment', myInit)
 
 	.then(function(response) {
 
@@ -543,11 +1146,83 @@ function addListeners() {
 		if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
 		updateAssessment();
 		drawResults();
-	});		
+	});	
 	
 	$("#open-report").click(function() {
 		openReport();
 	});
+}
+
+function addSeListeners() {
+
+	getSeTabs();
+
+	//$(".leftContainer").css("height", $('.biz').css('height'));
+	
+	//$(".leftContainer").css("height", $('.options').css('height'));
+
+		function goToAnchor(anchor) {
+		  var loc = document.location.toString().split('#')[0];
+		  document.location = loc + '#' + anchor;
+		  return false;
+		}
+
+	$(" .opsFromBiz ").click(function() {
+		goToAnchor("autonomous");
+		getSeAssessmentData();
+	});
+
+	$(" .bizFromOps ").click(function() {
+		goToAnchor("outcomes");
+		getSeAssessmentData();
+	});
+
+	$(" .devFromOps ").click(function() {
+		goToAnchor("enterprise");
+		getSeAssessmentData();
+	});
+
+	$(" .opsFromDev ").click(function() {
+		goToAnchor("autonomous");
+		getSeAssessmentData();
+	});
+
+	$(" .optionsFromDev ").click(function() {
+		goToAnchor("technical");
+		getSeAssessmentData();
+	});
+
+	$(" .devFromOptions ").click(function() {
+		goToAnchor("enterprise");
+		getSeAssessmentData();
+	});
+
+	showSeContent();
+
+	$('.radio').click(function() {
+		//this.parentElement.getElementsByTagName("input")[0].checked == true;
+		updateSeAssessment();
+		drawSeResults();
+	} );
+
+	$('#autonomous_appowner_feedback, #fullstack_appowner_feedback, #fullstack_dev_feedback, #fullstack_ops_feedback, #outcomes_appowner_feedback, #outcomes_cxo_feedback, #lead_sales, #lead_se, #business_champion, #technical_champion, #tenant').on( "blur", function() {
+		// if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
+		 updateSeAssessment();
+		 drawSeResults();
+	} );
+	
+	$('.checkbox').click(function() {
+		// if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
+		 updateSeAssessment();
+		 drawSeResults();
+	} );	
+	
+	$(".select").change(function() {
+		// if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
+		 updateSeAssessment();
+		 drawSeResults();
+	} );		
+
 }
 
 function showContent() {
@@ -571,6 +1246,34 @@ function showContent() {
 		}
 
 		if ($(location).attr('hash').substr(1) == "options") {
+			$(".options, .result-options").fadeIn();
+			$(".biz, .result-biz, .ops, .result-ops, .dev, .result-dev").fadeOut();
+			$(".leftContainer").css("height", $('.options').css('height'));
+		}
+
+}
+
+function showSeContent() {
+
+		if ($(location).attr('hash').substr(1) == "outcomes") {
+			$(".biz, .result-biz").fadeIn();
+			$(".ops, .result-ops, .dev, .result-dev, .options, .result-options").fadeOut();
+			$(".leftContainer").css("height", $('.biz').css('height'));
+		}
+
+		if ($(location).attr('hash').substr(1) == "autonomous") {
+			$(".ops, .result-ops").fadeIn();
+			$(".biz, .result-biz, .dev, .result-dev, .options, .result-options").fadeOut();
+			$(".leftContainer").css("height", $('.ops').css('height'));
+		}
+
+		if ($(location).attr('hash').substr(1) == "enterprise") {
+			$(".dev, .result-dev").fadeIn();
+			$(".biz, .result-biz, .ops, .result-ops, .options, .result-options").fadeOut();
+			$(".leftContainer").css("height", $('.dev').css('height'));
+		}
+
+		if ($(location).attr('hash').substr(1) == "technical") {
 			$(".options, .result-options").fadeIn();
 			$(".biz, .result-biz, .ops, .result-ops, .dev, .result-dev").fadeOut();
 			$(".leftContainer").css("height", $('.options').css('height'));
@@ -630,6 +1333,45 @@ function getTabs() {
 		getAssessmentData();
 
 	})
+}
+
+function getSeTabs() {
+	se_id = getGet('se_id');
+
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+	myHeaders.append("se_id", se_id);
+
+	var myInit = { method: 'GET',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin'
+	}
+
+	fetch('/getSeUserDetails', myInit)
+
+	.then(function(response) {
+		return response.json();
+	})
+
+	.then(function(jsonObj) {
+
+		document.getElementsByClassName("user-email")[0].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
+		document.getElementsByClassName("user-company")[0].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
+
+		document.getElementsByClassName("user-email")[1].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
+		document.getElementsByClassName("user-company")[1].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
+
+		document.getElementsByClassName("user-email")[2].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
+		document.getElementsByClassName("user-company")[2].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
+
+		document.getElementsByClassName("user-email")[3].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
+		document.getElementsByClassName("user-company")[3].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
+	})
+	
+	getSeAssessmentData();
 }
 
 function addExistingTool() {
@@ -734,6 +1476,11 @@ function addDeleteId() {
 	document.getElementById("finalDelete").href="/deleteAssessment?bva_id=" + id;
 }
 
+function addSeDeleteId() {
+	id = getGet('se_id');
+	document.getElementById("finalDelete").href="/deleteSeAssessment?se_id=" + id;
+}
+
 function deleteAssessment() {
 
 	var tool_id = generateId();
@@ -785,6 +1532,370 @@ function deleteAssessment() {
 		document.getElementById("existing_y3").value = "";
 
 	})
+
+}
+
+function drawSeResults() {
+
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+
+	bva_id = getGet('se_id');
+
+	myHeaders.append("se_id", se_id);
+
+	var myInit = { method: 'GET',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin'
+	}
+
+	fetch('/getSeAssessmentData', myInit)
+
+	.then(function(response) {
+		return response.json();
+	})
+
+	.then(function(jsonResponse) {
+
+			//Something to draw?
+
+			// if (jsonResponse.trends > 1) {
+			// 	$('#no-results').fadeOut();
+			// 	$('#results').fadeIn();
+			// 	$('#loading').fadeOut();			
+			// }
+
+			// else {
+			// 	$('#no-results').fadeIn();
+			// 	$('#results').fadeOut();
+			// 	$('#loading').fadeOut();
+			// }
+			
+			var outcomesTotal = jsonResponse.trends + jsonResponse.causation + jsonResponse.digital + jsonResponse.bi + jsonResponse.market;
+			var outcomesProg = Math.ceil((outcomesTotal / 15) * 100);
+			var outcomesValue = 1514 - (1514 / 100 * outcomesProg);
+			document.getElementById("resultCircles").getElementsByClassName("divTableCell")[0].innerHTML="<div id=\"outcomesCircle\" class=\"progresscircle progresscircle--bold theme--purple \" ><svg viewBox=\"0 0 512 512\" ><path class=\"progresscircle__background\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" /><path class=\"progresscircle__progress\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" style=\"stroke-dashoffset: " + outcomesValue + ";\"/></svg></div>";
+			document.getElementById("resultPercent").getElementsByClassName("divTableCell")[0].innerHTML="<b class=\"se-big-text\">" + outcomesProg + "%</b> (" + outcomesTotal + "/15)<br /><i class=\"se-small-text\">Demonstrating the outcomes to business owners</i>";
+			
+			var autonomousTotal = jsonResponse.driving + jsonResponse.healing + jsonResponse.culture + jsonResponse.automation + jsonResponse.bill;
+			var autonomousProg = Math.ceil((autonomousTotal / 15) * 100);
+			var autonomousValue = 1514 - (1514 / 100 * autonomousProg);
+			document.getElementById("resultCircles").getElementsByClassName("divTableCell")[1].innerHTML="<div id=\"autonomousCircle\" class=\"progresscircle progresscircle--bold theme--green \" data-progress=" + autonomousValue + " ><svg viewBox=\"0 0 512 512\" ><path class=\"progresscircle__background\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" /><path class=\"progresscircle__progress\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" style=\"stroke-dashoffset: " + autonomousValue + ";\"/></svg></div>";
+			document.getElementById("resultPercent").getElementsByClassName("divTableCell")[1].innerHTML="<b class=\"se-big-text\">" + autonomousProg + "%</b> (" + autonomousTotal + "/15)<br /><i class=\"se-small-text\">The journey towards the autonomous cloud</i>";
+			
+			var fullStackTotal = jsonResponse.tool_cons + jsonResponse.devops + jsonResponse.ai + jsonResponse.integrations + jsonResponse.release + jsonResponse.lifecycle + jsonResponse.shift + jsonResponse.perfect + jsonResponse.migration + jsonResponse.transaction;
+			var fullStackProg = Math.ceil((fullStackTotal / 30) * 100);
+			var fullStackValue = 1514 - (1514 / 100 * fullStackProg);
+			document.getElementById("resultCircles").getElementsByClassName("divTableCell")[2].innerHTML="<div id=\"fullStackCircle\" class=\"progresscircle progresscircle--bold theme--blue \" data-progress=" + fullStackValue + " ><svg viewBox=\"0 0 512 512\" ><path class=\"progresscircle__background\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" /><path class=\"progresscircle__progress\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" style=\"stroke-dashoffset: " + fullStackValue + ";\"/></svg></div>";
+			document.getElementById("resultPercent").getElementsByClassName("divTableCell")[2].innerHTML="<b class=\"se-big-text\">" + fullStackProg + "%</b> (" + fullStackTotal + "/30)<br /><i class=\"se-small-text\">Full-stack monitoring of the new enterprise cloudd</i>";
+			
+			
+			var bizPrios = ["trends", "causation", "digital", "bi", "market"];
+			var autoPrios = ["driving", "healing", "culture", "automation", "bill"];
+			var fullstackPrios = ["tool_cons", "devops", "ai", "integrations", "release", "lifecycle", "shift", "perfect", "migration", "transaction"];
+			
+			var bizArray = [];
+			
+			//BIZNISS
+			var totalOrder = [];
+			
+			//Loop through the priorities
+			var highOrder = {};
+			var highCount = 0;
+			for(i=0; i<bizPrios.length; i++) {
+				var temp = eval("jsonResponse." + bizPrios[i] + "_prio");
+				
+				//If it's high and not POC, add it to the array
+				if(temp == "high" && eval("jsonResponse." + bizPrios[i]) < 3) {
+					highOrder[bizPrios[i]] = eval("jsonResponse." + bizPrios[i]);
+					highCount++;
+				}	
+			}
+
+			//Add the high ones to the total
+			for (i=0; i<highCount; i++) {
+				if(i < 3) {
+					totalOrder.push(sortMe(highOrder)[i][0]);
+				}	
+			}
+
+
+			//If not enough high priority, carry on to medium
+			if(highCount < 3) {
+				var mediumOrder = {};	
+				var mediumCount = 0;
+				for(i=0; i<bizPrios.length; i++) {
+					var temp = eval("jsonResponse." + bizPrios[i] + "_prio");
+					
+					//If it's medium and not POC, add it to the array
+					if(temp == "medium" && eval("jsonResponse." + bizPrios[i]) < 3) {
+						mediumOrder[bizPrios[i]] = eval("jsonResponse." + bizPrios[i]);
+						mediumCount++;
+					}			
+				}	
+			}
+
+			//For the remaining gaps, add medium ones as far as possible
+			for (i=0; i<3-highCount; i++) {
+				if(sortMe(mediumOrder)[i] != undefined && i < 3-highCount) {
+					totalOrder.push(sortMe(mediumOrder)[i][0]);
+				}	
+			}		
+	
+			//If not enough medium, carry on to low
+			
+			if(totalOrder.length < 3) {	
+				var lowOrder = {};
+				var lowCount = 0;
+				for(i=0; i<bizPrios.length; i++) {
+					var temp = eval("jsonResponse." + bizPrios[i] + "_prio");
+					
+					//If it's low and not POC, add it to the array
+					if(temp == "low" && eval("jsonResponse." + bizPrios[i]) < 3) {
+						lowOrder[bizPrios[i]] = eval("jsonResponse." + bizPrios[i]);
+						lowCount++;
+					}					
+				}				
+			}		
+
+			//For the remaining gaps, add low ones as far as possible
+			var remaining = 3 - totalOrder.length;
+			for (i=0; i<remaining; i++) {
+				if(sortMe(lowOrder)[i] != undefined && i<remaining) {
+					totalOrder.push(sortMe(lowOrder)[i][0]);
+				}	
+			}				
+			
+			if(totalOrder.length == 0) {
+				console.log("nothing");
+			}
+			else {
+				var convos = ["trends","causation","digital","bi","market","driving","healing","culture","automation","bill","tool_cons","devops","ai","integration","release","lifecycle","shift","perfect","migration","transaction"];
+				var convo_desc = ["Improvement trends due to tuning and transaction monitoring","Correlation vs. causation","Digital experience insights","Integrate with BI solutions","Market insights via DT One","Self-driving IT","Self-healing","Culture change","Automation","Managing your cloud bill","Tool consolidation","Scaling for DevOps","AI-driven actions","Integrations and automation","How to release software faster","Integrate across application lifecycle","DevOps- shifting left","Delivering the perfect software experience","Cloud migration","Business transaction monitoring"];
+				var convo_team = ["Application Owners","Application Owners","CxO","CxO","CxO","CxO/Application owners","CxO/Application owners","CxO/Application owners","CxO/Application owners","CxO/Application owners","Operations team","Operations team","Operations team","Operations team","Development team","Development team","Development team","Application owner","Application owner","Application owner"];
+				var convo_stage = ["not started","Conversation","Demonstration","POC"];
+				var convo_pic = ["info","discuss","demo","trial"];
+				
+				var bizResults = "";
+				for(i=0;i<totalOrder.length;i++) {
+					for(x=0;x<convos.length;x++) {
+						if(totalOrder[i] == convos[x]) {
+							//console.log("matching " + totalOrder[i] + " with " + convos[x] + " and priority " + eval("jsonResponse." + totalOrder[i]));
+							var tempDesc = convo_desc[x];
+							var tempTeam = convo_team[x];
+							var tempStage = convo_stage[eval("jsonResponse." + totalOrder[i]) + 1];
+							var tempPic = convo_pic[eval("jsonResponse." + totalOrder[i]) + 1];
+							break;
+						}
+					}
+					bizResults += "<div class=\"infochip infochip-se\"><div class=\"infochip__icon\"><img class=\"se-question-image\" src=\"/static/" + tempPic + "-purple.png\"/></div><div class=\"infochip__desc\"><div class=\"infochip__desc__title\" style=\"white-space: normal\" title=\"Title\">" + tempDesc + "</div><div>" + tempStage + " with " + tempTeam + "</div></div><br /><br /></div>"
+				}	
+
+				document.getElementById("conversationPriority").getElementsByClassName("divTableCell")[0].innerHTML=bizResults;
+			}
+
+
+			//AUTONOMOUS
+			var totalOrder = [];
+			
+			//Loop through the priorities
+			var highOrder = {};
+			var highCount = 0;
+			for(i=0; i<autoPrios.length; i++) {
+				var temp = eval("jsonResponse." + autoPrios[i] + "_prio");
+				
+				//If it's high and not POC, add it to the array
+				if(temp == "high" && eval("jsonResponse." + autoPrios[i]) < 3) {
+					highOrder[autoPrios[i]] = eval("jsonResponse." + autoPrios[i]);
+					highCount++;
+				}	
+			}
+
+			//Add the high ones to the total
+			for (i=0; i<highCount; i++) {
+				if(i < 3) {
+					totalOrder.push(sortMe(highOrder)[i][0]);
+				}	
+			}
+
+
+			//If not enough high priority, carry on to medium
+			if(highCount < 3) {
+				var mediumOrder = {};	
+				var mediumCount = 0;
+				for(i=0; i<autoPrios.length; i++) {
+					var temp = eval("jsonResponse." + autoPrios[i] + "_prio");
+					
+					//If it's medium and not POC, add it to the array
+					if(temp == "medium" && eval("jsonResponse." + autoPrios[i]) < 3) {
+						mediumOrder[autoPrios[i]] = eval("jsonResponse." + autoPrios[i]);
+						mediumCount++;
+					}			
+				}	
+			}
+
+			//For the remaining gaps, add medium ones as far as possible
+			for (i=0; i<3-highCount; i++) {
+				if(sortMe(mediumOrder)[i] != undefined && i < 3-highCount) {
+					totalOrder.push(sortMe(mediumOrder)[i][0]);
+				}	
+			}		
+	
+			//If not enough medium, carry on to low
+			
+			if(totalOrder.length < 3) {	
+				var lowOrder = {};
+				var lowCount = 0;
+				for(i=0; i<autoPrios.length; i++) {
+					var temp = eval("jsonResponse." + autoPrios[i] + "_prio");
+					
+					//If it's low and not POC, add it to the array
+					if(temp == "low" && eval("jsonResponse." + autoPrios[i]) < 3) {
+						lowOrder[autoPrios[i]] = eval("jsonResponse." + autoPrios[i]);
+						lowCount++;
+					}					
+				}				
+			}		
+
+			//For the remaining gaps, add low ones as far as possible
+			var remaining = 3 - totalOrder.length;
+			for (i=0; i<remaining; i++) {
+				if(sortMe(lowOrder)[i] != undefined && i<remaining) {
+					totalOrder.push(sortMe(lowOrder)[i][0]);
+				}	
+			}				
+			
+			if(totalOrder.length == 0) {
+				console.log("nothing");
+			}
+			else {
+				var convos = ["trends","causation","digital","bi","market","driving","healing","culture","automation","bill","tool_cons","devops","ai","integration","release","lifecycle","shift","perfect","migration","transaction"];
+				var convo_desc = ["Improvement trends due to tuning and transaction monitoring","Correlation vs. causation","Digital experience insights","Integrate with BI solutions","Market insights via DT One","Self-driving IT","Self-healing","Culture change","Automation","Managing your cloud bill","Tool consolidation","Scaling for DevOps","AI-driven actions","Integrations and automation","How to release software faster","Integrate across application lifecycle","DevOps- shifting left","Delivering the perfect software experience","Cloud migration","Business transaction monitoring"];
+				var convo_team = ["Application Owners","Application Owners","CxO","CxO","CxO","CxO/Application owners","CxO/Application owners","CxO/Application owners","CxO/Application owners","CxO/Application owners","Operations team","Operations team","Operations team","Operations team","Development team","Development team","Development team","Application owner","Application owner","Application owner"];
+				var convo_stage = ["not started","Conversation","Demonstration","POC"];
+				var convo_pic = ["info","discuss","demo","trial"];
+				
+				var autoResults = "";
+				for(i=0;i<totalOrder.length;i++) {
+					for(x=0;x<convos.length;x++) {
+						if(totalOrder[i] == convos[x]) {
+							//console.log("matching " + totalOrder[i] + " with " + convos[x] + " and priority " + eval("jsonResponse." + totalOrder[i]));
+							var tempDesc = convo_desc[x];
+							var tempTeam = convo_team[x];
+							var tempStage = convo_stage[eval("jsonResponse." + totalOrder[i]) + 1];
+							var tempPic = convo_pic[eval("jsonResponse." + totalOrder[i]) + 1];
+							break;
+						}
+					}
+					autoResults += "<div class=\"infochip infochip-se\"><div class=\"infochip__icon\"><img class=\"se-question-image\" src=\"/static/" + tempPic + "-green.png\"/></div><div class=\"infochip__desc\"><div class=\"infochip__desc__title\" style=\"white-space: normal\" title=\"Title\">" + tempDesc + "</div><div>" + tempStage + " with " + tempTeam + "</div></div><br /><br /></div>"
+				}	
+
+				document.getElementById("conversationPriority").getElementsByClassName("divTableCell")[1].innerHTML=autoResults;	
+			}
+
+			//FULLSTACK
+			var totalOrder = [];
+			
+			//Loop through the priorities
+			var highOrder = {};
+			var highCount = 0;
+			for(i=0; i<fullstackPrios.length; i++) {
+				var temp = eval("jsonResponse." + fullstackPrios[i] + "_prio");
+				
+				//If it's high and not POC, add it to the array
+				if(temp == "high" && eval("jsonResponse." + fullstackPrios[i]) < 3) {
+					highOrder[fullstackPrios[i]] = eval("jsonResponse." + fullstackPrios[i]);
+					highCount++;
+				}	
+			}
+
+			//Add the high ones to the total
+			for (i=0; i<highCount; i++) {
+				if(i < 3) {
+					totalOrder.push(sortMe(highOrder)[i][0]);
+				}	
+			}
+
+
+			//If not enough high priority, carry on to medium
+			if(highCount < 3) {
+				var mediumOrder = {};	
+				var mediumCount = 0;
+				for(i=0; i<fullstackPrios.length; i++) {
+					var temp = eval("jsonResponse." + fullstackPrios[i] + "_prio");
+					
+					//If it's medium and not POC, add it to the array
+					if(temp == "medium" && eval("jsonResponse." + fullstackPrios[i]) < 3) {
+						mediumOrder[fullstackPrios[i]] = eval("jsonResponse." + fullstackPrios[i]);
+						mediumCount++;
+					}			
+				}	
+			}
+
+			//For the remaining gaps, add medium ones as far as possible
+			for (i=0; i<3-highCount; i++) {
+				if(sortMe(mediumOrder)[i] != undefined && i < 3-highCount) {
+					totalOrder.push(sortMe(mediumOrder)[i][0]);
+				}	
+			}		
+	
+			//If not enough medium, carry on to low
+			
+			if(totalOrder.length < 3) {	
+				var lowOrder = {};
+				var lowCount = 0;
+				for(i=0; i<fullstackPrios.length; i++) {
+					var temp = eval("jsonResponse." + fullstackPrios[i] + "_prio");
+					
+					//If it's low and not POC, add it to the array
+					if(temp == "low" && eval("jsonResponse." + fullstackPrios[i]) < 3) {
+						lowOrder[fullstackPrios[i]] = eval("jsonResponse." + fullstackPrios[i]);
+						lowCount++;
+					}					
+				}				
+			}		
+
+			//For the remaining gaps, add low ones as far as possible
+			var remaining = 3 - totalOrder.length;
+			for (i=0; i<remaining; i++) {
+				if(sortMe(lowOrder)[i] != undefined && i<remaining) {
+					totalOrder.push(sortMe(lowOrder)[i][0]);
+				}	
+			}				
+			
+			if(totalOrder.length == 0) {
+				console.log("nothing");
+			}
+			else {
+				var convos = ["trends","causation","digital","bi","market","driving","healing","culture","automation","bill","tool_cons","devops","ai","integrations","release","lifecycle","shift","perfect","migration","transaction"];
+				var convo_desc = ["Improvement trends due to tuning and transaction monitoring","Correlation vs. causation","Digital experience insights","Integrate with BI solutions","Market insights via DT One","Self-driving IT","Self-healing","Culture change","Automation","Managing your cloud bill","Tool consolidation","Scaling for DevOps","AI-driven actions","Integrations and automation","How to release software faster","Integrate across application lifecycle","DevOps- shifting left","Delivering the perfect software experience","Cloud migration","Business transaction monitoring"];
+				var convo_team = ["Application Owners","Application Owners","CxO","CxO","CxO","CxO/Application owners","CxO/Application owners","CxO/Application owners","CxO/Application owners","CxO/Application owners","Operations team","Operations team","Operations team","Operations team","Development team","Development team","Development team","Application owner","Application owner","Application owner"];
+				var convo_stage = ["not started","Conversation","Demonstration","POC"];
+				var convo_pic = ["info","discuss","demo","trial"];
+				
+
+				var fullResults = "";
+				for(i=0;i<totalOrder.length;i++) {
+					for(x=0;x<convos.length;x++) {
+						if(totalOrder[i] == convos[x]) {
+							var tempDesc = convo_desc[x];
+							var tempTeam = convo_team[x];
+							var tempStage = convo_stage[eval("jsonResponse." + totalOrder[i]) + 1];
+							var tempPic = convo_pic[eval("jsonResponse." + totalOrder[i]) + 1];
+							break;
+						}
+					}
+					fullResults += "<div class=\"infochip infochip-se\"><div class=\"infochip__icon\"><img class=\"se-question-image\" src=\"/static/" + tempPic + "-blue.png\"/></div><div class=\"infochip__desc\"><div class=\"infochip__desc__title\" title=\"Title\" style=\"white-space: normal\">" + tempDesc + "</div><div>" + tempStage + " with " + tempTeam + "</div></div><br /><br /></div>"
+				}	
+
+				document.getElementById("conversationPriority").getElementsByClassName("divTableCell")[2].innerHTML=fullResults;	
+			}
+			
+	})
+
 
 }
 

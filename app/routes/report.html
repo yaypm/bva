@@ -14,38 +14,46 @@
 	<style>a:hover {cursor:pointer;}</style>
 	<script src="/static/bva.js"></script>
 	<script src="//code.jquery.com/jquery-1.12.4.js"></script>
-	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>	
+	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="/static/html2canvas.js"></script>
 	<script type="text/javascript">
 		document.addEventListener("DOMContentLoaded", function(event) {
 			addListeners();
 		});
+
+		function takeScreenshot() {
+			html2canvas(document.body).then(function(canvas) {
+				originalBody = document.getElementsByClassName("bva-body")[0];
+				document.replaceChild(originalBody, canvas);
+			});
+		}
 	</script>
-	
+
 </head>
 
 <body class="bva-body">
 
 <!--start of content-->
 <div class=" bva-content">
- 
+
 <div style="display: none" >
 
 <div class="leftContainer" style="position: relative; height: 964px">
 
 <input type="hidden" id="currency"/>
 
-<div class="biz">  
+<div class="biz">
 
 
 
-<!-- start of title -->   
+<!-- start of title -->
 <div class="bva-title-wrapper bva-title-wrapper-biz">
 
 	<div class="bva-title-wrapper-inner">
-	
+
 		<h1 class="bva-title-text">Business</h1>
 		<p>Increased revenue from improved technology performance</p>
-		
+
 	</div>
 
 </div>
@@ -56,14 +64,14 @@
 
 	<span tabindex="1" class="tag user-email">
 	  <span class="tag__key">email:</span>
-	  
+
 	</span>
-	
+
 	<span tabindex="1" class="tag user-company">
 	  <span class="tag__key">company:</span>
-	  
+
 	</span>
-	
+
 </div>
 <!--end of tags-->
 
@@ -75,80 +83,80 @@
 
 <!--start of questions-->
 <div class="bva-all-question-wrapper">
-	
+
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/sales-purple.svg" class="bva-question-image"/>
-		
-		<div class="bva-input-wrapper">	
-			
+
+		<div class="bva-input-wrapper">
+
 			<label for="company_revenue" class="label bva-question-text" >Company or business unit annual revenue</label>
 			<input type="text" class="inputfield bva-question-input" id="company_revenue" placeholder="revenue"  />
-	
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
 
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/trend-purple.svg" class="bva-question-image"/>
-		
-		<div class="bva-input-wrapper">	
-			
+
+		<div class="bva-input-wrapper">
+
 			<label for="projected_growth" class="label bva-question-text">Projected annual growth rate</label>
 			<input type="text" class="inputfield bva-question-input" id="projected_growth" placeholder="growth"/>
-		
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
 
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/application-purple.svg" class="bva-question-image"/>
-	
-		<div class="bva-input-wrapper">	
-			
+
+		<div class="bva-input-wrapper">
+
 			<label for="revenue_dependent" class="label bva-question-text">Revenue dependent on applications</label>
 			<input type="text" class="inputfield bva-question-input" id="revenue_dependent" placeholder="% revenue" />
-		
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
 
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/health-purple.svg" class="bva-question-image"/>
-	
-		<div class="bva-input-wrapper">	
-	
+
+		<div class="bva-input-wrapper">
+
 			<label for="app_uptime" class="label bva-question-text" >Excluding planned maintenance, how often do you experience an application degradation or outage?</label>
 			<input type="text" class="inputfield bva-question-input" id="app_uptime" placeholder="% of time"/>
-	
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
 
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/warning-purple.svg" class="bva-question-image"/>
-		
-		<div class="bva-input-wrapper">	
-	
+
+		<div class="bva-input-wrapper">
+
 			<label for="revenue_breach" class="label bva-question-text" >Percentage of revenue lost during a degradation or outage</label>
 			<input type="text" class="inputfield bva-question-input" id="revenue_breach" placeholder="% of revenue lost" />
-	
+
 		</div>
-	
+
 	</div>
-		
+
 </div>
 <!--end of questions-->
 
@@ -167,14 +175,14 @@
 
 
 <div class="ops">
-<!-- start of title -->   
+<!-- start of title -->
 <div class="bva-title-wrapper bva-title-wrapper-ops">
 
 	<div class="bva-title-wrapper-inner">
-		
+
 		<h1 class="bva-title-text">Operations</h1>
 		<p>Reducing the frequency and cost of issues</p>
-		
+
 	</div>
 
 </div>
@@ -185,11 +193,11 @@
 	<span tabindex="1" class="tag user-email">
 	  <span class="tag__key">email:</span>
 	</span>
-	
+
 	<span tabindex="1" class="tag user-company">
 	  <span class="tag__key">id:</span>
 	</span>
-	
+
 </div>
 <!--end of tags-->
 
@@ -201,178 +209,178 @@
 
 <!--start of questions-->
 <div class="bva-all-question-wrapper">
-	
+
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/incident-green.svg" class="bva-question-image"/>
-		
-		<div class="bva-input-wrapper">	
-	
+
+		<div class="bva-input-wrapper">
+
 			<label for="incidents_month" class="label bva-question-text">Number of incidents reported per month caused by slowness or availability</label>
 			<input type="text" class="inputfield bva-question-input" id="incidents_month" placeholder="# of incidents"/>
-	
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
 
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/ops-green.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="no_ops_troubleshoot" class="label bva-question-text">Average number of Ops people used to troubleshoot an incident</label>
 			<input type="text" class="inputfield bva-question-input" id="no_ops_troubleshoot" placeholder="# of Ops people"/>
-		
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
 
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/dev-green.svg" class="bva-question-image"/>
-	
-		<div class="bva-input-wrapper">	
-	
+
+		<div class="bva-input-wrapper">
+
 			<label for="no_dev_troubleshoot" class="label bva-question-text">Average number of Dev people used to troubleshoot an incident</label>
 			<input type="text" class="inputfield bva-question-input" id="no_dev_troubleshoot" placeholder="# of Dev people"/>
-	
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
 
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/repair-green.svg" class="bva-question-image"/>
-		
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="mttr" class="label bva-question-text">Average MTTR</label>
 			<input type="text" class="inputfield bva-question-input" id="mttr" placeholder="# of minutes"/>
-		
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
 
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/transaction-green.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="no_apps_e2e" class="label bva-question-text"># of apps being monitored end-to-end currently</label>
 			<input type="text" class="inputfield bva-question-input" id="no_apps_e2e" placeholder="# of apps"/>
-	
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
-	
+
 	<div class="bva-question-wrapper">
-		
+
 		<img src="/static/application-green.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="no_t1t2_apps" class="label bva-question-text">Total # of T1/T2 apps in production</label>
 			<input type="text" class="inputfield bva-question-input" id="no_t1t2_apps" placeholder="# of apps"/>
-	
+
 		</div>
-	
+
 	</div>
-	
-		<br /><br />	
-	
+
+		<br /><br />
+
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/user-green.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="no_fte_existing" class="label bva-question-text"># of FTEs looking after existing tools</label>
 			<input type="text" class="inputfield bva-question-input" id="no_fte_existing" placeholder="# of FTEs"/>
-	
+
 		</div>
-	
+
 	</div>
-	
-		<br /><br />	
-	
+
+		<br /><br />
+
 	<h2 class="bva-question-text-centre">Replacement of existing tools</h2>
-	
+
 		<br />
-	
+
 		<div class="bva-question-wrapper">
-	
+
 			<img src="/static/tools-green.svg" class="bva-question-image"/>
-	
-			<div class="bva-input-wrapper">	
-			
+
+			<div class="bva-input-wrapper">
+
 				<label for="name_tool" class="label bva-question-text">Name of tool</label>
 				<input type="text" class="inputfield bva-question-input" id="name_tool" placeholder="Name of tool"/>
-			
+
 			</div>
-	
-		</div>
-	
-		<div class="bva-question-wrapper bva-question-top">
-	
-			<div class="bva-question-block">	
-	
-				<label for="annual_cost" class="label bva-question-text">Annual license and support costs</label>
-				<input type="text" class="inputfield bva-question-input" id="annual_cost" placeholder="annual costs"/>
-	
-			</div>
-		
-		</div>
-	
-		<div class="bva-question-wrapper bva-question-top">
-	
-			<div class="bva-question-block">	
-	
-				<label for="no_fte_config" class="label bva-question-text">FTEs used for config and admin</label>
-				<input type="text" class="inputfield bva-question-input" id="no_fte_config" placeholder="# of FTEs"/>
-	
-			</div>
-		
+
 		</div>
 
 		<div class="bva-question-wrapper bva-question-top">
-	
-			<div class="bva-question-existing-wrapper">	
-			
+
+			<div class="bva-question-block">
+
+				<label for="annual_cost" class="label bva-question-text">Annual license and support costs</label>
+				<input type="text" class="inputfield bva-question-input" id="annual_cost" placeholder="annual costs"/>
+
+			</div>
+
+		</div>
+
+		<div class="bva-question-wrapper bva-question-top">
+
+			<div class="bva-question-block">
+
+				<label for="no_fte_config" class="label bva-question-text">FTEs used for config and admin</label>
+				<input type="text" class="inputfield bva-question-input" id="no_fte_config" placeholder="# of FTEs"/>
+
+			</div>
+
+		</div>
+
+		<div class="bva-question-wrapper bva-question-top">
+
+			<div class="bva-question-existing-wrapper">
+
 				<label class="label bva-question-existing-label">% replaced with Dynatrace</label>
 				<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y1" placeholder="Year 1"/>
 				<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y2" placeholder="Year 2"/>
 				<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y3" placeholder="Year 3"/>
-			
+
 			</div>
-	
+
 		</div>
-	
+
 		<div class="bva-question-wrapper bva-question-top">
-			
-			<div class="bva-question-existing-wrapper">		
-	
+
+			<div class="bva-question-existing-wrapper">
+
 				<button  type="button" id="existingToolAdd" class="btn btn--primary theme--dark bva-question-existing-add">Add tool</button>
-			
+
 			</div>
-		
+
 		</div>
-	
+
 			<br /><br />
-		
+
 		<div id="existing_apps">
-		 		
+
 		</div>
 </div>
 <!--end of questions-->
@@ -390,14 +398,14 @@
 
 
 <div class="dev">
-<!-- start of title -->   
+<!-- start of title -->
 <div class="bva-title-wrapper bva-title-wrapper-dev">
 
 	<div class="bva-title-wrapper-inner">
-	
+
 		<h1 class="bva-title-text">Development</h1>
 		<p>Decreased cost of problem detection and impact</p>
-	
+
 	</div>
 
 </div>
@@ -409,11 +417,11 @@
 	<span tabindex="1" class="tag user-email">
 	  <span class="tag__key">email:</span>
 	</span>
-	
+
 	<span tabindex="1" class="tag user-company">
 	  <span class="tag__key">id:</span>
 	</span>
-	
+
 </div>
 <!--end of tags-->
 
@@ -425,110 +433,110 @@
 
 <!--start of questions-->
 <div class="bva-all-question-wrapper">
-	
+
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/release-blue.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-			
+
 			<label for="cycles_per_year" class="label bva-question-text">Release cycles per year for all applications</label>
 			<input type="text" class="inputfield bva-question-input" id="cycles_per_year" placeholder="# of release cycles"/>
-	
+
 		</div>
-	
+
 	</div>
-	
+
 	<br /><br />
 
 	<div class="bva-question-wrapper">
-		
+
 		<img src="/static/days-blue.svg" class="bva-question-image"/>
-	
-		<div class="bva-input-wrapper">	
-			
+
+		<div class="bva-input-wrapper">
+
 			<label for="cycle_days" class="label bva-question-text">Number of days to complete a release cycle</label>
 			<input type="text" class="inputfield bva-question-input" id="cycle_days" placeholder="# of days"/>
-	
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
 
 	<div class="bva-question-wrapper">
-		
+
 		<img src="/static/test-blue.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="test_per_cycle" class="label bva-question-text">Percentage of time spent testing per release cycle</label>
 			<input type="text" class="inputfield bva-question-input" id="test_per_cycle" placeholder="% of time"/>
-	
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
 
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/performance-blue.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="qa_time_per_cycle" class="label bva-question-text">Amount of QA testing time spent documenting performance issues</label>
 			<input type="text" class="inputfield bva-question-input" id="qa_time_per_cycle" placeholder="% of time"/>
-		
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
 
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/document-blue.svg" class="bva-question-image"/>
-	
-		<div class="bva-input-wrapper">	
-			
+
+		<div class="bva-input-wrapper">
+
 			<label for="qa_people_per_cycle" class="label bva-question-text">Number of QA people documenting performance problems per release (QA)</label>
 			<input type="text" class="inputfield bva-question-input" id="qa_people_per_cycle" placeholder="# of people"/>
-	
+
 		</div>
-	
-	</div>
-	
-		<br /><br />
-	
-	<div class="bva-question-wrapper">
-	
-		<img src="/static/performance-blue.svg" class="bva-question-image"/>
-	
-		<div class="bva-input-wrapper">
-			
-			<label for="dev_time_per_cycle" class="label bva-question-text">Amount of dev testing time spent documenting performance issues</label>
-			<input type="text" class="inputfield bva-question-input" id="dev_time_per_cycle" placeholder="% of time"/>
-		
-		</div>
-	
+
 	</div>
 
 		<br /><br />
-	
+
 	<div class="bva-question-wrapper">
-	
-		<img src="/static/document-blue.svg" class="bva-question-image"/>
-	
+
+		<img src="/static/performance-blue.svg" class="bva-question-image"/>
+
 		<div class="bva-input-wrapper">
-	
+
+			<label for="dev_time_per_cycle" class="label bva-question-text">Amount of dev testing time spent documenting performance issues</label>
+			<input type="text" class="inputfield bva-question-input" id="dev_time_per_cycle" placeholder="% of time"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/document-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
 			<label for="dev_people_per_cycle" class="label bva-question-text">Number of dev people documenting performance problems per release</label>
 			<input type="text" class="inputfield bva-question-input" id="dev_people_per_cycle" placeholder="# of people"/>
-		
+
 		</div>
-	
-	</div>	
-	
+
+	</div>
+
 </div>
 <!--end of questions-->
 
@@ -549,14 +557,14 @@
 
 
 <div class="options">
-<!-- start of title -->   
+<!-- start of title -->
 <div class="bva-title-wrapper bva-title-wrapper-options">
 
 	<div class="bva-title-wrapper-inner">
-	
+
 		<h1 class="bva-title-text">Options</h1>
 		<p>Provide the impact that Dynatrace will have to you</p>
-	
+
 	</div>
 
 </div>
@@ -568,11 +576,11 @@
 	<span tabindex="1" class="tag user-email">
 	  <span class="tag__key">email:</span>
 	</span>
-	
+
 	<span tabindex="1" class="tag user-company">
 	  <span class="tag__key">id:</span>
 	</span>
-	
+
 </div>
 <!--end of tags-->
 
@@ -584,270 +592,270 @@
 
 <!--start of questions-->
 <div class="bva-all-question-wrapper">
-	
+
 	<h2 class="bva-question-text-centre">IT labour costs</h2>
-	
+
 		<br />
-	
+
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/ops-grey.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-			
+
 			<label for="operation_cost" class="label bva-question-text">Fully loaded cost of operations person</label>
 			<input type="text" class="inputfield bva-question-input" id="operation_cost" placeholder="ops cost" />
-	
+
 		</div>
-	
+
 	</div>
-	
+
 	<br /><br />
 
 	<div class="bva-question-wrapper">
-		
+
 		<img src="/static/dev-grey.svg" class="bva-question-image"/>
-	
-		<div class="bva-input-wrapper">	
-			
+
+		<div class="bva-input-wrapper">
+
 			<label for="developer_cost" class="label bva-question-text">Fully loaded cost of developer</label>
 			<input type="text" class="inputfield bva-question-input" id="developer_cost" placeholder="dev cost" />
-	
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
 
 	<div class="bva-question-wrapper">
-		
+
 		<img src="/static/test-grey.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="qa_cost" class="label bva-question-text">Fully loaded cost of QA person</label>
 			<input type="text" class="inputfield bva-question-input" id="qa_cost" placeholder="qa cost" />
-	
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
 
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/time-grey.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="work_hours" class="label bva-question-text">Work hours per year</label>
 			<input type="text" class="inputfield bva-question-input" id="work_hours" placeholder="%" />
-		
+
 		</div>
-	
+
 	</div>
-	
+
 		<br />
-	
+
 	<h2 class="bva-question-text-centre">Dynatrace benefits</h2>
-	
+
 		<br />
-	
+
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/sales-grey.svg" class="bva-question-image"/>
-	
-		<div class="bva-input-wrapper">	
-			
+
+		<div class="bva-input-wrapper">
+
 			<label for="benefit_conversion" class="label bva-question-text">Increased revenue from increased conversions as a result of better performance</label>
 			<input type="text" class="inputfield bva-question-input" id="benefit_conversion" placeholder="%" />
-	
+
 		</div>
-	
+
 	</div>
-	
-		<br /><br />	
+
+		<br /><br />
 
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/incident-grey.svg" class="bva-question-image"/>
-	
-		<div class="bva-input-wrapper">	
-			
+
+		<div class="bva-input-wrapper">
+
 			<label for="benefit_incident_reduction" class="label bva-question-text">Incident reduction in production through pro-active detection</label>
 			<input type="text" class="inputfield bva-question-input" id="benefit_incident_reduction" placeholder="%" />
-	
+
 		</div>
-	
+
 	</div>
-	
+
 		<br /><br />
-	
+
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/analysis-grey.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-			
+
 			<label for="benefit_mttr" class="label bva-question-text">Faster MTTR and root cause analysis in production</label>
 			<input type="text" class="inputfield bva-question-input" id="benefit_mttr" placeholder="%" />
-		
+
 		</div>
-	
+
 	</div>
 
 		<br /><br />
-	
+
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/performance-grey.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="benefit_performance" class="label bva-question-text">Page load improvement</label>
 			<input type="text" class="inputfield bva-question-input" id="benefit_performance" placeholder="%" />
-		
+
 		</div>
-	
-	</div>	
+
+	</div>
 
 		<br /><br />
-	
+
 	<div class="bva-question-wrapper" style="display: none">
-	
+
 		<img src="/static/alert-grey.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="benefit_alert_storm" class="label bva-question-text">Alert storm reduction</label>
 			<input type="text" class="inputfield bva-question-input" id="benefit_alert_storm" placeholder="%" />
-		
+
 		</div>
-	
-	</div>	
+
+	</div>
 
 		<!-- <br /><br /> -->
-	
+
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/sla-grey.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="benefit_sla" class="label bva-question-text">Improvement on SLA achievement</label>
 			<input type="text" class="inputfield bva-question-input" id="benefit_sla" placeholder="%" />
-		
+
 		</div>
-	
+
 	</div>
 
 		<br /><br />
-	
+
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/find-grey.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="benefit_fix_qa" class="label bva-question-text">Reduced time finding and fixing performance problems in QA</label>
 			<input type="text" class="inputfield bva-question-input" id="benefit_fix_qa" placeholder="%" />
-		
+
 		</div>
-	
-	</div>	
+
+	</div>
 
 		<br /><br />
-	
+
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/down-grey.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="benefit_prod_reduction" class="label bva-question-text">Incident reduction in production by finding and fixing defects in Dev and QA</label>
 			<input type="text" class="inputfield bva-question-input" id="benefit_prod_reduction" placeholder="%" />
-		
+
 		</div>
-	
+
 	</div>
 
 		<br /><br />
-	
+
 	<div class="bva-question-wrapper">
-	
+
 		<img src="/static/config-grey.svg" class="bva-question-image"/>
-	
+
 		<div class="bva-input-wrapper">
-	
+
 			<label for="benefit_config" class="label bva-question-text">Reduced time spent implementing and configuring vs. existing tools</label>
 			<input type="text" class="inputfield bva-question-input" id="benefit_config" placeholder="%" />
-		
+
 		</div>
-	
+
 	</div>
-	
+
 	<div id="pricing" style="display:none">
-	
+
 		<br />
-	
-	<h2 class="bva-question-text-centre">Dynatrace pricing</h2>	
-	
+
+	<h2 class="bva-question-text-centre">Dynatrace pricing</h2>
+
 	<div class="bva-question-wrapper" style="text-align: center">
-	
-		<div class="bva-input-wrapper">	
-			
+
+		<div class="bva-input-wrapper">
+
 			<p style="text-align: center; max-width: 420px">Please enter the prices provided by Dynatrace for the software and services if applicable.</p>
-	
+
 		</div>
-	
-	</div>	
-	
-	
+
+	</div>
+
+
 		<br />
-	
+
 	<div class="bva-question-wrapper" style="text-align: center">
-	
-		<div class="bva-input-wrapper">	
+
+		<div class="bva-input-wrapper">
 			<p style="width: 25%; max-width: 25%; display: inline-block"></p>
 			<p style="width: 33%; max-width: 33%; display: inline-block"> software </p>
-			<p style="width: 33%; max-width: 33%; display: inline-block"> services </p>			
-			
+			<p style="width: 33%; max-width: 33%; display: inline-block"> services </p>
+
 			<p style="width: 15%; max-width: 15%; display: inline-block; margin-top: 0px">Year 1</p>
 			<input type="text" class="inputfield bva-question-input" id="y1_software" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
 			<input type="text" class="inputfield bva-question-input" id="y1_services" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
-	
+
 		</div>
-	
-	</div>	
-		
+
+	</div>
+
 		<br />
-	
+
 	<div class="bva-question-wrapper" style="text-align: center">
-	
-		<div class="bva-input-wrapper">	
-			
+
+		<div class="bva-input-wrapper">
+
 			<p style="width: 15%; max-width: 15%; display: inline-block;">Year 2</p>
 			<input type="text" class="inputfield bva-question-input" id="y2_software" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
 			<input type="text" class="inputfield bva-question-input" id="y2_services" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
-	
+
 		</div>
-	
-	</div>		
-	
+
+	</div>
+
 		<br />
-	
+
 	<div class="bva-question-wrapper" style="text-align: center">
-	
-		<div class="bva-input-wrapper">	
-			
+
+		<div class="bva-input-wrapper">
+
 			<p style="width: 15%; max-width: 15%; display: inline-block">Year 3</p>
 			<input type="text" class="inputfield bva-question-input" id="y3_software" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
 			<input type="text" class="inputfield bva-question-input" id="y3_services" placeholder="" style="width: 41%; max-width: 42%; display: inline-block" />
-	
+
 		</div>
-	
-	</div>	
-	
+
+	</div>
+
 	</div>
 </div>
 <!--end of questions-->
@@ -866,7 +874,7 @@
 
 
 </div>
-  
+
 <div  >
 
 
@@ -877,23 +885,23 @@
 <div class="bva-title-wrapper bva-title-wrapper-results result-biz">
 
 	<div class="bva-title-wrapper-inner">
-	
+
 		<h1 class="bva-title-text">Results</h1>
 		<p>The value to your business from partnering with Dynatrace</p>
-		
+
 	</div>
 
 </div>
 </div>
-	
+
 	<div id="results" style="display: none">
 		<h2 style="margin-left: 5%; margin-top: 20px">Total cost savings and revenue gains</h2>
-		
+
 		<p style="margin-left: 5%; width: 90%; font-family: BerninaSansLight">Based upon information provided about the current costs/revenue impact of performance problems, the summary below shows the expected improvements from working with Dynatrace.</p>
-		
+
 		<div id="total_stacked_bar" style="height: 450px; margin-left: 10%; margin-right: 10%; margin-top: 20px"></div>
 			<br /><br />
-		
+
 		<div id="result_total_table">
 			<div style="width: 90%; overflow: auto; margin-left: 5%">
 			<table class="table" id="results_table">
@@ -913,15 +921,15 @@
 			</div>
 		</div>
 
-		
-		
-		
+
+
+
 		<div id="roi_section" style="display: none">
 		<br />
 			<h2 style="margin-left: 5%">Return on investment</h2>
 			<p style="margin-left: 5%; width: 90%; font-family: BerninaSansLight">Using the provided software and services costs for Dynatrace, the information below shows the cost/benefit analysis over 3 years.</p>
 		<div id="roi_column" style="height: 450px; margin-left: 10%; margin-right: 10%;  margin-top: 20px"></div>
-			<br />	
+			<br />
 
 			<table class="table" style="width: 90%; margin-left: 5%">
 			  <thead>
@@ -936,167 +944,167 @@
 
 			  </tbody>
 			</table>
-			
+
 		<div class="theme--green" id="roi_points" style="margin-left: 5%; margin-right: 10%; ">
 
-		</div>	
-		
+		</div>
+
 		<br />
 		</div>
-		
-		
-		
-		
+
+
+
+
 		<h2 style="margin-left: 5%">Use case breakdown</h2>
 		<p style="margin-left: 5%; width: 90%; font-family: BerninaSansLight">These use cases provide a more detailed breakdown of where the revenue gains/cost reductions will be generated.</p>
 		<div id="business" style="display: none; margin-top: 20px">
 		<h3 style="margin-left: 5%">Business</h3>
 			<div id="biz-increased-revenue">
-				
+
 			</div>
-			
+
 			<div id="biz-increased-conversions">
 
 			</div>
 		</div>
-		
+
 		<div id="operations" style="display: none; margin-top: 20px">
-			<h3 style="margin-left: 5%">Operations</h3>	
-			
+			<h3 style="margin-left: 5%">Operations</h3>
+
 			<div id="ops-reduced-incidents">
 
 			</div>
-			
+
 			<div id="ops-increased-automation">
 
-			</div>	
+			</div>
 
 			<div id="ops-reduced-tools">
 
-			</div>	
+			</div>
 		</div>
-		
+
 		<div id="development" style="display: none; margin-top: 20px">
-			<h3 style="margin-left: 5%">Development</h3>	
-			
+			<h3 style="margin-left: 5%">Development</h3>
+
 			<div id="dev-decreased-investigation">
 
-			</div>	
+			</div>
 
 			<div id="dev-decreased-incidents">
 
-			</div>		
+			</div>
 		</div>
 
 	</div>
-	
+
 		<div id="no-results" style="display: none; margin-left: 10%; margin-right: 10%; margin-top: 30px">
 			Please complete the questions for <b>business</b>, <b>development</b> and <b>operations</b> in order to start seeing results. The final section, "options," is pre-filled with typical values but these can be changed depending on your organisation.
-			
+
 			<br /><br />
-			
+
 			As you start to provide more information, the results will be generated for the use cases detailed below:
 
 			<br /><br />
-			
+
 		<div class="bva-question-wrapper">
-		
+
 			<img src="/static/results/biz-increased-revenue.svg" class="bva-question-image" style="vertical-align: middle"/>
-		
+
 			<div class="bva-input-wrapper" style="vertical-align: middle">
-				
+
 				<p>Revenue gained by reduced incidents, downtime, and slowness</p>
-		
+
 			</div>
-		
+
 		</div>
 
 			<br />
-		
+
 		<div class="bva-question-wrapper">
-		
+
 			<img src="/static/results/biz-increased-conversions.svg" class="bva-question-image" style="vertical-align: middle"/>
-		
+
 			<div class="bva-input-wrapper" style="vertical-align: middle">
-				
+
 				<p>Revenue from increased conversions caused by better app performance</p>
-		
+
 			</div>
-		
-		</div>	
-		
+
+		</div>
+
 			<br />
-		
+
 		<div class="bva-question-wrapper">
-		
+
 			<img src="/static/results/ops-reduced-incidents.svg" class="bva-question-image" style="vertical-align: middle"/>
-		
+
 			<div class="bva-input-wrapper" style="vertical-align: middle">
-				
+
 				<p>Incident reduction and faster MTTR in production (cost of war room effort)</p>
-		
+
 			</div>
-		
-		</div>	
-		
+
+		</div>
+
 			<br />
-		
+
 		<div class="bva-question-wrapper">
-		
+
 			<img src="/static/results/ops-increased-automation.svg" class="bva-question-image" style="vertical-align: middle"/>
-		
+
 			<div class="bva-input-wrapper" style="vertical-align: middle">
-				
+
 				<p>Cost savings with Dynatrace automation vs. manual effort </p>
-		
+
 			</div>
-		
-		</div>		
+
+		</div>
 
 			<br />
-		
+
 		<div class="bva-question-wrapper">
-		
+
 			<img src="/static/results/ops-reduced-tools.svg" class="bva-question-image" style="vertical-align: middle"/>
-		
+
 			<div class="bva-input-wrapper" style="vertical-align: middle">
-				
+
 				<p>Reduction of existing monitoring tools</p>
-		
+
 			</div>
-		
-		</div>	
+
+		</div>
 
 			<br />
-		
+
 		<div class="bva-question-wrapper">
-		
+
 			<img src="/static/results/dev-decreased-investigation.svg" class="bva-question-image" style="vertical-align: middle"/>
-		
+
 			<div class="bva-input-wrapper" style="vertical-align: middle">
-				
+
 				<p>Performance defect investigation and troubleshooting in QA</p>
-		
+
 			</div>
-		
-		</div>	
+
+		</div>
 
 			<br />
-		
+
 		<div class="bva-question-wrapper">
-		
+
 			<img src="/static/results/dev-decreased-incidents.svg" class="bva-question-image" style="vertical-align: middle"/>
-		
+
 			<div class="bva-input-wrapper" style="vertical-align: middle">
-				
+
 				<p>Fewer production incidents by finding & fixing performance defects in QA & Dev</p>
-		
+
 			</div>
-		
-		</div>			
-		
+
+		</div>
+
 	</div>
-	
+
 	<div id="loading" style="margin-left: 40%; margin-top: 40%; translate(-30px, -30px);">
 		<div class="loading">
 			<svg class="loading__distractor" width="30px" height="30px" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">

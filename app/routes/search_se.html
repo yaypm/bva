@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<title>Dynatrace Business Value Calculator</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" type="text/css" href='/static/main.css' />
+	<!-- <script src='/static/es6-promise.auto.js'></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="icon" href="https://dt-cdn.net/images/favicon-32x32-32-26d70a5cff.png">
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<style>a:hover {cursor:pointer;}</style>
+	<script src="/static/bva.js"></script>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function(event) {
+			statusDetect();
+			enableSeOppSearch();
+			setFilters();
+			$('#filters').change(function() {
+					setFilters();
+			});
+		});
+	</script>
+
+</head>
+
+<body class="landing-body">
+
+<!--start of content-->
+<div id="content" >
+
+<div id="content_box_admin" style="width: 900px">
+
+	<div class="inner_box centre">
+
+		<div class="menu-box" style="width: 850px">
+
+			<h2 class="menu-title">Search for opportunities</h2>
+
+			<p>Search for opportunities relevant to the platforms/technologies you have encountered.</p>
+			</p>
+
+			<div class="status-failure">There was a problem creating your assessment.</div><br />
+						
+								<div id="search_box">	
+
+										<div class="section">
+												<div class="column--1-of-2">
+														<h3>Filter sections</h3>
+														<label for="s1" class="label">Select</label>
+														<select class="select bva-select" style="display: block; width: 300px" id="filters">
+														<option value="team">Dynatrace team</option>
+														<option value="champions">Customer champions</option>
+														<option value="approach">Dynatrace approach</option>
+														<option value="operating">Operating systems</option>
+														<option value="platforms">Platforms</option>
+														<option value="deployment">Deplyment method</option>
+														<option value="language">Languages</option>
+														<option value="interface">User interface</option>
+														<option value="synthetic">Synthetic</option>	
+														<option value="extending">Extending Dynatrace</option>	
+														</select>	
+
+														<br /><br />
+
+														<div style="width: 270px">
+														<a href="/landing_se"><button id="landing_box_new" type="button" class="btn btn--secondary theme--dark landing-button">Back</button></a> <button role="button" type="submit" id="se_search" class="btn btn--primary theme--dark landing-button">Search</button>
+														</div>		
+
+														</div>
+
+
+												<div class="column--1-of-2">
+
+														<h3>Filters</h3>
+
+														<div id="filter_options">
+														
+																<div id="team" class="show-me">
+																		<label for="lead_sales" class="label bva-question-text" style="width: 67%">Lead sales</label>
+																		<input type="text" name="lead_sales" class="inputfield bigInput" style="max-width: 67%" id="lead_sales" placeholder="name">
+																		<br /><br />
+																		<label for="lead_se" class="label bva-question-text" style="width: 67%">Lead SE</label>
+																		<input type="text" name="lead_se" class="inputfield bigInput" id="lead_se" style="width: 67%" placeholder="name">
+		
+																</div>	
+		
+																<div id="champions" style="display: none">
+																		<label for="business_champion" class="label bva-question-text" style="width: 67%">Business champion</label>
+																		<input type="text" name="business_champion" class="inputfield bva-question-input" style="width: 67%" id="business_champion" placeholder="name"/>
+																		<br /><br />
+																		<label for="technical_champion" class="label bva-question-text" style="width: 67%">Technical champion</label>
+																		<input type="text" name="technical_champion" class="inputfield bva-question-input" style="width: 67%" id="technical_champion" placeholder="name"/>
+		
+																</div>	
+		
+																<div id="approach" style="display: none">
+																		<div class="divTable">
+																				<div class="divTableBody">
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><img src="/static/saas-white.png" class="se-question-image"/><br /><b>SaaS</b></div>
+																				<div class="divTableCell se-center"><img src="/static/managed-white.png" class="se-question-image"/><br /><b>Managed</b></div>
+																				<div class="divTableCell se-center"><img src="/static/offline-white.png" class="se-question-image"/><br /><b>Offline</b></div>
+																				<div class="divTableCell se-center"></div>
+																				</div>
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="saas" class="checkbox" id="saas"><label class="checkbox__label theme--dark" for="saas"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="managed" class="checkbox" id="managed"><label class="checkbox__label theme--dark" for="managed"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="offline" class="checkbox" id="offline"><label class="checkbox__label theme--dark" for="offline"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"></div>
+																				</div>		
+																				
+																				</div>
+																				</div>
+																				<br />
+																				<input type="text" name="tenant" class="inputfield bva-question-input" id="tenant" style="max-width: 65%" placeholder="tenant id/cluster name"/>
+		
+																</div>
+		
+																<div id="operating" style="display: none">
+																		<div class="divTable">
+																				<div class="divTableBody">
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><img src="/static/windows-white.png" class="se-question-image"/><br /><b>Windows</b></div>
+																				<div class="divTableCell se-center"><img src="/static/linux-white.png" class="se-question-image"/><br /><b>Linux</b></div>
+																				<div class="divTableCell se-center"><img src="/static/aix-white.png" class="se-question-image"/><br /><b>AIX</b></div>
+																				<div class="divTableCell se-center"><img src="/static/solaris-white.png" class="se-question-image"/><br /><b>Solaris</b></div>
+																				</div>
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="windows" class="checkbox" id="windows"><label class="checkbox__label theme--dark" for="windows"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="linux" class="checkbox" id="linux"><label class="checkbox__label theme--dark" for="linux"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="aix" class="checkbox" id="aix"><label class="checkbox__label theme--dark" for="aix"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="solaris" class="checkbox" id="solaris"><label class="checkbox__label theme--dark" for="solaris"><span class="checkbox__caption"></span></label></div></div>
+																				</div>		
+																				
+																				</div>
+																				</div>
+																
+																</div>
+		
+																<div id="platforms" style="display: none">
+																
+																		<div class="divTable">
+		
+																				<div class="divTableBody">
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><img src="/static/vmware-white.png" class="se-question-image"/><br /><b>VMWare</b></div>
+																				<div class="divTableCell se-center"><img src="/static/azure-white.png" class="se-question-image"/><br /><b>Azure</b></div>
+																				<div class="divTableCell se-center"><img src="/static/amazon-white.png" class="se-question-image"/><br /><b>AWS</b></div>
+																				<div class="divTableCell se-center"><img src="/static/openshift-white.png" class="se-question-image"/><br /><b>OpenShift</b></div>
+																				</div>
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="vmware" class="checkbox" id="vmware"><label class="checkbox__label theme--dark" for="vmware"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="azure" class="checkbox" id="azure"><label class="checkbox__label theme--dark" for="azure"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="aws" class="checkbox" id="aws"><label class="checkbox__label theme--dark" for="aws"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="openshift" class="checkbox" id="openshift"><label class="checkbox__label theme--dark" for="openshift"><span class="checkbox__caption"></span></label></div></div>
+																				</div>		
+																				
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><br /><img src="/static/cloudfoundry-white.png" class="se-question-image"/><br /><b>Cloudfoundry</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/ibmcloud-white.png" class="se-question-image"/><br /><b>IBM cloud</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/oraclecloud-white.png" class="se-question-image"/><br /><b>Oracle cloud</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/gcp-white.png" class="se-question-image"/><br /><b>Google cloud</b></div>
+																				</div>
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="cloudfoundry" class="checkbox" id="cloudfoundry"><label class="checkbox__label theme--dark" for="cloudfoundry"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="ibmcloud" class="checkbox" id="ibmcloud"><label class="checkbox__label theme--dark" for="ibmcloud"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="oraclecloud" class="checkbox" id="oraclecloud"><label class="checkbox__label theme--dark" for="oraclecloud"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="gcp" class="checkbox" id="gcp"><label class="checkbox__label theme--dark" for="gcp"><span class="checkbox__caption"></span></label></div></div>
+																				</div>	
+																				
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><br /><img src="/static/heroku-white.png" class="se-question-image"/><br /><b>Heroku</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/openstack-white.png" class="se-question-image"/><br /><b>Openstack</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/kubernetes-white.png" class="se-question-image"/><br /><b>Kubernetes</b></div>
+																				<div class="divTableCell se-center"></div>
+																				</div>
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="heroku" class="checkbox" id="heroku"><label class="checkbox__label theme--dark" for="heroku"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="openstack" class="checkbox" id="openstack"><label class="checkbox__label theme--dark" for="openstack"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="kubernetes" class="checkbox" id="kubernetes"><label class="checkbox__label theme--dark" for="kubernetes"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"></div>
+																				</div>	
+																				
+																				
+																				</div>
+																				
+																				</div>	
+																</div>
+		
+																<div id="deployment" style="display: none">
+		
+																		<div class="divTable">
+																				<div class="divTableBody">
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><img src="/static/iaas-white.png" class="se-question-image"/><br /><b>IaaS</b></div>
+																				<div class="divTableCell se-center"><img src="/static/paas-white.png" class="se-question-image"/><br /><b>PaaS</b></div>
+																				<div class="divTableCell se-center"><img src="/static/faas-white.png" class="se-question-image"/><br /><b>FaaS</b></div>
+																				<div class="divTableCell se-center"><img src="/static/saas-white.png" class="se-question-image"/><br /><b>SaaS</b></div>
+																				</div>
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="iaas" class="checkbox" id="iaas"><label class="checkbox__label theme--dark" for="iaas"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="paas" class="checkbox" id="paas"><label class="checkbox__label theme--dark" for="paas"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="faas" class="checkbox" id="faas"><label class="checkbox__label theme--dark" for="faas"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="softaas" class="checkbox" id="softaas"><label class="checkbox__label theme--dark" for="softaas"><span class="checkbox__caption"></span></label></div></div>
+																				</div>		
+																				
+																				</div>
+																				</div>	
+		
+																</div>
+		
+																<div id="language" style="display: none">
+		
+																		<div class="divTable">
+																				<div class="divTableBody">
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><img src="/static/java-white.png" class="se-question-image"/><br /><b>Java</b></div>
+																				<div class="divTableCell se-center"><img src="/static/dotnet-white.png" class="se-question-image"/><br /><b>.NET</b></div>
+																				<div class="divTableCell se-center"><img src="/static/php-white.png" class="se-question-image"/><br /><b>PHP</b></div>
+																				<div class="divTableCell se-center"><img src="/static/nodejs-white.png" class="se-question-image"/><br /><b>NodeJS</b></div>
+																				</div>
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="java" class="checkbox" id="java"><label class="checkbox__label theme--dark" for="java"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="dotnet" class="checkbox" id="dotnet"><label class="checkbox__label theme--dark" for="dotnet"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="php" class="checkbox" id="php"><label class="checkbox__label theme--dark" for="php"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="nodejs" class="checkbox" id="nodejs"><label class="checkbox__label theme--dark" for="nodejs"><span class="checkbox__caption"></span></label></div></div>
+																				</div>		
+																				
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><br /><img src="/static/messaging-white.png" class="se-question-image"/><br /><b>Messaging</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/c-white.png" class="se-question-image"/><br /><b>C/C++</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/dotnet-white.png" class="se-question-image"/><br /><b>.NET core</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/webserver-white.png" class="se-question-image"/><br /><b>Web server</b></div>
+																				</div>
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="messaging" class="checkbox" id="messaging"><label class="checkbox__label theme--dark" for="messaging"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="c" class="checkbox" id="c"><label class="checkbox__label theme--dark" for="c"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="dotnetcore" class="checkbox" id="dotnetcore"><label class="checkbox__label theme--dark" for="dotnetcore"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="webserver" class="checkbox" id="webserver"><label class="checkbox__label theme--dark" for="webserver"><span class="checkbox__caption"></span></label></div></div>
+																				</div>	
+																				
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><br /><img src="/static/golang-white.png" class="se-question-image"/><br /><b>Go</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/mainframe-white.png" class="se-question-image"/><br /><b>Mainframe</b></div>
+																				<div class="divTableCell se-center"><br /></div>
+																				<div class="divTableCell se-center"><br /></div>
+																				</div>
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="golang" class="checkbox" id="golang"><label class="checkbox__label theme--dark" for="golang"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="mainframe" class="checkbox" id="mainframe"><label class="checkbox__label theme--dark" for="mainframe"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"></div>
+																				<div class="divTableCell se-center"></div>
+																				</div>			
+																				
+																				
+																				</div>
+																				</div>	
+		
+																</div>
+												
+																<div id="interface" style="display: none">
+		
+																		<div class="divTable">
+																				<div class="divTableBody">
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><img src="/static/browser-white.png" class="se-question-image"/><br /><b>Web</b></div>
+																				<div class="divTableCell se-center"><img src="/static/mobileapp-white.png" class="se-question-image"/><br /><b>Native app</b></div>
+																				<div class="divTableCell se-center"><img src="/static/iot-white.png" class="se-question-image"/><br /><b>Thick client</b></div>
+																				<div class="divTableCell se-center"><img src="/static/citrix-white.png" class="se-question-image"/><br /><b>Citrix</b></div>
+																				</div>
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="web" class="checkbox" id="web"><label class="checkbox__label theme--dark" for="web"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="mobileapp" class="checkbox" id="mobileapp"><label class="checkbox__label theme--dark" for="mobileapp"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="thick" class="checkbox" id="thick"><label class="checkbox__label theme--dark" for="thick"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="citrix" class="checkbox" id="citrix"><label class="checkbox__label theme--dark" for="citrix"><span class="checkbox__caption"></span></label></div></div>
+																				</div>		
+																				
+																				</div>
+																				</div>
+																</div>
+		
+																<div id="synthetic" style="display: none">
+																		<div class="divTable">
+																				<div class="divTableBody">
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><img src="/static/browser-white.png" class="se-question-image"/><br /><b>Browser</b></div>
+																				<div class="divTableCell se-center"><img src="/static/webrequest-white.png" class="se-question-image"/><br /><b>HTTP</b></div>
+																				<div class="divTableCell se-center"><img src="/static/events-white.png" class="se-question-image"/><br /><b>External</b></div>
+																				<div class="divTableCell se-center"></div>
+																				</div>
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="browser" class="checkbox" id="browser"><label class="checkbox__label theme--dark" for="browser"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="http" class="checkbox" id="http"><label class="checkbox__label theme--dark" for="http"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="external" class="checkbox" id="external"><label class="checkbox__label theme--dark" for="external"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"></div>
+																				</div>		
+																				
+																				</div>
+																				</div>
+		
+																</div>
+		
+		
+																<div id="extending" style="display: none">
+		
+																		<div class="divTable">
+																				<div class="divTableBody">
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><br /><img src="/static/plugin-white.png" class="se-question-image"/><br /><b>OneAgent plugins</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/iot-white.png" class="se-question-image"/><br /><b>Custom devices</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/activegateplugin-white.png" class="se-question-image"/><br /><b>ActiveGate plugins</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/events-white.png" class="se-question-image"/><br /><b>External events</b></div>
+																				</div>
+																				
+																				<div class="divTableRow"> 
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="oaplugins" class="checkbox" id="oaplugins"><label class="checkbox__label theme--dark" for="oaplugins"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="cnd" class="checkbox" id="cnd"><label class="checkbox__label theme--dark" for="cnd"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="agplugins" class="checkbox" id="agplugins"><label class="checkbox__label theme--dark" for="agplugins"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="externalevents" class="checkbox" id="externalevents"><label class="checkbox__label theme--dark" for="externalevents"><span class="checkbox__caption"></span></label></div></div>
+																				</div>	
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><br /><img src="/static/incident-white.png" class="se-question-image"/><br /><b>Incidents</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/cmdb-white.png" class="se-question-image"/><br /><b>CMDB</b></div>
+																				<div class="divTableCell se-center"></div>
+																				<div class="divTableCell se-center"></div>
+																				</div>
+																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="incidents" class="checkbox" id="incidents"><label class="checkbox__label theme--dark" for="incidents"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="cmdb" class="checkbox" id="cmdb"><label class="checkbox__label theme--dark" for="cmdb"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"></div>
+																				<div class="divTableCell se-center"></div>
+																				</div>			
+																				
+																				</div>
+																				</div>
+																</div>
+		
+		
+		
+																</div>
+												
+												</div>
+											
+											
+											
+											</div>										
+												
+											
+<br /><br />
+											<div id="search_results" style="display: none" >
+													<h3>Results</h3>
+													<div class="theme--blue">
+													<table id="opp_results" class="table table--expandable" data-behavior="accordion">
+														<thead>
+															<tr>
+															<th>Name</th>
+															<th>Business outcomes</th>
+															<th>Autonomous cloud</th>
+															<th>Full-stack</th>
+															<th>Details</th>
+															</tr>
+														</thead>
+								
+														<tbody class="expandable" style="color: white;">
+															<tr style="background-color: #006bba">
+																<td></td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td><a href="#" class="expandable__trigger"></a></td>
+															</tr>
+															<tr class="expandable__content" style="background-color: transparent">
+																<td colspan="5">
+																
+																</td>
+															</tr>
+															</tbody>
+														
+															<tbody class="expandable" style="color: white">
+																<tr style="background-color: #008bdb">
+																<td></td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td><a href="#" class="expandable__trigger"></a></td>
+																</tr>
+																<tr class="expandable__content" style="background-color: transparent">
+																<td colspan="5">
+																	
+																</td>
+																</tr>
+															</tbody>
+														
+															<tbody class="expandable" style="color: white;">
+																<tr style="background-color: #006bba">
+																<td></td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td><a href="#" class="expandable__trigger"></a></td>
+																</tr>
+																<tr class="expandable__content" style="background-color: transparent">
+																<td colspan="5">
+																	
+																</td>
+																</tr>
+															</tbody>
+														
+															<tbody class="expandable" style="color: white">
+																<tr style="background-color: #008bdb">
+																	<td></td>
+																	<td></td>
+																	<td></td>
+																	<td></td>
+																	<td><a href="#" class="expandable__trigger"></a></td>
+																</tr>
+																<tr class="expandable__content" style="background-color: transparent">
+																	<td colspan="5">
+																	
+																	</td>
+																</tr>
+																</tbody>
+														
+																<tbody class="expandable" style="color: white;">
+																<tr style="background-color: #006bba">
+																	<td></td>
+																	<td></td>
+																	<td></td>
+																	<td></td>
+																	<td><a href="#" class="expandable__trigger"></a></td>
+																</tr>
+																<tr class="expandable__content" style="background-color: transparent">
+																	<td colspan="5">
+																	
+																	</td>
+																</tr>
+																</tbody>
+															
+																<tbody class="expandable" style="color: white">
+																	<tr style="background-color: #008bdb">
+																	<td></td>
+																	<td></td>
+																	<td></td>
+																	<td></td>
+																	<td><a href="#" class="expandable__trigger"></a></td>
+																	</tr>
+																	<tr class="expandable__content" style="background-color: transparent">
+																	<td colspan="5">
+																		
+																	</td>
+																	</tr>
+																</tbody>
+															
+																<tbody class="expandable" style="color: white;">
+																	<tr style="background-color: #006bba">
+																	<td></td>
+																	<td></td>
+																	<td></td>
+																	<td></td>
+																	<td><a href="#" class="expandable__trigger"></a></td>
+																	</tr>
+																	<tr class="expandable__content" style="background-color: transparent">
+																	<td colspan="5">
+																		
+																	</td>
+																	</tr>
+																</tbody>
+															
+																<tbody class="expandable" style="color: white">
+																	<tr style="background-color: #008bdb">
+																		<td></td>
+																		<td></td>
+																		<td></td>
+																		<td></td>
+																		<td><a href="#" class="expandable__trigger"></a></td>
+																	</tr>
+																	<tr class="expandable__content" style="background-color: transparent">
+																		<td colspan="5">
+																		
+																		</td>
+																	</tr>
+																	</tbody>
+														
+																	<tbody class="expandable" style="color: white;">
+																	<tr style="background-color: #006bba">
+																		<td></td>
+																		<td></td>
+																		<td></td>
+																		<td></td>
+																		<td><a href="#" class="expandable__trigger"></a></td>
+																	</tr>
+																	<tr class="expandable__content" style="background-color: transparent">
+																		<td colspan="5">
+																		
+																		</td>
+																	</tr>
+																	</tbody>
+																
+																	<tbody class="expandable" style="color: white">
+																		<tr style="background-color: #008bdb">
+																		<td></td>
+																		<td></td>
+																		<td></td>
+																		<td></td>
+																		<td><a href="#" class="expandable__trigger"></a></td>
+																		</tr>
+																		<tr class="expandable__content" style="background-color: transparent">
+																		<td colspan="5">
+																			
+																		</td>
+																		</tr>
+																	</tbody>
+																
+																	<tbody class="expandable" style="color: white;">
+																		<tr style="background-color: #006bba">
+																		<td></td>
+																		<td></td>
+																		<td></td>
+																		<td></td>
+																		<td><a href="#" class="expandable__trigger"></a></td>
+																		</tr>
+																		<tr class="expandable__content" style="background-color: transparent">
+																		<td colspan="5">
+																			
+																		</td>
+																		</tr>
+																	</tbody>
+																
+																	<tbody class="expandable" style="color: white">
+																		<tr style="background-color: #008bdb">
+																			<td></td>
+																			<td></td>
+																			<td></td>
+																			<td></td>
+																			<td><a href="#" class="expandable__trigger"></a></td>
+																		</tr>
+																		<tr class="expandable__content" style="background-color: transparent">
+																			<td colspan="5">
+																			
+																			</td>
+																		</tr>
+																		</tbody>
+														
+																		<tbody class="expandable" style="color: white;">
+																		<tr style="background-color: #006bba">
+																			<td></td>
+																			<td></td>
+																			<td></td>
+																			<td></td>
+																			<td><a href="#" class="expandable__trigger"></a></td>
+																		</tr>
+																		<tr class="expandable__content" style="background-color: transparent">
+																			<td colspan="5">
+																			
+																			</td>
+																		</tr>
+																		</tbody>
+																	
+																		<tbody class="expandable" style="color: white">
+																			<tr style="background-color: #008bdb">
+																			<td></td>
+																			<td></td>
+																			<td></td>
+																			<td></td>
+																			<td><a href="#" class="expandable__trigger"></a></td>
+																			</tr>
+																			<tr class="expandable__content" style="background-color: transparent">
+																			<td colspan="5">
+																				
+																			</td>
+																			</tr>
+																		</tbody>
+																	
+																		<tbody class="expandable" style="color: white;">
+																			<tr style="background-color: #006bba">
+																			<td></td>
+																			<td></td>
+																			<td></td>
+																			<td></td>
+																			<td><a href="#" class="expandable__trigger"></a></td>
+																			</tr>
+																			<tr class="expandable__content" style="background-color: transparent">
+																			<td colspan="5">
+																				
+																			</td>
+																			</tr>
+																		</tbody>
+																	
+																		<tbody class="expandable" style="color: white">
+																			<tr style="background-color: #008bdb">
+																				<td></td>
+																				<td></td>
+																				<td></td>
+																				<td></td>
+																				<td><a href="#" class="expandable__trigger"></a></td>
+																			</tr>
+																			<tr class="expandable__content" style="background-color: transparent">
+																				<td colspan="5">
+																				
+																				</td>
+																			</tr>
+																			</tbody>
+														
+																			<tbody class="expandable" style="color: white;">
+																			<tr style="background-color: #006bba">
+																				<td></td>
+																				<td></td>
+																				<td></td>
+																				<td></td>
+																				<td><a href="#" class="expandable__trigger"></a></td>
+																			</tr>
+																			<tr class="expandable__content" style="background-color: transparent">
+																				<td colspan="5">
+																				
+																				</td>
+																			</tr>
+																			</tbody>
+																		
+																			<tbody class="expandable" style="color: white">
+																				<tr style="background-color: #008bdb">
+																				<td></td>
+																				<td></td>
+																				<td></td>
+																				<td></td>
+																				<td><a href="#" class="expandable__trigger"></a></td>
+																				</tr>
+																				<tr class="expandable__content" style="background-color: transparent">
+																				<td colspan="5">
+																					
+																				</td>
+																				</tr>
+																			</tbody>
+																		
+																			<tbody class="expandable" style="color: white;">
+																				<tr style="background-color: #006bba">
+																				<td></td>
+																				<td></td>
+																				<td></td>
+																				<td></td>
+																				<td><a href="#" class="expandable__trigger"></a></td>
+																				</tr>
+																				<tr class="expandable__content" style="background-color: transparent">
+																				<td colspan="5">
+																					
+																				</td>
+																				</tr>
+																			</tbody>
+																		
+																			<tbody class="expandable" style="color: white">
+																				<tr style="background-color: #008bdb">
+																					<td></td>
+																					<td></td>
+																					<td></td>
+																					<td></td>
+																					<td><a href="#" class="expandable__trigger"></a></td>
+																				</tr>
+																				<tr class="expandable__content" style="background-color: transparent">
+																					<td colspan="5">
+																					
+																					</td>
+																				</tr>
+																				</tbody>
+								
+														</table>
+													 </div> 
+												</div>
+
+
+
+
+
+
+
+
+										</div>  
+
+										<br /><br />
+
+
+					<!-- </form>   -->
+
+
+
+
+		</div>
+
+	</div>
+
+		<br />
+
+</div>
+
+</div>
+<!--end of content-->
+
+<script src="/static/main.js"></script>
+
+</body>
+
+</html>

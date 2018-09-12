@@ -5,8 +5,8 @@
 	<title>Dynatrace Business Value Calculator</title>
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<link rel="stylesheet" type="text/css" href='/static/main.css' />
-	<!-- <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.js"></script> -->
-	<!-- <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>  -->
+	<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<link rel="icon" href="https://dt-cdn.net/images/favicon-32x32-32-26d70a5cff.png">
 	<script src="https://code.highcharts.com/highcharts.js"></script>
@@ -17,10 +17,10 @@
 		document.addEventListener("DOMContentLoaded", function(event) {
 			getAssessmentList();
 			setBvaLinks();
-		
+
 			$('#bva_select').change(function() {
 				setBvaLinks();
-			});	
+			});
 		});
 
 	</script>
@@ -35,58 +35,59 @@
 <div id="content_box">
 
 	<div class="inner_box centre">
-	
+
 		<div class="landing-box">
-		
-		<h2 class="menu-title">Your account</h2>
-		
-		<p>Please choose from the options below; continue with an assessment, share it with somebody else, create a new assessment or change your password.</p>	
+
+		<h2 class="menu-title">Your account <a href="/landing_se"><button role="button" type="button" class="btn btn--secondary theme--dark">BVA mode</button></a> </h2> 		
+
+		<p>Please choose from the options below; continue with an assessment, share it with somebody else, create a new assessment or change your password.</p>
+
 
 			<br />
 
 			<form action="/workflow#biz" method="get" enctype="application/x-www-form-urlencoded">
-				
+
 				<select class="select bva-select" name="bva_id" id="bva_select">
 					<option value="">
 						Loading..
-					</option>	
+					</option>
 				</select>
 
-				<a id="edit" href=""><button id="edit_submit" type="button" class="btn btn--secondary theme--dark landing-bva-button"><img src="/static/edit-white.svg" /></button></a>	
-			
+				<a id="edit" href=""><button id="edit_submit" type="button" class="btn btn--secondary theme--dark landing-bva-button"><img src="/static/edit-white.svg" /></button></a>
+
 				<a id="share" href=""><button id="share_submit" type="button" class="btn btn--secondary theme--dark landing-bva-button"><img src="/static/share-white.svg" /></button></a>
-			
+
 					<br /><br />
-			
+
 				<button id="landing_box_submit" type="submit" class="btn btn--primary theme--dark" >Continue</button>
-			
+
 					<br /><br />
-			
+
 				<a href="/createnew"><button id="landing_box_new" type="button" class="btn btn--secondary theme--dark landing-button">Create new</button></a> <a href="/changepassword"><button id="landing_box_password" type="button" class="btn btn--secondary theme--dark landing-button">Change password</button></a>
 
 					<br /><br />
-		
+
 				<a href="/editassessment"><button id="landing_box_submit" type="button" class="btn btn--secondary theme--dark ">Search/edit assessments</button></a>
-				
-			</form>	
+
+			</form>
 
 			<br />
-		
+
 		<div class="landing-logout">
-		
+
 			<a href="/logout" class="white">Logout</a><br />
-		
+
 		</div>
-		
+
 		</div>
-		
+
 	</div>
-	
+
 		<br />
 
-</div> 
+</div>
 
-</div>		
+</div>
 <!--end of content-->
 
 <script src="/static/main.js"></script>
