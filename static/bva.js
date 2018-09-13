@@ -1167,32 +1167,32 @@ function addSeListeners() {
 		  return false;
 		}
 
-	$(" .opsFromBiz ").click(function() {
+	$(" .autonomousFromOutcomes ").click(function() {
 		goToAnchor("autonomous");
 		getSeAssessmentData();
 	});
 
-	$(" .bizFromOps ").click(function() {
+	$(" .outcomesFromAutonomous ").click(function() {
 		goToAnchor("outcomes");
 		getSeAssessmentData();
 	});
 
-	$(" .devFromOps ").click(function() {
+	$(" .enterpriseFromAutonomous ").click(function() {
 		goToAnchor("enterprise");
 		getSeAssessmentData();
 	});
 
-	$(" .opsFromDev ").click(function() {
+	$(" .autonmousFromEnterprise ").click(function() {
 		goToAnchor("autonomous");
 		getSeAssessmentData();
 	});
 
-	$(" .optionsFromDev ").click(function() {
+	$(" .technicalFromEnterprise ").click(function() {
 		goToAnchor("technical");
 		getSeAssessmentData();
 	});
 
-	$(" .devFromOptions ").click(function() {
+	$(" .enterpriseFromTechnical ").click(function() {
 		goToAnchor("enterprise");
 		getSeAssessmentData();
 	});
