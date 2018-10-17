@@ -3963,7 +3963,7 @@ ol.list ol ul ul li:before {
 /* DivTable.com */
 .divTable{
 	display: table;
-	width: 100%;
+	/* width: 100%; */
 }
 .divTableRow {
 	display: table-row;

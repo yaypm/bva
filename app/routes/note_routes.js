@@ -69,9 +69,16 @@ module.exports = function(app, db) {
 							res.sendFile(path.join(__dirname + '/workflow.html'));
 						}
 						else {
-							db.close();
-							res.redirect('/landing');
-							console.log(username + " tried to access a bva they don't have access to: " + bva_id);
+							var check = new RegExp('(@dynatrace.com)').exec(username);
+							if(check == null) {
+								db.close();
+								res.redirect('/landing');
+								console.log(username + " tried to access a bva they don't have access to: " + bva_id);
+							}
+							else {
+								db.close();
+								res.sendFile(path.join(__dirname + '/workflow_readonly.html'));
+							}
 						}
 				});
 			})
@@ -97,10 +104,17 @@ module.exports = function(app, db) {
 							res.sendFile(path.join(__dirname + '/workflow_se.html'));
 						}
 						else {
-							db.close();
-							console.log("no results");
-							res.redirect('/landing_se');
-							//console.log(username + " tried to access a bva they don't have access to: " + bva_id);
+							var check = new RegExp('(@dynatrace.com)').exec(username);
+							if(check == null) {
+								db.close();
+								console.log("no results");
+								res.redirect('/landing_se');
+							}
+							else {
+								db.close();
+								res.sendFile(path.join(__dirname + '/workflow_se_readonly.html'));
+							}
+
 						}
 				});
 			})
@@ -1038,6 +1052,20 @@ module.exports = function(app, db) {
 				externalevents: false,
 				incidents: false,
 				cmdb: false,
+				api: false,
+				iot: false,
+				iib: false,
+				python: false,
+				docker: false,
+				cloud: false,
+				onprem: false,
+				hybrid: false,
+				outcomes_appowner_value: "",
+				outcomes_cxo_value: "",
+				autonomous_appowner_value: "",
+				fullstack_ops_value: "",
+				fullstack_dev_value: "",
+				fullstack_appowner_value: ""
 			};
 
 			MongoClient.connect(connectionOptions, function(err, db) {
@@ -1152,10 +1180,10 @@ module.exports = function(app, db) {
 
 		MongoClient.connect(connectionOptions, function(err, db) {
 			if(err) {
-				return console.dir(err);
 				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("failure");
 				db.close();
+				return console.dir(err);
 			}
 
 			else {
@@ -1532,7 +1560,7 @@ module.exports = function(app, db) {
 									}
 									else {
 										var email = username_share;
-										var subject = "You have a new assessment!"
+										var subject = "You have a new SE assessment!"
 										var text = "";
 										var html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\"><html style=\"background-color: #ececec; color: #454646; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 300; height: 100%; margin: 0; padding: 0;\"> <head> <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\"> <title></title> <style>@media only screen and (max-width: 580px){body{font-size: 16px !important;}table.container{width: 100% !important;}.button{font-size: 16px !important; line-height: 24px !important; border-top: 10px solid #00a1b2 !important; border-bottom: 10px solid #00a1b2 !important; border-right: 26px solid #00a1b2 !important; border-left: 26px solid #00a1b2 !important;}.cta-button{background-color: #7dc540 !important; border-top: 8px solid #7dc540 !important; border-bottom: 8px solid #7dc540 !important; border-right: 60px solid #7dc540 !important; border-left: 60px solid #7dc540 !important;}}</style> </head> <body style=\"background-color: #ececec; color: #454646; font-family: Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 300; height: 100%; margin: 0; padding: 0;\"> <table class=\"body\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; padding: 0; border: 0; background-color: #ececec; border-collapse: collapse; margin: 0 auto; height: 100%; width: 100%!important;\" height=\"100%\" bgcolor=\"#ececec\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td align=\"center\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"container\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"580\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #ffffff; border-collapse: collapse; width: 580px;\" bgcolor=\"#ffffff\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"header\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #242424; border-collapse: collapse; color: #ffffff; width: 100%!important;\" bgcolor=\"#242424\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 15px 30px;\" valign=\"top\"><img src=\"http://assets.dynatrace.com/global/logos/dynatrace_web-224x40.png\" alt=\"Dynatrace Logo\" style=\"display: block; max-width: 100%; height: 30px; margin: 0;\" height=\"30\"></td></tr></table> </td></tr><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"content\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; width: 100%;\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"section\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #ffffff; width: 100%!important;\" bgcolor=\"#ffffff\"><tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"><td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 40px 30px 60px;\" valign=\"top\"><h1 id=\"a-new-assessment\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; margin-bottom: 15px;\">A new assessment</h1><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Hi,</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">You have a new assessment that has been shared by " + username + ", titled \"" + company + ".\"</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Please login to access <a href=\"http://dynatrace.ai/bva\" style=\"color: #00a1b2; text-decoration: none;\">here</a>, or if you don't have an account create one first!</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">Many thanks,</p><p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px;\">The BVA (Business Value Assessment) team</p></td></tr></tbody></table> </td></tr></tbody> </table> </td></tr><tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; vertical-align: top;\" valign=\"top\"> <table class=\"footer\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" width=\"100%\" style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; background-color: #353535; color: #ffffff; font-size: 12px; text-align: center; width: 100%!important;\" bgcolor=\"#353535\" align=\"center\"> <tbody style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <tr style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0;\"> <td style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; border: 0; vertical-align: top; padding: 15px;\" valign=\"top\"> <p style=\"font-family: Helvetica, Arial, sans-serif; margin: 0; padding: 0; border: 0; font-weight: 300; line-height: 22px; margin-bottom: 20px; color: #ffffff;\">© 2018 Dynatrace LLC. All Rights Reserved<br><a href=\"https://www.dynatrace.com/\" style=\"color: #ffffff; text-decoration: underline;\">dynatrace.com</a></p></td></tr></tbody> </table> </td></tr></tbody> </table> </td></tr></tbody> </table> </body></html>";
 
@@ -1882,7 +1910,6 @@ module.exports = function(app, db) {
 	});
 
 	app.post('/seOppSearch', (req, res) => {
-		console.log(req.body);
 		var searchTerms = req.body;
 
 		//companyRegex = new RegExp('.*' + req.body.company + '.*');
@@ -1906,8 +1933,6 @@ module.exports = function(app, db) {
 				searchTerms[options[i]] = true;
 			}
 		}
-
-		console.log(searchTerms);
 
 		MongoClient.connect(connectionOptions, function(err, db) {
 
@@ -1933,15 +1958,36 @@ module.exports = function(app, db) {
 				}
 			})
 		})
+	});
 
+	app.post('/getBvaFromSe', (req, res) => {
+		var search = req.body;
 
+		console.log(req.body);
 
+		MongoClient.connect(connectionOptions, function(err, db) {
 
+			if(err) {
+				var response = {"status":"failed"};
+				res.end(JSON.stringify(response));
+				db.close();
+			}
 
+			var collection = db.collection('se_assessments');
+			var results = collection.find({$or:search}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+				if(err || items[0] == undefined) {
+					console.log("no results");
+					var response = {"status":"failed"};
+					res.end(JSON.stringify(response));
+					db.close();
+				}
 
-
-
-		//res.end(JSON.stringify(test));
+				else {
+					res.end(JSON.stringify(items));
+					db.close();					
+				}
+			})
+		})
 	});
 
 	app.get('/seBvaSearch', (req, res) => {

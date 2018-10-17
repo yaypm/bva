@@ -55,10 +55,11 @@
 														<option value="champions">Customer champions</option>
 														<option value="approach">Dynatrace approach</option>
 														<option value="operating">Operating systems</option>
-														<option value="platforms">Platforms</option>
+														<option value="location">Platform location</option>
+														<option value="platforms">Platform type</option>
 														<option value="deployment">Deplyment method</option>
 														<option value="language">Languages</option>
-														<option value="interface">User interface</option>
+														<option value="interface">Interface</option>
 														<option value="synthetic">Synthetic</option>	
 														<option value="extending">Extending Dynatrace</option>	
 														</select>	
@@ -184,14 +185,14 @@
 																				<div class="divTableCell se-center"><br /><img src="/static/heroku-white.png" class="se-question-image"/><br /><b>Heroku</b></div>
 																				<div class="divTableCell se-center"><br /><img src="/static/openstack-white.png" class="se-question-image"/><br /><b>Openstack</b></div>
 																				<div class="divTableCell se-center"><br /><img src="/static/kubernetes-white.png" class="se-question-image"/><br /><b>Kubernetes</b></div>
-																				<div class="divTableCell se-center"></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/docker-white.png" class="se-question-image"/><br /><b>Docker</b></div>
 																				</div>
 																				
 																				<div class="divTableRow">
 																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="heroku" class="checkbox" id="heroku"><label class="checkbox__label theme--dark" for="heroku"><span class="checkbox__caption"></span></label></div></div>
 																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="openstack" class="checkbox" id="openstack"><label class="checkbox__label theme--dark" for="openstack"><span class="checkbox__caption"></span></label></div></div>
 																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="kubernetes" class="checkbox" id="kubernetes"><label class="checkbox__label theme--dark" for="kubernetes"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="docker" class="checkbox" id="docker"><label class="checkbox__label theme--dark" for="docker"><span class="checkbox__capt	on"></span></label></div></div>
 																				</div>	
 																				
 																				
@@ -262,15 +263,15 @@
 																				<div class="divTableRow">
 																				<div class="divTableCell se-center"><br /><img src="/static/golang-white.png" class="se-question-image"/><br /><b>Go</b></div>
 																				<div class="divTableCell se-center"><br /><img src="/static/mainframe-white.png" class="se-question-image"/><br /><b>Mainframe</b></div>
-																				<div class="divTableCell se-center"><br /></div>
-																				<div class="divTableCell se-center"><br /></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/iib-white.png" class="se-question-image"/><br /><b>IIB</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/python-white.png" class="se-question-image"/><br /><b>Python</b></div>
 																				</div>
 																				
 																				<div class="divTableRow">
 																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="golang" class="checkbox" id="golang"><label class="checkbox__label theme--dark" for="golang"><span class="checkbox__caption"></span></label></div></div>
 																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="mainframe" class="checkbox" id="mainframe"><label class="checkbox__label theme--dark" for="mainframe"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"></div>
-																				<div class="divTableCell se-center"></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="iib" class="checkbox" id="iib"><label class="checkbox__label theme--dark" for="iib"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="python" class="checkbox" id="python"><label class="checkbox__label theme--dark" for="python"><span class="checkbox__caption"></span></label></div></div>
 																				</div>			
 																				
 																				
@@ -298,6 +299,20 @@
 																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="citrix" class="checkbox" id="citrix"><label class="checkbox__label theme--dark" for="citrix"><span class="checkbox__caption"></span></label></div></div>
 																				</div>		
 																				
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><br /><img src="/static/webrequest-white.png" class="se-question-image"/><br /><b>API</b></div>
+																				<div class="divTableCell se-center"><br /><img src="/static/iot-white.png" class="se-question-image"/><br /><b>IoT</b></div>
+																				<div class="divTableCell se-center"></div>
+																				<div class="divTableCell se-center"></div>
+																				</div>
+
+																				<div class="divTableRow">
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="api" class="checkbox" id="api"><label class="checkbox__label theme--dark" for="api"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="iot" class="checkbox" id="iot"><label class="checkbox__label theme--dark" for="iot"><span class="checkbox__caption"></span></label></div></div>
+																				<div class="divTableCell se-center"></div>
+																				<div class="divTableCell se-center"></div>
+																				</div>
+
 																				</div>
 																				</div>
 																</div>
@@ -324,7 +339,28 @@
 																				</div>
 		
 																</div>
-		
+																
+																<div id="location" style="display: none">
+																	<div class="divTable">
+																		<div class="divTableBody">
+																		
+																		<div class="divTableRow">
+																		<div class="divTableCell se-center"><img src="/static/saas-white.png" class="se-question-image"/><br /><b>Cloud</b></div>
+																		<div class="divTableCell se-center"><img src="/static/iaas-white.png" class="se-question-image"/><br /><b>On-premise</b></div>
+																		<div class="divTableCell se-center"><img src="/static/hybrid-white.png" class="se-question-image"/><br /><b>Hybrid</b></div>
+																		<div class="divTableCell se-center"></div>
+																		</div>
+																		
+																		<div class="divTableRow">
+																		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="cloud" class="checkbox" id="cloud"><label class="checkbox__label theme--dark" for="cloud"><span class="checkbox__caption"></span></label></div></div>
+																		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="onprem" class="checkbox" id="onprem"><label class="checkbox__label theme--dark" for="onprem"><span class="checkbox__caption"></span></label></div></div>
+																		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="hybrid" class="checkbox" id="hybrid"><label class="checkbox__label theme--dark" for="hybrid"><span class="checkbox__caption"></span></label></div></div>
+																		<div class="divTableCell se-center"></div>
+																		</div>		
+																		
+																		</div>
+																		</div>
+																</div>
 		
 																<div id="extending" style="display: none">
 		

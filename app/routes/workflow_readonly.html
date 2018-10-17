@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<title>Dynatrace Business Value Calculator</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" type="text/css" href='/static/main_og.css' />
+	<link rel="stylesheet" type="text/css" href='/static/bva.css' />
+	<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="icon" href="https://dt-cdn.net/images/favicon-32x32-32-26d70a5cff.png">
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<style>a:hover {cursor:pointer;}</style>
+	<script src="/static/bva.js"></script>
+	<script src="//code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function(event) {
+			addReadOnlyListeners();
+		});
+	</script>
+
+</head>
+
+<body class="bva-body" onhashchange="showContent()">
+
+<!--start of nav bar-->
+<div class="nav has-no-secondary">
+
+  <a class="nav__brand" href="/">
+    <img class="nav__logo" src="https://assets.dynatrace.com/global/logos/dynatrace-logo.svg" alt="dynatrace logo"/>
+  </a>
+
+  <nav id="nav-bar-example1" class="nav__bar">
+  </nav>
+
+</div>
+<!--end of nav bar-->
+
+<!--start of content-->
+<div class="section bva-content">
+
+<div class="column--1-of-2 bva-content-column" >
+
+<div class="leftContainer" >
+
+<input type="hidden" id="currency"/>
+
+<div class="biz">
+
+
+
+<!-- start of title -->
+<div class="bva-title-wrapper bva-title-wrapper-biz">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Business</h1>
+		<p>Increased revenue from improved technology performance</p>
+
+	</div>
+
+</div>
+<!--end of title-->
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag user-email">
+	  <span class="tag__key" id="email">email:</span>
+
+	</span>
+
+	<span tabindex="1" class="tag user-company">
+	  <span class="tag__key">company:</span>
+
+	</span>
+
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="toHome" href="/landing"><img src="/static/home-purple.svg" class="bva-progress-button"/></a><br />Home</div><div class="theme--purple bva-progress-wrapper" ><label class="label--progressbar" for="p1">1/4</label><progress class="progressbar" value="1" max="4" if="p1"></progress>	</div><div class="bva-button-wrapper"><a class="opsFromBiz" ><img src="/static/arrow-purple.svg" class="bva-progress-button"/></a><br />Next</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/sales-purple.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="company_revenue" class="label bva-question-text" >Company or business unit annual revenue <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-conversions.svg"/>Revenue from increased conversions caused by better app performance</li></ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="company_revenue" placeholder="revenue"  />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/trend-purple.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="projected_growth" class="label bva-question-text">Projected annual growth rate <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-conversions.svg"/>Revenue from increased conversions caused by better app performance</li></ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="projected_growth" placeholder="growth"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/application-purple.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="revenue_dependent" class="label bva-question-text">Revenue dependent on applications <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-conversions.svg"/>Revenue from increased conversions caused by better app performance</li></ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="revenue_dependent" placeholder="% revenue" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/health-purple.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="app_uptime" class="label bva-question-text" >Excluding planned maintenance, how often are you free from application degradations or outages? <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="app_uptime" placeholder="% of time"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/warning-purple.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="revenue_breach" class="label bva-question-text" >Percentage of revenue lost during a degradation or outage <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="revenue_breach" placeholder="% of revenue lost" />
+
+		</div>
+
+	</div>
+
+</div>
+<!--end of questions-->
+
+
+<br /><br />
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="ops">
+<!-- start of title -->
+<div class="bva-title-wrapper bva-title-wrapper-ops">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Operations</h1>
+		<p>Reducing the frequency and cost of issues</p>
+
+	</div>
+
+</div>
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag user-email">
+	  <span class="tag__key">email:</span>
+	</span>
+
+	<span tabindex="1" class="tag user-company">
+	  <span class="tag__key">id:</span>
+	</span>
+
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="bizFromOps" ><img src="/static/arrow-green.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--green bva-progress-wrapper"><label class="label--progressbar" for="p1">2/4</label><progress class="progressbar" value="2" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><a class="devFromOps" ><img src="/static/arrow-green.svg" class="bva-progress-button"/></a><br />Next</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/incident-green.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="incidents_month" class="label bva-question-text">Number of incidents reported per month caused by slowness or availability <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-incidents.svg"/>Incident reduction and faster MTTR in production (cost of war room effort)</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-incidents.svg"/>Fewer production incidents by finding & fixing performance defects in QA & Dev</li></ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="incidents_month" placeholder="# of incidents"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/ops-green.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="no_ops_troubleshoot" class="label bva-question-text">Average number of Ops people used to troubleshoot an incident <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-incidents.svg"/>Incident reduction and faster MTTR in production (cost of war room effort)</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-incidents.svg"/>Fewer production incidents by finding & fixing performance defects in QA & Dev</li></ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="no_ops_troubleshoot" placeholder="# of Ops people"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/dev-green.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="no_dev_troubleshoot" class="label bva-question-text">Average number of Dev people used to troubleshoot an incident <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-incidents.svg"/>Incident reduction and faster MTTR in production (cost of war room effort)</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-incidents.svg"/>Fewer production incidents by finding & fixing performance defects in QA & Dev</li></ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="no_dev_troubleshoot" placeholder="# of Dev people"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/repair-green.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="mttr" class="label bva-question-text">Average <div class="tooltip underline">MTTR<div class="tooltiptext">MTTR stands for "Mean time to resolution" and is the time taken (in minutes) from an incident affecting an application, to the incident being closed.</div></div> (minutes) <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-incidents.svg"/>Incident reduction and faster MTTR in production (cost of war room effort)</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-incidents.svg"/>Fewer production incidents by finding & fixing performance defects in QA & Dev</li></ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="mttr" placeholder="# of minutes"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/transaction-green.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="no_apps_e2e" class="label bva-question-text"># of apps being monitored end-to-end currently <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-increased-automation.svg"/>Cost savings with Dynatrace automation vs. manual effort</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="no_apps_e2e" placeholder="# of apps"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/application-green.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="no_t1t2_apps" class="label bva-question-text">Total # of <div class="tooltip underline">T1/T2<div class="tooltiptext">T1/T2 (Tier 1/Tier 2) are the most important applications within your organisation, they may also be referred to as "Gold" and "Silver" applications.</div></div> apps in production <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-increased-automation.svg"/>Cost savings with Dynatrace automation vs. manual effort</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="no_t1t2_apps" placeholder="# of apps"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/user-green.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="no_fte_existing" class="label bva-question-text"># of <div class="tooltip underline">FTEs<div class="tooltiptext">FTE stands for "Full time employee"</div></div> looking after existing tools <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-increased-automation.svg"/>Cost savings with Dynatrace automation vs. manual effort</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="no_fte_existing" placeholder="# of FTEs"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<h2 class="bva-question-text-centre">Replacement of existing tools </h2>
+
+		<br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/tools-green.svg" class="bva-question-image"/>
+
+			<div class="bva-input-wrapper">
+
+				<label for="name_tool" class="label bva-question-text">Name of tool <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-tools.svg"/>Reduction of existing monitoring tools</li> </ul></div> </div></label>
+				<input type="text" class="inputfield bva-question-input" id="name_tool" placeholder="Name of tool"/>
+
+			</div>
+
+		</div>
+
+		<div class="bva-question-wrapper bva-question-top">
+
+			<div class="bva-question-block">
+
+				<label for="annual_cost" class="label bva-question-text">Annual license and support costs <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-tools.svg"/>Reduction of existing monitoring tools</li> </ul></div> </div></label>
+				<input type="text" class="inputfield bva-question-input" id="annual_cost" placeholder="annual costs"/>
+
+			</div>
+
+		</div>
+
+		<div class="bva-question-wrapper bva-question-top">
+
+			<div class="bva-question-block">
+
+				<label for="no_fte_config" class="label bva-question-text"><div class="tooltip underline">FTEs<div class="tooltiptext">FTE stands for "Full time employee"</div></div> used for config and admin <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-tools.svg"/>Reduction of existing monitoring tools</li> </ul></div> </div></label>
+				<input type="text" class="inputfield bva-question-input" id="no_fte_config" placeholder="# of FTEs"/>
+
+			</div>
+
+		</div>
+
+		<div class="bva-question-wrapper bva-question-top">
+
+			<div class="bva-question-existing-wrapper">
+
+				<label class="label bva-question-existing-label">% replaced with Dynatrace <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-tools.svg"/>Reduction of existing monitoring tools</li> </ul></div> </div></label>
+				<!--<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y1" placeholder="Year 1"/>-->
+				<select class="select bva-question-exsiting-input" id="existing_y1">
+				  <option value="100" selected="selected">100%</option>
+				  <option value="90">90%</option>
+				  <option value="80">80%</option>
+				  <option value="70">70%</option>
+					<option value="60">60%</option>
+					<option value="50">50%</option>
+					<option value="40">40%</option>
+					<option value="30">30%</option>
+					<option value="20">20%</option>
+					<option value="10">10%</option>
+					<option value="0">0%</option>
+				</select>
+				<!--<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y2" placeholder="Year 2"/>-->
+				<select class="select bva-question-exsiting-input" id="existing_y2">
+					<option value="100" selected="selected">100%</option>
+					<option value="90">90%</option>
+					<option value="80">80%</option>
+					<option value="70">70%</option>
+					<option value="60">60%</option>
+					<option value="50">50%</option>
+					<option value="40">40%</option>
+					<option value="30">30%</option>
+					<option value="20">20%</option>
+					<option value="10">10%</option>
+					<option value="0">0%</option>
+				</select>
+				<!--<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y3" placeholder="Year 3"/>-->
+				<select class="select bva-question-exsiting-input" id="existing_y3">
+					<option value="100" selected="selected">100%</option>
+					<option value="90">90%</option>
+					<option value="80">80%</option>
+					<option value="70">70%</option>
+					<option value="60">60%</option>
+					<option value="50">50%</option>
+					<option value="40">40%</option>
+					<option value="30">30%</option>
+					<option value="20">20%</option>
+					<option value="10">10%</option>
+					<option value="0">0%</option>
+				</select>
+
+			</div>
+
+		</div>
+
+		<div class="bva-question-wrapper bva-question-top">
+
+			<div class="bva-question-existing-wrapper">
+
+				<button  type="button" id="existingToolAdd" class="btn btn--primary theme--dark bva-question-existing-add">Add tool</button>
+
+			</div>
+
+		</div>
+
+			<br /><br />
+
+		<div id="existing_apps">
+
+		</div>
+</div>
+<!--end of questions-->
+
+<br />
+
+</div>
+
+
+
+
+
+
+
+
+
+<div class="dev">
+<!-- start of title -->
+<div class="bva-title-wrapper bva-title-wrapper-dev">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Development</h1>
+		<p>Decreased cost of problem detection and impact</p>
+
+	</div>
+
+</div>
+<!--end of title-->
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag user-email">
+	  <span class="tag__key">email:</span>
+	</span>
+
+	<span tabindex="1" class="tag user-company">
+	  <span class="tag__key">id:</span>
+	</span>
+
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="opsFromDev" ><img src="/static/arrow-blue.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--royalblue bva-progress-wrapper"><label class="label--progressbar" for="p1">3/4</label><progress class="progressbar" value="3" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><a class="optionsFromDev" ><img src="/static/arrow-blue.svg" class="bva-progress-button"/></a><br />Next</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/release-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="cycles_per_year" class="label bva-question-text">Release cycles per year for all applications <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="cycles_per_year" placeholder="# of release cycles"/>
+
+		</div>
+
+	</div>
+
+	<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/days-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="cycle_days" class="label bva-question-text">Number of days to complete a release cycle <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="cycle_days" placeholder="# of days"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/test-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="test_per_cycle" class="label bva-question-text">Percentage of time spent testing per release cycle <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="test_per_cycle" placeholder="% of time"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/performance-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="qa_time_per_cycle" class="label bva-question-text">Amount of <div class="tooltip underline">QA<div class="tooltiptext">QA stands for "Quality Assurance" and is a particular role during software testing</div></div> testing time spent documenting performance issues <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="qa_time_per_cycle" placeholder="% of time"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/document-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="qa_people_per_cycle" class="label bva-question-text">Number of <div class="tooltip underline">QA<div class="tooltiptext">QA stands for "Quality Assurance" and is a particular role during software testing</div></div> people documenting performance problems per release (QA) <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="qa_people_per_cycle" placeholder="# of people"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/performance-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="dev_time_per_cycle" class="label bva-question-text">Amount of dev testing time spent documenting performance issues <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="dev_time_per_cycle" placeholder="% of time"/>
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/document-blue.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="dev_people_per_cycle" class="label bva-question-text">Number of dev people documenting performance problems per release <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="dev_people_per_cycle" placeholder="# of people"/>
+
+		</div>
+
+	</div>
+
+</div>
+<!--end of questions-->
+
+<br />
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="options">
+<!-- start of title -->
+<div class="bva-title-wrapper bva-title-wrapper-options">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Options</h1>
+		<p>Provide the impact that Dynatrace will have to you</p>
+
+	</div>
+
+</div>
+<!--end of title-->
+
+<!--start of tags-->
+<div class="tags">
+
+	<span tabindex="1" class="tag user-email">
+	  <span class="tag__key">email:</span>
+	</span>
+
+	<span tabindex="1" class="tag user-company">
+	  <span class="tag__key">id:</span>
+	</span>
+
+</div>
+<!--end of tags-->
+
+<br />
+
+<!--start of progress-->
+<div class="progress bva-progress"><div class="bva-button-wrapper"><a class="devFromOptions" ><img src="/static/arrow-grey.svg" class="bva-progress-button bva-progress-button-rotate"/></a><br />Previous</div><div class="theme--grey bva-progress-wrapper"><label class="label--progressbar" for="p1">4/4</label><progress class="progressbar" value="4" max="4" if="p1"></progress></div><div class="bva-button-wrapper"><img src="/static/finish-grey.svg" class="bva-progress-button"/><br />Finished!</div></div>
+<!--end of progress-->
+
+<!--start of questions-->
+<div class="bva-all-question-wrapper">
+
+	<h2 class="bva-question-text-centre">IT labour costs</h2>
+
+		<br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/ops-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="operation_cost" class="label bva-question-text">Fully loaded cost of operations person <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-incidents.svg"/>Incident reduction and faster MTTR in production (cost of war room effort)</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-increased-automation.svg"/>Cost savings with Dynatrace automation vs. manual effort</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-tools.svg"/>Reduction of existing monitoring tools</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-incidents.svg"/>Fewer production incidents by finding & fixing performance defects in QA & Dev</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="operation_cost" placeholder="ops cost" />
+
+		</div>
+
+	</div>
+
+	<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/dev-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="developer_cost" class="label bva-question-text">Fully loaded cost of developer <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-incidents.svg"/>Incident reduction and faster MTTR in production (cost of war room effort)</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-increased-automation.svg"/>Cost savings with Dynatrace automation vs. manual effort</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-tools.svg"/>Reduction of existing monitoring tools</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-incidents.svg"/>Fewer production incidents by finding & fixing performance defects in QA & Dev</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="developer_cost" placeholder="dev cost" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/test-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="qa_cost" class="label bva-question-text">Fully loaded cost of <div class="tooltip underline">QA<div class="tooltiptext">QA stands for "Quality Assurance" and is a particular role during software testing</div></div> person <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-incidents.svg"/>Incident reduction and faster MTTR in production (cost of war room effort)</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-increased-automation.svg"/>Cost savings with Dynatrace automation vs. manual effort</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-tools.svg"/>Reduction of existing monitoring tools</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-incidents.svg"/>Fewer production incidents by finding & fixing performance defects in QA & Dev</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="qa_cost" placeholder="qa cost" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/time-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="work_hours" class="label bva-question-text">Work hours per year <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-incidents.svg"/>Incident reduction and faster MTTR in production (cost of war room effort)</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-increased-automation.svg"/>Cost savings with Dynatrace automation vs. manual effort</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-tools.svg"/>Reduction of existing monitoring tools</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-incidents.svg"/>Fewer production incidents by finding & fixing performance defects in QA & Dev</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="work_hours" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br />
+
+	<h2 class="bva-question-text-centre">Dynatrace benefits</h2>
+
+		<br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/sales-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_conversion" class="label bva-question-text">Increased revenue from increased conversions as a result of better performance <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-conversions.svg"/>Revenue from increased conversions caused by better app performance</li>  </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_conversion" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/incident-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_incident_reduction" class="label bva-question-text">Incident reduction in production through pro-active detection <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-incidents.svg"/>Incident reduction and faster MTTR in production (cost of war room effort)</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_incident_reduction" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/analysis-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_mttr" class="label bva-question-text">Faster <div class="tooltip underline">MTTR<div class="tooltiptext">MTTR stands for "Mean time to resolution" and is the time taken (in minutes) from an incident affecting an application, to the incident being closed.</div></div> and root cause analysis in production <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-incidents.svg"/>Incident reduction and faster MTTR in production (cost of war room effort)</li> </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_mttr" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/sla-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_sla" class="label bva-question-text">Improvement on <div class="tooltip underline">SLA<div class="tooltiptext">SLA stands for "Service level agreement" and in this context refers to the uptime of your applications</div></div> achievement <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/biz-increased-revenue.svg"/>Revenue gained by reduced incidents, downtime, and slowness</li>  </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_sla" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/find-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_fix_qa" class="label bva-question-text">Reduced time finding and fixing performance problems in <div class="tooltip underline">QA<div class="tooltiptext">QA stands for "Quality Assurance" and is a particular role during software testing</div></div> <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-investigation.svg"/>Performance defect investigation and troubleshooting in QA</li>  </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_fix_qa" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/down-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_prod_reduction" class="label bva-question-text">Incident reduction in production by finding and fixing defects in Dev and <div class="tooltip underline">QA<div class="tooltiptext">QA stands for "Quality Assurance" and is a particular role during software testing</div></div> <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/dev-decreased-incidents.svg"/>Fewer production incidents by finding & fixing performance defects in QA & Dev</li>  </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_prod_reduction" placeholder="%" />
+
+		</div>
+
+	</div>
+
+		<br /><br />
+
+	<div class="bva-question-wrapper">
+
+		<img src="/static/config-grey.svg" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="benefit_config" class="label bva-question-text">Reduced time spent implementing and configuring vs. existing tools <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"><br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-increased-automation.svg"/>Cost savings with Dynatrace automation vs. manual effort</li>  </ul></div> </div></label>
+			<input type="text" class="inputfield bva-question-input" id="benefit_config" placeholder="%" />
+
+		</div>
+
+	</div>
+
+	<div id="pricing" style="display:none">
+
+		<br />
+
+	<h2 class="bva-question-text-centre">Dynatrace pricing</h2>
+
+	<div class="bva-question-wrapper centre">
+
+		<div class="bva-input-wrapper">
+
+			<p class="pricing-text">Please enter the prices provided by Dynatrace for the software and services if applicable.</p>
+
+		</div>
+
+	</div>
+
+
+		<br />
+
+	<div class="bva-question-wrapper centre" >
+
+		<div class="bva-input-wrapper">
+			<p class="pricing-text-gap"></p>
+			<p class="pricing-text-header"> software </p>
+			<p class="pricing-text-header"> services </p>
+
+			<p class="year-header">Year 1</p>
+			<input type="text" class="inputfield bva-question-input pricing-input" id="y1_software" placeholder=""/>
+			<input type="text" class="inputfield bva-question-input pricing-input" id="y1_services" placeholder="" />
+
+		</div>
+
+	</div>
+
+		<br />
+
+	<div class="bva-question-wrapper" style="text-align: center">
+
+		<div class="bva-input-wrapper">
+
+			<p class="year-header">Year 2</p>
+			<input type="text" class="inputfield bva-question-input pricing-input" id="y2_software" placeholder="" />
+			<input type="text" class="inputfield bva-question-input pricing-input" id="y2_services" placeholder="" />
+
+		</div>
+
+	</div>
+
+		<br />
+
+	<div class="bva-question-wrapper" style="text-align: center">
+
+		<div class="bva-input-wrapper">
+
+			<p class="year-header">Year 3</p>
+			<input type="text" class="inputfield bva-question-input pricing-input" id="y3_software" placeholder="" />
+			<input type="text" class="inputfield bva-question-input pricing-input" id="y3_services" placeholder=""  />
+
+		</div>
+
+	</div>
+
+	</div>
+</div>
+<!--end of questions-->
+</div>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+</div>
+
+<div class="column--1-of-2 bva-content-column" >
+
+
+
+
+
+<div class="headContainer" style="position: relative; height: 105px">
+<div class="bva-title-wrapper bva-title-wrapper-results result-biz">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Results</h1>
+		<p>The value to your business from partnering with Dynatrace</p>
+
+	</div>
+
+</div>
+
+<div class="bva-title-wrapper bva-title-wrapper-results result-ops">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Results</h1>
+		<p>The value to your business from partnering with Dynatrace</p>
+
+	</div>
+
+</div>
+
+
+<div class="bva-title-wrapper bva-title-wrapper-results result-dev">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Results</h1>
+		<p>The value to your business from partnering with Dynatrace</p>
+
+	</div>
+
+</div>
+
+
+<div class="bva-title-wrapper bva-title-wrapper-results result-options">
+
+	<div class="bva-title-wrapper-inner">
+
+		<h1 class="bva-title-text">Results</h1>
+		<p>The value to your business from partnering with Dynatrace</p>
+
+	</div>
+
+</div>
+
+
+</div>
+
+	<div id="results" style="display: none">
+
+		<h2 style="margin-left: 5%; margin-top: 20px">Total cost savings and revenue gains</h2>
+
+		<p style="margin-left: 5%; width: 90%; font-family: BerninaSansLight">Based upon information provided about the current costs/revenue impact of performance problems, the summary below shows the expected improvements from working with Dynatrace.</p>
+
+		<div id="total_stacked_bar" style="height: 450px; margin-left: 10%; margin-right: 10%; margin-top: 20px"></div>
+			<br /><br />
+
+		<div id="result_total_table">
+			<div style="width: 90%; overflow: auto; margin-left: 5%">
+			<table class="table" id="results_table">
+			  <thead>
+				<tr>
+				  <th></th>
+				  <th>Year 1</th>
+				  <th>Year 2</th>
+				  <th>Year 3</th>
+				  <th><b>Total</b></th>
+				</tr>
+			  </thead>
+			  <tbody id="results_body">
+
+			  </tbody>
+			</table>
+			</div>
+		</div>
+
+
+
+
+		<div id="roi_section" style="display: none">
+		<br />
+			<h2 style="margin-left: 5%">Return on investment</h2>
+			<p style="margin-left: 5%; width: 90%; font-family: BerninaSansLight">Using the provided software and services costs for Dynatrace, the information below shows the cost/benefit analysis over 3 years.</p>
+		<div id="roi_column" style="height: 450px; margin-left: 10%; margin-right: 10%;  margin-top: 20px"></div>
+			<br />
+
+			<table class="table" style="width: 90%; margin-left: 5%">
+			  <thead>
+				<tr>
+				  <th></th>
+				  <th>Year 1</th>
+				  <th>Year 2</th>
+				  <th>Year 3</th>
+				</tr>
+			  </thead>
+			  <tbody id="roi_body">
+
+			  </tbody>
+			</table>
+
+		<div class="theme--green" id="roi_points" style="margin-left: 5%; margin-right: 10%; ">
+
+		</div>
+
+		<br />
+		</div>
+
+
+
+
+		<h2 style="margin-left: 5%">Use case breakdown</h2>
+		<p style="margin-left: 5%; width: 90%; font-family: BerninaSansLight">These use cases provide a more detailed breakdown of where the revenue gains/cost reductions will be generated.</p>
+		<div id="business" style="display: none; margin-top: 20px">
+		<h3 style="margin-left: 5%">Business</h3>
+			<div id="biz-increased-revenue">
+
+			</div>
+
+			<div id="biz-increased-conversions">
+
+			</div>
+		</div>
+
+		<div id="operations" style="display: none; margin-top: 20px">
+			<h3 style="margin-left: 5%">Operations</h3>
+
+			<div id="ops-reduced-incidents">
+
+			</div>
+
+			<div id="ops-increased-automation">
+
+			</div>
+
+			<div id="ops-reduced-tools">
+
+			</div>
+		</div>
+
+		<div id="development" style="display: none; margin-top: 20px">
+			<h3 style="margin-left: 5%">Development</h3>
+
+			<div id="dev-decreased-investigation">
+
+			</div>
+
+			<div id="dev-decreased-incidents">
+
+			</div>
+		</div>
+		<button id="open-report" type="button" class="btn btn--secondary" style="width: 90%; margin-left: 5%">Open as report</button>
+		<br />
+		<br />
+	</div>
+
+		<div id="no-results" style="display: none; margin-left: 10%; margin-right: 10%; margin-top: 30px">
+			Please complete the questions for <b>business</b>, <b>development</b> and <b>operations</b> in order to start seeing results. The final section, "options," is pre-filled with typical values but these can be changed depending on your organisation.
+
+			<br /><br />
+
+			As you start to provide more information, the results will be generated for the use cases detailed below:
+
+			<br /><br /><br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/results/biz-increased-revenue.svg" class="bva-question-image" style="vertical-align: middle"/>
+
+			<div class="bva-input-wrapper" style="vertical-align: middle">
+
+				<p>Revenue gained by reduced incidents, downtime, and slowness</p>
+
+			</div>
+
+		</div>
+
+			<br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/results/biz-increased-conversions.svg" class="bva-question-image" style="vertical-align: middle"/>
+
+			<div class="bva-input-wrapper" style="vertical-align: middle">
+
+				<p>Revenue from increased conversions caused by better app performance</p>
+
+			</div>
+
+		</div>
+
+			<br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/results/ops-reduced-incidents.svg" class="bva-question-image" style="vertical-align: middle"/>
+
+			<div class="bva-input-wrapper" style="vertical-align: middle">
+
+				<p>Incident reduction and faster MTTR in production (cost of war room effort)</p>
+
+			</div>
+
+		</div>
+
+			<br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/results/ops-increased-automation.svg" class="bva-question-image" style="vertical-align: middle"/>
+
+			<div class="bva-input-wrapper" style="vertical-align: middle">
+
+				<p>Cost savings with Dynatrace automation vs. manual effort </p>
+
+			</div>
+
+		</div>
+
+			<br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/results/ops-reduced-tools.svg" class="bva-question-image" style="vertical-align: middle"/>
+
+			<div class="bva-input-wrapper" style="vertical-align: middle">
+
+				<p>Reduction of existing monitoring tools</p>
+
+			</div>
+
+		</div>
+
+			<br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/results/dev-decreased-investigation.svg" class="bva-question-image" style="vertical-align: middle"/>
+
+			<div class="bva-input-wrapper" style="vertical-align: middle">
+
+				<p>Performance defect investigation and troubleshooting in QA</p>
+
+			</div>
+
+		</div>
+
+			<br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/results/dev-decreased-incidents.svg" class="bva-question-image" style="vertical-align: middle"/>
+
+			<div class="bva-input-wrapper" style="vertical-align: middle">
+
+				<p>Fewer production incidents by finding & fixing performance defects in QA & Dev</p>
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<div id="loading" style="margin-left: 40%; margin-top: 40%; transform:translate(-30px, -30px);">
+		<div class="loading">
+			<svg class="loading__distractor" width="30px" height="30px" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+				<circle class="loading__path" cx="15" cy="15" r="12"></circle>
+			</svg>
+			<p class="loading__text">Loading...</p>
+		</div>
+	</div>
+
+
+</div>
+<!--end of content-->
+</div>
+<script src="/static/result_charts.js"></script>
+<script src="/static/main.js"></script>
+
+</body>
+
+</html>

@@ -62,7 +62,7 @@ function seOppSearch() {
 			technical_champion: document.getElementById("technical_champion").value,
 			tenant: document.getElementById("tenant").value};
 
-	options = ["saas","managed","offline","windows","linux","aix","solaris","vmware","azure","aws","openshift","cloudfoundry","ibmcloud","oraclecloud","gcp","heroku","openstack","kubernetes","iaas","paas","faas","softaas","java","dotnet","php","nodejs","messaging","c","dotnetcore","webserver","golang","mainframe","web","mobileapp","thick","citrix","browser","http","external","oaplugins","cnd","agplugins","externalevents","incidents","cmdb"];
+	options = ["saas","managed","offline","windows","linux","aix","solaris","vmware","azure","aws","openshift","cloudfoundry","ibmcloud","oraclecloud","gcp","heroku","openstack","kubernetes","iaas","paas","faas","softaas","java","dotnet","php","nodejs","messaging","c","dotnetcore","webserver","golang","mainframe","web","mobileapp","thick","citrix","browser","http","external","oaplugins","cnd","agplugins","externalevents","incidents","cmdb","cloud","onprem","hybrid","docker","iib","python","api","iot"];
 
 	for(i=0;i<options.length;i++) {
 		if(document.getElementById(options[i]).checked == true) {
@@ -118,7 +118,7 @@ function seOppSearch() {
 				var fullStackTotal = orderedOpps[i].tool_cons + orderedOpps[i].devops + orderedOpps[i].ai + orderedOpps[i].integrations + orderedOpps[i].release + orderedOpps[i].lifecycle + orderedOpps[i].shift + orderedOpps[i].perfect + orderedOpps[i].migration + orderedOpps[i].transaction;
 				var fullStackProg = Math.ceil((fullStackTotal / 30) * 100);
 
-				document.getElementById("opp_results").tBodies[i].children[0].children[0].innerHTML=orderedOpps[i].company;
+				document.getElementById("opp_results").tBodies[i].children[0].children[0].innerHTML="<input type=\"hidden\" class=\"hiddenSeId\" name=\"hiddenSeId\" value=\"" + orderedOpps[i]._id + "\">" + orderedOpps[i].company;
 				document.getElementById("opp_results").tBodies[i].children[0].children[1].innerHTML="<div class=\"theme--purple\"><label class=\"label--purple\" for=\"p0\">" + outcomesTotal + "/15</label><progress class=\"progressbar\" value=\"" + outcomesProg + "\" max=\"100\" id=\"p0\"></progress></div>";
 				document.getElementById("opp_results").tBodies[i].children[0].children[2].innerHTML="<div class=\"theme--green\"><label class=\"label--purple\" for=\"p0\">" + autonomousTotal + "/15</label><progress class=\"progressbar\" value=\"" + autonomousProg + "\" max=\"100\" id=\"p0\"></progress></div>";
 				document.getElementById("opp_results").tBodies[i].children[0].children[3].innerHTML="<div class=\"theme--blue\"><label class=\"label--purple\" for=\"p0\">" + fullStackTotal + "/30</label><progress class=\"progressbar\" value=\"" + fullStackProg + "\" max=\"100\" id=\"p0\"></progress></div>";
@@ -137,8 +137,8 @@ function seOppSearch() {
 					lead_se = "n/a";
 				}				
 
-				document.getElementById("opp_results").tBodies[i].children[1].children[0].innerHTML="<div class=\"divTable\" style=\"font-size: 1.2em\"><div class=\"divTableBody\"><div class=\"divTableRow\"><div class=\"divTableCell\"><b>Lead sales</b> <br /><div style=\"font-size: 1.5em\">" + lead_sales + "</div></div><div class=\"divTableCell\"><b>Lead SE</b><br /><div style=\"font-size: 1.5em\">" + lead_se + "</div></div><div class=\"divTableCell\"></div></div></div>";
-		
+				document.getElementById("opp_results").tBodies[i].children[1].children[0].innerHTML="<div class=\"divTable\" style=\"font-size: 1.2em\"><div class=\"divTableBody\"><div class=\"divTableRow\"><div class=\"divTableCell\"><b>Lead sales</b> <br /><div style=\"font-size: 1.5em\">" + lead_sales + "</div></div><div class=\"divTableCell\"><b>Lead SE</b><br /><div style=\"font-size: 1.5em\">" + lead_se + "</div></div><div class=\"divTableCell\"><a href=\"/workflow_se?se_id=" + orderedOpps[i]._id + "#technical\"><button role=\"button\" type=\"button\" class=\"btn btn--secondary theme--dark\">Go to SE app</button></a><br /><br /><a href=\"/\" id=\"" + orderedOpps[i]._id + "\" class=\"bvaClickThrough\" style=\"display: none\"><button role=\"button\" type=\"button\" class=\"btn btn--secondary theme--dark\">Go to BVA</button></a></div></div></div>";
+				
 			}
 		
 		
@@ -150,6 +150,55 @@ function seOppSearch() {
 		document.getElementById("search_results").scrollIntoView();
 
 	})
+
+	.then(function() {
+		getBvaForClickThrough();
+	})
+}
+
+function getBvaForClickThrough() {
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+
+	var loop = document.getElementsByClassName("bvaClickThrough");
+	var search = [];
+
+	for(i=0;i<loop.length;i++) {
+		search.push({_id: loop[i].id});
+	}
+
+	var myInit = { method: 'POST',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin',
+		body: JSON.stringify(search)
+	}
+
+	fetch('/getBvaFromSe', myInit)
+
+	.then(function(response) {
+		return response.json();
+	})
+
+	.then(function(jsonResponse) {
+		jsonResponse.forEach(function(item) {
+			
+			for(i=0;i<loop.length;i++) {
+				
+				if(item._id == loop[i].id) {
+					if(item.bva_id == null || item.bva_id == "" || item.bva_id == undefined) {
+
+					}
+					else {
+						loop[i].href="/workflow?bva_id=" + item.bva_id + "#biz";
+						loop[i].style.display = "block";
+					}	
+				}
+			}
+		})
+	})
+
 }
 
 function enableSeBvaSearch() {
@@ -659,7 +708,7 @@ function getSEAssessmentList() {
 	})
 }
 
-function getAssessmentData() {
+function getAssessmentData(read) {
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
 	myHeaders.append("Accept", "application/json");
@@ -729,11 +778,17 @@ function getAssessmentData() {
 
 		document.getElementById("existing_apps").innerHTML = existingApps;
 
-		$(" .delete ").click(function() {
+		if(read == 1) {
 
-			deleteExistingTool(this.id);
+		}
+		else {
+			$(" .delete ").click(function() {
 
-		});
+				deleteExistingTool(this.id);
+	
+			});
+		}
+
 
 		drawResults();
 	})
@@ -824,6 +879,12 @@ function getSeAssessmentData() {
 		radioInput("transaction", jsonResponse.transaction);
 		document.getElementById("transaction_prio").value = jsonResponse.transaction_prio;
 		document.getElementById("fullstack_appowner_feedback").value = jsonResponse.fullstack_appowner_feedback;
+		document.getElementById("outcomes_appowner_value").value = jsonResponse.outcomes_appowner_value;
+		document.getElementById("outcomes_cxo_value").value = jsonResponse.outcomes_cxo_value;
+		document.getElementById("autonomous_appowner_value").value = jsonResponse.autonomous_appowner_value;
+		document.getElementById("fullstack_ops_value").value = jsonResponse.fullstack_ops_value;
+		document.getElementById("fullstack_dev_value").value = jsonResponse.fullstack_dev_value;
+		document.getElementById("fullstack_appowner_value").value = jsonResponse.fullstack_appowner_value;
 		document.getElementById("lead_sales").value = jsonResponse.lead_sales;
 		document.getElementById("lead_se").value = jsonResponse.lead_se;
 		document.getElementById("business_champion").value = jsonResponse.business_champion;
@@ -873,7 +934,15 @@ function getSeAssessmentData() {
 		checkInput("agplugins", jsonResponse.agplugins);
 		checkInput("externalevents", jsonResponse.externalevents);
 		checkInput("incidents", jsonResponse.incidents);
-		checkInput("cmdb", jsonResponse.cmdb);		
+		checkInput("cmdb", jsonResponse.cmdb);	
+		checkInput("api", jsonResponse.api);	
+		checkInput("iot", jsonResponse.iot);
+		checkInput("iib", jsonResponse.iib);
+		checkInput("python", jsonResponse.python);
+		checkInput("docker", jsonResponse.docker);
+		checkInput("cloud", jsonResponse.cloud);
+		checkInput("onprem", jsonResponse.onprem);
+		checkInput("hybrid", jsonResponse.hybrid);			
 		drawSeResults();
 	})
 }
@@ -958,6 +1027,7 @@ function updateSeAssessment() {
 		causation: getRadioValue("causation"),
 		causation_prio: document.getElementById("causation_prio").value,
 		outcomes_appowner_feedback: document.getElementById("outcomes_appowner_feedback").value,
+		outcomes_appowner_value: document.getElementById("outcomes_appowner_value").value,
 		digital: getRadioValue("digital"),
 		digital_prio: document.getElementById("digital_prio").value,
 		bi: getRadioValue("bi"),
@@ -965,6 +1035,7 @@ function updateSeAssessment() {
 		market: getRadioValue("market"),
 		market_prio: document.getElementById("market_prio").value,
 		outcomes_cxo_feedback: document.getElementById("outcomes_cxo_feedback").value,
+		outcomes_cxo_value: document.getElementById("outcomes_cxo_value").value,
 		driving: getRadioValue("driving"),
 		driving_prio: document.getElementById("driving_prio").value,
 		healing: getRadioValue("healing"),
@@ -976,6 +1047,7 @@ function updateSeAssessment() {
 		bill: getRadioValue("bill"),
 		bill_prio: document.getElementById("bill_prio").value,
 		autonomous_appowner_feedback: document.getElementById("autonomous_appowner_feedback").value,
+		autonomous_appowner_value: document.getElementById("autonomous_appowner_value").value,
 		tool_cons: getRadioValue("tool_cons"),
 		tool_cons_prio: document.getElementById("tool_cons_prio").value,
 		devops: getRadioValue("devops"),
@@ -985,6 +1057,7 @@ function updateSeAssessment() {
 		integrations: getRadioValue("integrations"),
 		integrations_prio: document.getElementById("integrations_prio").value,
 		fullstack_ops_feedback: document.getElementById("fullstack_ops_feedback").value,
+		fullstack_ops_value: document.getElementById("fullstack_ops_value").value,
 		release: getRadioValue("release"),
 		release_prio: document.getElementById("release_prio").value,
 		lifecycle: getRadioValue("lifecycle"),
@@ -992,6 +1065,7 @@ function updateSeAssessment() {
 		shift: getRadioValue("shift"),
 		shift_prio: document.getElementById("shift_prio").value,
 		fullstack_dev_feedback: document.getElementById("fullstack_dev_feedback").value,
+		fullstack_dev_value: document.getElementById("fullstack_dev_value").value,
 		perfect: getRadioValue("perfect"),
 		perfect_prio: document.getElementById("perfect_prio").value,
 		migration: getRadioValue("migration"),
@@ -999,6 +1073,7 @@ function updateSeAssessment() {
 		transaction: getRadioValue("transaction"),
 		transaction_prio: document.getElementById("transaction_prio").value,
 		fullstack_appowner_feedback: document.getElementById("fullstack_appowner_feedback").value,
+		fullstack_appowner_value: document.getElementById("fullstack_appowner_value").value,
 		lead_sales: document.getElementById("lead_sales").value,
 		lead_se: document.getElementById("lead_se").value,
 		business_champion: document.getElementById("business_champion").value,
@@ -1049,6 +1124,14 @@ function updateSeAssessment() {
 		externalevents: document.getElementById("externalevents").checked,
 		incidents: document.getElementById("incidents").checked,
 		cmdb: document.getElementById("cmdb").checked,
+		api: document.getElementById("api").checked,
+		iot: document.getElementById("iot").checked,
+		iib: document.getElementById("iib").checked,
+		python: document.getElementById("python").checked,
+		docker: document.getElementById("docker").checked,
+		cloud: document.getElementById("cloud").checked,
+		onprem: document.getElementById("onprem").checked,
+		hybrid: document.getElementById("hybrid").checked		
 	}
 
 	console.log(assessment_data);
@@ -1094,32 +1177,32 @@ function addListeners() {
 
 	$(" .opsFromBiz ").click(function() {
 		goToAnchor("ops");
-		getAssessmentData();
+		getAssessmentData(0);
 	});
 
 	$(" .bizFromOps ").click(function() {
 		goToAnchor("biz");
-		getAssessmentData();
+		getAssessmentData(0);
 	});
 
 	$(" .devFromOps ").click(function() {
 		goToAnchor("dev");
-		getAssessmentData();
+		getAssessmentData(0);
 	});
 
 	$(" .opsFromDev ").click(function() {
 		goToAnchor("ops");
-		getAssessmentData();
+		getAssessmentData(0);
 	});
 
 	$(" .optionsFromDev ").click(function() {
 		goToAnchor("options");
-		getAssessmentData();
+		getAssessmentData(0);
 	});
 
 	$(" .devFromOptions ").click(function() {
 		goToAnchor("dev");
-		getAssessmentData();
+		getAssessmentData(0);
 	});
 
 	showContent();
@@ -1145,6 +1228,75 @@ function addListeners() {
 	$('#no_fte_config').on( "blur", function() {
 		if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
 		updateAssessment();
+		drawResults();
+	});	
+	
+	$("#open-report").click(function() {
+		openReport();
+	});
+}
+
+function addReadOnlyListeners() {
+
+	getTabs();
+
+	$(".leftContainer").css("height", $('.biz').css('height'));
+
+		function goToAnchor(anchor) {
+		  var loc = document.location.toString().split('#')[0];
+		  document.location = loc + '#' + anchor;
+		  return false;
+		}
+
+	$(" .opsFromBiz ").click(function() {
+		goToAnchor("ops");
+		getAssessmentData(1);
+	});
+
+	$(" .bizFromOps ").click(function() {
+		goToAnchor("biz");
+		getAssessmentData(1);
+	});
+
+	$(" .devFromOps ").click(function() {
+		goToAnchor("dev");
+		getAssessmentData(1);
+	});
+
+	$(" .opsFromDev ").click(function() {
+		goToAnchor("ops");
+		getAssessmentData(1);
+	});
+
+	$(" .optionsFromDev ").click(function() {
+		goToAnchor("options");
+		getAssessmentData(1);
+	});
+
+	$(" .devFromOptions ").click(function() {
+		goToAnchor("dev");
+		getAssessmentData(1);
+	});
+
+	showContent();
+
+	$('#company_revenue, #operation_cost, #developer_cost, #qa_cost, #annual_cost, #y1_software, #y1_services, #y2_software, #y2_services, #y3_software, #y3_services').on( "blur", function() {
+		if(this.value != '' && this.value != undefined) {this.value = document.getElementById("currency").value + parseInt(getNumbers(this.value)).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
+		drawResults();
+	} );
+
+	$('#projected_growth, #revenue_breach, #revenue_dependent, #app_uptime, #test_per_cycle, #qa_time_per_cycle, #dev_time_per_cycle, #benefit_conversion, #benefit_incident_reduction, #benefit_mttr, #benefit_sla, #benefit_fix_qa, #benefit_prod_reduction, #benefit_config').on( "blur", function() {
+		if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
+		drawResults();
+	} );
+
+	$('#incidents_month, #no_ops_troubleshoot, #no_dev_troubleshoot, #mttr, #no_apps_e2e, #no_t1t2_apps, #no_fte_existing, #cycles_per_year, #cycle_days, #qa_people_per_cycle, #dev_people_per_cycle, #work_hours').on( "blur", function() {
+		if(this.value != '' && this.value != undefined) {this.value = parseInt(getNumbersAndDots(this.value)).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
+		drawResults();
+	});
+
+	$('#no_fte_config').on( "blur", function() {
+		if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value).toLocaleString(); temp = this.value; this.value = ''; this.value = temp; } else {this.value = '';}
 		drawResults();
 	});	
 	
@@ -1220,6 +1372,74 @@ function addSeListeners() {
 	$(".select").change(function() {
 		// if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
 		 updateSeAssessment();
+		 drawSeResults();
+	} );		
+
+}
+
+function addSeReadOnlyListeners() {
+
+	getSeTabs();
+
+	//$(".leftContainer").css("height", $('.biz').css('height'));
+	
+	//$(".leftContainer").css("height", $('.options').css('height'));
+
+		function goToAnchor(anchor) {
+		  var loc = document.location.toString().split('#')[0];
+		  document.location = loc + '#' + anchor;
+		  return false;
+		}
+
+	$(" .autonomousFromOutcomes ").click(function() {
+		goToAnchor("autonomous");
+		getSeAssessmentData();
+	});
+
+	$(" .outcomesFromAutonomous ").click(function() {
+		goToAnchor("outcomes");
+		getSeAssessmentData();
+	});
+
+	$(" .enterpriseFromAutonomous ").click(function() {
+		goToAnchor("enterprise");
+		getSeAssessmentData();
+	});
+
+	$(" .autonmousFromEnterprise ").click(function() {
+		goToAnchor("autonomous");
+		getSeAssessmentData();
+	});
+
+	$(" .technicalFromEnterprise ").click(function() {
+		goToAnchor("technical");
+		getSeAssessmentData();
+	});
+
+	$(" .enterpriseFromTechnical ").click(function() {
+		goToAnchor("enterprise");
+		getSeAssessmentData();
+	});
+
+	showSeContent();
+
+	$('.radio').click(function() {
+		//this.parentElement.getElementsByTagName("input")[0].checked == true;
+		drawSeResults();
+	} );
+
+	$('#autonomous_appowner_feedback, #fullstack_appowner_feedback, #fullstack_dev_feedback, #fullstack_ops_feedback, #outcomes_appowner_feedback, #outcomes_cxo_feedback, #lead_sales, #lead_se, #business_champion, #technical_champion, #tenant').on( "blur", function() {
+		// if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
+		 drawSeResults();
+	} );
+	
+	$('.checkbox').click(function() {
+		// if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
+		 drawSeResults();
+	} );	
+	
+	$(".select").change(function() {
+		// if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
 		 drawSeResults();
 	} );		
 
@@ -1416,6 +1636,8 @@ function addExistingTool() {
 		$(" .delete ").click(function() {
 			deleteExistingTool(this.id);
 		});
+		
+
 
 		document.getElementById("name_tool").value = "";
 		document.getElementById("annual_cost").value = "";
@@ -1577,20 +1799,20 @@ function drawSeResults() {
 			var outcomesTotal = jsonResponse.trends + jsonResponse.causation + jsonResponse.digital + jsonResponse.bi + jsonResponse.market;
 			var outcomesProg = Math.ceil((outcomesTotal / 15) * 100);
 			var outcomesValue = 1514 - (1514 / 100 * outcomesProg);
-			document.getElementById("resultCircles").getElementsByClassName("divTableCell")[0].innerHTML="<div id=\"outcomesCircle\" class=\"progresscircle progresscircle--bold theme--purple \" ><svg viewBox=\"0 0 512 512\" ><path class=\"progresscircle__background\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" /><path class=\"progresscircle__progress\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" style=\"stroke-dashoffset: " + outcomesValue + ";\"/></svg></div>";
-			document.getElementById("resultPercent").getElementsByClassName("divTableCell")[0].innerHTML="<b class=\"se-big-text\">" + outcomesProg + "%</b> (" + outcomesTotal + "/15)<br /><i class=\"se-small-text\">Demonstrating the outcomes to business owners</i>";
+			document.getElementById("resultCircles").getElementsByClassName("divTableCell")[2].innerHTML="<div id=\"outcomesCircle\"  class=\"progresscircle progresscircle--bold theme--purple \" ><svg viewBox=\"0 0 512 512\" style=\"height:150px; width=150px\"><path class=\"progresscircle__background\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" /><path class=\"progresscircle__progress\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" style=\"stroke-dashoffset: " + outcomesValue + ";\"/></svg></div>";
+			document.getElementById("resultPercent").getElementsByClassName("divTableCell")[2].innerHTML="<b class=\"se-big-text\">" + outcomesProg + "%</b> (" + outcomesTotal + "/15)<br /><i class=\"se-small-text\">Demonstrating the outcomes to business owners</i>";
 			
 			var autonomousTotal = jsonResponse.driving + jsonResponse.healing + jsonResponse.culture + jsonResponse.automation + jsonResponse.bill;
 			var autonomousProg = Math.ceil((autonomousTotal / 15) * 100);
 			var autonomousValue = 1514 - (1514 / 100 * autonomousProg);
-			document.getElementById("resultCircles").getElementsByClassName("divTableCell")[1].innerHTML="<div id=\"autonomousCircle\" class=\"progresscircle progresscircle--bold theme--green \" data-progress=" + autonomousValue + " ><svg viewBox=\"0 0 512 512\" ><path class=\"progresscircle__background\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" /><path class=\"progresscircle__progress\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" style=\"stroke-dashoffset: " + autonomousValue + ";\"/></svg></div>";
+			document.getElementById("resultCircles").getElementsByClassName("divTableCell")[1].innerHTML="<div id=\"autonomousCircle\"  class=\"progresscircle progresscircle--bold theme--green \" data-progress=" + autonomousValue + " ><svg viewBox=\"0 0 512 512\" style=\"height:150px; width=150px\"><path class=\"progresscircle__background\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" /><path class=\"progresscircle__progress\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" style=\"stroke-dashoffset: " + autonomousValue + ";\"/></svg></div>";
 			document.getElementById("resultPercent").getElementsByClassName("divTableCell")[1].innerHTML="<b class=\"se-big-text\">" + autonomousProg + "%</b> (" + autonomousTotal + "/15)<br /><i class=\"se-small-text\">The journey towards the autonomous cloud</i>";
 			
 			var fullStackTotal = jsonResponse.tool_cons + jsonResponse.devops + jsonResponse.ai + jsonResponse.integrations + jsonResponse.release + jsonResponse.lifecycle + jsonResponse.shift + jsonResponse.perfect + jsonResponse.migration + jsonResponse.transaction;
 			var fullStackProg = Math.ceil((fullStackTotal / 30) * 100);
 			var fullStackValue = 1514 - (1514 / 100 * fullStackProg);
-			document.getElementById("resultCircles").getElementsByClassName("divTableCell")[2].innerHTML="<div id=\"fullStackCircle\" class=\"progresscircle progresscircle--bold theme--blue \" data-progress=" + fullStackValue + " ><svg viewBox=\"0 0 512 512\" ><path class=\"progresscircle__background\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" /><path class=\"progresscircle__progress\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" style=\"stroke-dashoffset: " + fullStackValue + ";\"/></svg></div>";
-			document.getElementById("resultPercent").getElementsByClassName("divTableCell")[2].innerHTML="<b class=\"se-big-text\">" + fullStackProg + "%</b> (" + fullStackTotal + "/30)<br /><i class=\"se-small-text\">Full-stack monitoring of the new enterprise cloudd</i>";
+			document.getElementById("resultCircles").getElementsByClassName("divTableCell")[0].innerHTML="<div id=\"fullStackCircle\" class=\"progresscircle progresscircle--bold theme--blue \" data-progress=" + fullStackValue + " ><svg viewBox=\"0 0 512 512\" style=\"height:150px; width=150px\"><path class=\"progresscircle__background\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" /><path class=\"progresscircle__progress\" d=\"M256 15 a241 241 0 1 1 0 482 a241 241 0 1 1 0 -482z\" style=\"stroke-dashoffset: " + fullStackValue + ";\"/></svg></div>";
+			document.getElementById("resultPercent").getElementsByClassName("divTableCell")[0].innerHTML="<b class=\"se-big-text\">" + fullStackProg + "%</b> (" + fullStackTotal + "/30)<br /><i class=\"se-small-text\">Full-stack monitoring of the new enterprise cloud</i>";
 			
 			
 			var bizPrios = ["trends", "causation", "digital", "bi", "market"];
@@ -1694,7 +1916,7 @@ function drawSeResults() {
 					bizResults += "<div class=\"infochip infochip-se\"><div class=\"infochip__icon\"><img class=\"se-question-image\" src=\"/static/" + tempPic + "-purple.png\"/></div><div class=\"infochip__desc\"><div class=\"infochip__desc__title\" style=\"white-space: normal\" title=\"Title\">" + tempDesc + "</div><div>" + tempStage + " with " + tempTeam + "</div></div><br /><br /></div>"
 				}	
 
-				document.getElementById("conversationPriority").getElementsByClassName("divTableCell")[0].innerHTML=bizResults;
+				document.getElementById("conversationPriority").getElementsByClassName("divTableCell")[2].innerHTML=bizResults;
 			}
 
 
@@ -1891,7 +2113,7 @@ function drawSeResults() {
 					fullResults += "<div class=\"infochip infochip-se\"><div class=\"infochip__icon\"><img class=\"se-question-image\" src=\"/static/" + tempPic + "-blue.png\"/></div><div class=\"infochip__desc\"><div class=\"infochip__desc__title\" title=\"Title\" style=\"white-space: normal\">" + tempDesc + "</div><div>" + tempStage + " with " + tempTeam + "</div></div><br /><br /></div>"
 				}	
 
-				document.getElementById("conversationPriority").getElementsByClassName("divTableCell")[2].innerHTML=fullResults;	
+				document.getElementById("conversationPriority").getElementsByClassName("divTableCell")[0].innerHTML=fullResults;	
 			}
 			
 	})
