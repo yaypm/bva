@@ -19,8 +19,12 @@ function seCheck() {
 
 	.then(function(jsonResponse) {
 		if(jsonResponse.status == "se") {
-
+			console.log("is se");
 		}
+		else {
+			console.log("not se");
+		}
+		console.log(jsonResponse.status);
 	})
 }
 
@@ -657,14 +661,14 @@ function getAssessmentList() {
 
 		if(jsonObj[0]._id == "new") {
 			document.getElementById("bva_select").innerHTML = '<option value="">Create an assessment!</option>';
-			//dtrum.identifyUser(jsonObj[0].username);
+			dtrum.identifyUser(jsonObj[0].username);
 		}
 
 		else {
 			for(i=0;i<jsonObj.length;i++) {
 				newHTML += '<option value="' + jsonObj[i].id + '">' + jsonObj[i].company + '</option>';
 			}
-			//dtrum.identifyUser(jsonObj[0].username);
+			dtrum.identifyUser(jsonObj[0].username);
 			document.getElementById("bva_select").innerHTML = newHTML;
 			setBvaLinks();
 		}
@@ -1550,10 +1554,74 @@ function getTabs() {
 			$('#pricing').css("display", "block");
 		}
 
+		if(document.getElementById("company_name")) {
+			document.getElementById("company_name").innerHTML=jsonObj.company;
+		}
+
+		getSharedWith();
+
 		getAssessmentData();
 
 	})
 }
+
+function getSharedWith() {
+	var bva_id = getGet('bva_id');
+	// var username = new RegExp('(<\/span>)(.*)').exec(document.getElementsByClassName("user-email")[0].innerHTML);
+	// var username = username[2];
+
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+	myHeaders.append("bva_id", bva_id);
+
+	var myInit = { method: 'GET',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin'
+	}
+
+	fetch('/getSharedWith', myInit)
+
+	.then(function(response) {
+		return response.json();
+	})
+
+	.then(function(jsonResponse) {
+		var sharedWithUsers = "";
+
+		for(i=0;i<jsonResponse.length;i++) {
+			var check = new RegExp('(@dynatrace.com)').exec(jsonResponse[i].username);
+			if(check == null) {
+				if(sharedWithUsers == "") {
+					sharedWithUsers += jsonResponse[i].username;
+				}
+				else {
+					sharedWithUsers += ", " + jsonResponse[i].username;
+				}
+			}
+			else {
+
+			}
+		}
+
+		if(sharedWithUsers.length > 0) {
+			document.getElementsByClassName("user-shared")[0].innerHTML = "<span class=\"tag__key\">shared with: </span>" + sharedWithUsers;
+			document.getElementsByClassName("user-shared")[0].style.display="inline-block";
+			document.getElementsByClassName("user-shared")[1].innerHTML = "<span class=\"tag__key\">shared with: </span>" + sharedWithUsers;
+			document.getElementsByClassName("user-shared")[1].style.display="inline-block";
+			document.getElementsByClassName("user-shared")[2].innerHTML = "<span class=\"tag__key\">shared with: </span>" + sharedWithUsers;
+			document.getElementsByClassName("user-shared")[2].style.display="inline-block";
+			document.getElementsByClassName("user-shared")[3].innerHTML = "<span class=\"tag__key\">shared with: </span>" + sharedWithUsers;
+			document.getElementsByClassName("user-shared")[3].style.display="inline-block";
+		}
+
+		else {
+
+		}
+	})
+}	
 
 function getSeTabs() {
 	se_id = getGet('se_id');
@@ -1781,20 +1849,6 @@ function drawSeResults() {
 	})
 
 	.then(function(jsonResponse) {
-
-			//Something to draw?
-
-			// if (jsonResponse.trends > 1) {
-			// 	$('#no-results').fadeOut();
-			// 	$('#results').fadeIn();
-			// 	$('#loading').fadeOut();			
-			// }
-
-			// else {
-			// 	$('#no-results').fadeIn();
-			// 	$('#results').fadeOut();
-			// 	$('#loading').fadeOut();
-			// }
 			
 			var outcomesTotal = jsonResponse.trends + jsonResponse.causation + jsonResponse.digital + jsonResponse.bi + jsonResponse.market;
 			var outcomesProg = Math.ceil((outcomesTotal / 15) * 100);
@@ -2146,6 +2200,10 @@ function drawResults() {
 
 	.then(function(jsonResponse) {
 
+			var check = new RegExp("report?").exec(window.location.href);
+			var bulletpoints = "";
+			var bulletcosts = "";
+
 			//OPERATIONS - get rid of tools
 			if(jsonResponse.existing_apps.length == 0) {
 					existingy1 = 0;
@@ -2161,9 +2219,15 @@ function drawResults() {
 			else {
 				number = jsonResponse.existing_apps.length;
 
+				console.log(jsonResponse);
+
 				var existingy1 = 0;
 				var existingy2 = 0;
 				var existingy3 = 0;
+
+				var addHtml = "<br /><div style=\"font-family: BerninaSansLight\"><div class=\"divTable\" style=\"width: 100%\"><div class=\"divTableBody\"><div class=\"divTableRow\"><div class=\"divTableCell\" style=\"width: 50%\"><b>Current tools to be replaced</b><div class=\"theme--green\"><ul class=\"list\">";
+				var currentHtml = "";
+				var expectedHtml = "";
 
 				for(i=0;i<number;i++) {
 					annual_cost = (parseFloat(jsonResponse.existing_apps[i].annual_costs)) + (parseFloat(jsonResponse.existing_apps[i].ftes) * parseFloat(jsonResponse.operation_cost));
@@ -2174,15 +2238,36 @@ function drawResults() {
 					existingy2 = parseInt(existingy2 + (annual_cost * percent2));
 					existingy3 = parseInt(existingy3 + (annual_cost * percent3));
 					existingTotal = existingy1 + existingy2 + existingy3;
+					
+					if(check != null) {
+						currentHtml += "<li>" + jsonResponse.existing_apps[i].name + ": <b>" + processMoney(jsonResponse.existing_apps[i].annual_costs.toString()) + "</b> annual costs, <b>" + jsonResponse.existing_apps[i].ftes + "</b> FTEs used for configuration and maintenance</li>";
+					}
+
+					if(check != null) {
+						expectedHtml += "<li>" + jsonResponse.existing_apps[i].name + ": <b>" + processPercent(jsonResponse.existing_apps[i].y1.toString()) + "</b> replaced in year 1, <b>" + processPercent(jsonResponse.existing_apps[i].y2.toString()) + "</b> replaced in year 2 and <b>" + processPercent(jsonResponse.existing_apps[i].y3.toString()) + "</b> replaced in year 3</li>";
+					}
 				}
 
-				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/ops-reduced-tools.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Reduction of existing monitoring tools</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(existingTotal.toString()) + "</b></dd></dl></div></div>";
+				addHtml += currentHtml;
+				addHtml += "</ul></div></div><div class=\"divTableCell\" style=\"width: 50%\"><b>Expected replacements</b><div class=\"theme--green\"><ul class=\"list\">";
+
+				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/ops-reduced-tools.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 15px\"><h3>Reduction of existing monitoring tools</h3></div><br /><dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(existingTotal.toString()) + "</b></dd></dl>";
+
+				if(check != null) {
+					addHtml += expectedHtml;
+					addHtml += "</ul></div></div></div></div></div></div><br /><br />";
+					newHtml += addHtml;
+				}
+
+				//var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/ops-reduced-tools.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Reduction of existing monitoring tools</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(existingTotal.toString()) + "</b></dd></dl></div></div>";
 
 				document.getElementById("ops-reduced-tools").innerHTML=newHtml;
 
 				if($('#operations').css('display') == "none") {
 					$('#operations').fadeIn();
 				}
+
+				bulletpoints += "<li>License cost and effort reduction through tool consolidation: <b>" + processMoney(existingTotal.toString()) + "</b></li>";
 
 				var opsCase1 = 1;
 			}
@@ -2223,10 +2308,17 @@ function drawResults() {
 				revenueDowntimeY2 = parseInt(revenueDowntimeY1 * (1+growth));
 				revenueDowntimeY3 = parseInt(revenueDowntimeY2 * (1+growth));
 				revenueDowntimeTotal = revenueDowntimeY1 + revenueDowntimeY2 + revenueDowntimeY3;
+		
+				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/biz-increased-revenue.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 15px\"><h3>Revenue gained by reduced incidents, downtime, and slowness</h3></div><br /><dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(revenueDowntimeTotal.toString()) + "</b></dd></dl>";
 
-				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/biz-increased-revenue.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Revenue gained by reduced incidents, downtime, and slowness</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(revenueDowntimeTotal.toString()) + "</b></dd></dl></div></div>";
+
+				if(check != null) {
+					newHtml += "<br /><div style=\"font-family: BerninaSansLight\"><div class=\"divTable\" style=\"width: 100%\"><div class=\"divTableBody\"><div class=\"divTableRow\"><div class=\"divTableCell\" style=\"width: 50%\"><b>Current situation</b><div class=\"theme--purple\"><ul class=\"list\"><li>Company or business unit annual revenue: <b>" + processMoney(revenue.toString()) + "</b></li><li>Annual growth rate: <b>" + processPercent((growth * 100).toString()) + "</b></li><li>Revenue directly dependant on applications: <b>" + processPercent((percent * 100).toString()) + "</b></li><li>Overall uptime excluding planned maintenance and downtime: <b>" + processPercent((uptime * 100).toString()) + "</b></li><li>Percentage of application-dependant revenue which is lost per year due to outages or poor performance: <b>" + processPercent((breach * 100).toString()) + "</b></li></ul></div></div><div class=\"divTableCell\" style=\"width: 50%\"><b>Expected improvements</b><div class=\"theme--purple\"><ul class=\"list\"><li>Expected increase in uptime after Dynatrace: <b>" + processPercent((benefit_sla * 100).toString()) + "</b></li></ul></div></div></div></div></div></div><br /><br />";
+				}
 
 				document.getElementById("biz-increased-revenue").innerHTML=newHtml;
+
+				bulletpoints += "<li>Increased potential revenue, through a reduction in downtime or unacceptable performance: <b>" + processMoney(revenueDowntimeTotal.toString()) + "</b></li>";
 
 				var bizCase1 = 1;
 
@@ -2264,13 +2356,26 @@ function drawResults() {
 				revenueConversionY3 = parseInt(revenueConversionY2 * (1+growth));
 				revenueConversionTotal = revenueConversionY1 + revenueConversionY2 + revenueConversionY3;
 
-				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/biz-increased-conversions.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Revenue from increased conversions caused by better user experience and app performance</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(revenueConversionTotal.toString()) + "</b></dd></dl></div></div>";
+				// var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/biz-increased-conversions.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Revenue from increased conversions caused by better user experience and app performance</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(revenueConversionTotal.toString()) + "</b></dd></dl></div></div>";
+
+				// if(check != null) {
+				// 	newHtml += "<br /><div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div class=\"divTable\" style=\"width: 100%\"><div class=\"divTableBody\"><div class=\"divTableRow\"><div class=\"divTableCell\" style=\"width: 50%\">Current situation<ul class=\"list\"><li>Company or business unit annual revenue: <b>" + processMoney(revenue.toString()) + "</b></li><li>Annual growth rate: <b>" + processPercent((growth * 100).toString()) + "</b></li><li>Revenue directly dependant on applications: <b>" + processPercent((percent * 100).toString()) + "</b></li></ul></div><div class=\"divTableCell\" style=\"width: 50%\">Expected improvements<ul class=\"list\"><li>Expected increase in conversions after Dynatrace: <b>" + processPercent((conversion * 100).toString()) + "</b></li></ul></div></div></div></div></div>";
+				// }
+
+				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/biz-increased-conversions.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 10px\"><h3>Revenue from increased conversions caused by better user experience and app performance</h3></div><br /><dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(revenueConversionTotal.toString()) + "</b></dd></dl>";
+
+
+				if(check != null) {
+					newHtml += "<br /><div style=\"font-family: BerninaSansLight\"><div class=\"divTable\" style=\"width: 100%\"><div class=\"divTableBody\"><div class=\"divTableRow\"><div class=\"divTableCell\" style=\"width: 50%\"><b>Current situation</b><div class=\"theme--purple\"><ul class=\"list\"><li>Company or business unit annual revenue: <b>" + processMoney(revenue.toString()) + "</b></li><li>Annual growth rate: <b>" + processPercent((growth * 100).toString()) + "</b></li><li>Revenue directly dependant on applications: <b>" + processPercent((percent * 100).toString()) + "</b></li></ul></div></div><div class=\"divTableCell\" style=\"width: 50%\"><b>Expected improvements</b><div class=\"theme--purple\"><ul class=\"list\"><li>Expected increase in conversions after Dynatrace: <b>" + processPercent((conversion * 100).toString()) + "</b></li></ul></div></div></div></div></div></div><br />";
+				}
 
 				document.getElementById("biz-increased-conversions").innerHTML=newHtml;
 
 				if($('#business').css('display') == "none") {
 					$('#business').fadeIn();
 				}
+
+				bulletpoints += "<li>Increased potential revenue from more conversions, caused by better user experience: <b>" + processMoney(revenueConversionTotal.toString()) + "</b></li>";
 
 				var bizCase2 = 1;
 			}
@@ -2341,13 +2446,22 @@ function drawResults() {
 				opsIncidentCostTotal = opsIncidentCostY1 + opsIncidentCostY2 + opsIncidentCostY3;
 
 
-				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/ops-reduced-incidents.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Incident reduction and faster MTTR in production (cost of war room effort)</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(opsIncidentCostTotal.toString()) + "</b></dd></dl></div></div>";
+				//var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/ops-reduced-incidents.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Incident reduction and faster MTTR in production (cost of war room effort)</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(opsIncidentCostTotal.toString()) + "</b></dd></dl></div></div>";
+
+				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/ops-reduced-incidents.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 5px\"><h3>Incident reduction and faster MTTR in production (cost of war room effort)</h3></div><br /><dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(revenueConversionTotal.toString()) + "</b></dd></dl>";
+
+
+				if(check != null) {
+					newHtml += "<br /><div style=\"font-family: BerninaSansLight\"><div class=\"divTable\" style=\"width: 100%\"><div class=\"divTableBody\"><div class=\"divTableRow\"><div class=\"divTableCell\" style=\"width: 50%\"><b>Current situation</b><div class=\"theme--green\"><ul class=\"list\"><li>Number of incidents reported per month caused by slowness or availability: <b>" + incidents_month.toString() + "</b></li><li>Average number of Ops people used to troubleshoot an incident: <b>" + no_ops_troubleshoot.toString() + "</b></li><li>Average number of Dev people used to troubleshoot an incident: <b>" + no_dev_troubleshoot.toString() + "</b></li><li>Average MTTR (minutes): <b>" + mttr.toString() + "</b></li><li>Fully loaded cost of operations person: <b>" + processMoney(ops_cost.toString()) + "</b></li><li>Fully loaded cost of development person: <b>" + processMoney(dev_cost.toString()) + "</b></li><li>Work hours per year: <b>" + work_hours.toString() + "</b></li></ul></div></div><div class=\"divTableCell\" style=\"width: 50%\"><b>Expected improvements</b><div class=\"theme--green\"><ul class=\"list\"><li>Incident reduction in production through pro-active detection: <b>" + processPercent((benefit_incident_reduction * 100).toString()) + "</b></li><li>Faster MTTR and root cause analysis in production: <b>" + processPercent((benefit_mttr * 100).toString()) + "</b></li></ul></div></div></div></div></div></div><br />";
+				}
 
 				document.getElementById("ops-reduced-incidents").innerHTML=newHtml;
 
 				if($('#operations').css('display') == "none") {
 					$('#operations').fadeIn();
 				}
+
+				bulletpoints += "<li>Reduced costs associated with resolving an IT incident: <b>" + processMoney(opsIncidentCostTotal.toString()) + "</b></li>";
 
 				var opsCase2 = 1;
 			}
@@ -2388,13 +2502,22 @@ function drawResults() {
 				effortSavingY3 = parseInt(effortSavingY2 * (1+growth));
 				effortSavingTotal = effortSavingY1 + effortSavingY2 + effortSavingY3;
 
-				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/ops-increased-automation.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Cost savings with Dynatrace automation vs. manual effort </p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(effortSavingTotal.toString()) + "</b></dd></dl></div></div>";
+				//var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/ops-increased-automation.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Cost savings with Dynatrace automation vs. manual effort </p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(effortSavingTotal.toString()) + "</b></dd></dl></div></div>";
+
+				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/ops-increased-automation.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 5px\"><h3>Cost savings with Dynatrace automation vs. manual effort</h3></div><br /><dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(effortSavingTotal.toString()) + "</b></dd></dl>";
+
+
+				if(check != null) {
+					newHtml += "<br /><div style=\"font-family: BerninaSansLight\"><div class=\"divTable\" style=\"width: 100%\"><div class=\"divTableBody\"><div class=\"divTableRow\"><div class=\"divTableCell\" style=\"width: 50%\"><b>Current situation</b><div class=\"theme--green\"><ul class=\"list\"><li>Number of applications being monitored end-to-end currently: <b>" + no_apps_e2e.toString() + "</b></li><li>Number of T1/T2 applications currently in production: <b>" + no_t1t2_apps.toString() + "</b></li><li>Number of FTEs looking after existing monitoring tools: <b>" + no_fte_existing.toString() + "</b></li><li>Fully loaded cost of operations person: <b>" + processMoney(ops_cost.toString()) + "</b></li><li>Work hours per year: <b>" + work_hours.toString() + "</b></li></ul></div></div><div class=\"divTableCell\" style=\"width: 50%\"><b>Expected improvements</b><div class=\"theme--green\"><ul class=\"list\"><li>Reduced time spent implementing and configuring vs. existing tools: <b>" + processPercent((benefit_config * 100).toString()) + "</b></li></ul></div></div></div></div></div></div><br />";
+				}
 
 				document.getElementById("ops-increased-automation").innerHTML=newHtml;
 
 				if($('#operations').css('display') == "none") {
 					$('#operations').fadeIn();
 				}
+
+				bulletpoints += "<li>Reduction in operational costs associated with managing many existing and complex tools: <b>" + processMoney(effortSavingTotal.toString()) + "</b></li>";
 
 				var opsCase3 = 1;
 
@@ -2462,13 +2585,22 @@ function drawResults() {
 				devQaY3 = parseInt(devQaY2 * (1+growth));
 				devQaTotal = devQaY1 + devQaY2 + devQaY3;
 
-				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/dev-decreased-investigation.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Performance defect investigation and troubleshooting in QA</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(devQaTotal.toString()) + "</b></dd></dl></div></div>";
+				//var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/dev-decreased-investigation.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Performance defect investigation and troubleshooting in QA</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(devQaTotal.toString()) + "</b></dd></dl></div></div>";
+
+				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/dev-decreased-investigation.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 5px\"><h3>Performance defect investigation and troubleshooting in QA</h3></div><br /><dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(devQaTotal.toString()) + "</b></dd></dl>";
+
+
+				if(check != null) {
+					newHtml += "<br /><div style=\"font-family: BerninaSansLight\"><div class=\"divTable\" style=\"width: 100%\"><div class=\"divTableBody\"><div class=\"divTableRow\"><div class=\"divTableCell\" style=\"width: 50%\"><b>Current situation</b><div class=\"theme--blue\"><ul class=\"list\"><li>Number of release cycles per year for all applications: <b>" + cycles_per_year.toString() + "</b></li><li>Number of days to complete a release cycle: <b>" + cycle_days.toString() + "</b></li><li>Percentage of time spent testing per release cycle: <b>" + processPercent((test_per_cycle * 100).toString()) + "</b></li><li>Amount of QA testing time spent documenting performance issues: <b>" + processPercent((qa_time_per_cycle * 100).toString()) + "</b></li><li>Number of QA people documenting performance issues per release: <b>" + qa_people_per_cycle.toString() + "</b></li><li>Amount of dev testing time spent documenting performance issues: <b>" + processPercent((dev_time_per_cycle * 100).toString()) + "</b></li><li>Number of dev people documenting performance issues per release: <b>" + dev_people_per_cycle.toString() + "</b></li><li>Fully loaded cost of QA person: <b>" + processMoney(qa_cost.toString()) + "</b></li><li>Fully loaded cost of development person: <b>" + processMoney(dev_cost.toString()) + "</b></li><li>Work hours per year: <b>" + work_hours.toString() + "</b></li></ul></div></div><div class=\"divTableCell\" style=\"width: 50%\"><b>Expected improvements</b><div class=\"theme--blue\"><ul class=\"list\"><li>Reduced time finding and fixing performance problems in QA: <b>" + processPercent((benefit_fix_qa * 100).toString()) + "</b></li></ul></div></div></div></div></div></div><br />";
+				}
 
 				document.getElementById("dev-decreased-investigation").innerHTML=newHtml;
 
 				if($('#development').css('display') == "none") {
 					$('#development').fadeIn();
 				}
+
+				bulletpoints += "<li>Increased cost efficiences associated with solving performance issues in pre-production: <b>" + processMoney(devQaTotal.toString()) + "</b></li>";
 
 				var devCase1 = 1;
 			}
@@ -2501,12 +2633,21 @@ function drawResults() {
 				devLowerIncidentsY3 = parseInt(devLowerIncidentsY2 * (1+growth));
 				devLowerIncidentsTotal = devLowerIncidentsY1 + devLowerIncidentsY2 + devLowerIncidentsY3;
 
-				var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/dev-decreased-incidents.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Fewer production incidents by finding & fixing performance defects in QA & Dev</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(devLowerIncidentsTotal.toString()) + "</b></dd></dl></div></div>";
+				//var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/dev-decreased-incidents.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Fewer production incidents by finding & fixing performance defects in QA & Dev</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(devLowerIncidentsTotal.toString()) + "</b></dd></dl></div></div>";
+
+				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/dev-decreased-incidents.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 5px\"><h3>Fewer production incidents by finding & fixing performance defects in QA & Dev</h3></div><br /><dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(devLowerIncidentsTotal.toString()) + "</b></dd></dl>";
+
+
+				if(check != null) {
+					newHtml += "<br /><div style=\"font-family: BerninaSansLight\"><div class=\"divTable\" style=\"width: 100%\"><div class=\"divTableBody\"><div class=\"divTableRow\"><div class=\"divTableCell\" style=\"width: 50%\"><b>Current situation</b><div class=\"theme--blue\"><ul class=\"list\"><li>Number of incidents reported per month caused by slowness or availability: <b>" + incidents_month.toString() + "</b></li><li>Average number of Ops people used to troubleshoot an incident: <b>" + no_ops_troubleshoot.toString() + "</b></li><li>Average number of Dev people used to troubleshoot an incident: <b>" + no_dev_troubleshoot.toString() + "</b></li><li>Average MTTR (minutes): <b>" + mttr.toString() + "</b></li><li>Fully loaded cost of operations person: <b>" + processMoney(ops_cost.toString()) + "</b></li><li>Fully loaded cost of development person: <b>" + processMoney(dev_cost.toString()) + "</b></li><li>Work hours per year: <b>" + work_hours.toString() + "</b></li></ul></div></div><div class=\"divTableCell\" style=\"width: 50%\"><b>Expected improvements</b><div class=\"theme--blue\"><ul class=\"list\"><li>Incident reduction in production by finding and fixing defects in Dev and QA: <b>" + processPercent((parseInt(benefit_prod_reduction * 100)).toString()) + "</b></li></ul></div></div></div></div></div></div><br />";
+				}
 
 				document.getElementById("dev-decreased-incidents").innerHTML=newHtml;
 				if($('#development').css('display') == "none") {
 					$('#development').fadeIn();
 				}
+
+				bulletpoints += "<li>Increased potential revenue by finding major bugs in pre-production, before they affect real customers: <b>" + processMoney(devLowerIncidentsTotal.toString()) + "</b></li>";
 
 				var devCase2 = 1;
 			}
@@ -2897,6 +3038,41 @@ function drawResults() {
 
 				document.getElementById("roi_points").innerHTML = "<ul class=\"list\"><li>ROI over the 3 years: <b>" + roi.toFixed(0) + "%</b></li><li>Year 1 payback period: <b>" + payback.toFixed(1) + " months</b></li></ul>";
 
+				var y1 = ""; 
+				var y2 = ""; 
+				var y3 = "";
+
+				if(y1_software != 0) {
+					y1 += "<li>Year 1: <b>" + processMoney(y1_software.toString()) + "</b> in software";
+				}			
+
+				if(y1_services != 0) {
+					if(y1 != "") { y1 += ", <b>" + processMoney(y1_services.toString()) + "</b> on services</li>" ; }
+					else { y1 += "<li>Year 1: <b>" + processMoney(y1_services.toString()) + "</b> on services</li>"; }
+				}
+
+				if(y2_software != 0) {
+					y2 += "<li>Year 2: <b>" + processMoney(y2_software.toString()) + "</b> in software";
+				}			
+				
+				if(y2_services != 0) {
+					if(y2 != "") { y2 += ", <b>" + processMoney(y2_services.toString()) + "</b> on services</li>" ; }
+					else { y2 += "<li>Year 2: <b>" + processMoney(y2_services.toString()) + "</b> on services</li>"; }
+				}
+
+				if(y3_software != 0) {
+					y3 += "<li>Year 3: <b>" + processMoney(y3_software.toString()) + "</b> in software";
+				}			
+				
+				if(y3_services != 0) {
+					if(y3 != "") { y3 += ", <b>" + processMoney(y3_services.toString()) + "</b> on services</li>" ; }
+					else { y3 += "<li>Year 3: <b>" + processMoney(y3_services.toString()) + "</b> on services</li>"; }
+				}
+
+				bulletcosts += y1;
+				bulletcosts += y2;
+				bulletcosts += y3;
+
 				//DRAW CHART
 
 					var column_chart = Highcharts.chart('roi_column', {
@@ -2954,7 +3130,40 @@ function drawResults() {
 			else {
 				$('#roi_section').css('display','none');
 			}
+
+			//Add bullets
+			if(check != null) {
+				document.getElementById("overall_points").innerHTML=bulletpoints;
+				document.getElementById("software_costs").innerHTML=bulletcosts;
+			}
 	})
 
 
+}
+
+function reportData() {
+	var myHeaders = new Headers();
+	myHeaders.append("Content-Type", "application/json");
+	myHeaders.append("Accept", "application/json");
+	myHeaders.append("Access-Control-Allow-Origin", "http://127.0.0.1:8080");
+
+	bva_id = getGet('bva_id');
+
+	myHeaders.append("bva_id", bva_id);
+
+	var myInit = { method: 'GET',
+		headers: myHeaders,
+		cache: 'default',
+		credentials: 'same-origin'
+	}
+
+	fetch('/getAssessmentData', myInit)
+
+	.then(function(response) {
+		return response.json();
+	})
+
+	.then(function(jsonResponse) {
+		
+	})
 }

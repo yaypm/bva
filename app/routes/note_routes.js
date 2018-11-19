@@ -1311,7 +1311,27 @@ module.exports = function(app, db) {
 			})
 		})
 	});
-	
+
+	app.get('/getSharedWith', (req, res) => {
+
+		MongoClient.connect(connectionOptions, function(err, db) {
+
+			if(err) {
+				return console.dir(err);
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("failure");
+				db.close();
+			}
+
+			var collection = db.collection('user_assessments');
+			var results = collection.find({'id':req.header('bva_id')}).toArray(function(err, items) {
+				res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+				res.end(JSON.stringify(items));
+				db.close();
+			})
+		})
+	});	
+
 	app.get('/getSeUserDetails', (req, res) => {
 
 		var theUsername = req.session.username;

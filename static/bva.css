@@ -305,9 +305,18 @@ background-color: #1a1a1a; }
 	margin-left: 20px;
 	max-width: 70%; }
 
+.bva-result-title-wrapper-inner {
+	position: absolute;
+	margin-top: 10px ;
+	margin-left: 100px;}	
+
 .bva-title-text {
 	margin-bottom: 0px;
 	max-width: 100px; }
+
+.bva-result-title-text {
+	margin-bottom: 0px;
+	max-width: 100px; }	
 	
 .se-title-text {
 	margin-bottom: 0px;
