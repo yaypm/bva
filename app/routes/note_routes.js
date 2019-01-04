@@ -824,6 +824,20 @@ module.exports = function(app, db) {
 			res.end(password);
 		})
 	});
+	
+	app.post('/testing', (req, res) => {
+		
+		var iops = Math.floor((Math.random() * 250) + 200);
+		var volume_latency = Math.floor((Math.random() * 20) + 10);
+		var usage_array = [50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70];
+		var usage = usage_array[Math.floor((Math.random() * 20) + 1)];
+		
+		var results = {"iops": iops, "volume_latency": volume_latency,  "usage", usage };
+		
+		res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+		res.end(JSON.stringify(results));
+		
+	});
 
 	app.post('/createAssessment', (req, res) => {
 
