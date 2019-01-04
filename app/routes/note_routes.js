@@ -825,7 +825,7 @@ module.exports = function(app, db) {
 		})
 	});
 	
-	app.post('/testing', (req, res) => {
+	app.get('/testing', (req, res) => {
 		
 		var iops = Math.floor((Math.random() * 250) + 200);
 		var volume_latency = Math.floor((Math.random() * 20) + 10);
