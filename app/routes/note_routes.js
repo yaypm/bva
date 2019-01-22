@@ -838,7 +838,114 @@ module.exports = function(app, db) {
 		res.end(JSON.stringify(results));
 		
 	});
+	
+	app.post('/v1/tokens', (req, res) => {
+		
+		var results = {"data": {"session_token": "0123456789"}};
+		
+		res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+		res.end(JSON.stringify(results));
+		
+	});
+	
+	app.get('/v1/volumes', (req, res) => {
+		
+		var results = { "data": [ { "id": "060df0fe6f7dc7bb160000000000000000000001be", "name": "myvol1" } ], "endRow": 1, "startRow": 0, "totalRows": 1 };
+		
+		res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+		res.end(JSON.stringify(results));
+		
+	});	
 
+	app.get('/v1/volumes/060df0fe6f7dc7bb160000000000000000000001be', (req, res) => {
+		
+		var results = {
+   data: {
+      access_control_records: [
+         {
+            access_protocol: "iscsi",
+            acl_id: "0d00000000000004d3000000000000000000000001",
+            apply_to: "both",
+            chap_user_id: "",
+            chap_user_name: "*",
+            initiator_group_id: "",
+            initiator_group_name: "*",
+            lun: 0
+         }
+      ],
+      agent_type: "none",
+      app_uuid: "",
+      base_snap_id: "",
+      base_snap_name: "",
+      block_size: 4096,
+      cache_needed_for_pin: 104857600,
+      cache_pinned: false,
+      cache_policy: "normal",
+      caching_enabled: true,
+      clone: false,
+      creation_time: 1430516996,
+      description: "",
+      dest_pool_id: "",
+      dest_pool_name: "",
+      encryption_cipher: "none",
+      fc_sessions: null,
+      full_name: "",
+      id: "0600000000000004d3000000000000000000000001",
+      iscsi_sessions: null,
+      last_modified: 1430516996,
+      limit: 100,
+      metadata: null,
+      move_aborting: false,
+      move_bytes_migrated: 0,
+      move_bytes_remaining: 0,
+      move_start_time: 0,
+      multi_initiator: false,
+      name: "myvol1",
+      num_connections: 0,
+      num_fc_connections: 0,
+      num_iscsi_connections: 0,
+      num_snaps: 0,
+      offline_reason: null,
+      online: true,
+      online_snaps: null,
+      owned_by_group: "g1a1",
+      parent_vol_id: "",
+      parent_vol_name: "",
+      perfpolicy_id: "0300000000000004d3000000000000000000000001",
+      perfpolicy_name: "default",
+      pinned_cache_size: 0,
+      pool_id: "0a00000000000004d3000000000000000000000001",
+      pool_name: "default",
+      projected_num_snaps: 0,
+      read_only: false,
+      reserve: 0,
+      search_name: "myvol1",
+      serial_number: "9965f28016895f826c9ce900d3040000",
+      size: 100,
+      snap_limit: 9223372036854776000,
+      snap_reserve: 0,
+      snap_usage_compressed_bytes: 0,
+      snap_usage_populated_bytes: 0,
+      snap_usage_uncompressed_bytes: 0,
+      snap_warn_level: 0,
+      target_name: "iqn.2007-11.com.nimblestorage:myvol1-v00000000000004d3.00000001.000004d3",
+      thinly_provisioned: true,
+      upstream_cache_pinned: false,
+      usage_valid: true,
+      vol_state: "online",
+      vol_usage_compressed_bytes: 0,
+      vol_usage_uncompressed_bytes: 0,
+      volcoll_id: "",
+      volcoll_name: "",
+      warn_level: 80
+   }
+};
+		
+		res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
+		res.end(JSON.stringify(results));
+		
+	});		
+	
 	app.post('/createAssessment', (req, res) => {
 
 		var company = req.body.company;
