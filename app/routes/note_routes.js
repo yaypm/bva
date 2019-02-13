@@ -1008,7 +1008,7 @@ module.exports = function(app, db) {
 				developer_cost: developers,
 				qa_cost: qas,
 				work_hours: '1950',
-				benefit_conversion: '0.5',
+				benefit_conversion: '0.01',
 				benefit_incident_reduction: '30',
 				benefit_mttr: '90',
 				benefit_sla: '75',
