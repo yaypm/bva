@@ -2230,7 +2230,16 @@ function drawResults() {
 				var expectedHtml = "";
 
 				for(i=0;i<number;i++) {
-					annual_cost = (parseFloat(jsonResponse.existing_apps[i].annual_costs)) + (parseFloat(jsonResponse.existing_apps[i].ftes) * parseFloat(jsonResponse.operation_cost));
+					var ftes = 0;
+					
+					if(jsonResponse.existing_apps[i].ftes == "" || jsonResponse.existing_apps[i].ftes == null) {
+						ftes = 0;	
+					}
+					else {
+						ftes = jsonResponse.existing_apps[i].ftes;
+					}
+					
+					annual_cost = (parseFloat(jsonResponse.existing_apps[i].annual_costs)) + (parseFloat(ftes) * parseFloat(jsonResponse.operation_cost));
 					percent1 = (parseFloat(jsonResponse.existing_apps[i].y1)/100);
 					percent2 = (parseFloat(jsonResponse.existing_apps[i].y2)/100);
 					percent3 = (parseFloat(jsonResponse.existing_apps[i].y3)/100);
