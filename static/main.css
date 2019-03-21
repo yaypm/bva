@@ -821,7 +821,7 @@ ol.list ol ul ul li:before {
   /** al change on background-color was 606060 **/
 .nav__list--primary > .nav__item:not(.expandable).is-current,
 .nav__list--secondary > .nav__item.is-current {
-  background-color: black; }
+  background-color: #191818; }
 
 .nav__list--secondary .nav__link {
   padding-left: 50px; }
@@ -3238,11 +3238,11 @@ ol.list ol ul ul li:before {
      /* right: 0; */
      /* bottom: 100px; */
      /* left: 0; */
-	/* background-color: #008bdb;  */
+	/* background-color: #191818;  */
 	/* color: white;  */
 	/* border-radius: 20px; */
 	/* text-align: center;  */
-	/* box-shadow: 0px 0px 30px 30px #008bdb;  */
+	/* box-shadow: 0px 0px 30px 30px #191818;  */
 	/* color: white; }		 */
 
 #intro_box {
@@ -3258,11 +3258,11 @@ ol.list ol ul ul li:before {
      right: 0;
      bottom: 0;
      left: 0;
-	background-color: #008bdb;
+	background-color: #191818;
 	color: white;
 	border-radius: 20px;
 	text-align: center;
-	box-shadow: 0px 0px 30px 30px #008bdb;
+	box-shadow: 0px 0px 30px 30px #191818;
 	color: white; }
 
 #content_box {
@@ -3290,10 +3290,10 @@ ol.list ol ul ul li:before {
 	color: white; }
 
 .inner_box {
-	background-color: #008bdb;
+	background-color: #191818;
 	color: white;
 	border-radius: 20px;
-	box-shadow: 0px 0px 30px 30px #008bdb;  }
+	box-shadow: 0px 0px 30px 30px #191818;  }
 
 #intro_box h1 {
 	font-size: 60px;
@@ -3358,11 +3358,11 @@ ol.list ol ul ul li:before {
      right: 0;
      bottom: 100px;
      left: 0;
-	background-color: #008bdb;
+	background-color: #191818;
 	color: white;
 	border-radius: 20px;
 	text-align: center;
-	box-shadow: 0px 0px 30px 30px #008bdb;
+	box-shadow: 0px 0px 30px 30px #191818;
 	color: white; }
 
 @font-face {
@@ -3411,7 +3411,7 @@ ol.list ol ul ul li:before {
 .landing-body {
 	background-image: url(/static/welcome-background.svg);
 	background-size: cover;
-	background-color: #008bdb; }
+	background-color: #191818; }
 
 .bva-body {
 	background-color: #f2f2f2; }

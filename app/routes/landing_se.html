@@ -15,12 +15,12 @@
 	<script src="/static/bva.js"></script>
 	<script type="text/javascript">
 		document.addEventListener("DOMContentLoaded", function(event) {
-				getSEAssessmentList();
-				setSeLinks();
+			getSEAssessmentList();
+			// setBvaLinks();
 
-				$('#se_id').change(function() {
-					setSeLinks();
-				});
+			// $('#bva_select').change(function() {
+			// 	setBvaLinks();
+			// });
 		});
 
 	</script>
@@ -29,8 +29,47 @@
 
 <body class="landing-body">
 
+	<div class="nav has-no-secondary">
+		<a class="nav__brand" href="/">
+		  <img class="nav__logo" src="http://assets.dynatrace.com/global/logos/dynatrace-logo.svg" alt="dynatrace logo"/>
+		</a>
+
+		<nav id="nav-bar-example2" class="nav__bar">
+		  <ul class="nav__list nav__list--primary">
+	  
+			<li class="nav__item nav__item--right">
+				<a class="nav__link" href="/changepassword">Change password</a>
+			  </li>
+			<li class="nav__item nav__item--right">
+			  <a class="nav__link" href="/logout">Logout</a>
+			</li>
+		  </ul>
+		</nav>
+	  </div>
+	  
+
+<div class="section" style="width: 400px;margin-top:5% ;margin-left: 50%;margin-right: 50%;transform: translate(-50%); color: white; box-shadow: 0px 0px 30px 30px #191818; background-color: #191818">
+	<div class="column--1-of-1">
+			<div style="display: inline-block; width: 39%"><img src="/static/business-purple-light.png" width="140px" height="140px"/></div> <div style="display: inline-block; width: 59%"><h2 class="menu-title">Business Value Assessment</h2></div>
+				<br /><br />
+			<a href="/createnew"><button id="landing_box_submit" type="submit" class="btn btn--secondary theme--dark" >Create a new assessment</button></a>
+				<br /><br />
+			<div id="results" style="height: 600px; overflow:auto">
+				<!--You have no assessments yet, please create a new one!-->
+				<div id="loading" style="margin-left: 40%; margin-top: 40%; transform:translate(-30px, -30px);">
+					<div class="loading">
+						<svg class="loading__distractor" width="30px" height="30px" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+							<circle class="loading__path" cx="15" cy="15" r="12"></circle>
+						</svg>
+						<p class="loading__text">Loading...</p>
+					</div>
+				</div>
+			</div>	
+		</div>
+</div>
+
 <!--start of content-->
-<div id="content" class="main-content">
+<!-- <div id="content" class="main-content">
 
 <div id="content_box">
 
@@ -38,17 +77,18 @@
 
 		<div class="landing-box">
 
-		<h2 class="menu-title">Your account <a href="/landing"><button role="button" type="button" class="btn btn--secondary theme--dark">SE mode</button></a> </h2>
+		<h2 class="menu-title">Your account <a href="/landing"><button role="button" type="button" class="btn btn--secondary theme--dark">BVA mode</button></a> </h2> 		
 
-		<p>Successful opportunies require us to engage with multiple layers of the organisation. These SE assessments will help to track what interactions have happened, and which are yet to come.</p>
+		<p>Please choose from the options below; continue with an assessment, share it with somebody else, create a new assessment or change your password.</p>
+
 
 			<br />
 
-			<form action="/workflow_se#technical" method="get" enctype="application/x-www-form-urlencoded" id="se_continue">
+			<form action="/workflow#biz" method="get" enctype="application/x-www-form-urlencoded">
 
-				<select class="select bva-select" name="se_id" id="se_id">
+				<select class="select bva-select" name="bva_id" id="bva_select">
 					<option value="">
-						Loading...
+						Loading..
 					</option>
 				</select>
 
@@ -62,11 +102,12 @@
 
 					<br /><br />
 
-				<a href="/createnew_se"><button id="landing_box_submit" type="button" class="btn btn--secondary theme--dark ">Start a new assessment</button></a>
-				
-				<br /><br />
+				<a href="/createnew"><button id="landing_box_new" type="button" class="btn btn--secondary theme--dark landing-button">Create new</button></a> <a href="/changepassword"><button id="landing_box_password" type="button" class="btn btn--secondary theme--dark landing-button">Change password</button></a>
 
-				<a href="/search_se"><button id="landing_box_submit" type="button" class="btn btn--secondary theme--dark ">Search</button></a>
+					<br /><br />
+
+				<a href="/editassessment"><button id="landing_box_submit" type="button" class="btn btn--secondary theme--dark ">Search/edit assessments</button></a>
+
 			</form>
 
 			<br />
@@ -85,7 +126,7 @@
 
 </div>
 
-</div>
+</div> -->
 <!--end of content-->
 
 <script src="/static/main.js"></script>

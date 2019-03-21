@@ -356,17 +356,6 @@ function statusDetect() {
 	}
 }
 
-function browserDetect() {
-	if (navigator.appName == 'Microsoft Internet Explorer' ||  !!(navigator.userAgent.match(/Trident/) || navigator.userAgent.match(/rv:11/)) || (typeof $.browser !== "undefined" && $.browser.msie == 1))	{
-		$(".status-ie").css("display", "block");
-		$(".signup-forgot").css("display", "none");
-		document.getElementById("ie").value="yes";
-	}
-
-	else {
-		document.getElementById("ie").value="no";
-	}
-}
 
 function setFormLocation() {
 	token = getGet('token');
@@ -416,22 +405,22 @@ function openReport() {
 	win.focus();
 }
 
-function setBvaLinks() {
-	id = document.getElementById("bva_select").value;
-	shareHref = "/share?bva_id=" + id;
-	editHref = "/edit?bva_id=" + id;
-	document.getElementById("edit").href=editHref;
-	document.getElementById("share").href=shareHref;
-}
+// function setBvaLinks() {
+// 	id = document.getElementById("bva_select").value;
+// 	shareHref = "/share?bva_id=" + id;
+// 	editHref = "/edit?bva_id=" + id;
+// 	document.getElementById("edit").href=editHref;
+// 	document.getElementById("share").href=shareHref;
+// }
 
-function setSeLinks() {
-	id = document.getElementById("se_id").value;
-	shareHref = "/share_se?se_id=" + id;
-	editHref = "/edit_se?se_id=" + id;
-	//document.getElementById("se_continue").action="/workflow_se?se_id=" + id + "#outcomes";
-	document.getElementById("edit").href=editHref;
-	document.getElementById("share").href=shareHref;
-}
+// function setSeLinks() {
+// 	id = document.getElementById("se_id").value;
+// 	shareHref = "/share_se?se_id=" + id;
+// 	editHref = "/edit_se?se_id=" + id;
+// 	//document.getElementById("se_continue").action="/workflow_se?se_id=" + id + "#outcomes";
+// 	document.getElementById("edit").href=editHref;
+// 	document.getElementById("share").href=shareHref;
+// }
 
 function setFilters() {
 	newId = document.getElementById("filters").value;
@@ -660,17 +649,17 @@ function getAssessmentList() {
 		var newHTML = '';
 
 		if(jsonObj[0]._id == "new") {
-			document.getElementById("bva_select").innerHTML = '<option value="">Create an assessment!</option>';
-			dtrum.identifyUser(jsonObj[0].username);
+			document.getElementById("results").innerHTML = 'Please create an assessment to get started!';
+			//dtrum.identifyUser(jsonObj[0].username);
 		}
 
 		else {
 			for(i=0;i<jsonObj.length;i++) {
-				newHTML += '<option value="' + jsonObj[i].id + '">' + jsonObj[i].company + '</option>';
+				newHTML += '<p><h1>' + jsonObj[i].company + '</h1><a href="/workflow?bva_id=' + jsonObj[i].id + '#biz"><u>View</u></a> | <a href="/edit?bva_id=' + jsonObj[i].id + '"><u>Edit</u></a> | <a href="/share?bva_id=' + jsonObj[i].id + '"><u>Share</u></a></p>';
 			}
-			dtrum.identifyUser(jsonObj[0].username);
-			document.getElementById("bva_select").innerHTML = newHTML;
-			setBvaLinks();
+			//dtrum.identifyUser(jsonObj[0].username);
+			document.getElementById("results").innerHTML = newHTML;
+			//setBvaLinks();
 		}
 	})
 }
@@ -698,16 +687,16 @@ function getSEAssessmentList() {
 
 		if(jsonObj[0]._id == "new") {
 			document.getElementById("se_id").innerHTML = '<option value="">Create an assessment!</option>';
-			dtrum.identifyUser(jsonObj[0].username);
+			//dtrum.identifyUser(jsonObj[0].username);
 		}
 
 		else {
 			for(i=0;i<jsonObj.length;i++) {
-				newHTML += '<option value="' + jsonObj[i].id + '">' + jsonObj[i].company + '</option>';
+				newHTML += '<p><h1>' + jsonObj[i].company + '</h1><a href="/workflow_se?se_id=' + jsonObj[i].id + '#technical"><u>View</u></a> | <a href="/edit_se?se_id=' + jsonObj[i].id + '"><u>Edit</u></a> | <a href="/share_se?se_id=' + jsonObj[i].id + '"><u>Share</u></a></p>';
 			}
-			dtrum.identifyUser(jsonObj[0].username);
-			document.getElementById("se_id").innerHTML = newHTML;
-			setSeLinks();
+			//dtrum.identifyUser(jsonObj[0].username);
+			document.getElementById("results_tracker").innerHTML = newHTML;
+			//setSeLinks();
 		}
 	})
 }
@@ -2238,8 +2227,8 @@ function drawResults() {
 					else {
 						ftes = jsonResponse.existing_apps[i].ftes;
 					}
-					
-					annual_cost = (parseFloat(jsonResponse.existing_apps[i].annual_costs)) + (parseFloat(ftes) * parseFloat(jsonResponse.operation_cost));
+
+					annual_cost = (parseFloat(jsonResponse.existing_apps[i].annual_costs)) + (parseFloat(jsonResponse.existing_apps[i].ftes) * parseFloat(jsonResponse.operation_cost));
 					percent1 = (parseFloat(jsonResponse.existing_apps[i].y1)/100);
 					percent2 = (parseFloat(jsonResponse.existing_apps[i].y2)/100);
 					percent3 = (parseFloat(jsonResponse.existing_apps[i].y3)/100);

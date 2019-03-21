@@ -91,7 +91,7 @@ module.exports = function(app, db) {
 
 		if(se_id == ""){
 			console.log("no se id");
-			res.redirect('/landing_se');
+			res.redirect('/landing');
 		}
 
 		else {
@@ -108,7 +108,7 @@ module.exports = function(app, db) {
 							if(check == null) {
 								db.close();
 								console.log("no results");
-								res.redirect('/landing_se');
+								res.redirect('/landing');
 							}
 							else {
 								db.close();
@@ -179,7 +179,7 @@ module.exports = function(app, db) {
 		var se_id = req.query.se_id;
 
 		if(username == "" || se_id == "") {
-			res.redirect('/landing_se');
+			res.redirect('/landing');
 		}
 
 		else {
@@ -193,7 +193,7 @@ module.exports = function(app, db) {
 						}
 						else {
 							db.close();
-							res.redirect('/landing_se');
+							res.redirect('/landing');
 						}
 				});
 			})
@@ -238,7 +238,7 @@ module.exports = function(app, db) {
 		var se_id = req.query.se_id;
 
 		if(username == "" || se_id == "") {
-			res.redirect('/landing_se');
+			res.redirect('/landing');
 		}
 
 		else {
@@ -258,7 +258,7 @@ module.exports = function(app, db) {
 
 						else {
 							db.close();
-							res.redirect('/landing_se');
+							res.redirect('/landing');
 						}
 					}
 				});
@@ -417,7 +417,7 @@ module.exports = function(app, db) {
 				res.sendFile(path.join(__dirname + '/search_se.html'));
 			}
 			else {
-				res.redirect('/landing_se');
+				res.redirect('/landing');
 			}
 		}
 
@@ -579,7 +579,7 @@ module.exports = function(app, db) {
 		}
 	});
 
-	app.get('/landing_se', (req, res) => {
+	app.get('/landing', (req, res) => {
 
 		if (requiresLogin(req, res) == false) {
 			res.redirect('/');
@@ -596,7 +596,7 @@ module.exports = function(app, db) {
 						}
 						else {
 							db.close();
-							res.sendFile(path.join(__dirname + '/landing_se.html'));
+							res.sendFile(path.join(__dirname + '/landing.html'));
 						}
 					});
 				})
@@ -750,8 +750,6 @@ module.exports = function(app, db) {
 			password: req.body.password
 		}
 
-		if(req.body.ie == "no") {
-
 			if(validateEmail(username) == false) {
 				res.redirect('/?status=failed');
 			}
@@ -800,11 +798,7 @@ module.exports = function(app, db) {
 					}
 				});
 			}
-		}
 
-		else {
-			res.redirect('/?browser=ie');
-		}
 	});
 
 	app.post('/gimmePassword', (req, res) => {
@@ -1204,7 +1198,7 @@ module.exports = function(app, db) {
 					var collection = db.collection('se_assessment_data');
 					collection.insert(se_assessment_data, {w:1}, function(err, result) { if(err!=null){console.log(err);}        });
 
-					res.redirect('/landing_se');
+					res.redirect('/landing');
 					db.close();
 				}
 			});
@@ -1218,10 +1212,10 @@ module.exports = function(app, db) {
 		MongoClient.connect(connectionOptions, function(err, db) {
 
 			if(err) {
-				return console.dir(err);
 				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
 				res.end("failure");
 				db.close();
+				return console.dir(err);
 			}
 
 			var companyAssessment;
@@ -1871,7 +1865,7 @@ module.exports = function(app, db) {
 						}
 						else {
 							if(items[0] == undefined) {
-								res.redirect('/landing_se');
+								res.redirect('/landing');
 							}
 							else {
 								var collection = db.collection('se_assessments');
@@ -1948,7 +1942,7 @@ module.exports = function(app, db) {
 		var username = req.session.username;
 
 		if(id == "") {
-			res.redirect('/landing_se');
+			res.redirect('/landing');
 		}
 
 		else {
@@ -1967,7 +1961,7 @@ module.exports = function(app, db) {
 						}
 						else {
 							if(items[0] == undefined){
-								res.redirect('/landing_se');
+								res.redirect('/landing');
 							}
 
 							else {
@@ -1987,7 +1981,7 @@ module.exports = function(app, db) {
 								})
 
 
-								res.redirect("/landing_se");
+								res.redirect("/landing");
 							}
 						}
 					})
