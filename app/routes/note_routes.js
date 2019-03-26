@@ -2044,6 +2044,58 @@ module.exports = function(app, db) {
 		}
 	});
 
+	app.get('/searchSEYou', (req, res) => {
+
+		var emailSearch = req.session.username;
+		var results = new RegExp('(@dynatrace.com)').exec(emailSearch);
+
+		if(emailSearch == "" || results == false) {
+			res.redirect('/');
+		}
+
+		else {
+
+			var queryRegex = new RegExp('.*' + emailSearch + '.*');
+			var queryRegex2 = {$regex : queryRegex, $options: 'i'};
+			
+			var query = {username: queryRegex2};
+
+			MongoClient.connect(connectionOptions, function(err, db) {
+
+				if(err) {
+					var response = {"status":"failed"};
+					res.end(JSON.stringify(response));
+					db.close();
+				}
+
+				var collection = db.collection('user_assessments');
+				var results = collection.find(query).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+					if(err || items[0] == undefined) {
+						var response = {"status":"failed"};
+						res.end(JSON.stringify(response));
+						db.close();
+					}
+
+					else {
+						resultArray = [];
+						for(i=0;i<items.length;i++) {
+							resultItem = {
+								_id: items[i].id
+							}
+							resultArray.push(resultItem);
+						}
+						var collection = db.collection('assessments');
+						var results = collection.find({$or:resultArray}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+
+							res.end(JSON.stringify(items));
+							db.close();
+						})
+					}
+				})
+			})
+		}
+	});	
+
 	app.post('/seOppSearch', (req, res) => {
 		var searchTerms = req.body;
 
