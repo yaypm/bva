@@ -17,16 +17,39 @@
 		document.addEventListener("DOMContentLoaded", function(event) {
 			statusDetect();
 			enableSeOppSearch();
-			setFilters();
-			$('#filters').change(function() {
-					setFilters();
-			});
+			// setFilters();
+			// $('#filters').change(function() {
+			// 		setFilters();
+			// });
+			seSearchMenuSwitch();
+			onLoadAndHashChange();
+			return false;
 		});
 	</script>
 
 </head>
 
 <body class="landing-body">
+
+
+		<div class="nav has-no-secondary">
+				<a class="nav__brand" href="/">
+				  <img class="nav__logo" src="http://assets.dynatrace.com/global/logos/dynatrace-logo.svg" alt="dynatrace logo"/>
+				</a>
+		
+				<nav id="nav-bar-example2" class="nav__bar">
+				  <ul class="nav__list nav__list--primary">
+					  	  
+					<li class="nav__item nav__item--right">
+						<a class="nav__link" href="/changepassword">Change password</a>
+					  </li>
+					<li class="nav__item nav__item--right">
+					  <a class="nav__link" href="/logout">Logout</a>
+					</li>
+				  </ul>
+				</nav>
+			  </div>
+
 
 <!--start of content-->
 <div id="content" >
@@ -37,382 +60,397 @@
 
 		<div class="menu-box" style="width: 850px">
 
-			<h2 class="menu-title">Search for opportunities</h2>
+			<h2 class="menu-title">Search for POC trackers</h2>
 
 			<p>Search for opportunities relevant to the platforms/technologies you have encountered.</p>
 			</p>
 
 			<div class="status-failure">There was a problem creating your assessment.</div><br />
+
+			<div style="width: 270px">
+					<a href="/landing"><button id="landing_box_new" type="button" class="btn btn--secondary theme--dark landing-button">Back</button></a> <button role="button" type="submit" id="se_search" class="btn btn--primary theme--dark landing-button">Search</button>
+					</div>		
+
+			<br /><br />		
+
+			<div class="expandable" id="filters">
+					<a href="#noop" class="expandable__trigger">Expand search filters</a>
+					<div class="expandable__content">			
+
+			<br /><br />
+			<div class="tabs" >
+				<button onclick="window.location.href = '/search_se#people'" class="tab is-active" style="color: white">People</button>		
+				<button onclick="window.location.href = '/search_se#approach'" class="tab" style="color: white">Dynatrace approach</button>
+				<button onclick="window.location.href = '/search_se#platform'" class="tab" style="color: white">Platform</button>
+				<button onclick="window.location.href = '/search_se#application'" class="tab" style="color: white">Application</button>
+			  </div>
+
+			  <br /><br />
+
+			  <div id="filter_options">
+
+
+			<div id="people" class="section">
+
+				<div class="column--1-of-2">
+					<h2>Dynatrace</h2> <br />
+				<div id="team">
+					<label for="lead_sales" class="label bva-question-text" style="width: 67%">Lead sales</label>
+					<input type="text" name="lead_sales" class="inputfield bigInput" style="max-width: 67%" id="lead_sales" placeholder="name">
+					<br /><br />
+					<label for="lead_se" class="label bva-question-text" style="width: 67%">Lead SE</label>
+					<input type="text" name="lead_se" class="inputfield bigInput" id="lead_se" style="width: 67%" placeholder="name">
+
+				</div>	
+				</div>
+
+				<div class="column--1-of-2">
+						<h2>Customer</h2> <br />
+			<div id="champions" >
+					<label for="business_champion" class="label bva-question-text" style="width: 67%">Business champion</label>
+					<input type="text" name="business_champion" class="inputfield bva-question-input" style="width: 67%" id="business_champion" placeholder="name"/>
+					<br /><br />
+					<label for="technical_champion" class="label bva-question-text" style="width: 67%">Technical champion</label>
+					<input type="text" name="technical_champion" class="inputfield bva-question-input" style="width: 67%" id="technical_champion" placeholder="name"/>
+
+			</div>	
+			</div>
+		</div>
+
+
+
+		<div id="approach" class="section" style="display:none">
+
+				<div class="column--1-of-2">
+					<h2>Cluster location</h2> <br />
+						<div class="divTable">
+								<div class="divTableBody">
+								
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><img src="/static/saas-white.png" class="se-question-image"/><br />SaaS</div>
+								<div class="divTableCell se-center"><img src="/static/managed-white.png" class="se-question-image"/><br />Managed</div>
+								<div class="divTableCell se-center"><img src="/static/offline-white.png" class="se-question-image"/><br />Offline</div>
+								<div class="divTableCell se-center"></div>
+								</div>
+								
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="saas" class="checkbox" id="saas"><label class="checkbox__label theme--dark" for="saas"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="managed" class="checkbox" id="managed"><label class="checkbox__label theme--dark" for="managed"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="offline" class="checkbox" id="offline"><label class="checkbox__label theme--dark" for="offline"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"></div>
+								</div>		
+								
+								</div>
+								</div>
+								<br />
+								<input type="text" name="tenant" class="inputfield bva-question-input" id="tenant" style="max-width: 65%" placeholder="tenant id/cluster name"/>
+				</div>
+		
+				
+
+				<div class="column--1-of-2">
+						<h2>Extending Dynatrace</h2> <br />
+						<div class="divTable" style="margin-top: -20px">
+								<div class="divTableBody" >
+								
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><br /><img src="/static/plugin-white.png" class="se-question-image"/><br />OneAgent plugins</div>
+								<div class="divTableCell se-center"><br /><img src="/static/iot-white.png" class="se-question-image"/><br />Custom devices</div>
+								<div class="divTableCell se-center"><br /><img src="/static/activegateplugin-white.png" class="se-question-image"/>ActiveGate plugins</div>
+								<div class="divTableCell se-center"><br /><img src="/static/events-white.png" class="se-question-image"/>External events</div>
+								</div>
+								
+								<div class="divTableRow"> 
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="oaplugins" class="checkbox" id="oaplugins"><label class="checkbox__label theme--dark" for="oaplugins"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="cnd" class="checkbox" id="cnd"><label class="checkbox__label theme--dark" for="cnd"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="agplugins" class="checkbox" id="agplugins"><label class="checkbox__label theme--dark" for="agplugins"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="externalevents" class="checkbox" id="externalevents"><label class="checkbox__label theme--dark" for="externalevents"><span class="checkbox__caption"></span></label></div></div>
+								</div>	
+								
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><br /><img src="/static/incident-white.png" class="se-question-image"/><br />Incidents</div>
+								<div class="divTableCell se-center"><br /><img src="/static/cmdb-white.png" class="se-question-image"/><br />CMDB</div>
+								<div class="divTableCell se-center"></div>
+								<div class="divTableCell se-center"></div>
+								</div>
+								
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="incidents" class="checkbox" id="incidents"><label class="checkbox__label theme--dark" for="incidents"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="cmdb" class="checkbox" id="cmdb"><label class="checkbox__label theme--dark" for="cmdb"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"></div>
+								<div class="divTableCell se-center"></div>
+								</div>			
+								
+								</div>
+								</div>
+			</div>
+			  
+		</div>
+
+
+
+
+
+		<div id="platform" class="section" style="display:none">
+
+				<div class="column--1-of-2">
+					<h2>Deployment method</h2> <br />
+						<div class="divTable">
+								<div class="divTableBody">
+								
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><img src="/static/iaas-white.png" class="se-question-image"/><br />IaaS</div>
+								<div class="divTableCell se-center"><img src="/static/paas-white.png" class="se-question-image"/><br />PaaS</div>
+								<div class="divTableCell se-center"><img src="/static/faas-white.png" class="se-question-image"/><br />FaaS</div>
+								<div class="divTableCell se-center"><img src="/static/saas-white.png" class="se-question-image"/><br />SaaS</div>
+								</div>
+								
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="iaas" class="checkbox" id="iaas"><label class="checkbox__label theme--dark" for="iaas"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="paas" class="checkbox" id="paas"><label class="checkbox__label theme--dark" for="paas"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="faas" class="checkbox" id="faas"><label class="checkbox__label theme--dark" for="faas"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="softaas" class="checkbox" id="softaas"><label class="checkbox__label theme--dark" for="softaas"><span class="checkbox__caption"></span></label></div></div>
+								</div>		
+								
+								</div>
+								</div>	
+				
+
+				<br />
+				<h2>Platform location</h2> <br />
+
+				<div class="divTable">
+						<div class="divTableBody">
 						
-								<div id="search_box">	
+						<div class="divTableRow">
+						<div class="divTableCell se-center"><img src="/static/saas-white.png" class="se-question-image"/><br />Cloud</div>
+						<div class="divTableCell se-center"><img src="/static/iaas-white.png" class="se-question-image"/><br />On-premise</div>
+						<div class="divTableCell se-center"><img src="/static/hybrid-white.png" class="se-question-image"/><br />Hybrid</div>
+						<div class="divTableCell se-center"></div>
+						</div>
+						
+						<div class="divTableRow">
+						<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="cloud" class="checkbox" id="cloud"><label class="checkbox__label theme--dark" for="cloud"><span class="checkbox__caption"></span></label></div></div>
+						<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="onprem" class="checkbox" id="onprem"><label class="checkbox__label theme--dark" for="onprem"><span class="checkbox__caption"></span></label></div></div>
+						<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="hybrid" class="checkbox" id="hybrid"><label class="checkbox__label theme--dark" for="hybrid"><span class="checkbox__caption"></span></label></div></div>
+						<div class="divTableCell se-center"></div>
+						</div>		
+						
+						</div>
+						</div>
+		</div>
+				<div class="column--1-of-2">
 
-										<div class="section">
-												<div class="column--1-of-2">
-														<h3>Filter sections</h3>
-														<label for="s1" class="label">Select</label>
-														<select class="select bva-select" style="display: block; width: 300px" id="filters">
-														<option value="team">Dynatrace team</option>
-														<option value="champions">Customer champions</option>
-														<option value="approach">Dynatrace approach</option>
-														<option value="operating">Operating systems</option>
-														<option value="location">Platform location</option>
-														<option value="platforms">Platform type</option>
-														<option value="deployment">Deplyment method</option>
-														<option value="language">Languages</option>
-														<option value="interface">Interface</option>
-														<option value="synthetic">Synthetic</option>	
-														<option value="extending">Extending Dynatrace</option>	
-														</select>	
+					<h2>Platform type</h2><br />
+					<div class="divTable">
+		
+							<div class="divTableBody">
+							
+							<div class="divTableRow">
+							<div class="divTableCell se-center"><img src="/static/vmware-white.png" class="se-question-image"/><br />VMWare</div>
+							<div class="divTableCell se-center"><img src="/static/azure-white.png" class="se-question-image"/><br />Azure</div>
+							<div class="divTableCell se-center"><img src="/static/amazon-white.png" class="se-question-image"/><br />AWS</div>
+							<div class="divTableCell se-center"><img src="/static/openshift-white.png" class="se-question-image"/><br />OpenShift</div>
+							</div>
+							
+							<div class="divTableRow">
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="vmware" class="checkbox" id="vmware"><label class="checkbox__label theme--dark" for="vmware"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="azure" class="checkbox" id="azure"><label class="checkbox__label theme--dark" for="azure"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="aws" class="checkbox" id="aws"><label class="checkbox__label theme--dark" for="aws"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="openshift" class="checkbox" id="openshift"><label class="checkbox__label theme--dark" for="openshift"><span class="checkbox__caption"></span></label></div></div>
+							</div>		
+							
+							
+							<div class="divTableRow">
+							<div class="divTableCell se-center"><br /><img src="/static/cloudfoundry-white.png" class="se-question-image"/><br />Cloudfoundry</div>
+							<div class="divTableCell se-center"><br /><img src="/static/ibmcloud-white.png" class="se-question-image"/><br />IBM cloud</div>
+							<div class="divTableCell se-center"><br /><img src="/static/oraclecloud-white.png" class="se-question-image"/><br />Oracle cloud</div>
+							<div class="divTableCell se-center"><br /><img src="/static/gcp-white.png" class="se-question-image"/><br />Google cloud</div>
+							</div>
+							
+							<div class="divTableRow">
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="cloudfoundry" class="checkbox" id="cloudfoundry"><label class="checkbox__label theme--dark" for="cloudfoundry"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="ibmcloud" class="checkbox" id="ibmcloud"><label class="checkbox__label theme--dark" for="ibmcloud"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="oraclecloud" class="checkbox" id="oraclecloud"><label class="checkbox__label theme--dark" for="oraclecloud"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="gcp" class="checkbox" id="gcp"><label class="checkbox__label theme--dark" for="gcp"><span class="checkbox__caption"></span></label></div></div>
+							</div>	
+							
+							
+							<div class="divTableRow">
+							<div class="divTableCell se-center"><br /><img src="/static/heroku-white.png" class="se-question-image"/><br />Heroku</div>
+							<div class="divTableCell se-center"><br /><img src="/static/openstack-white.png" class="se-question-image"/><br />Openstack</div>
+							<div class="divTableCell se-center"><br /><img src="/static/kubernetes-white.png" class="se-question-image"/><br />Kubernetes</div>
+							<div class="divTableCell se-center"><br /><img src="/static/docker-white.png" class="se-question-image"/><br />Docker</div>
+							</div>
+							
+							<div class="divTableRow">
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="heroku" class="checkbox" id="heroku"><label class="checkbox__label theme--dark" for="heroku"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="openstack" class="checkbox" id="openstack"><label class="checkbox__label theme--dark" for="openstack"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="kubernetes" class="checkbox" id="kubernetes"><label class="checkbox__label theme--dark" for="kubernetes"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="docker" class="checkbox" id="docker"><label class="checkbox__label theme--dark" for="docker"><span class="checkbox__capt	on"></span></label></div></div>
+							</div>	
+							
+							
+							</div>
+							
+							</div>	
+			</div>
 
-														<br /><br />
-
-														<div style="width: 270px">
-														<a href="/landing"><button id="landing_box_new" type="button" class="btn btn--secondary theme--dark landing-button">Back</button></a> <button role="button" type="submit" id="se_search" class="btn btn--primary theme--dark landing-button">Search</button>
-														</div>		
-
-														</div>
+		</div>
 
 
-												<div class="column--1-of-2">
 
-														<h3>Filters</h3>
 
-														<div id="filter_options">
-														
-																<div id="team" class="show-me">
-																		<label for="lead_sales" class="label bva-question-text" style="width: 67%">Lead sales</label>
-																		<input type="text" name="lead_sales" class="inputfield bigInput" style="max-width: 67%" id="lead_sales" placeholder="name">
-																		<br /><br />
-																		<label for="lead_se" class="label bva-question-text" style="width: 67%">Lead SE</label>
-																		<input type="text" name="lead_se" class="inputfield bigInput" id="lead_se" style="width: 67%" placeholder="name">
-		
-																</div>	
-		
-																<div id="champions" style="display: none">
-																		<label for="business_champion" class="label bva-question-text" style="width: 67%">Business champion</label>
-																		<input type="text" name="business_champion" class="inputfield bva-question-input" style="width: 67%" id="business_champion" placeholder="name"/>
-																		<br /><br />
-																		<label for="technical_champion" class="label bva-question-text" style="width: 67%">Technical champion</label>
-																		<input type="text" name="technical_champion" class="inputfield bva-question-input" style="width: 67%" id="technical_champion" placeholder="name"/>
-		
-																</div>	
-		
-																<div id="approach" style="display: none">
-																		<div class="divTable">
-																				<div class="divTableBody">
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><img src="/static/saas-white.png" class="se-question-image"/><br /><b>SaaS</b></div>
-																				<div class="divTableCell se-center"><img src="/static/managed-white.png" class="se-question-image"/><br /><b>Managed</b></div>
-																				<div class="divTableCell se-center"><img src="/static/offline-white.png" class="se-question-image"/><br /><b>Offline</b></div>
-																				<div class="divTableCell se-center"></div>
-																				</div>
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="saas" class="checkbox" id="saas"><label class="checkbox__label theme--dark" for="saas"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="managed" class="checkbox" id="managed"><label class="checkbox__label theme--dark" for="managed"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="offline" class="checkbox" id="offline"><label class="checkbox__label theme--dark" for="offline"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"></div>
-																				</div>		
-																				
-																				</div>
-																				</div>
-																				<br />
-																				<input type="text" name="tenant" class="inputfield bva-question-input" id="tenant" style="max-width: 65%" placeholder="tenant id/cluster name"/>
-		
-																</div>
-		
-																<div id="operating" style="display: none">
-																		<div class="divTable">
-																				<div class="divTableBody">
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><img src="/static/windows-white.png" class="se-question-image"/><br /><b>Windows</b></div>
-																				<div class="divTableCell se-center"><img src="/static/linux-white.png" class="se-question-image"/><br /><b>Linux</b></div>
-																				<div class="divTableCell se-center"><img src="/static/aix-white.png" class="se-question-image"/><br /><b>AIX</b></div>
-																				<div class="divTableCell se-center"><img src="/static/solaris-white.png" class="se-question-image"/><br /><b>Solaris</b></div>
-																				</div>
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="windows" class="checkbox" id="windows"><label class="checkbox__label theme--dark" for="windows"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="linux" class="checkbox" id="linux"><label class="checkbox__label theme--dark" for="linux"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="aix" class="checkbox" id="aix"><label class="checkbox__label theme--dark" for="aix"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="solaris" class="checkbox" id="solaris"><label class="checkbox__label theme--dark" for="solaris"><span class="checkbox__caption"></span></label></div></div>
-																				</div>		
-																				
-																				</div>
-																				</div>
-																
-																</div>
-		
-																<div id="platforms" style="display: none">
-																
-																		<div class="divTable">
-		
-																				<div class="divTableBody">
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><img src="/static/vmware-white.png" class="se-question-image"/><br /><b>VMWare</b></div>
-																				<div class="divTableCell se-center"><img src="/static/azure-white.png" class="se-question-image"/><br /><b>Azure</b></div>
-																				<div class="divTableCell se-center"><img src="/static/amazon-white.png" class="se-question-image"/><br /><b>AWS</b></div>
-																				<div class="divTableCell se-center"><img src="/static/openshift-white.png" class="se-question-image"/><br /><b>OpenShift</b></div>
-																				</div>
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="vmware" class="checkbox" id="vmware"><label class="checkbox__label theme--dark" for="vmware"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="azure" class="checkbox" id="azure"><label class="checkbox__label theme--dark" for="azure"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="aws" class="checkbox" id="aws"><label class="checkbox__label theme--dark" for="aws"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="openshift" class="checkbox" id="openshift"><label class="checkbox__label theme--dark" for="openshift"><span class="checkbox__caption"></span></label></div></div>
-																				</div>		
-																				
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><br /><img src="/static/cloudfoundry-white.png" class="se-question-image"/><br /><b>Cloudfoundry</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/ibmcloud-white.png" class="se-question-image"/><br /><b>IBM cloud</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/oraclecloud-white.png" class="se-question-image"/><br /><b>Oracle cloud</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/gcp-white.png" class="se-question-image"/><br /><b>Google cloud</b></div>
-																				</div>
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="cloudfoundry" class="checkbox" id="cloudfoundry"><label class="checkbox__label theme--dark" for="cloudfoundry"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="ibmcloud" class="checkbox" id="ibmcloud"><label class="checkbox__label theme--dark" for="ibmcloud"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="oraclecloud" class="checkbox" id="oraclecloud"><label class="checkbox__label theme--dark" for="oraclecloud"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="gcp" class="checkbox" id="gcp"><label class="checkbox__label theme--dark" for="gcp"><span class="checkbox__caption"></span></label></div></div>
-																				</div>	
-																				
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><br /><img src="/static/heroku-white.png" class="se-question-image"/><br /><b>Heroku</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/openstack-white.png" class="se-question-image"/><br /><b>Openstack</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/kubernetes-white.png" class="se-question-image"/><br /><b>Kubernetes</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/docker-white.png" class="se-question-image"/><br /><b>Docker</b></div>
-																				</div>
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="heroku" class="checkbox" id="heroku"><label class="checkbox__label theme--dark" for="heroku"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="openstack" class="checkbox" id="openstack"><label class="checkbox__label theme--dark" for="openstack"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="kubernetes" class="checkbox" id="kubernetes"><label class="checkbox__label theme--dark" for="kubernetes"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="docker" class="checkbox" id="docker"><label class="checkbox__label theme--dark" for="docker"><span class="checkbox__capt	on"></span></label></div></div>
-																				</div>	
-																				
-																				
-																				</div>
-																				
-																				</div>	
-																</div>
-		
-																<div id="deployment" style="display: none">
-		
-																		<div class="divTable">
-																				<div class="divTableBody">
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><img src="/static/iaas-white.png" class="se-question-image"/><br /><b>IaaS</b></div>
-																				<div class="divTableCell se-center"><img src="/static/paas-white.png" class="se-question-image"/><br /><b>PaaS</b></div>
-																				<div class="divTableCell se-center"><img src="/static/faas-white.png" class="se-question-image"/><br /><b>FaaS</b></div>
-																				<div class="divTableCell se-center"><img src="/static/saas-white.png" class="se-question-image"/><br /><b>SaaS</b></div>
-																				</div>
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="iaas" class="checkbox" id="iaas"><label class="checkbox__label theme--dark" for="iaas"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="paas" class="checkbox" id="paas"><label class="checkbox__label theme--dark" for="paas"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="faas" class="checkbox" id="faas"><label class="checkbox__label theme--dark" for="faas"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="softaas" class="checkbox" id="softaas"><label class="checkbox__label theme--dark" for="softaas"><span class="checkbox__caption"></span></label></div></div>
-																				</div>		
-																				
-																				</div>
-																				</div>	
-		
-																</div>
-		
-																<div id="language" style="display: none">
-		
-																		<div class="divTable">
-																				<div class="divTableBody">
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><img src="/static/java-white.png" class="se-question-image"/><br /><b>Java</b></div>
-																				<div class="divTableCell se-center"><img src="/static/dotnet-white.png" class="se-question-image"/><br /><b>.NET</b></div>
-																				<div class="divTableCell se-center"><img src="/static/php-white.png" class="se-question-image"/><br /><b>PHP</b></div>
-																				<div class="divTableCell se-center"><img src="/static/nodejs-white.png" class="se-question-image"/><br /><b>NodeJS</b></div>
-																				</div>
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="java" class="checkbox" id="java"><label class="checkbox__label theme--dark" for="java"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="dotnet" class="checkbox" id="dotnet"><label class="checkbox__label theme--dark" for="dotnet"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="php" class="checkbox" id="php"><label class="checkbox__label theme--dark" for="php"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="nodejs" class="checkbox" id="nodejs"><label class="checkbox__label theme--dark" for="nodejs"><span class="checkbox__caption"></span></label></div></div>
-																				</div>		
-																				
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><br /><img src="/static/messaging-white.png" class="se-question-image"/><br /><b>Messaging</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/c-white.png" class="se-question-image"/><br /><b>C/C++</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/dotnet-white.png" class="se-question-image"/><br /><b>.NET core</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/webserver-white.png" class="se-question-image"/><br /><b>Web server</b></div>
-																				</div>
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="messaging" class="checkbox" id="messaging"><label class="checkbox__label theme--dark" for="messaging"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="c" class="checkbox" id="c"><label class="checkbox__label theme--dark" for="c"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="dotnetcore" class="checkbox" id="dotnetcore"><label class="checkbox__label theme--dark" for="dotnetcore"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="webserver" class="checkbox" id="webserver"><label class="checkbox__label theme--dark" for="webserver"><span class="checkbox__caption"></span></label></div></div>
-																				</div>	
-																				
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><br /><img src="/static/golang-white.png" class="se-question-image"/><br /><b>Go</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/mainframe-white.png" class="se-question-image"/><br /><b>Mainframe</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/iib-white.png" class="se-question-image"/><br /><b>IIB</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/python-white.png" class="se-question-image"/><br /><b>Python</b></div>
-																				</div>
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="golang" class="checkbox" id="golang"><label class="checkbox__label theme--dark" for="golang"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="mainframe" class="checkbox" id="mainframe"><label class="checkbox__label theme--dark" for="mainframe"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="iib" class="checkbox" id="iib"><label class="checkbox__label theme--dark" for="iib"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="python" class="checkbox" id="python"><label class="checkbox__label theme--dark" for="python"><span class="checkbox__caption"></span></label></div></div>
-																				</div>			
-																				
-																				
-																				</div>
-																				</div>	
-		
-																</div>
-												
-																<div id="interface" style="display: none">
-		
-																		<div class="divTable">
-																				<div class="divTableBody">
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><img src="/static/browser-white.png" class="se-question-image"/><br /><b>Web</b></div>
-																				<div class="divTableCell se-center"><img src="/static/mobileapp-white.png" class="se-question-image"/><br /><b>Native app</b></div>
-																				<div class="divTableCell se-center"><img src="/static/iot-white.png" class="se-question-image"/><br /><b>Thick client</b></div>
-																				<div class="divTableCell se-center"><img src="/static/citrix-white.png" class="se-question-image"/><br /><b>Citrix</b></div>
-																				</div>
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="web" class="checkbox" id="web"><label class="checkbox__label theme--dark" for="web"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="mobileapp" class="checkbox" id="mobileapp"><label class="checkbox__label theme--dark" for="mobileapp"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="thick" class="checkbox" id="thick"><label class="checkbox__label theme--dark" for="thick"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="citrix" class="checkbox" id="citrix"><label class="checkbox__label theme--dark" for="citrix"><span class="checkbox__caption"></span></label></div></div>
-																				</div>		
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><br /><img src="/static/webrequest-white.png" class="se-question-image"/><br /><b>API</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/iot-white.png" class="se-question-image"/><br /><b>IoT</b></div>
-																				<div class="divTableCell se-center"></div>
-																				<div class="divTableCell se-center"></div>
-																				</div>
 
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="api" class="checkbox" id="api"><label class="checkbox__label theme--dark" for="api"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="iot" class="checkbox" id="iot"><label class="checkbox__label theme--dark" for="iot"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"></div>
-																				<div class="divTableCell se-center"></div>
-																				</div>
+		<div id="application" class="section" style="display:none">
 
-																				</div>
-																				</div>
-																</div>
-		
-																<div id="synthetic" style="display: none">
-																		<div class="divTable">
-																				<div class="divTableBody">
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><img src="/static/browser-white.png" class="se-question-image"/><br /><b>Browser</b></div>
-																				<div class="divTableCell se-center"><img src="/static/webrequest-white.png" class="se-question-image"/><br /><b>HTTP</b></div>
-																				<div class="divTableCell se-center"><img src="/static/events-white.png" class="se-question-image"/><br /><b>External</b></div>
-																				<div class="divTableCell se-center"></div>
-																				</div>
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="browser" class="checkbox" id="browser"><label class="checkbox__label theme--dark" for="browser"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="http" class="checkbox" id="http"><label class="checkbox__label theme--dark" for="http"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="external" class="checkbox" id="external"><label class="checkbox__label theme--dark" for="external"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"></div>
-																				</div>		
-																				
-																				</div>
-																				</div>
-		
-																</div>
-																
-																<div id="location" style="display: none">
-																	<div class="divTable">
-																		<div class="divTableBody">
-																		
-																		<div class="divTableRow">
-																		<div class="divTableCell se-center"><img src="/static/saas-white.png" class="se-question-image"/><br /><b>Cloud</b></div>
-																		<div class="divTableCell se-center"><img src="/static/iaas-white.png" class="se-question-image"/><br /><b>On-premise</b></div>
-																		<div class="divTableCell se-center"><img src="/static/hybrid-white.png" class="se-question-image"/><br /><b>Hybrid</b></div>
-																		<div class="divTableCell se-center"></div>
-																		</div>
-																		
-																		<div class="divTableRow">
-																		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="cloud" class="checkbox" id="cloud"><label class="checkbox__label theme--dark" for="cloud"><span class="checkbox__caption"></span></label></div></div>
-																		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="onprem" class="checkbox" id="onprem"><label class="checkbox__label theme--dark" for="onprem"><span class="checkbox__caption"></span></label></div></div>
-																		<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="hybrid" class="checkbox" id="hybrid"><label class="checkbox__label theme--dark" for="hybrid"><span class="checkbox__caption"></span></label></div></div>
-																		<div class="divTableCell se-center"></div>
-																		</div>		
-																		
-																		</div>
-																		</div>
-																</div>
-		
-																<div id="extending" style="display: none">
-		
-																		<div class="divTable">
-																				<div class="divTableBody">
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><br /><img src="/static/plugin-white.png" class="se-question-image"/><br /><b>OneAgent plugins</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/iot-white.png" class="se-question-image"/><br /><b>Custom devices</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/activegateplugin-white.png" class="se-question-image"/><br /><b>ActiveGate plugins</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/events-white.png" class="se-question-image"/><br /><b>External events</b></div>
-																				</div>
-																				
-																				<div class="divTableRow"> 
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="oaplugins" class="checkbox" id="oaplugins"><label class="checkbox__label theme--dark" for="oaplugins"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="cnd" class="checkbox" id="cnd"><label class="checkbox__label theme--dark" for="cnd"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="agplugins" class="checkbox" id="agplugins"><label class="checkbox__label theme--dark" for="agplugins"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="externalevents" class="checkbox" id="externalevents"><label class="checkbox__label theme--dark" for="externalevents"><span class="checkbox__caption"></span></label></div></div>
-																				</div>	
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><br /><img src="/static/incident-white.png" class="se-question-image"/><br /><b>Incidents</b></div>
-																				<div class="divTableCell se-center"><br /><img src="/static/cmdb-white.png" class="se-question-image"/><br /><b>CMDB</b></div>
-																				<div class="divTableCell se-center"></div>
-																				<div class="divTableCell se-center"></div>
-																				</div>
-																				
-																				<div class="divTableRow">
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="incidents" class="checkbox" id="incidents"><label class="checkbox__label theme--dark" for="incidents"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="cmdb" class="checkbox" id="cmdb"><label class="checkbox__label theme--dark" for="cmdb"><span class="checkbox__caption"></span></label></div></div>
-																				<div class="divTableCell se-center"></div>
-																				<div class="divTableCell se-center"></div>
-																				</div>			
-																				
-																				</div>
-																				</div>
-																</div>
-		
-		
-		
-																</div>
-												
-												</div>
-											
-											
-											
-											</div>										
+				<div class="column--1-of-2">
+						<h2>Operating systems</h2> <br />
+						<div class="divTable">
+								<div class="divTableBody">
+								
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><img src="/static/windows-white.png" class="se-question-image"/><br />Windows</div>
+								<div class="divTableCell se-center"><img src="/static/linux-white.png" class="se-question-image"/><br />Linux</div>
+								<div class="divTableCell se-center"><img src="/static/aix-white.png" class="se-question-image"/><br />AIX</div>
+								<div class="divTableCell se-center"><img src="/static/solaris-white.png" class="se-question-image"/><br />Solaris</div>
+								</div>
+								
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="windows" class="checkbox" id="windows"><label class="checkbox__label theme--dark" for="windows"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="linux" class="checkbox" id="linux"><label class="checkbox__label theme--dark" for="linux"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="aix" class="checkbox" id="aix"><label class="checkbox__label theme--dark" for="aix"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="solaris" class="checkbox" id="solaris"><label class="checkbox__label theme--dark" for="solaris"><span class="checkbox__caption"></span></label></div></div>
+								</div>		
+								
+								</div>
+								</div>
+						<br />		
+						<h2>Interface</h2><br />
+						<div class="divTable">
+								<div class="divTableBody">
+								
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><img src="/static/browser-white.png" class="se-question-image"/><br />Web</div>
+								<div class="divTableCell se-center"><img src="/static/mobileapp-white.png" class="se-question-image"/><br />Native app</div>
+								<div class="divTableCell se-center"><img src="/static/iot-white.png" class="se-question-image"/><br />Thick client</div>
+								<div class="divTableCell se-center"><img src="/static/citrix-white.png" class="se-question-image"/><br />Citrix</div>
+								</div>
+								
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="web" class="checkbox" id="web"><label class="checkbox__label theme--dark" for="web"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="mobileapp" class="checkbox" id="mobileapp"><label class="checkbox__label theme--dark" for="mobileapp"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="thick" class="checkbox" id="thick"><label class="checkbox__label theme--dark" for="thick"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="citrix" class="checkbox" id="citrix"><label class="checkbox__label theme--dark" for="citrix"><span class="checkbox__caption"></span></label></div></div>
+								</div>		
+								
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><br /><img src="/static/webrequest-white.png" class="se-question-image"/><br />API</div>
+								<div class="divTableCell se-center"><br /><img src="/static/iot-white.png" class="se-question-image"/><br />IoT</div>
+								<div class="divTableCell se-center"></div>
+								<div class="divTableCell se-center"></div>
+								</div>
+
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="api" class="checkbox" id="api"><label class="checkbox__label theme--dark" for="api"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="iot" class="checkbox" id="iot"><label class="checkbox__label theme--dark" for="iot"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"></div>
+								<div class="divTableCell se-center"></div>
+								</div>
+
+								</div>
+								</div>
+						<br />
+						<h2>Synthetic</h2> <br />
+						<div class="divTable">
+								<div class="divTableBody">
+								
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><img src="/static/browser-white.png" class="se-question-image"/><br /><b>Browser</b></div>
+								<div class="divTableCell se-center"><img src="/static/webrequest-white.png" class="se-question-image"/><br /><b>HTTP</b></div>
+								<div class="divTableCell se-center"><img src="/static/events-white.png" class="se-question-image"/><br /><b>External</b></div>
+								<div class="divTableCell se-center"></div>
+								</div>
+								
+								<div class="divTableRow">
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="browser" class="checkbox" id="browser"><label class="checkbox__label theme--dark" for="browser"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="http" class="checkbox" id="http"><label class="checkbox__label theme--dark" for="http"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="external" class="checkbox" id="external"><label class="checkbox__label theme--dark" for="external"><span class="checkbox__caption"></span></label></div></div>
+								<div class="divTableCell se-center"></div>
+								</div>		
+								
+								</div>
+								</div>		
+				</div>
+
+				<div class="column--1-of-2">
+
+					<h2>Languages</h2><br />
+					<div class="divTable">
+							<div class="divTableBody">
+							
+							<div class="divTableRow">
+							<div class="divTableCell se-center"><img src="/static/java-white.png" class="se-question-image"/><br />Java</div>
+							<div class="divTableCell se-center"><img src="/static/dotnet-white.png" class="se-question-image"/><br />.NET</div>
+							<div class="divTableCell se-center"><img src="/static/php-white.png" class="se-question-image"/><br />PHP</div>
+							<div class="divTableCell se-center"><img src="/static/nodejs-white.png" class="se-question-image"/><br />NodeJS</div>
+							</div>
+							
+							<div class="divTableRow">
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="java" class="checkbox" id="java"><label class="checkbox__label theme--dark" for="java"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="dotnet" class="checkbox" id="dotnet"><label class="checkbox__label theme--dark" for="dotnet"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="php" class="checkbox" id="php"><label class="checkbox__label theme--dark" for="php"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="nodejs" class="checkbox" id="nodejs"><label class="checkbox__label theme--dark" for="nodejs"><span class="checkbox__caption"></span></label></div></div>
+							</div>		
+							
+							
+							<div class="divTableRow">
+							<div class="divTableCell se-center"><br /><img src="/static/messaging-white.png" class="se-question-image"/><br />Messaging</div>
+							<div class="divTableCell se-center"><br /><img src="/static/c-white.png" class="se-question-image"/><br />C/C++</div>
+							<div class="divTableCell se-center"><br /><img src="/static/dotnet-white.png" class="se-question-image"/><br />.NET core</div>
+							<div class="divTableCell se-center"><br /><img src="/static/webserver-white.png" class="se-question-image"/><br />Web server</div>
+							</div>
+							
+							<div class="divTableRow">
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="messaging" class="checkbox" id="messaging"><label class="checkbox__label theme--dark" for="messaging"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="c" class="checkbox" id="c"><label class="checkbox__label theme--dark" for="c"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="dotnetcore" class="checkbox" id="dotnetcore"><label class="checkbox__label theme--dark" for="dotnetcore"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="webserver" class="checkbox" id="webserver"><label class="checkbox__label theme--dark" for="webserver"><span class="checkbox__caption"></span></label></div></div>
+							</div>	
+							
+							
+							<div class="divTableRow">
+							<div class="divTableCell se-center"><br /><img src="/static/golang-white.png" class="se-question-image"/><br />Go</div>
+							<div class="divTableCell se-center"><br /><img src="/static/mainframe-white.png" class="se-question-image"/><br />Mainframe</div>
+							<div class="divTableCell se-center"><br /><img src="/static/iib-white.png" class="se-question-image"/><br />IIB</div>
+							<div class="divTableCell se-center"><br /><img src="/static/python-white.png" class="se-question-image"/><br />Python</div>
+							</div>
+							
+							<div class="divTableRow">
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="golang" class="checkbox" id="golang"><label class="checkbox__label theme--dark" for="golang"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="mainframe" class="checkbox" id="mainframe"><label class="checkbox__label theme--dark" for="mainframe"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="iib" class="checkbox" id="iib"><label class="checkbox__label theme--dark" for="iib"><span class="checkbox__caption"></span></label></div></div>
+							<div class="divTableCell se-center"><div class="se-center-more"><input type="checkbox" name="python" class="checkbox" id="python"><label class="checkbox__label theme--dark" for="python"><span class="checkbox__caption"></span></label></div></div>
+							</div>			
+							
+							
+							</div>
+							</div>	
+				</div>
+
+		</div>
+
+
+
+
+				  <!--end of expandable-->
+				</div>
+			  </div>
 												
 											
 <br /><br />
 											<div id="search_results" style="display: none" >
-													<h3>Results</h3>
+													<h2 class="menu-title">Results</h2>
 													<div class="theme--blue">
 													<table id="opp_results" class="table table--expandable" data-behavior="accordion">
 														<thead>
@@ -426,7 +464,7 @@
 														</thead>
 								
 														<tbody class="expandable" style="color: white;">
-															<tr style="background-color: #006bba">
+															<tr style="background-color: #242424">
 																<td></td>
 																<td></td>
 																<td></td>
@@ -456,7 +494,7 @@
 															</tbody>
 														
 															<tbody class="expandable" style="color: white;">
-																<tr style="background-color: #006bba">
+																<tr style="background-color: #242424">
 																<td></td>
 																<td></td>
 																<td></td>
@@ -486,7 +524,7 @@
 																</tbody>
 														
 																<tbody class="expandable" style="color: white;">
-																<tr style="background-color: #006bba">
+																<tr style="background-color: #242424">
 																	<td></td>
 																	<td></td>
 																	<td></td>
@@ -516,7 +554,7 @@
 																</tbody>
 															
 																<tbody class="expandable" style="color: white;">
-																	<tr style="background-color: #006bba">
+																	<tr style="background-color: #242424">
 																	<td></td>
 																	<td></td>
 																	<td></td>
@@ -546,7 +584,7 @@
 																	</tbody>
 														
 																	<tbody class="expandable" style="color: white;">
-																	<tr style="background-color: #006bba">
+																	<tr style="background-color: #242424">
 																		<td></td>
 																		<td></td>
 																		<td></td>
@@ -576,7 +614,7 @@
 																	</tbody>
 																
 																	<tbody class="expandable" style="color: white;">
-																		<tr style="background-color: #006bba">
+																		<tr style="background-color: #242424">
 																		<td></td>
 																		<td></td>
 																		<td></td>
@@ -606,7 +644,7 @@
 																		</tbody>
 														
 																		<tbody class="expandable" style="color: white;">
-																		<tr style="background-color: #006bba">
+																		<tr style="background-color: #242424">
 																			<td></td>
 																			<td></td>
 																			<td></td>
@@ -636,7 +674,7 @@
 																		</tbody>
 																	
 																		<tbody class="expandable" style="color: white;">
-																			<tr style="background-color: #006bba">
+																			<tr style="background-color: #242424">
 																			<td></td>
 																			<td></td>
 																			<td></td>
@@ -666,7 +704,7 @@
 																			</tbody>
 														
 																			<tbody class="expandable" style="color: white;">
-																			<tr style="background-color: #006bba">
+																			<tr style="background-color: #242424">
 																				<td></td>
 																				<td></td>
 																				<td></td>
@@ -696,7 +734,7 @@
 																			</tbody>
 																		
 																			<tbody class="expandable" style="color: white;">
-																				<tr style="background-color: #006bba">
+																				<tr style="background-color: #242424">
 																				<td></td>
 																				<td></td>
 																				<td></td>
@@ -729,7 +767,9 @@
 													 </div> 
 												</div>
 
-
+											<div id="no_search_results" style="display: none">
+												No POC trackers match your search results
+											</div>
 
 
 

@@ -41,56 +41,284 @@
 <!--start of content-->
 <div id="content" class="main-content">
 
-<div id="content_box_admin" >
-	
-	<div class="inner_box centre">
-	
-		<div class="menu-box">
-		
-			<h2 class="menu-title">Search assessments</h2>
-			
-			<p>Find an assessment using an email address, then edit properties of the assessment.</p>	
-			</p>
-			
-			<div class="status-success">Assessment successfully updated!</div>
-			<div class="status-failure">Unable to update assessment.</div>	
+		<div id="content_box_admin" style="width: 900px">
 
-			<div class="share-success">Assessment added to your list!</div>
-			<div class="share-failure">Already added to your list.</div>	
+				<div class="inner_box centre">
 			
-				<br />
+					<div class="menu-box" style="width: 700px">
 			
-				<form id="edit" action="/changeAssessment" method="post" enctype="application/x-www-form-urlencoded">
-				
-					<input type="email" name="email" class="inputfield bigInput search-email" id="emailSearch" placeholder="email" />
-
-					<button id="user_search" type="button" class="btn btn--primary theme--dark landing-bva-button search-button" ><img src="/static/search-white.svg" /></button>	
-						
-						<br /><br /> 	
-						
-					<p id="no_result" style="display: none">No assessments for this user found!</p>					
-					
-
-					
+						<h2 class="menu-title">Search for business value assessments</h2>
+			
+						<p>Search for business value assessments associated with specific users using their email address.</p>
+						</p>
+			
 						<br />
-					
-					<input type="hidden" value="" name="listOfIds" id="listOfIds"/>
+
+						<input type="email" name="email" class="inputfield bigInput search-email" id="emailSearch" placeholder="email" />
+			
+						<br /><br />
+
+						<div style="width: 290px">
+								<a href="/landing"><button id="landing_box_new" type="button" class="btn btn--secondary theme--dark landing-button">Back</button></a> <button role="button" type="submit" id="user_search" class="btn btn--primary theme--dark landing-button">Search</button>
+								</div>		
+			
+						<br /><br />		
+		
+						<div id="search_results" style="display: none" >
+							<h2 class="menu-title">Results</h2>
+							<div class="theme--blue">
+							<table id="opp_results" class="table table--expandable" data-behavior="accordion" style="font-size: 1em; text-align: left; width: 700px">
+								<thead>
+									<tr>
+									<th>Name</th>
+									<th>Region</th>
+									<th>Add yourself</th>
+									</tr>
+								</thead>
+		
+								<tbody class="expandable" style="color: white;">
+									<tr style="background-color: #242424">
+										<td></td>
+										<td></td>
+										<td></td>
+										
+									</tr>
+									</tbody>
+								
+									<tbody class="expandable" style="color: white">
+										<tr style="background-color: #191818">
+										<td></td>
+										<td></td>
+										<td></td>
+										
+										</tr>
+									</tbody>
+								
+									<tbody class="expandable" style="color: white;">
+										<tr style="background-color: #242424">
+										<td></td>
+										<td></td>
+										<td></td>
+										
+										</tr>
+									</tbody>
+								
+									<tbody class="expandable" style="color: white">
+										<tr style="background-color: #191818">
+											<td></td>
+											<td></td>
+											<td></td>
+											
+										</tr>
+	
+										</tbody>
+								
+										<tbody class="expandable" style="color: white;">
+										<tr style="background-color: #242424">
+											<td></td>
+											<td></td>
+											<td></td>
+											
+										</tr>
+	
+										</tbody>
 									
-					<a href="/landing"><button id="deleteBva" type="button" class="btn btn--secondary theme--dark reset-button">Back</button></a> <button id="landing_box_password" type="submit" class="btn btn--primary theme--dark reset-button">Save</button>
-					
-					<br /><br />
-					
-					<div id="results">
+										<tbody class="expandable" style="color: white">
+											<tr style="background-color: #191818">
+											<td></td>
+											<td></td>
+											<td></td>
+											
+											</tr>
+	
+										</tbody>
+									
+										<tbody class="expandable" style="color: white;">
+											<tr style="background-color: #242424">
+											<td></td>
+											<td></td>
+											<td></td>
+											
+											</tr>
+	
+										</tbody>
+									
+										<tbody class="expandable" style="color: white">
+											<tr style="background-color: #191818">
+												<td></td>
+												<td></td>
+												<td></td>
+												
+											</tr>
+	
+											</tbody>
+								
+											<tbody class="expandable" style="color: white;">
+											<tr style="background-color: #242424">
+												<td></td>
+												<td></td>
+												<td></td>
+												
+											</tr>
+	
+											</tbody>
+										
+											<tbody class="expandable" style="color: white">
+												<tr style="background-color: #191818">
+												<td></td>
+												<td></td>
+												<td></td>
+												
+												</tr>
+	
+											</tbody>
+										
+											<tbody class="expandable" style="color: white;">
+												<tr style="background-color: #242424">
+												<td></td>
+												<td></td>
+												<td></td>
+												
+												</tr>
+	
+											</tbody>
+										
+											<tbody class="expandable" style="color: white">
+												<tr style="background-color: #191818">
+													<td></td>
+													<td></td>
+													<td></td>
+													
+												</tr>
+	
+												</tbody>
+								
+												<tbody class="expandable" style="color: white;">
+												<tr style="background-color: #242424">
+													<td></td>
+													<td></td>
+													<td></td>
+													
+												</tr>
+	
+												</tbody>
+											
+												<tbody class="expandable" style="color: white">
+													<tr style="background-color: #191818">
+													<td></td>
+													<td></td>
+													<td></td>
+													
+													</tr>
+	
+												</tbody>
+											
+												<tbody class="expandable" style="color: white;">
+													<tr style="background-color: #242424">
+													<td></td>
+													<td></td>
+													<td></td>
+													
+													</tr>
+	
+												</tbody>
+											
+												<tbody class="expandable" style="color: white">
+													<tr style="background-color: #191818">
+														<td></td>
+														<td></td>
+														<td></td>
+														
+													</tr>
+	
+													</tbody>
+								
+													<tbody class="expandable" style="color: white;">
+													<tr style="background-color: #242424">
+														<td></td>
+														<td></td>
+														<td></td>
+														
+													</tr>
+	
+													</tbody>
+												
+													<tbody class="expandable" style="color: white">
+														<tr style="background-color: #191818">
+														<td></td>
+														<td></td>
+														<td></td>
+														
+														</tr>
+	
+													</tbody>
+												
+													<tbody class="expandable" style="color: white;">
+														<tr style="background-color: #242424">
+														<td></td>
+														<td></td>
+														<td></td>
+														
+														</tr>
+	
+													</tbody>
+												
+													<tbody class="expandable" style="color: white">
+														<tr style="background-color: #191818">
+															<td></td>
+															<td></td>
+															<td></td>
+
+															
+														</tr>
+	
+														</tbody>
+		
+								</table>
+							 </div> 
+						</div>
+	
+					<div id="no_search_results" style="display: none">
+						No assessments have been found for that user
+					</div>
+
 
 					</div>
 
-				</form>	
-		
-		</div>
-		
-	</div>
-	
-</div> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			
+				</div>
+			
+					<br />
+			
+			</div>
 
 </div>
 <!--end of content-->

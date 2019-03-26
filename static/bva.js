@@ -89,6 +89,10 @@ function seOppSearch() {
 
 	.then(function(jsonResponse) {
 
+	if(jsonResponse.status != "failed") {
+	
+		document.getElementById("filters").classList.remove("is-active");
+
 		$('#search_results').css("display", "block");
 
 		for(i=0;i<document.getElementById("opp_results").tBodies.length;i++) {
@@ -151,12 +155,21 @@ function seOppSearch() {
 			}			
 		}
 
-		document.getElementById("search_results").scrollIntoView();
+		//document.getElementById("search_results").scrollIntoView();
+		
 
-	})
+		}
+		else {
+			$('#no_search_results').css("display", "block");
+			var results = 0;
+		}
 
+		})
+	
 	.then(function() {
-		getBvaForClickThrough();
+		if(results = 0) {
+			getBvaForClickThrough();
+		}
 	})
 }
 
@@ -214,6 +227,59 @@ function enableSeBvaSearch() {
 		document.getElementById("results").innerHTML = "";
 		seBvaSearch();
 	});
+}
+
+function seSearchMenuSwitch() {
+	window.addEventListener("hashchange", onLoadAndHashChange, false);
+}
+
+function onLoadAndHashChange() {
+	var anchor = window.location.hash.substr(1);
+	if(anchor == "people") {
+		document.getElementById("people").style.display="flex";
+		document.getElementById("approach").style.display="none";
+		document.getElementById("platform").style.display="none";
+		document.getElementById("application").style.display="none";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[0].className="tab is-active";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[1].className="tab";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[2].className="tab";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[3].className="tab";
+		return false;
+	}
+	if(anchor == "approach") {
+		document.getElementById("people").style.display="none";
+		document.getElementById("approach").style.display="flex";
+		document.getElementById("platform").style.display="none";
+		document.getElementById("application").style.display="none";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[0].className="tab";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[1].className="tab is-active";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[2].className="tab";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[3].className="tab";
+		return false;
+	}
+	if(anchor == "platform") {
+		document.getElementById("people").style.display="none";
+		document.getElementById("approach").style.display="none";
+		document.getElementById("platform").style.display="flex";
+		document.getElementById("application").style.display="none";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[0].className="tab";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[1].className="tab";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[2].className="tab is-active";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[3].className="tab";
+		return false;
+	}
+	if(anchor == "application") {
+		document.getElementById("people").style.display="none";
+		document.getElementById("approach").style.display="none";
+		document.getElementById("platform").style.display="none";
+		document.getElementById("application").style.display="flex";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[0].className="tab";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[1].className="tab";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[2].className="tab";
+		document.getElementsByClassName("tabs")[0].getElementsByTagName("button")[3].className="tab is-active";
+		return false;
+	}	
+	return false;		
 }
 
 function seBvaSearch() {
@@ -385,10 +451,6 @@ function setSeShareLocation() {
 
 function enableUserSearch() {
 	$(" #user_search ").click(function() {
-		$(".status-success").css("display", "none");
-		$(".status-failure").css("display", "none");
-		$(".status-success").css("display", "none");
-		$(".status-failure").css("display", "none");
 		userSearch();
 	});
 }
@@ -422,13 +484,13 @@ function openReport() {
 // 	document.getElementById("share").href=shareHref;
 // }
 
-function setFilters() {
-	newId = document.getElementById("filters").value;
-	document.getElementsByClassName("show-me")[0].style.display="none";
-	document.getElementsByClassName("show-me")[0].classList.remove("show-me");
-	document.getElementById(newId).classList.add("show-me");
-	document.getElementById(newId).style.display="block";
-}
+// function setFilters() {
+// 	newId = document.getElementById("filters").value;
+// 	document.getElementsByClassName("show-me")[0].style.display="none";
+// 	document.getElementsByClassName("show-me")[0].classList.remove("show-me");
+// 	document.getElementById(newId).classList.add("show-me");
+// 	document.getElementById(newId).style.display="block";
+// }
 
 function getAssessmentForEdit() {
 	var myHeaders = new Headers();
@@ -512,7 +574,8 @@ function getSeAssessmentForEdit() {
 }
 
 function addToMine(id) {
-	company = document.getElementById(id).parentElement.parentElement.getElementsByTagName("h2")[0].innerHTML;
+
+	company = document.getElementById(id).parentElement.parentElement.getElementsByTagName("td")[0].innerHTML;
 
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
@@ -537,6 +600,9 @@ function addToMine(id) {
 		if(jsonResponse.status == "success") {
 			scrollToTop();
 			$(".share-success").css("display", "block");
+			console.log("removing event listener");
+			document.getElementById(id).removeEventListener("click", getIt);
+			document.getElementById(id).disabled=true;
 		}
 		if(jsonResponse.status == "fail") {
 			scrollToTop();
@@ -545,7 +611,21 @@ function addToMine(id) {
 	})
 }
 
+function getIt() {
+	addToMine(this.id);
+}
+
 function userSearch() {
+
+
+	for(i=0;i<document.getElementById("opp_results").tBodies.length;i++) {
+		document.getElementById("opp_results").tBodies[i].style.display="none";
+		document.getElementById("opp_results").tBodies[i].children[0].children[0].innerHTML="";
+		document.getElementById("opp_results").tBodies[i].children[0].children[1].innerHTML="";
+		document.getElementById("opp_results").tBodies[i].children[0].children[2].innerHTML="";
+	}
+
+
 	var myHeaders = new Headers();
 	myHeaders.append("Content-Type", "application/json");
 	myHeaders.append("Accept", "application/json");
@@ -561,70 +641,75 @@ function userSearch() {
 		credentials: 'same-origin',
 	}
 
-	fetch('/searchUsers', myInit)
+	Promise.all([
+		fetch("/searchUsers", myInit).then(value => value.json()),
+		fetch("/searchSEYou", myInit).then(value => value.json())
+		]).then((value) => {
+		
+		var personResults = value[0];
+		var youResults = value[1];
 
-	.then(function(response) {
-		return response.json();
-	})
+			console.log(personResults);
 
-	.then(function(jsonResponse) {
+		if(personResults.status != "failed") {
+	
+			$('#search_results').css("display", "block");
+			$('#no_search_results').css("display", "none");
 
-		if(jsonResponse.status == undefined) {
-			$('#no_result').css("display","none");
-			$('#user_list').css("display","block");
+			for(i=0;i<document.getElementById("opp_results").tBodies.length;i++) {
 
-			var newHtml = "";
-			var listId = [];
+				if(personResults[i] != undefined) {
+					document.getElementById("opp_results").tBodies[i].style.display="table-row-group";
 
-			for(i=0; i<jsonResponse.length; i++) {
-				var newId = {
-					id: jsonResponse[i]._id
-				}
+	
+					document.getElementById("opp_results").tBodies[i].children[0].children[0].innerHTML="" + personResults[i].company + "";
+					document.getElementById("opp_results").tBodies[i].children[0].children[1].innerHTML="" + personResults[i].currency + "";
 
-				listId.push(newId);
+					var added = 0;
 
-				if(jsonResponse[i].has_pricing == true) {
-					pricingCheckYes = "selected=\"selected\"";
-					pricingCheckNo = "";
-				}
+					for(x=0; x<youResults.length;x++) {
+						if(youResults[x]._id == personResults[i]._id) {
+							var added = "disabled";
+						}
+					}
 
-				else {
-					pricingCheckYes = "";
-					pricingCheckNo = "selected=\"selected\"";
-				}
+					document.getElementById("opp_results").tBodies[i].children[0].children[2].innerHTML='<button ' + added + ' type="button" style="width: 25px; height: 25px" class="btn btn--primary theme--dark add-button" id="' + personResults[i]._id + '"><img src="/static/add-white.png" height="20px" width="20px"></button>';
 
-				if(jsonResponse[i].currency == "uk") { var currency = "&pound;" }
-				if(jsonResponse[i].currency == "ireland") { var currency = "&euro;" }
-				if(jsonResponse[i].currency == "us") { var currency = "&dollar;" }
-				if(jsonResponse[i].currency == "spain") { var currency = "&euro;" }
-				if(jsonResponse[i].currency == "benelux") { var currency = "&euro;" }
-				if(jsonResponse[i].currency == "germany") { var currency = "&euro;" }
-				if(jsonResponse[i].currency == "france") { var currency = "&euro;" }
-				if(jsonResponse[i].currency == "italy") { var currency = "&euro;" }
-
-				newHtml += "<div class=\"searchResult\"><h2>" + jsonResponse[i].company + "</h2><div class=\"result-block\"><label for=\"currency\" class=\"label\" >Currency</label><input name=\"currency\" disabled type=\"text\" class=\"inputfield currency-result\" value=\"" + currency + "\"/></div><div class=\"result-block\"><label for=\"pricing\" class=\"label\">Seen pricing?</label><select class=\"select pricing-result\" name=\"" + jsonResponse[i]._id + "_pricing\"><option value=\"Yes\" " + pricingCheckYes + ">Yes</option><option value=\"No\" " + pricingCheckNo + ">No</option></select></div><div class=\"result-block\"><label for=\"add\" class=\"label\">Add to yours</label><button type=\"button\" class=\"btn btn--primary theme--dark add-button\" id=\"" + jsonResponse[i]._id + "\"><img src=\"/static/add-white.png\" height=\"40px\" width=\"40px\" /></button></div><br /><br /><div style=\"block\"><label for=\"sfdc\" class=\"label\">Salesforce link</label><input type=\"text\" class=\"inputfield sfdc-result\" placeholder=\"SFDC link\" name=\"" + jsonResponse[i]._id + "_sfdc\" value=\"" + jsonResponse[i].sfdc + "\"/><button id=\"landing_box_password\" type=\"button\" class=\"btn btn--secondary theme--dark landing-bva-button openlink sfdc-link\"><img src=\"/static/external-link-white.png\" height=\"40px\" width=\"40px\"/></button></div></div><br />";
+					if(added == 0) {
+						console.log("adding event listener");
+						document.getElementById(personResults[i]._id).addEventListener("click", getIt);
+					}
+				}	
+			}
+	
+		
+	
+			}
+			else {
+				$('#search_results').css("display", "none");
+				$('#no_search_results').css("display", "block");
+				var results = 0;
 			}
 
-			document.getElementById("listOfIds").value=JSON.stringify(listId);
-			document.getElementById("results").innerHTML = newHtml;
 
-			$(" .openlink ").click(function() {
 
-					url = this.parentElement.children[1].value;
-					openInNewTab(url);
-			});
 
-			$(" .add-button ").click(function() {
-				addToMine(this.id);
-			});
 
-		}
 
-		else {
-			document.getElementById("listOfIds").value = "";
-			$('#no_result').css("display", "block");
-		}
-	})
+
+
+
+
+
+
+
+
+	}).catch((err) => {
+			console.log(err);
+	});
+
+
+
 }
 
 function getAssessmentList() {
