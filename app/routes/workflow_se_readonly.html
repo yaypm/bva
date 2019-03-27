@@ -44,6 +44,11 @@
 </div>
 <!--end of nav bar-->
 
+<div style="width: 100%; height: 40px; background-color: #ffe11c; font-size: 1.2em">
+<p style="margin-left: 20px;">You are viewing in read-only mode</p>
+</div>
+
+
 <!--start of content-->
 <div class="section bva-content">
 
@@ -689,6 +694,21 @@
 
 	<br />
 
+	<div class="bva-question-wrapper">
+
+		<img src="/static/objectives-grey.png" class="bva-question-image"/>
+
+		<div class="bva-input-wrapper">
+
+			<label for="objectives" class="label bva-question-text">High level objectives</label>
+			<textarea rows="3" cols="100" class="textarea" id="objectives"></textarea>
+
+		</div>
+
+	</div>	
+
+	<br />
+
 <h2 class="bva-question-text-centre">Dynatrace approach</h2>
 
 		<br />
@@ -732,7 +752,22 @@
 	</div>	
 
 		<br />
+
+		<div class="bva-question-wrapper">
+
+			<img src="/static/tools-grey.png" class="bva-question-image"/>
 	
+			<div class="bva-input-wrapper">
+	
+				<label for="tool_replacement" class="label bva-question-text">Potential tool replacements</label>
+				<textarea rows="3" cols="100" class="textarea" id="tool_replacement"></textarea>
+	
+			</div>
+	
+		</div>	
+		
+		<br />
+
 <h2 class="bva-question-text-centre">Operating systems</h2>
 
 		<br />
@@ -1171,20 +1206,55 @@
 	<h2 style="margin-left: 5%; margin-top: 20px">Conversation coverage</h2>
 	
 		<br /><br />
+
+		<div style="margin-left: 5%; margin-right: 5%; margin-top: 20px; width: inherit">
 	
-	<div style="margin-left: 10%; margin-right: 10%; margin-top: 20px">
+			<div class="divTable" id="circles" style="width: 100%">
+			<div class="divTableBody">
+			<div class="divTableRow" id="resultCircles" style="width: 50%">
+			<div class="divTableCell" style="max-width: 34%">
+				
+			
+			</div>
+			<div class="divTableCell" style="max-width: 33%">
+			
+			</div>
+			<div class="divTableCell" style="max-width: 33%">
+			
+			</div>
+			</div>
+
+			<div class="divTableRow" id="resultPercent" style="width: 100%">
+				<div class="divTableCell" style="width: 34%">
+					
+				
+				</div>
+				<div class="divTableCell" style="width: 33%">
+				
+				</div>
+				<div class="divTableCell" style="width: 33%">
+				
+				</div>
+				</div>
+			
+			</div>
+			</div>		
+				
+				</div>		
+
+	<!-- <div style="margin-left: 10%; margin-right: 10%; margin-top: 20px">
 	
 <div class="divTable" style="width: 100%">
 <div class="divTableBody">
 <div class="divTableRow" id="resultCircles" style="width: 100%">
-<div class="divTableCell" style="width: 30%">
+<div class="divTableCell" style="width: 33%">
 
 
 </div>
-<div class="divTableCell" style="width: 30%">
+<div class="divTableCell" style="width: 33%">
 
 </div>
-<div class="divTableCell" style="width: 30%">
+<div class="divTableCell" style="width: 34%">
 
 </div>
 </div>
@@ -1196,7 +1266,7 @@
 <div class="divTableCell se-center" style="width: 33%">
 
 </div>
-<div class="divTableCell se-center" style="width: 33%">
+<div class="divTableCell se-center" style="width: 34%">
 
 </div>
 </div>
@@ -1205,7 +1275,7 @@
 </div>
 </div>		
 	
-	</div>
+	</div> -->
 	
 
 

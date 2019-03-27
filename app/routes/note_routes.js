@@ -1121,6 +1121,8 @@ module.exports = function(app, db) {
 				lead_se: "",
 				business_champion: "",
 				technical_champion: "",
+				objectives: "",
+				tool_replacement: "",
 				saas: false,
 				managed: false,
 				offline: false,
@@ -2105,6 +2107,8 @@ module.exports = function(app, db) {
 		busRegex = new RegExp('.*' + req.body.business_champion + '.*');
 		techRegex = new RegExp('.*' + req.body.technical_champion + '.*');
 		tenantRegex = new RegExp('.*' + req.body.tenant + '.*');
+		toolRegex = new RegExp('.*' + req.body.tool_replacement + '.*');
+		objectivesRegex = new RegExp('.*' + req.body.objectives + '.*');
 
 		//searchTerms.company = {$regex : companyRegex, $options: 'i'};
 		searchTerms.lead_sales = {$regex : salesRegex, $options: 'i'};
@@ -2112,6 +2116,9 @@ module.exports = function(app, db) {
 		searchTerms.business_champion = {$regex : busRegex, $options: 'i'};
 		searchTerms.technical_champion = {$regex : techRegex, $options: 'i'};
 		searchTerms.tenant = {$regex : tenantRegex, $options: 'i'};
+		
+		searchTerms.tool_replacement = {$regex : toolRegex, $options: 'i'};
+		searchTerms.objectives = {$regex : objectivesRegex, $options: 'i'};
 
 		options = ["saas","managed","offline","windows","linux","aix","solaris","vmware","azure","aws","openshift","cloudfoundry","ibmcloud","oraclecloud","gcp","heroku","openstack","kubernetes","iaas","paas","faas","softaas","java","dotnet","php","nodejs","messaging","c","dotnetcore","webserver","golang","mainframe","web","mobileapp","thick","citrix","browser","http","external","oaplugins","cnd","agplugins","externalevents","incidents","cmdb"];
 

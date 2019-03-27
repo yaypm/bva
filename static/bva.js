@@ -64,7 +64,10 @@ function seOppSearch() {
 			lead_se: document.getElementById("lead_se").value,
 			business_champion: document.getElementById("business_champion").value,
 			technical_champion: document.getElementById("technical_champion").value,
-			tenant: document.getElementById("tenant").value};
+			tenant: document.getElementById("tenant").value,
+			objectives: document.getElementById("objectives").value,
+			tool_replacement: document.getElementById("tool_replacement").value
+		};
 
 	options = ["saas","managed","offline","windows","linux","aix","solaris","vmware","azure","aws","openshift","cloudfoundry","ibmcloud","oraclecloud","gcp","heroku","openstack","kubernetes","iaas","paas","faas","softaas","java","dotnet","php","nodejs","messaging","c","dotnetcore","webserver","golang","mainframe","web","mobileapp","thick","citrix","browser","http","external","oaplugins","cnd","agplugins","externalevents","incidents","cmdb","cloud","onprem","hybrid","docker","iib","python","api","iot"];
 
@@ -153,6 +156,7 @@ function seOppSearch() {
 			else {
 				document.getElementById("opp_results").tBodies[i].style.display="none";
 			}			
+			var results = 1;
 		}
 
 		//document.getElementById("search_results").scrollIntoView();
@@ -166,8 +170,10 @@ function seOppSearch() {
 
 		})
 	
-	.then(function() {
-		if(results = 0) {
+	.then(function(results) {
+		console.log("thinking about it");
+		if(results != 0) {
+			console.log("doing it");
 			getBvaForClickThrough();
 		}
 	})
@@ -735,14 +741,14 @@ function getAssessmentList() {
 
 		if(jsonObj[0]._id == "new") {
 			document.getElementById("results").innerHTML = 'Please create an assessment to get started!';
-			dtrum.identifyUser(jsonObj[0].username);
+			//dtrum.identifyUser(jsonObj[0].username);
 		}
 
 		else {
 			for(i=0;i<jsonObj.length;i++) {
 				newHTML += '<p><h1>' + jsonObj[i].company + '</h1><a href="/workflow?bva_id=' + jsonObj[i].id + '#biz"><u>View</u></a> | <a href="/edit?bva_id=' + jsonObj[i].id + '"><u>Edit</u></a> | <a href="/share?bva_id=' + jsonObj[i].id + '"><u>Share</u></a></p>';
 			}
-			dtrum.identifyUser(jsonObj[0].username);
+			//dtrum.identifyUser(jsonObj[0].username);
 			document.getElementById("results").innerHTML = newHTML;
 			//setBvaLinks();
 		}
@@ -772,14 +778,14 @@ function getSEAssessmentList() {
 
 		if(jsonObj[0]._id == "new") {
 			document.getElementById("se_id").innerHTML = '<option value="">Create an assessment!</option>';
-			dtrum.identifyUser(jsonObj[0].username);
+			//dtrum.identifyUser(jsonObj[0].username);
 		}
 
 		else {
 			for(i=0;i<jsonObj.length;i++) {
 				newHTML += '<p><h1>' + jsonObj[i].company + '</h1><a href="/workflow_se?se_id=' + jsonObj[i].id + '#technical"><u>View</u></a> | <a href="/edit_se?se_id=' + jsonObj[i].id + '"><u>Edit</u></a> | <a href="/share_se?se_id=' + jsonObj[i].id + '"><u>Share</u></a></p>';
 			}
-			dtrum.identifyUser(jsonObj[0].username);
+			//dtrum.identifyUser(jsonObj[0].username);
 			document.getElementById("results_tracker").innerHTML = newHTML;
 			//setSeLinks();
 		}
@@ -967,6 +973,8 @@ function getSeAssessmentData() {
 		document.getElementById("lead_se").value = jsonResponse.lead_se;
 		document.getElementById("business_champion").value = jsonResponse.business_champion;
 		document.getElementById("technical_champion").value = jsonResponse.technical_champion;
+		document.getElementById("objectives").value = jsonResponse.objectives;
+		document.getElementById("tool_replacement").value = jsonResponse.tool_replacement;
 		checkInput("saas", jsonResponse.saas);
 		checkInput("managed", jsonResponse.managed);
 		checkInput("offline", jsonResponse.offline);
@@ -1156,6 +1164,8 @@ function updateSeAssessment() {
 		lead_se: document.getElementById("lead_se").value,
 		business_champion: document.getElementById("business_champion").value,
 		technical_champion: document.getElementById("technical_champion").value,
+		objectives: document.getElementById("objectives").value,
+		tool_replacement: document.getElementById("tool_replacement").value,
 		saas: document.getElementById("saas").checked,
 		managed: document.getElementById("managed").checked,
 		offline: document.getElementById("offline").checked,
@@ -1435,7 +1445,7 @@ function addSeListeners() {
 		drawSeResults();
 	} );
 
-	$('#autonomous_appowner_feedback, #fullstack_appowner_feedback, #fullstack_dev_feedback, #fullstack_ops_feedback, #outcomes_appowner_feedback, #outcomes_cxo_feedback, #lead_sales, #lead_se, #business_champion, #technical_champion, #tenant').on( "blur", function() {
+	$('#objectives, #tool_replacement, #autonomous_appowner_feedback, #fullstack_appowner_feedback, #fullstack_dev_feedback, #fullstack_ops_feedback, #outcomes_appowner_feedback, #outcomes_cxo_feedback, #lead_sales, #lead_se, #business_champion, #technical_champion, #tenant').on( "blur", function() {
 		// if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
 		 updateSeAssessment();
 		 drawSeResults();
@@ -1503,22 +1513,22 @@ function addSeReadOnlyListeners() {
 
 	$('.radio').click(function() {
 		//this.parentElement.getElementsByTagName("input")[0].checked == true;
-		drawSeResults();
+		//drawSeResults();
 	} );
 
-	$('#autonomous_appowner_feedback, #fullstack_appowner_feedback, #fullstack_dev_feedback, #fullstack_ops_feedback, #outcomes_appowner_feedback, #outcomes_cxo_feedback, #lead_sales, #lead_se, #business_champion, #technical_champion, #tenant').on( "blur", function() {
+	$('#objectives, #tool_replacement, #autonomous_appowner_feedback, #fullstack_appowner_feedback, #fullstack_dev_feedback, #fullstack_ops_feedback, #outcomes_appowner_feedback, #outcomes_cxo_feedback, #lead_sales, #lead_se, #business_champion, #technical_champion, #tenant').on( "blur", function() {
 		// if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
-		 drawSeResults();
+		 //drawSeResults();
 	} );
 	
 	$('.checkbox').click(function() {
 		// if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
-		 drawSeResults();
+		 //drawSeResults();
 	} );	
 	
 	$(".select").change(function() {
 		// if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
-		 drawSeResults();
+		 //drawSeResults();
 	} );		
 
 }

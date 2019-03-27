@@ -16,10 +16,18 @@
 	<script src="/static/bva.js"></script>
 	<script src="//code.jquery.com/jquery-1.12.4.js"></script>
 	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="/static/html2canvas.js"></script>
 	<script type="text/javascript">
 		document.addEventListener("DOMContentLoaded", function(event) {
 			addReadOnlyListeners();
 		});
+
+		function takeScreenshot() {
+			html2canvas(document.getElementById("total_stacked_bar")).then(function(canvas) {
+				originalBody = document.getElementById("total_stacked_bar");
+				originalBody.replaceWith(canvas);
+			});
+		}
 	</script>
 
 </head>
@@ -38,7 +46,9 @@
 
 </div>
 <!--end of nav bar-->
-
+<div style="width: 100%; height: 40px; background-color: #ffe11c; font-size: 1.2em">
+	<p style="margin-left: 20px;">You are viewing in read-only mode</p>
+	</div>
 <!--start of content-->
 <div class="section bva-content">
 
@@ -76,6 +86,11 @@
 	<span tabindex="1" class="tag user-company">
 	  <span class="tag__key">company:</span>
 
+	</span>
+
+	<span style="display: none" tabindex="1" class="tag user-shared">
+		<span class="tag__key">shared with:</span>
+  
 	</span>
 
 </div>
@@ -202,6 +217,11 @@
 
 	<span tabindex="1" class="tag user-company">
 	  <span class="tag__key">id:</span>
+	</span>
+
+	<span style="display: none" tabindex="1" class="tag user-shared">
+		<span class="tag__key">shared with:</span>
+  
 	</span>
 
 </div>
@@ -364,7 +384,7 @@
 
 			<div class="bva-question-existing-wrapper">
 
-				<label class="label bva-question-existing-label">% replaced with Dynatrace <div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-tools.svg"/>Reduction of existing monitoring tools</li> </ul></div> </div></label>
+				<label class="label bva-question-existing-label">% replaced with Dynatrace (year 1/year 2/year 3)<div class="tooltip"><img width=20px height=20px src="/static/help-grey.png" /><div class="tooltiptext">This input is used in the following use cases:<br /><ul style="list-style-type: none"> <br /><li><img height="30px" width="30px" style="vertical-align: middle" src="/static/results/ops-reduced-tools.svg"/>Reduction of existing monitoring tools</li> </ul></div> </div></label>
 				<!--<input type="text" class="inputfield bva-question-exsiting-input" id="existing_y1" placeholder="Year 1"/>-->
 				<select class="select bva-question-exsiting-input" id="existing_y1">
 				  <option value="100" selected="selected">100%</option>
@@ -465,6 +485,11 @@
 
 	<span tabindex="1" class="tag user-company">
 	  <span class="tag__key">id:</span>
+	</span>
+
+	<span style="display: none" tabindex="1" class="tag user-shared">
+		<span class="tag__key">shared with:</span>
+  
 	</span>
 
 </div>
@@ -607,7 +632,7 @@
 
 	<div class="bva-title-wrapper-inner">
 
-		<h1 class="bva-title-text">Options</h1>
+		<h1 class="bva-title-text">Assumptions</h1>
 		<p>Provide the impact that Dynatrace will have to you</p>
 
 	</div>
@@ -624,6 +649,11 @@
 
 	<span tabindex="1" class="tag user-company">
 	  <span class="tag__key">id:</span>
+	</span>
+
+	<span style="display: none" tabindex="1" class="tag user-shared">
+		<span class="tag__key">shared with:</span>
+  
 	</span>
 
 </div>
@@ -947,13 +977,13 @@
 
 </div>
 
-	<div id="results" style="display: none">
+	<div id="results" style="display: none; font-family: BerninaSansLight">
 
-		<h2 style="margin-left: 5%; margin-top: 20px">Total cost savings and revenue gains</h2>
+		<h2 style="margin-left: 5%; margin-top: 20px">Total cost efficiences and savings</h2>
 
 		<p style="margin-left: 5%; width: 90%; font-family: BerninaSansLight">Based upon information provided about the current costs/revenue impact of performance problems, the summary below shows the expected improvements from working with Dynatrace.</p>
 
-		<div id="total_stacked_bar" style="height: 450px; margin-left: 10%; margin-right: 10%; margin-top: 20px"></div>
+		<div id="total_stacked_bar" style="height: 450px; margin-left: 10%; margin-right: 10%; margin-top: 20px; font-family: BerninaSansLight"></div>
 			<br /><br />
 
 		<div id="result_total_table">
