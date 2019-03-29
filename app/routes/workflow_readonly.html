@@ -21,7 +21,9 @@
 		document.addEventListener("DOMContentLoaded", function(event) {
 			var urlParams = new URLSearchParams(window.location.search);
 			var bva_id = urlParams.get('bva_id');
-			dtrum.sendSessionProperties(null,null,{"bva_id":bva_id});
+			if(dtrum != undefined) {
+				dtrum.sendSessionProperties(null,null,{"bva_id":bva_id});
+			}
 			addReadOnlyListeners();
 		});
 

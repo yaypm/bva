@@ -17,13 +17,21 @@ var bodyParser = require('body-parser');
 var path = require('path');	
 var app = express();
 
-var port = 8080;
+var port;
+
+if(process.env.PORT == undefined) {
+    port = 8080;
+}
+else {
+    port = process.env.PORT;
+}
 
 app.use('/static', express.static(path.join(__dirname, 'static')))
 
 app.use(bodyParser.urlencoded({ extended: true }));	
 require('./app/routes')(app, {});	
 
-app.listen(process.env.PORT, () => {
-console.log('We are live on ' + process.env.PORT);
+
+app.listen(port, () => {
+    console.log('We are live on ' + port);
 });	
