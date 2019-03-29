@@ -22,6 +22,10 @@
 			addReadOnlyListeners();
 		});
 
+		var urlParams = new URLSearchParams(window.location.search);
+		var bva_id = urlParams.get('bva_id');
+		dtrum.sendSessionProperties(null,null,{"bva_id":bva_id});
+		
 		function takeScreenshot() {
 			html2canvas(document.getElementById("total_stacked_bar")).then(function(canvas) {
 				originalBody = document.getElementById("total_stacked_bar");
