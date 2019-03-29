@@ -19,12 +19,13 @@
 	<script src="/static/html2canvas.js"></script>
 	<script type="text/javascript">
 		document.addEventListener("DOMContentLoaded", function(event) {
+			var urlParams = new URLSearchParams(window.location.search);
+			var bva_id = urlParams.get('bva_id');
+			dtrum.sendSessionProperties(null,null,{"bva_id":bva_id});
 			addReadOnlyListeners();
 		});
 
-		var urlParams = new URLSearchParams(window.location.search);
-		var bva_id = urlParams.get('bva_id');
-		dtrum.sendSessionProperties(null,null,{"bva_id":bva_id});
+
 		
 		function takeScreenshot() {
 			html2canvas(document.getElementById("total_stacked_bar")).then(function(canvas) {
