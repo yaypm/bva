@@ -20,7 +20,9 @@
 			$(".leftContainer").css("height", $('.options').css('height'));
 		};	 
 	document.addEventListener("DOMContentLoaded", function(event) {
-
+		var urlParams = new URLSearchParams(window.location.search);
+		var se_id = urlParams.get('se_id');
+		dtrum.sendSessionProperties(null,null,{"se_id":se_id});
 		
 	 addSeListeners();
 	 });
