@@ -741,7 +741,7 @@ function getAssessmentList() {
 
 		if(jsonObj[0]._id == "new") {
 			document.getElementById("results").innerHTML = 'Please create an assessment to get started!';
-			if(dtrum != undefined) {
+			if (typeof dtrum !== 'undefined') {
 				dtrum.identifyUser(jsonObj[0].username);
 			}	
 		}
@@ -750,7 +750,7 @@ function getAssessmentList() {
 			for(i=0;i<jsonObj.length;i++) {
 				newHTML += '<p><h1>' + jsonObj[i].company + '</h1><a href="/workflow?bva_id=' + jsonObj[i].id + '#biz"><u>View</u></a> | <a href="/edit?bva_id=' + jsonObj[i].id + '"><u>Edit</u></a> | <a href="/share?bva_id=' + jsonObj[i].id + '"><u>Share</u></a></p>';
 			}
-			if(dtrum != undefined) {
+			if (typeof dtrum !== 'undefined') {
 				dtrum.identifyUser(jsonObj[0].username);
 			}
 			document.getElementById("results").innerHTML = newHTML;
