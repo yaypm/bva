@@ -1262,7 +1262,7 @@ module.exports = function(app, db) {
 					res.end(JSON.stringify(body));
 					db.close();
 				}
-
+		
 				if(items.length > 0) {
 					res.writeHead(200, {'Access-Control-Allow-Headers':'content-type'});
 					res.end(JSON.stringify(items));

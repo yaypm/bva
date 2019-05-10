@@ -781,7 +781,7 @@ function getSEAssessmentList() {
 		var newHTML = '';
 
 		if(jsonObj[0]._id == "new") {
-			document.getElementById("se_id").innerHTML = '<option value="">Create an assessment!</option>';
+			document.getElementById("results_tracker").innerHTML = 'Please create a POC tracker to get started!';
 			//dtrum.identifyUser(jsonObj[0].username);
 		}
 
