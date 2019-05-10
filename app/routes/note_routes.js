@@ -366,22 +366,16 @@ module.exports = function(app, db) {
 			}
 
 			else {
-				MongoClient.connect(connectionOptions, function(err, db) {
-					var collection = db.collection('se');
-					collection.findOne({"email":username}, {collation:{ locale: "en", strength: 2 }}, function(err, result) {
-						if (err) throw err;
-							if(result == null) {
-								db.close();
-								console.log("apparently no results");
-								res.redirect('/landing');
-							}
-							else {
-								db.close();
-								res.sendFile(path.join(__dirname + '/createnew_se.html'));
-								//console.log(username + " tried to access a bva they don't have access to: " + bva_id);
-							}
-					});
-				})
+			
+				var results = new RegExp('(@dynatrace.com)').exec(req.session.username);
+
+				if(results != undefined) {
+					res.sendFile(path.join(__dirname + '/createnew_se.html'));
+				}
+	
+				else {
+					res.redirect('/landing');
+				}			
 			}
 		}
 
@@ -585,21 +579,7 @@ module.exports = function(app, db) {
 			res.redirect('/');
 		}
 		else {
-			var username = req.session.username;
-			MongoClient.connect(connectionOptions, function(err, db) {
-				var collection = db.collection('se');
-				collection.findOne({"email":username}, {collation:{ locale: "en", strength: 2 }}, function(err, result) {
-					if (err) throw err;
-						if(result == null) {
-							db.close();
-							res.redirect('/');
-						}
-						else {
-							db.close();
-							res.sendFile(path.join(__dirname + '/landing.html'));
-						}
-					});
-				})
+			res.sendFile(path.join(__dirname + '/landing.html'));
 		}
 	});
 
@@ -1673,10 +1653,9 @@ module.exports = function(app, db) {
 					else {
 						if(items[0] == undefined) {
 
-							var collection = db.collection('se');
-							var results = collection.find({email:username_share}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
+							var results = new RegExp('(@dynatrace.com)').exec(req.session.username);
 
-							if(items[0] != undefined) {
+							if(results != undefined) {
 								var collection = db.collection('se_user_assessments');
 								var results = collection.find({id:id, username:username}).collation({locale: 'en', strength: 2 }).toArray(function(err, items) {
 
@@ -1713,7 +1692,7 @@ module.exports = function(app, db) {
 								res.redirect('/share_se?se_id=' + id + "&status=failed");
 								db.close();
 							}
-							})
+							
 						}
 						else {
 							res.redirect('/share_se?se_id=' + id + "&status=failed");
@@ -2331,22 +2310,19 @@ module.exports = function(app, db) {
 		}
 
 		else {
-			MongoClient.connect(connectionOptions, function(err, db) {
-				var collection = db.collection('se');
-				collection.findOne({"email":username}, {collation:{ locale: "en", strength: 2 }}, function(err, result) {
-					if (err) throw err;
-						if(result == null) {
-							db.close();
-							var response = {"status":"other"};
-							res.end(JSON.stringify(response));
-						}
-						else {
+			var results = new RegExp('(@dynatrace.com)').exec(req.session.username);
+
+						if(results != undefined) {
 							db.close();
 							var response = {"status":"se"};
 							res.end(JSON.stringify(response));
 						}
-					});
-				})
+						else {
+							db.close();
+							var response = {"status":"other"};
+							res.end(JSON.stringify(response));
+						}
+
 		}
 
 	});
