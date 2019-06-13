@@ -1638,9 +1638,9 @@ function getTabs() {
 		document.getElementsByClassName("user-email")[3].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
 		document.getElementsByClassName("user-company")[3].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
 
-		if(jsonObj.has_pricing == true) {
-			$('#pricing').css("display", "block");
-		}
+		// if(jsonObj.has_pricing == true) {
+		// 	$('#pricing').css("display", "block");
+		// }
 
 		if(document.getElementById("company_name")) {
 			document.getElementById("company_name").innerHTML=jsonObj.company;
