@@ -1639,7 +1639,7 @@ function getTabs() {
 		document.getElementsByClassName("user-company")[3].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
 
 		// if(jsonObj.has_pricing == true) {
-		// 	$('#pricing').css("display", "block");
+		$('#pricing').css("display", "block");
 		// }
 
 		if(document.getElementById("company_name")) {
