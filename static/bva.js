@@ -1449,7 +1449,7 @@ function addSeListeners() {
 		drawSeResults();
 	} );
 
-	$('#objectives, #tool_replacement, #autonomous_appowner_feedback, #fullstack_appowner_feedback, #fullstack_dev_feedback, #fullstack_ops_feedback, #outcomes_appowner_feedback, #outcomes_cxo_feedback, #lead_sales, #lead_se, #business_champion, #technical_champion, #tenant').on( "blur", function() {
+	$('#objectives, #tool_replacement, #autonomous_appowner_feedback, #fullstack_appowner_feedback, #fullstack_appowner_value, #fullstack_dev_feedback, #fullstack_ops_feedback, #outcomes_appowner_feedback, #outcomes_cxo_feedback, #lead_sales, #lead_se, #business_champion, #technical_champion, #tenant').on( "blur", function() {
 		// if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
 		 updateSeAssessment();
 		 drawSeResults();
@@ -1520,7 +1520,7 @@ function addSeReadOnlyListeners() {
 		//drawSeResults();
 	} );
 
-	$('#objectives, #tool_replacement, #autonomous_appowner_feedback, #fullstack_appowner_feedback, #fullstack_dev_feedback, #fullstack_ops_feedback, #outcomes_appowner_feedback, #outcomes_cxo_feedback, #lead_sales, #lead_se, #business_champion, #technical_champion, #tenant').on( "blur", function() {
+	$('#objectives, #tool_replacement, #autonomous_appowner_feedback, #fullstack_appowner_feedback, #fullstack_appowner_value, #fullstack_dev_feedback, #fullstack_ops_feedback, #outcomes_appowner_feedback, #outcomes_cxo_feedback, #lead_sales, #lead_se, #business_champion, #technical_champion, #tenant').on( "blur", function() {
 		// if(this.value != '' && this.value != undefined) {this.value = getNumbersAndDots(this.value) + '%'; temp = this.value; this.value = ''; this.value = temp; } else { this.value = '';}
 		 //drawSeResults();
 	} );
