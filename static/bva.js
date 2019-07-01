@@ -1646,6 +1646,10 @@ function getTabs() {
 			document.getElementById("company_name").innerHTML=jsonObj.company;
 		}
 
+		if (typeof dtrum !== 'undefined') {
+			dtrum.sendSessionProperties(null,null,{"bva_name":jsonObj.company});
+		}
+
 		getSharedWith();
 
 		getAssessmentData();
@@ -1745,6 +1749,10 @@ function getSeTabs() {
 
 		document.getElementsByClassName("user-email")[3].innerHTML = "<span class=\"tag__key\">email: </span>" + jsonObj.username;
 		document.getElementsByClassName("user-company")[3].innerHTML = "<span class=\"tag__key\">company: </span>" + jsonObj.company;
+
+		if (typeof dtrum !== 'undefined') {
+			dtrum.sendSessionProperties(null,null,{"se_name":jsonObj.company});
+		}
 	})
 	
 	getSeAssessmentData();
