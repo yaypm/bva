@@ -339,9 +339,15 @@ function seBvaSearch() {
 
 function getNumbers(txt) {
 	if (txt != "") {
-		var numb = txt.match(/\d/g);
-		numb = numb.join("");
 
+		var numb = txt.match(/\d/g);
+
+		if(numb != null) {
+			numb = numb.join("");
+		}
+		else {
+			numb = 0;
+		}
 		return numb;
 	}
 
@@ -1762,11 +1768,23 @@ function addExistingTool() {
 
 	var tool_id = generateId();
 
+	annual_cost = document.getElementById("annual_cost").value;
+	no_fte_config = document.getElementById("no_fte_config").value;
+
+	if(annual_cost == "") {
+		annual_cost = "0";
+	}
+
+	if(no_fte_config == "") {
+		no_fte_config == "0";
+	}
+
+	
 	var existingTool = {
 		tool_id: tool_id,
 		name_tool: document.getElementById("name_tool").value,
-		annual_cost: getNumbers(document.getElementById("annual_cost").value),
-		no_fte_config: getNumbersAndDots(document.getElementById("no_fte_config").value),
+		annual_cost: getNumbers(annual_cost),
+		no_fte_config: getNumbersAndDots(no_fte_config),
 		existing_y1: getNumbers(document.getElementById("existing_y1").value),
 		existing_y2: getNumbers(document.getElementById("existing_y2").value),
 		existing_y3: getNumbers(document.getElementById("existing_y3").value),
