@@ -867,7 +867,7 @@ function getAssessmentData(read) {
 		var currency = document.getElementById("currency").value;
 
 		for(i=0;i<jsonResponse.existing_apps.length;i++) {
-			existingApps += "<div class=\"bva-question-wrapper bva-question-top \" \"><div class=\"bva-question-existing-wrapper\">	<div style=\"position: relative\"> <h2 style=\"display: inline-block\">" + jsonResponse.existing_apps[i].name + "</h2> <div style=\"display: inline-block; position: absolute; right: 0px\"><a class=\"delete\" id=\"" + jsonResponse.existing_apps[i].tool_id + "\"><img src=\"/static/delete-grey.svg\"  width=\"40px\" height=\"40px\" /></a></div> </div><p>" + currency + parseInt(jsonResponse.existing_apps[i].annual_costs).toLocaleString() + " - " + jsonResponse.existing_apps[i].ftes + " FTEs</p><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 1: " + jsonResponse.existing_apps[i].y1 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y1 + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 2: " + jsonResponse.existing_apps[i].y2 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y2 + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 3: " + jsonResponse.existing_apps[i].y3 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y3 + "\" max=\"100\" id=\"p0\"></progress></div>	</div></div><br />";
+			existingApps += "<div class=\"bva-question-wrapper bva-question-top \" \"><div class=\"bva-question-existing-wrapper\">	<div style=\"position: relative\"> <h2 style=\"display: inline-block\">" + jsonResponse.existing_apps[i].name + "</h2> <div style=\"display: inline-block; position: absolute; right: 0px\"><a class=\"delete\" id=\"" + jsonResponse.existing_apps[i].tool_id + "\"><img src=\"/static/delete-grey.svg\"  width=\"40px\" height=\"40px\" /></a></div> </div><p>" + currency + parseInt(jsonResponse.existing_apps[i].annual_costs).toLocaleString() + "</p><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 1: " + jsonResponse.existing_apps[i].y1 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y1 + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 2: " + jsonResponse.existing_apps[i].y2 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y2 + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 3: " + jsonResponse.existing_apps[i].y3 + "%</label><progress class=\"progressbar\" value=\"" + jsonResponse.existing_apps[i].y3 + "\" max=\"100\" id=\"p0\"></progress></div>	</div></div><br />";
 		}
 
 		document.getElementById("existing_apps").innerHTML = existingApps;
@@ -1769,22 +1769,19 @@ function addExistingTool() {
 	var tool_id = generateId();
 
 	annual_cost = document.getElementById("annual_cost").value;
-	no_fte_config = document.getElementById("no_fte_config").value;
 
 	if(annual_cost == "") {
 		annual_cost = "0";
 	}
 
-	if(no_fte_config == "") {
-		no_fte_config == "0";
-	}
+	//no_fte_config == "0";
 
 	
 	var existingTool = {
 		tool_id: tool_id,
 		name_tool: document.getElementById("name_tool").value,
 		annual_cost: getNumbers(annual_cost),
-		no_fte_config: getNumbersAndDots(no_fte_config),
+		no_fte_config: 0,
 		existing_y1: getNumbers(document.getElementById("existing_y1").value),
 		existing_y2: getNumbers(document.getElementById("existing_y2").value),
 		existing_y3: getNumbers(document.getElementById("existing_y3").value),
@@ -1810,7 +1807,7 @@ function addExistingTool() {
 
 	.then(function() {
 
-		var newApp = "<div class=\"bva-question-wrapper bva-question-top \" \"><div class=\"bva-question-existing-wrapper\">	<div style=\"position: relative\"> <h2 style=\"display: inline-block\">" + document.getElementById("name_tool").value + "</h2> <div style=\"display: inline-block; position: absolute; right: 0px\"><a class=\"delete\" id=\"" + tool_id + "\"><img src=\"/static/delete-grey.svg\"  width=\"40px\" height=\"40px\" /></a></div> </div><p>" + document.getElementById("annual_cost").value + " - " + document.getElementById("no_fte_config").value + " FTEs</p><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 1: " + document.getElementById("existing_y1").value + "%</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y1").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 2: " + document.getElementById("existing_y2").value + "%</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y2").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 3: " + document.getElementById("existing_y3").value + "%</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y3").value) + "\" max=\"100\" id=\"p0\"></progress></div>	</div></div><br />";
+		var newApp = "<div class=\"bva-question-wrapper bva-question-top \" \"><div class=\"bva-question-existing-wrapper\">	<div style=\"position: relative\"> <h2 style=\"display: inline-block\">" + document.getElementById("name_tool").value + "</h2> <div style=\"display: inline-block; position: absolute; right: 0px\"><a class=\"delete\" id=\"" + tool_id + "\"><img src=\"/static/delete-grey.svg\"  width=\"40px\" height=\"40px\" /></a></div> </div><p>" + document.getElementById("annual_cost").value + "</p><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 1: " + document.getElementById("existing_y1").value + "%</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y1").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 2: " + document.getElementById("existing_y2").value + "%</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y2").value) + "\" max=\"100\" id=\"p0\"></progress></div><div class=\"theme--green\"><label class=\"label--progressbar\" for=\"p0\">Year 3: " + document.getElementById("existing_y3").value + "%</label><progress class=\"progressbar\" value=\"" + getNumbers(document.getElementById("existing_y3").value) + "\" max=\"100\" id=\"p0\"></progress></div>	</div></div><br />";
 
 		$( "#existing_apps" ).append( newApp );
 		$(".leftContainer").css("height", $('.ops').css('height'));
@@ -1823,7 +1820,7 @@ function addExistingTool() {
 
 		document.getElementById("name_tool").value = "";
 		document.getElementById("annual_cost").value = "";
-		document.getElementById("no_fte_config").value = "";
+		//document.getElementById("no_fte_config").value = "";
 		document.getElementById("existing_y1").value = "100";
 		document.getElementById("existing_y2").value = "100";
 		document.getElementById("existing_y3").value = "100";
@@ -2314,6 +2311,23 @@ function drawResults() {
 
 	.then(function(jsonResponse) {
 
+		function enableCalcDropdowns() {
+			var coll = document.getElementsByClassName("collapsible");
+			var i;
+			
+			for (i = 0; i < coll.length; i++) {
+			coll[i].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var content = this.nextElementSibling;
+				if (content.style.display === "block") {
+				content.style.display = "none";
+				} else {
+				content.style.display = "block";
+				}
+			});
+			}
+		}
+
 			var check = new RegExp("report?").exec(window.location.href);
 			var bulletpoints = "";
 			var bulletcosts = "";
@@ -2343,6 +2357,9 @@ function drawResults() {
 				var currentHtml = "";
 				var expectedHtml = "";
 
+				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/ops-reduced-tools.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 15px\"><h3>Reduction of existing monitoring tools</h3></div><br />";
+				newHtml += '<a href="javascript:;" class="collapsible">Show calculation</a><div class="content" style="display: none"><p>';
+
 				for(i=0;i<number;i++) {
 					var ftes = 0;
 					
@@ -2353,7 +2370,7 @@ function drawResults() {
 						ftes = jsonResponse.existing_apps[i].ftes;
 					}
 
-					annual_cost = (parseFloat(jsonResponse.existing_apps[i].annual_costs)) + (parseFloat(jsonResponse.existing_apps[i].ftes) * parseFloat(jsonResponse.operation_cost));
+					annual_cost = (parseFloat(jsonResponse.existing_apps[i].annual_costs));
 					percent1 = (parseFloat(jsonResponse.existing_apps[i].y1)/100);
 					percent2 = (parseFloat(jsonResponse.existing_apps[i].y2)/100);
 					percent3 = (parseFloat(jsonResponse.existing_apps[i].y3)/100);
@@ -2362,8 +2379,11 @@ function drawResults() {
 					existingy3 = parseInt(existingy3 + (annual_cost * percent3));
 					existingTotal = existingy1 + existingy2 + existingy3;
 					
+					newHtml += jsonResponse.existing_apps[i].name + " (" + processMoney(parseInt(jsonResponse.existing_apps[i].annual_costs).toString()) + " annual license/services)<br/ >";
+					newHtml += processMoney(parseInt(existingTotal).toString()) + " total savings: " + processMoney(parseInt(existingy1).toString()) + " (" + jsonResponse.existing_apps[i].y1 + "%) year 1, " + processMoney(parseInt(existingy2).toString()) + "(" + jsonResponse.existing_apps[i].y2 + "%) year 2, " + processMoney(parseInt(existingy3).toString()) + "(" + jsonResponse.existing_apps[i].y3 + ") year 3 <br /><br />";
+
 					if(check != null) {
-						currentHtml += "<li>" + jsonResponse.existing_apps[i].name + ": <b>" + processMoney(jsonResponse.existing_apps[i].annual_costs.toString()) + "</b> annual costs, <b>" + jsonResponse.existing_apps[i].ftes + "</b> FTEs used for configuration and maintenance</li>";
+						currentHtml += "<li>" + jsonResponse.existing_apps[i].name + ": <b>" + processMoney(jsonResponse.existing_apps[i].annual_costs.toString()) + "</b> annual costs</li>";
 					}
 
 					if(check != null) {
@@ -2374,7 +2394,9 @@ function drawResults() {
 				addHtml += currentHtml;
 				addHtml += "</ul></div></div><div class=\"divTableCell\" style=\"width: 50%\"><b>Expected replacements</b><div class=\"theme--green\"><ul class=\"list\">";
 
-				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/ops-reduced-tools.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 15px\"><h3>Reduction of existing monitoring tools</h3></div><br /><dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(existingTotal.toString()) + "</b></dd></dl>";
+				newHtml += "</p></div><br /><br />";
+
+				newHtml += "<dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(existingy3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(existingTotal.toString()) + "</b></dd></dl>";
 
 				if(check != null) {
 					addHtml += expectedHtml;
@@ -2398,20 +2420,20 @@ function drawResults() {
 			//BUSINESS - revenue increase
 			revenue = parseFloat(getNumbersAndDots(document.getElementById("company_revenue").value));
 
-			percent = parseFloat(getNumbersAndDots(document.getElementById("revenue_dependent").value));
-			percent = percent / 100;
+			prePercent = parseFloat(getNumbersAndDots(document.getElementById("revenue_dependent").value));
+			percent = prePercent / 100;
 
-			growth = parseFloat(getNumbersAndDots(document.getElementById("projected_growth").value));
-			growth = growth / 100;
+			preGrowth = parseFloat(getNumbersAndDots(document.getElementById("projected_growth").value));
+			growth = preGrowth / 100;
 
-			uptime = parseFloat(getNumbersAndDots(document.getElementById("app_uptime").value));
-			uptime = uptime / 100;
+			preUptime = parseFloat(getNumbersAndDots(document.getElementById("app_uptime").value));
+			uptime = preUptime / 100;
 
-			breach = parseFloat(getNumbersAndDots(document.getElementById("revenue_breach").value));
-			breach = breach / 100;
+			preBreach = parseFloat(getNumbersAndDots(document.getElementById("revenue_breach").value));
+			breach = preBreach / 100;
 
-			benefit_sla = parseInt(getNumbersAndDots(document.getElementById("benefit_sla").value));
-			benefit_sla = benefit_sla / 100;
+			pre_benefit_sla = parseInt(getNumbersAndDots(document.getElementById("benefit_sla").value));
+			benefit_sla = pre_benefit_sla / 100;
 
 			if(isNaN(revenue) == true || revenue == 0 || isNaN(percent) == true || percent == 0 || isNaN(growth) == true || growth == 0 || isNaN(uptime) == true || uptime == 0 || isNaN(breach) == true || breach == 0 || isNaN(benefit_sla) == true || benefit_sla == 0) {
 				revenueDowntimeY1 = 0;
@@ -2432,7 +2454,23 @@ function drawResults() {
 				revenueDowntimeY3 = parseInt(revenueDowntimeY2 * (1+growth));
 				revenueDowntimeTotal = revenueDowntimeY1 + revenueDowntimeY2 + revenueDowntimeY3;
 		
-				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/biz-increased-revenue.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 15px\"><h3>Revenue gained by reduced incidents, downtime, and slowness</h3></div><br /><dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(revenueDowntimeTotal.toString()) + "</b></dd></dl>";
+				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/biz-increased-revenue.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 15px\"><h3>Revenue gained by reduced incidents, downtime, and slowness</h3></div><br />";
+
+				newHtml += '<a href="javascript:;" class="collapsible">Show calculation</a><div class="content" style="display: none"><p>';
+				
+				newHtml += 'Revenue generated through apps: ' + processMoney(revenue.toString()) + ' x ' + prePercent + '% = ' + processMoney((revenue * percent).toString()) + '<br />';
+				newHtml += 'Revenue per hour: ' + processMoney((parseInt((revenue * percent)/8760)).toString()) + '<br />';
+				newHtml += 'Hours the application is not within SLAs: 8760 x ' + (100 - preUptime) + '% = ' + parseInt(8760*(1-uptime)) + '<br /><br />';
+				newHtml += 'Revenue lost per year whilst out of SLA: ' + parseInt(8760*(1-uptime)) + ' x ' + processMoney(parseInt((revenue * percent)/8760).toString()) + ' x ' + preBreach + '% = ' + processMoney(parseInt((8760*(1-uptime)) * ((revenue * percent)/8760) * breach).toString()) + '<br /><br />';  
+				newHtml += 'Benefit year 1: ' + processMoney(parseInt((8760*(1-uptime)) * ((revenue * percent)/8760) * breach).toString()) + ' x ' + pre_benefit_sla + '% = ' + processMoney(parseInt(((8760*(1-uptime)) * ((revenue * percent)/8760) * breach) * benefit_sla).toString()) + "<br />";
+				newHtml += 'Benefit year 2: ' + processMoney(parseInt(((8760*(1-uptime)) * ((revenue * percent)/8760) * breach) * benefit_sla).toString()) + ' x growth of ' + preGrowth + '% = ' + processMoney(parseInt((((8760*(1-uptime)) * ((revenue * percent)/8760) * breach) * benefit_sla) * (1+growth)).toString()) + "<br />";
+				newHtml += 'Benefit year 3: ' + processMoney(parseInt((((8760*(1-uptime)) * ((revenue * percent)/8760) * breach) * benefit_sla) * (1+growth)).toString()) + ' x growth of ' + preGrowth + '% = ' + processMoney(parseInt(((((8760*(1-uptime)) * ((revenue * percent)/8760) * breach) * benefit_sla) * (1+growth)) * (1+growth)).toString()); 
+
+
+				newHtml += "</p></div><br /><br />";
+
+				newHtml += "<dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueDowntimeY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(revenueDowntimeTotal.toString()) + "</b></dd></dl>";
+
 
 
 				if(check != null) {
@@ -2440,6 +2478,8 @@ function drawResults() {
 				}
 
 				document.getElementById("biz-increased-revenue").innerHTML=newHtml;
+
+				//enableCalcDropdowns();
 
 				bulletpoints += "<li>Increased potential revenue, through a reduction in downtime or unacceptable performance: <b>" + processMoney(revenueDowntimeTotal.toString()) + "</b></li>";
 
@@ -2456,11 +2496,11 @@ function drawResults() {
 			percent = parseFloat(getNumbersAndDots(document.getElementById("revenue_dependent").value));
 			percent = percent / 100;
 
-			conversion = parseFloat(getNumbersAndDots(document.getElementById("benefit_conversion").value));
-			conversion = conversion / 100;
+			preConversion = parseFloat(getNumbersAndDots(document.getElementById("benefit_conversion").value));
+			conversion = preConversion / 100;
 
-			growth = parseFloat(getNumbersAndDots(document.getElementById("projected_growth").value));
-			growth = growth / 100;
+			preGrowth = parseFloat(getNumbersAndDots(document.getElementById("projected_growth").value));
+			growth = preGrowth / 100;
 
 			if(isNaN(revenue) == true || revenue == 0 || isNaN(percent) == true || percent == 0 || isNaN(conversion) == true || conversion == 0 || isNaN(growth) == true || growth == 0) {
 				revenueConversionY1 = 0;
@@ -2485,7 +2525,19 @@ function drawResults() {
 				// 	newHtml += "<br /><div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div class=\"divTable\" style=\"width: 100%\"><div class=\"divTableBody\"><div class=\"divTableRow\"><div class=\"divTableCell\" style=\"width: 50%\">Current situation<ul class=\"list\"><li>Company or business unit annual revenue: <b>" + processMoney(revenue.toString()) + "</b></li><li>Annual growth rate: <b>" + processPercent((growth * 100).toString()) + "</b></li><li>Revenue directly dependant on applications: <b>" + processPercent((percent * 100).toString()) + "</b></li></ul></div><div class=\"divTableCell\" style=\"width: 50%\">Expected improvements<ul class=\"list\"><li>Expected increase in conversions after Dynatrace: <b>" + processPercent((conversion * 100).toString()) + "</b></li></ul></div></div></div></div></div>";
 				// }
 
-				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/biz-increased-conversions.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 10px\"><h3>Revenue from increased conversions caused by better user experience and app performance</h3></div><br /><dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(revenueConversionTotal.toString()) + "</b></dd></dl>";
+				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/biz-increased-conversions.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 10px\"><h3>Revenue from increased conversions caused by better user experience and app performance</h3></div><br />";
+				
+				newHtml += '<a href="javascript:;" class="collapsible">Show calculation</a><div class="content" style="display: none"><p>';
+				
+				newHtml += 'Revenue generated through apps: ' + processMoney(revenue.toString()) + ' x ' + prePercent + '% = ' + processMoney((revenue * percent).toString()) + '<br /><br />';
+				newHtml += 'Benefit year 1: ' + processMoney((revenue * percent).toString()) + ' x improvement of ' + preConversion + '% = ' + processMoney(parseInt((revenue * percent) * conversion).toString()) + '<br />';
+				newHtml += 'Benefit year 2: ' + processMoney(parseInt((revenue * percent) * conversion).toString()) + ' x growth of ' + preGrowth + '% = ' + processMoney(parseInt(revenueConversionY1 * (1+growth)).toString()) + "<br />";
+				newHtml += 'Benefit year 3: ' + processMoney(parseInt(revenueConversionY1 * (1+growth)).toString()) + ' x growth of ' + preGrowth + '% = ' + processMoney(parseInt(revenueConversionY2 * (1+growth)).toString()); 
+
+
+				newHtml += "</p></div><br /><br />";				
+				
+				newHtml += "<dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(revenueConversionY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(revenueConversionTotal.toString()) + "</b></dd></dl>";
 
 
 				if(check != null) {
@@ -2493,6 +2545,8 @@ function drawResults() {
 				}
 
 				document.getElementById("biz-increased-conversions").innerHTML=newHtml;
+
+				//enableCalcDropdowns();
 
 				if($('#business').css('display') == "none") {
 					$('#business').fadeIn();
@@ -2512,10 +2566,11 @@ function drawResults() {
 
 			if(document.getElementById("projected_growth").value == "") {
 				growth = 0;
+				preGrowth = 0;
 			}
 			else {
-				growth = parseFloat(getNumbersAndDots(document.getElementById("projected_growth").value));
-				growth = growth / 100;
+				preGrowth = parseFloat(getNumbersAndDots(document.getElementById("projected_growth").value));
+				growth = preGrowth / 100;
 			}
 
 			no_ops_troubleshoot = parseFloat(getNumbersAndDots(document.getElementById("no_ops_troubleshoot").value));
@@ -2524,12 +2579,12 @@ function drawResults() {
 
 			mttr = parseFloat(getNumbersAndDots(document.getElementById("mttr").value));
 
-			benefit_incident_reduction = parseFloat(getNumbersAndDots(document.getElementById("benefit_incident_reduction").value));
+			pre_benefit_incident_reduction = parseFloat(getNumbersAndDots(document.getElementById("benefit_incident_reduction").value));
 
-			benefit_incident_reduction = benefit_incident_reduction / 100;
+			benefit_incident_reduction = pre_benefit_incident_reduction / 100;
 
-			benefit_mttr = parseFloat(getNumbersAndDots(document.getElementById("benefit_mttr").value));
-			benefit_mttr = benefit_mttr / 100;
+			pre_benefit_mttr = parseFloat(getNumbersAndDots(document.getElementById("benefit_mttr").value));
+			benefit_mttr = pre_benefit_mttr / 100;
 
 			ops_cost = parseFloat(getNumbersAndDots(document.getElementById("operation_cost").value));
 
@@ -2571,7 +2626,32 @@ function drawResults() {
 
 				//var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/ops-reduced-incidents.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Incident reduction and faster MTTR in production (cost of war room effort)</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(opsIncidentCostTotal.toString()) + "</b></dd></dl></div></div>";
 
-				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/ops-reduced-incidents.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 5px\"><h3>Incident reduction and faster MTTR in production (cost of war room effort)</h3></div><br /><dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(opsIncidentCostTotal.toString()) + "</b></dd></dl>";
+				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/ops-reduced-incidents.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 5px\"><h3>Incident reduction and faster MTTR in production (cost of war room effort)</h3></div><br />";
+
+				newHtml += '<a href="javascript:;" class="collapsible">Show calculation</a><div class="content" style="display: none"><p>';
+				
+				newHtml += 'Number of incidents per year: ' + incidents_month + ' x 12 = ' + incidentsYear + '<br />';
+				newHtml += 'Annual Ops incident hours: ' + incidentsYear + ' x ' + no_ops_troubleshoot + ' Ops x ' + parseInt(mttr / 60) + ' hours = ' + parseInt(incidentsYear * no_ops_troubleshoot * (mttr / 60)) + '<br />';
+				newHtml += 'Annual Ops incident cost: ' + opsHours + ' x (' + processMoney(ops_cost.toString()) + '/' + work_hours + ') = ' + processMoney(parseInt(opsHours * (ops_cost / work_hours)).toString()) + '<br />';
+				newHtml += 'Annual Dev incident hours: ' + incidentsYear + ' x ' + no_dev_troubleshoot + ' Dev x ' + parseInt(mttr / 60) + ' hours = ' + parseInt(incidentsYear * no_dev_troubleshoot * (mttr / 60)) + '<br />';
+				newHtml += 'Annual Dev incident cost: ' + devHours + ' x (' + processMoney(dev_cost.toString()) + '/' + work_hours + ') = ' + processMoney(parseInt(devHours * (dev_cost / work_hours)).toString()) + '<br />';
+				newHtml += 'Total resource cost of an incident: ' + processMoney(parseInt(opsCost).toString()) + ' + ' + processMoney(parseInt(devCost).toString()) + ' = ' + processMoney(parseInt(incidentCost).toString()) + '<br /><br />';
+
+				newHtml += 'Post Dynatrace incidents per year: ' + incidentsYear + ' x ' + pre_benefit_incident_reduction + '% decrease = ' + parseInt(incidentsYear * (1 - benefit_incident_reduction)) + '<br />';
+				newHtml += 'Post Dynatrace annual Ops incident hours: ' + after_incidentsYear + ' x ' + no_ops_troubleshoot + ' Ops x ' + parseInt(mttr / 60) + ' hours x ' +  pre_benefit_mttr + '% decrease = ' + parseInt(after_incidentsYear * no_ops_troubleshoot * (mttr / 60) * (1-benefit_mttr)) + '<br />';
+				newHtml += 'Post Dynatrace annual Ops incident cost: ' + parseInt(after_opsHours) + ' x (' + processMoney(ops_cost.toString()) + '/' + work_hours + ') = ' + processMoney(parseInt(after_opsHours * (ops_cost / work_hours)).toString()) + '<br />';
+				newHtml += 'Post Dynatrace annual Dev incident hours: ' + after_incidentsYear + ' x ' + no_dev_troubleshoot + ' Dev x ' + parseInt(mttr / 60) + ' hours x ' +  pre_benefit_mttr + '% decrease = ' + parseInt(after_incidentsYear * no_dev_troubleshoot * (mttr / 60) * (1-benefit_mttr)) + '<br />';
+				newHtml += 'Post Dynatrace annual Dev incident cost: ' + parseInt(after_devHours) + ' x (' + processMoney(dev_cost.toString()) + '/' + work_hours + ') = ' + processMoney(parseInt(after_devHours * (dev_cost / work_hours)).toString()) + '<br />';
+				newHtml += 'Total resource cost of an incident: ' + processMoney(parseInt(after_opsCost).toString()) + ' + ' + processMoney(parseInt(after_devCost).toString()) + ' = ' + processMoney(parseInt(after_incidentCost).toString()) + '<br /><br />';
+
+				newHtml += 'Benefit year 1: ' + processMoney(parseInt(incidentCost).toString()) + ' incident cost before - ' + processMoney(parseInt(after_incidentCost).toString()) + ' incident cost after = ' + processMoney(parseInt((opsIncidentCostY1)).toString()) + '<br />';
+				newHtml += 'Benefit year 2: ' + processMoney(parseInt(opsIncidentCostY1).toString()) + ' x growth of ' + preGrowth + '% = ' + processMoney(parseInt(opsIncidentCostY1 * (1+growth)).toString()) + "<br />";
+				newHtml += 'Benefit year 3: ' + processMoney(parseInt(opsIncidentCostY2).toString()) + ' x growth of ' + preGrowth + '% = ' + processMoney(parseInt(opsIncidentCostY2 * (1+growth)).toString()) + "<br />";
+
+
+				newHtml += "</p></div><br /><br />";					
+
+				newHtml += "<dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(opsIncidentCostY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(opsIncidentCostTotal.toString()) + "</b></dd></dl>";
 
 
 				if(check != null) {
@@ -2596,8 +2676,8 @@ function drawResults() {
 
 			no_t1t2_apps = parseFloat(getNumbersAndDots(document.getElementById("no_t1t2_apps").value));
 
-			benefit_config = parseFloat(getNumbersAndDots(document.getElementById("benefit_config").value));
-			benefit_config = benefit_config / 100;
+			pre_benefit_config = parseFloat(getNumbersAndDots(document.getElementById("benefit_config").value));
+			benefit_config = pre_benefit_config / 100;
 
 			if(isNaN(no_fte_existing) == true || no_fte_existing == 0 || isNaN(no_apps_e2e) == true || no_apps_e2e == 0 || isNaN(no_t1t2_apps) == true || no_t1t2_apps == 0 || isNaN(benefit_config) == true || benefit_config == 0 || isNaN(growth) == true) {
 				effortSavingY1 = 0;
@@ -2614,20 +2694,36 @@ function drawResults() {
 				costPerApp = ((no_fte_existing * ops_cost)/no_apps_e2e);
 				costAllApps = costPerApp * no_t1t2_apps;
 
-				after_costPerApp = costPerApp * benefit_config;
+				after_costPerApp = costPerApp * (1 - benefit_config);
 				after_costAllApps = after_costPerApp * no_t1t2_apps;
 
-				effortBefore = costPerApp * no_apps_e2e;
-				effortAfter = effortBefore * (1 - benefit_config);
+				//effortBefore = costPerApp * no_apps_e2e;
+				//effortAfter = effortBefore * (1 - benefit_config);
 
-				effortSavingY1 = parseInt(effortBefore - effortAfter);
+				effortSavingY1 = parseInt(costAllApps - after_costAllApps);
 				effortSavingY2 = parseInt(effortSavingY1 * (1+growth));
 				effortSavingY3 = parseInt(effortSavingY2 * (1+growth));
 				effortSavingTotal = effortSavingY1 + effortSavingY2 + effortSavingY3;
 
 				//var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/ops-increased-automation.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Cost savings with Dynatrace automation vs. manual effort </p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(effortSavingTotal.toString()) + "</b></dd></dl></div></div>";
 
-				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/ops-increased-automation.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 5px\"><h3>Cost savings with Dynatrace automation vs. manual effort</h3></div><br /><dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(effortSavingTotal.toString()) + "</b></dd></dl>";
+				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/ops-increased-automation.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 5px\"><h3>Cost savings with Dynatrace automation vs. manual effort</h3></div><br />";
+				
+				newHtml += '<a href="javascript:;" class="collapsible">Show calculation</a><div class="content" style="display: none"><p>';
+				
+				//newHtml += 'Cost to monitor an app: (' + no_fte_existing + ' x ' + processMoney(parseInt(ops_cost).toString()) + ') / ' + no_apps_e2e + ' = ' + processMoney(parseInt(((no_fte_existing * ops_cost)/no_apps_e2e).toString())) + '<br />';
+				newHtml += 'Cost to monitor an app: (' + no_fte_existing + ' x ' + processMoney(parseInt(ops_cost).toString()) + ') / ' + no_apps_e2e + ' = ' + processMoney(parseInt((no_fte_existing * ops_cost)/no_apps_e2e).toString()) + '<br />';;
+				newHtml += 'Cost for all apps: ' + processMoney(parseInt(costPerApp).toString()) + ' x ' + no_t1t2_apps + ' = ' + processMoney(parseInt(costAllApps).toString()) + '<br /><br />';
+				newHtml += 'Post Dynatrace cost per app: ' + processMoney(parseInt(costPerApp).toString()) + ' x ' + pre_benefit_config + '% improvement = ' + processMoney(parseInt(costPerApp * (1 - benefit_config)).toString()) + '<br />';
+				newHtml += 'Post Dynatrace cost for all apps: ' + processMoney(parseInt(after_costPerApp).toString()) + ' x ' + no_t1t2_apps + ' = ' + processMoney(parseInt(after_costAllApps).toString()) + '<br /><br />';
+				newHtml += 'Benefit year 1: ' + processMoney(parseInt(costAllApps).toString()) + ' - ' + processMoney(parseInt(after_costAllApps).toString()) + ' = ' + processMoney(parseInt(costAllApps - after_costAllApps).toString()) + "<br />";
+				newHtml += 'Benefit year 2: ' + processMoney(parseInt(effortSavingY1).toString()) + ' x growth of ' + preGrowth + '% = ' + processMoney(parseInt(effortSavingY2).toString()) + "<br />";
+				newHtml += 'Benefit year 3: ' + processMoney(parseInt(effortSavingY2).toString()) + ' x growth of ' + preGrowth + '% = ' + processMoney(parseInt(effortSavingY3).toString()) + "<br />";
+
+
+				newHtml += "</p></div><br /><br />";
+
+				newHtml += "<dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(effortSavingY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(effortSavingTotal.toString()) + "</b></dd></dl>";
 
 
 				if(check != null) {
@@ -2656,11 +2752,11 @@ function drawResults() {
 
 			cycle_days = parseFloat(getNumbersAndDots(document.getElementById("cycle_days").value));
 
-			test_per_cycle = parseFloat(getNumbersAndDots(document.getElementById("test_per_cycle").value));
-			test_per_cycle = test_per_cycle / 100;
+			pre_test_per_cycle = parseFloat(getNumbersAndDots(document.getElementById("test_per_cycle").value));
+			test_per_cycle = pre_test_per_cycle / 100;
 
-			qa_time_per_cycle = parseFloat(getNumbersAndDots(document.getElementById("qa_time_per_cycle").value));
-			qa_time_per_cycle = qa_time_per_cycle / 100;
+			pre_qa_time_per_cycle = parseFloat(getNumbersAndDots(document.getElementById("qa_time_per_cycle").value));
+			qa_time_per_cycle = pre_qa_time_per_cycle / 100;
 
 			qa_people_per_cycle = parseFloat(getNumbersAndDots(document.getElementById("qa_people_per_cycle").value));
 
@@ -2669,8 +2765,8 @@ function drawResults() {
 
 			dev_people_per_cycle = parseFloat(getNumbersAndDots(document.getElementById("dev_people_per_cycle").value));
 
-			benefit_fix_qa = parseFloat(getNumbersAndDots(document.getElementById("benefit_fix_qa").value));
-			benefit_fix_qa = benefit_fix_qa / 100;
+			pre_benefit_fix_qa = parseFloat(getNumbersAndDots(document.getElementById("benefit_fix_qa").value));
+			benefit_fix_qa = pre_benefit_fix_qa / 100;
 
 			qa_cost = parseFloat(getNumbersAndDots(document.getElementById("qa_cost").value));
 
@@ -2687,21 +2783,47 @@ function drawResults() {
 
 			else {
 
-				non_test_cycle = cycle_days * (1 - test_per_cycle);
-				test_cycle = cycle_days * test_per_cycle;
+				total_test_days = cycles_per_year * cycle_days;
+				total_test_perf_days = total_test_days * test_per_cycle;
 
-				days_not_performance = test_cycle * (1-(qa_time_per_cycle + dev_time_per_cycle));
-				days_performance = test_cycle * (qa_time_per_cycle + dev_time_per_cycle);
+				dev_daily_sal = (dev_cost / work_hours) * 8;
+				qa_daily_sal = (qa_cost / work_hours) * 8;
 
-				dt_days_performance = days_performance * (1-benefit_fix_qa);
-				dt_cycle_days = non_test_cycle + days_not_performance + dt_days_performance;
-				dt_times_release = cycle_days / dt_cycle_days;
-				dt_release_year = cycles_per_year  * dt_times_release;
+				dev_time_perf_issues = total_test_perf_days * dev_time_per_cycle * dev_people_per_cycle;
+				dev_cost_perf_issues = dev_time_perf_issues * dev_daily_sal;
+				qa_time_perf_issues = total_test_perf_days * qa_time_per_cycle * qa_people_per_cycle;
+				qa_cost_perf_issues = qa_time_perf_issues * qa_daily_sal;
 
-				qa_cost_performance	= test_cycle * cycles_per_year * qa_time_per_cycle * qa_people_per_cycle * (qa_cost/work_hours) * 8;
-				dev_cost_performance = test_cycle * cycles_per_year * dev_time_per_cycle * dev_people_per_cycle * (dev_cost/work_hours) * 8;
-				total_effort_performance = qa_cost_performance + dev_cost_performance;
-				dt_qa_effort = benefit_fix_qa * total_effort_performance;
+				pre_dyna_total = dev_cost_perf_issues + qa_cost_perf_issues;
+
+				console.log(processMoney(parseInt(pre_dyna_total).toString()));
+
+				dyna_dev_time_perf_issues = dev_time_perf_issues * (1-benefit_fix_qa);
+				dyna_dev_cost_perf_issues = dyna_dev_time_perf_issues * dev_daily_sal;
+				dyna_qa_time_perf_issues = qa_time_perf_issues * (1 - benefit_fix_qa);
+				dyna_qa_cost_perf_issues = dyna_qa_time_perf_issues * qa_daily_sal;
+
+				post_dyna_total = dyna_dev_cost_perf_issues + dyna_qa_cost_perf_issues;
+
+				console.log(processMoney(parseInt(post_dyna_total).toString()));
+
+				dt_qa_effort = pre_dyna_total - post_dyna_total;
+
+				// non_test_cycle = cycle_days * (1 - test_per_cycle);
+				// test_cycle = cycle_days * test_per_cycle;
+
+				// days_not_performance = test_cycle * (1-(qa_time_per_cycle + dev_time_per_cycle));
+				// days_performance = test_cycle * (qa_time_per_cycle + dev_time_per_cycle);
+
+				// dt_days_performance = days_performance * (1-benefit_fix_qa);
+				// dt_cycle_days = non_test_cycle + days_not_performance + dt_days_performance;
+				// dt_times_release = cycle_days / dt_cycle_days;
+				// dt_release_year = cycles_per_year  * dt_times_release;
+
+				// qa_cost_performance	= test_cycle * cycles_per_year * qa_time_per_cycle * qa_people_per_cycle * (qa_cost/work_hours) * 8;
+				// dev_cost_performance = test_cycle * cycles_per_year * dev_time_per_cycle * dev_people_per_cycle * (dev_cost/work_hours) * 8;
+				// total_effort_performance = qa_cost_performance + dev_cost_performance;
+				// dt_qa_effort = benefit_fix_qa * total_effort_performance;
 
 				devQaY1 = parseInt(dt_qa_effort);
 				devQaY2 = parseInt(devQaY1 * (1+growth));
@@ -2710,7 +2832,38 @@ function drawResults() {
 
 				//var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/dev-decreased-investigation.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Performance defect investigation and troubleshooting in QA</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(devQaTotal.toString()) + "</b></dd></dl></div></div>";
 
-				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/dev-decreased-investigation.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 5px\"><h3>Performance defect investigation and troubleshooting in QA</h3></div><br /><dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(devQaTotal.toString()) + "</b></dd></dl>";
+				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/dev-decreased-investigation.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 5px\"><h3>Performance defect investigation and troubleshooting in QA</h3></div><br />";
+				
+				newHtml += '<a href="javascript:;" class="collapsible">Show calculation</a><div class="content" style="display: none"><p>';
+
+				newHtml += 'Total test days: ' + cycles_per_year + " cycles per year " + " x " + cycle_days + " in a cycle = " + total_test_days + "<br />";
+				newHtml += 'Days spent testing: ' + total_test_days + " x " + pre_benefit_fix_qa + "% = " + total_test_perf_days + "<br /><br />";
+				
+				newHtml += 'Dev daily salary (8 hour day): (' +  processMoney(parseInt(dev_cost).toString()) + "/" + work_hours + ") x 8 = " + processMoney(parseInt(dev_daily_sal).toString()) + "<br />";
+				newHtml += 'QA daily salary (8 hour day): (' +  processMoney(parseInt(qa_cost).toString()) + "/" + work_hours + ") x 8 = " + processMoney(parseInt(qa_daily_sal).toString()) + "<br /><br />";
+
+				newHtml += "Dev time spent in performance issues: " + total_test_perf_days + " x " + pre_test_per_cycle + "% of time x " + dev_people_per_cycle + " people = " + dev_time_perf_issues + "<br />";
+				newHtml += "Dev cost spent in performance issues: " + dev_time_perf_issues + " x " + processMoney(parseInt(dev_daily_sal).toString()) + " = " + processMoney(parseInt(dev_cost_perf_issues).toString()) + "<br />";
+				newHtml += "QA time spent in performance issues: " + total_test_perf_days + " x " + pre_qa_time_per_cycle + "% of time x " + qa_people_per_cycle + " people = " + qa_time_perf_issues + "<br />";
+				newHtml += "QA cost spent in performance issues: " + qa_time_perf_issues + " x " + processMoney(parseInt(qa_daily_sal).toString()) + " = " + processMoney(parseInt(qa_cost_perf_issues).toString()) + "<br /><br />";
+
+				newHtml += "Total cost pre Dynatrace: " + processMoney(parseInt(dev_cost_perf_issues).toString()) + " + " + processMoney(parseInt(qa_cost_perf_issues).toString()) + " = " + processMoney(parseInt(pre_dyna_total).toString()) + "<br /><br />";
+
+				newHtml += "Post Dynatrace Dev time spent in performance issues: " + parseInt(dev_time_perf_issues) + " x " + pre_benefit_fix_qa + "% reduction = " + parseInt(dyna_dev_time_perf_issues) + "<br />";
+				newHtml += "Post Dynatrace Dev cost spent in performance issues: " +  parseInt(dyna_dev_time_perf_issues) + " x " + processMoney(parseInt(dev_daily_sal).toString()) + " = " + processMoney(parseInt(dyna_dev_cost_perf_issues).toString()) + "<br />";
+				newHtml += "Post Dynatrace QA time spent in performance issues: " + parseInt(qa_time_perf_issues) + " x " + pre_benefit_fix_qa + "% reduction = " + parseInt(dyna_qa_time_perf_issues) + "<br />";
+				newHtml += "Post Dynatrace QA cost spent in performance issues: " +  parseInt(dyna_qa_time_perf_issues) + " x " + processMoney(parseInt(qa_daily_sal).toString()) + " = " + processMoney(parseInt(dyna_qa_cost_perf_issues).toString()) + "<br /><br />";
+
+				newHtml += "Total cost post Dynatrace: " + processMoney(parseInt(dyna_dev_cost_perf_issues).toString()) + " + " + processMoney(parseInt(dyna_qa_cost_perf_issues).toString()) + " = " + processMoney(parseInt(post_dyna_total).toString()) + "<br /><br />";
+				
+				newHtml += 'Benefit year 1: ' + processMoney(parseInt(pre_dyna_total).toString()) + ' - ' + processMoney(parseInt(post_dyna_total).toString()) + ' = ' + processMoney(parseInt(dt_qa_effort).toString()) + "<br />";
+				newHtml += 'Benefit year 2: ' + processMoney(parseInt(dt_qa_effort).toString()) + ' x growth of ' + preGrowth + '% = ' + processMoney(parseInt(devQaY2).toString()) + "<br />";
+				newHtml += 'Benefit year 3: ' + processMoney(parseInt(devQaY3).toString()) + ' x growth of ' + preGrowth + '% = ' + processMoney(parseInt(devQaY3).toString()) + "<br />";				
+
+
+				newHtml += "</p></div><br /><br />";
+
+				newHtml += "<dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(devQaY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(devQaTotal.toString()) + "</b></dd></dl>";
 
 
 				if(check != null) {
@@ -2736,8 +2889,8 @@ function drawResults() {
 			devCost = devHours * (dev_cost / work_hours);
 			incidentCost = opsCost + devCost;
 
-			benefit_prod_reduction = parseFloat(getNumbersAndDots(document.getElementById("benefit_prod_reduction").value));
-			benefit_prod_reduction = benefit_prod_reduction / 100;
+			pre_benefit_prod_reduction = parseFloat(getNumbersAndDots(document.getElementById("benefit_prod_reduction").value));
+			benefit_prod_reduction = pre_benefit_prod_reduction / 100;
 
 			if(isNaN(incidentsYear) == true || incidentsYear == 0 || isNaN(opsHours) == true || opsHours == 0 || isNaN(opsCost) == true || opsCost == 0 || isNaN(devHours) == true || devHours == 0 || isNaN(devCost) == true || devCost == 0 || isNaN(incidentCost) == true || incidentCost == 0 || isNaN(benefit_prod_reduction) == true || benefit_prod_reduction == 0 || isNaN(incidents_month) == true || incidents_month == 0 || isNaN(no_ops_troubleshoot) == true || no_ops_troubleshoot == 0 || isNaN(no_dev_troubleshoot) == true || no_dev_troubleshoot == 0 || isNaN(work_hours) == true || work_hours == 0 || isNaN(mttr) == true || mttr == 0 || isNaN(growth) == true) {
 				devLowerIncidentsY1 = 0;
@@ -2758,7 +2911,34 @@ function drawResults() {
 
 				//var newHtml = "<div class=\"section\" style=\"width: 90%; overflow: auto; margin-left: 5%\"><div class=\"column--3-of-6\"><div style=\"display:inline-block; width: 20%; max-width: 20%; padding-top: 15px; vertical-align: middle;\" ><img src=\"/static/results/dev-decreased-incidents.png\" height=\"100px\" width=\"100px\" /></div><div style=\"display: inline-block; width: 75%; max-width: 75%; margin-left: 2%; vertical-align: middle; padding-top: 10px\"><p>Fewer production incidents by finding & fixing performance defects in QA & Dev</p></div></div><div class=\"column--3-of-6\"><dl class=\"definition-list\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(devLowerIncidentsTotal.toString()) + "</b></dd></dl></div></div>";
 
-				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/dev-decreased-incidents.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 5px\"><h3>Fewer production incidents by finding & fixing performance defects in QA & Dev</h3></div><br /><dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(devLowerIncidentsTotal.toString()) + "</b></dd></dl>";
+				var newHtml = "<div style=\"margin-left: 5%; width: 90%; font-family: BerninaSansLight\"><div style=\"width: 10%; float: left\"><img src=\"/static/results/dev-decreased-incidents.png\" height=\"60px\" width=\"60px\" /></div><div style=\"width: 90%; padding-top: 5px\"><h3>Fewer production incidents by finding & fixing performance defects in QA & Dev</h3></div><br />";
+				
+
+				newHtml += '<a href="javascript:;" class="collapsible">Show calculation</a><div class="content" style="display: none"><p>';
+				
+				newHtml += 'Incidents per year: ' + incidents_month + ' per month x 12 = ' + incidentsYear + "<br /><br />";
+				
+				newHtml += "Ops hours spent on incidents: " + incidentsYear + " x " + no_ops_troubleshoot + " people x (" + mttr + " MTTR / 60 minutes) = " + parseInt(opsHours) + "<br />";
+				newHtml += "Ops cost spent on incidents: " + parseInt(opsHours) + " x (" + processMoney(parseInt(ops_cost).toString()) + "/" + work_hours + ") = " + processMoney(parseInt(opsCost).toString()) + "<br />";
+				newHtml += "Dev hours spent on incidents: " + incidentsYear + " x " + no_dev_troubleshoot + " people x (" + mttr + " MTTR / 60 minutes) = " + parseInt(devHours) + "<br />";
+				newHtml += "Dev cost spent on incidents: " + parseInt(devHours) + " x (" + processMoney(parseInt(dev_cost).toString()) + "/" + work_hours + ") = " + processMoney(parseInt(devCost).toString()) + "<br /><br />";
+
+				newHtml += "Total incident cost: " + processMoney(parseInt(opsCost).toString()) + " + " + processMoney(parseInt(devCost).toString()) + " = " + processMoney(parseInt(incidentCost).toString()) + "<br /><br />";
+	
+				newHtml += 'Benefit year 1: ' + processMoney(parseInt(incidentCost).toString()) + ' x ' + pre_benefit_prod_reduction + '% reduction = ' + processMoney(parseInt(devLowerIncidentsY1).toString()) + "<br />";
+				newHtml += 'Benefit year 2: ' + processMoney(parseInt(devLowerIncidentsY1).toString()) + ' x growth of ' + preGrowth + '% = ' + processMoney(parseInt(devLowerIncidentsY2).toString()) + "<br />";
+				newHtml += 'Benefit year 3: ' + processMoney(parseInt(devLowerIncidentsY2).toString()) + ' x growth of ' + preGrowth + '% = ' + processMoney(parseInt(devLowerIncidentsY3).toString()) + "<br />";
+
+
+				newHtml += "</p></div><br /><br />";
+
+
+
+
+
+
+
+				newHtml += "<dl class=\"definition-list\" style=\"margin-left: 5%; width: 90%\"><dt>Year 1</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY1.toString()) + "</dd><dt>Year 2</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY2.toString()) + "</dd><dt>Year 3</dt><dd style=\"font-size: 1.2em\">" + processMoney(devLowerIncidentsY3.toString()) + "</dd><dt>Total</dt><dd style=\"font-size: 1.2em\"><b>" + processMoney(devLowerIncidentsTotal.toString()) + "</b></dd></dl>";
 
 
 				if(check != null) {
@@ -2932,6 +3112,8 @@ function drawResults() {
 			}
 
 			//Something to draw?
+
+			enableCalcDropdowns();
 
 			if ((devTotal + operationsTotal + revenueGainTotal) > 0) {
 				$('#no-results').fadeOut();
@@ -3261,7 +3443,7 @@ function drawResults() {
 			}
 	})
 
-
+	
 }
 
 function reportData() {
