@@ -2246,6 +2246,7 @@ module.exports = function(app, db) {
 
 	app.post('/problem', function(req, res) {
 		console.log(req.body);
+		res.end("Done");
 	});
 
 	app.post('/changeAssessment', (req, res) => {
