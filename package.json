@@ -15,8 +15,7 @@
     "dynatrace",
     "bva"
   ],
-  "dependencies": {
-    "@dynatrace/oneagent": "^1.125.216-1.0.2",  
+  "dependencies": { 
     "bluebird": "^3.5.0",
     "request": "^2.75.0",
     "request-promise": "^4.2.1",
