@@ -2244,6 +2244,10 @@ module.exports = function(app, db) {
 		res.redirect('/');
 	});
 
+	app.post('/problem', function(req, res) {
+		console.log(req.body);
+	});
+
 	app.post('/changeAssessment', (req, res) => {
 		if(req.body.listOfIds == "") {
 			res.redirect('/editassessment?status=failed');
