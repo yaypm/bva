@@ -30,7 +30,7 @@
 
   },
   "engines": {
-    "node": "6.11.3"
+    "node": ">=10.0.0"
   },
   "author": "Alistair Emslie",
   "license": "ISC",
