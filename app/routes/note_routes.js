@@ -953,6 +953,9 @@ module.exports = function(app, db) {
 			if(currency == "germany") { var operations = '48000'; var developers = '50000'; var qas = '58000'; }
 			if(currency == "spain") { var operations = '22000'; var developers = '25000'; var qas = '33000'; }
 			if(currency == "italy") { var operations = '24000'; var developers = '25000'; var qas = '30000'; }
+			if(currency == "denmark") { var operations = '628032'; var developers = '636648'; var qas = '449340'; }
+			if(currency == "finland") { var operations = '48250'; var developers = '45000'; var qas = '40000'; }
+			if(currency == "sweden") { var operations = '594000'; var developers = '429000'; var qas = '300000'; }
 
 
 

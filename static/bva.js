@@ -1629,6 +1629,9 @@ function getTabs() {
 		if(jsonObj.currency == "germany") { var currency = "€" }
 		if(jsonObj.currency == "france") { var currency = "€" }
 		if(jsonObj.currency == "italy") { var currency = "€" }
+		if(jsonObj.currency == "finland") { var currency = "€" }
+		if(jsonObj.currency == "denmark") { var currency = "Kr." }
+		if(jsonObj.currency == "sweden") { var currency = "kr" }
 
 		document.getElementById("currency").value=currency;
 
