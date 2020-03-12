@@ -1632,6 +1632,16 @@ function getTabs() {
 		if(jsonObj.currency == "finland") { var currency = "€" }
 		if(jsonObj.currency == "denmark") { var currency = "Kr." }
 		if(jsonObj.currency == "sweden") { var currency = "kr" }
+		if(jsonObj.currency == "mexico") { var currency = "$" }
+		if(jsonObj.currency == "colombia") { var currency = "$" }
+		if(jsonObj.currency == "peru") { var currency = "S/" }
+		if(jsonObj.currency == "venezuela") { var currency = "Bs." }
+		if(jsonObj.currency == "argentina") { var currency = "$" }
+		if(jsonObj.currency == "panama") { var currency = "B/" }
+		if(jsonObj.currency == "brasil") { var currency = "R$" }
+		if(jsonObj.currency == "puerto_rico") { var currency = "$" }
+		if(jsonObj.currency == "republica_dominicana") { var currency = "RD$" }
+		if(jsonObj.currency == "costa_rica") { var currency = "₡" }
 
 		document.getElementById("currency").value=currency;
 
