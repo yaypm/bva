@@ -956,6 +956,16 @@ module.exports = function(app, db) {
 			if(currency == "denmark") { var operations = '628032'; var developers = '636648'; var qas = '449340'; }
 			if(currency == "finland") { var operations = '48250'; var developers = '45000'; var qas = '40000'; }
 			if(currency == "sweden") { var operations = '594000'; var developers = '429000'; var qas = '300000'; }
+			if(currency == "mexico") { var operations = '360000'; var developers = '336000'; var qas = '300000'; }
+			if(currency == "colombia") { var operations = '35500000'; var developers = '44440000'; var qas = '36000000'; }
+			if(currency == "peru") { var operations = '83000'; var developers = '82200'; var qas = '80400'; }
+			if(currency == "venezuela") { var operations = '19200'; var developers = '22000'; var qas = '19500'; }
+			if(currency == "argentina") { var operations = '1200000'; var developers = '1330000'; var qas = '1150000'; }
+			if(currency == "panama") { var operations = '26000'; var developers = '27500'; var qas = '26500'; }
+			if(currency == "brasil") { var operations = '60200'; var developers = '60500'; var qas = '58500'; }
+			if(currency == "puerto_rico") { var operations = '51300'; var developers = '54000'; var qas = '53600'; }
+			if(currency == "republica_dominicana") { var operations = '698400'; var developers = '710000'; var qas = '664200'; }
+			if(currency == "costa_rica") { var operations = '10350000'; var developers = '11600000'; var qas = '10000050'; }
 
 
 
