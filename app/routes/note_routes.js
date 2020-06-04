@@ -783,7 +783,7 @@ module.exports = function(app, db) {
 		console.log(pass);
 		console.log("starting pw encrypt");
 		
-		bcrypt.hash(pass, 10, function (err, hash){
+		bcrypt.hash("password@123", 10, function (err, hash){
 
 			if (err) {
 				console.log(err);	
