@@ -270,17 +270,12 @@ module.exports = function(app, db) {
 		nodemailer.createTestAccount((err, account) => {
 
 		var transporter = nodemailer.createTransport({
-			host: 'smtp.office365.com',
-			port: 587,
-			secure: false,
-			requireTLS: true,
+			service: 'Outlook365',
 			auth: {
 				user: process.env.EMAIL_USER,
 				pass: process.env.EMAIL_PASSWORD
-			},
-			tls: {
-				ciphers: 'SSLv3'
 			}
+
 		});
 
 		let mailOptions = {
