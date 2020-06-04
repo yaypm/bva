@@ -269,6 +269,8 @@ module.exports = function(app, db) {
 	function sendMail(email, subject, text, html) {
 		nodemailer.createTestAccount((err, account) => {
 
+		console.log(process.env.EMAIL_USER);	
+			
 		var transporter = nodemailer.createTransport({
 			service: 'Outlook365',
 			auth: {
