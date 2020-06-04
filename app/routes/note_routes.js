@@ -780,7 +780,7 @@ module.exports = function(app, db) {
 
 	app.post('/gimmePassword', (req, res) => {
 		pass = req.body.password;
-
+		console.log(pass);
 		console.log("starting pw encrypt");
 		
 		bcrypt.hash(pass, 10, function (err, hash){
