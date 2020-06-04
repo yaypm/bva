@@ -779,16 +779,18 @@ module.exports = function(app, db) {
 	});
 
 	app.post('/gimmePassword', (req, res) => {
-		pass = req.body.password;
+		var pass = req.body.password;
 		console.log(pass);
 		console.log("starting pw encrypt");
 		
 		bcrypt.hash(pass, 10, function (err, hash){
 
 			if (err) {
-				console.log(err);
+				console.log(err);	
+				res.writeHead(500, {'Access-Control-Allow-Headers':'content-type'});
+				res.end("error!");
 				return err;
-
+	
 			}
 
 			password = hash;
