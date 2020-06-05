@@ -31,40 +31,34 @@
 	
 		<div class="menu-box">
 		
-		<p class="menu-title">Create an account</p>
+		<h2 class="menu-title">Reset your password</h2>
 		
-		<!-- <p>Please provide a few details to get started. An email will then be sent with a temporary password.</p>	 -->
-				
-		<div class="status-failure">Account could not be created.</div>
-		<div class="status-success">Account created! Check your email.</div>
-
+		<p>Enter your email address and a reset link will be sent to you.</p>	
+		</p>
+		
+		<div class="status-success">Password reset sent! Check your email.</div>
+		<div class="status-failure">Unable to reset password.</div>
+		
 			<br />
-
-		<form action="/createUser" method="post" enctype="application/x-www-form-urlencoded">
-		
-			Unfortunately due to a technical issue sign-up isn't available - please drop a mail to alistair.emslie@dynatrace.com and I can make you an account!
-
-			<!-- <input type="text" name="firstName" class="inputfield signup" id="firstName" placeholder="first name"/>
-			<input type="text" name="lastName" class="inputfield signup" id="lastName" placeholder="last name"/>
-		
-				<br /><br />
-		
-			<input type="email" name="username" class="inputfield bigInput" id="username" placeholder="email"/>
 			
-				<br /><br /> 	
-		
-			<a href="/"><button id="back" type="button" class="btn btn--secondary theme--dark reset-button">Back</button></a> <button id="signup" type="submit" class="btn btn--primary theme--dark reset-button">Sign up</button> -->
+			<form action="/reset" method="post" enctype="application/x-www-form-urlencoded">
 			
-			<br /><br />
+				<input type="email" name="username" class="inputfield bigInput" placeholder="email"/>
+				
+					<br /><br /> 	
 			
-		</form>	
+				<a href="/"><button id="back" type="button" class="btn btn--secondary theme--dark landing-button">Back</button></a> <button id="reset" type="submit" class="btn btn--primary theme--dark landing-button">Reset</button>
+				
+					<br /><br />
+				
+			</form>	
 		
 		</div>
-		
-	</div>
 	
-		<br />
-		
+	</div>
+
+		<br />				
+	
 </div> 
 
 </div>
