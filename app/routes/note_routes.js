@@ -6,7 +6,81 @@ var path = require('path');
 var MongoClient = require('mongodb').MongoClient;
 var bcrypt = require('bcrypt');
 const MongoStore = require('connect-mongo')(session);
-const nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script type="text/javascript" src="https://js-cdn.dynatracelabs.com/jstag/14868fa4215/bf00024xhz/209889b7a3ea4739_complete.js" crossorigin="anonymous"></script>
+	<title>Dynatrace Business Value Calculator</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" type="text/css" href='/static/main.css' />
+	<!-- <script src='/static/es6-promise.auto.js'></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="icon" href="https://dt-cdn.net/images/favicon-32x32-32-26d70a5cff.png">
+	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="https://code.highcharts.com/modules/exporting.js"></script>
+	<style>a:hover {cursor:pointer;}</style>
+	<script src="/static/bva.js"></script>
+	<script type="text/javascript">
+		document.addEventListener("DOMContentLoaded", function(event) {
+			statusDetect();
+		});
+	</script>
+
+</head>
+
+<body class="landing-body">
+
+<!--start of content-->
+<div id="content" class="main-content">
+
+<div id="content_box">
+		
+	<div class="inner_box centre">
+	
+		<div class="menu-box">
+		
+		<p class="menu-title">Create an account</p>
+		
+		<p>Please provide a few details to get started. An email will then be sent with a temporary password.</p>	
+				
+		<div class="status-failure">Account could not be created.</div>
+		<div class="status-success">Account created! Check your email.</div>
+
+			<br />
+
+		<form action="/createUser" method="post" enctype="application/x-www-form-urlencoded">
+		
+			<input type="text" name="firstName" class="inputfield signup" id="firstName" placeholder="first name"/>
+			<input type="text" name="lastName" class="inputfield signup" id="lastName" placeholder="last name"/>
+		
+				<br /><br />
+		
+			<input type="email" name="username" class="inputfield bigInput" id="username" placeholder="email"/>
+			
+				<br /><br /> 	
+		
+			<a href="/"><button id="back" type="button" class="btn btn--secondary theme--dark reset-button">Back</button></a> <button id="signup" type="submit" class="btn btn--primary theme--dark reset-button">Sign up</button>
+			
+			<br /><br />
+			
+		</form>	
+		
+		</div>
+		
+	</div>
+	
+		<br />
+		
+</div> 
+
+</div>
+<!--end of content-->
+
+<script src="/static/main.js"></script>
+
+</body>
+
+</html>
 
 module.exports = function(app, db) {
 
