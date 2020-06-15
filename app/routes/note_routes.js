@@ -353,7 +353,7 @@ module.exports = function(app, db) {
 			tls: {
 				ciphers: 'SSLv3'
 			}
-
+		}
 		});
 
 		let mailOptions = {
