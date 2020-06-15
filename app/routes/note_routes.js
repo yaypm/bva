@@ -268,6 +268,7 @@ module.exports = function(app, db) {
 
 	function sendMail(email, subject, text, html) {
 		nodemailer.createTestAccount((err, account) => {
+		var transporter = nodemailer.createTransport({
 			host: 'us-smtp-outbound-1.mimecast.com',
 			port: 587,
 			secure: false,
@@ -279,7 +280,6 @@ module.exports = function(app, db) {
 			tls: {
 				ciphers: 'SSLv3'
 			}
-		}
 		});
 
 		let mailOptions = {
