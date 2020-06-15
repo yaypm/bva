@@ -268,20 +268,22 @@ module.exports = function(app, db) {
 
 	function sendMail(email, subject, text, html) {
 		nodemailer.createTestAccount((err, account) => {
-
-		console.log(process.env.EMAIL_USER);	
-			
-		var transporter = nodemailer.createTransport({
-			service: 'Outlook365',
+			host: 'us-smtp-outbound-1.mimecast.com',
+			port: 587,
+			secure: false,
+			requireTLS: true,
 			auth: {
 				user: process.env.EMAIL_USER,
 				pass: process.env.EMAIL_PASSWORD
+			},
+			tls: {
+				ciphers: 'SSLv3'
 			}
 
 		});
 
 		let mailOptions = {
-			from: '"Dynatrace Business Value Assessment" <alistair.emslie@dynatrace.com>',
+			from: '"Dynatrace Business Value Assessment (No reply)" <bus.val.assess.svc@dynatrace.com>',
 			to: email,
 			subject: subject,
 			text: text,
