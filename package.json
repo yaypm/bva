@@ -16,7 +16,7 @@
     "bva"
   ],
   "dependencies": {
-    "bcrypt": "^4.0.1",
+    "bcrypt": "^5.0.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.18.0",
     "connect-mongo": "^2.0.3",
