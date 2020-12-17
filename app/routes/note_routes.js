@@ -328,6 +328,12 @@ module.exports = function(app, db) {
 		res.sendFile(path.join(__dirname + '/signup.html'));
 
 	});
+	
+	app.get('/orderconfirmation', (req, res) => {
+
+		res.sendFile(path.join(__dirname + '/orderconfirmation.html'));
+
+	});
 
 	app.get('/changepassword', (req, res) => {
 
