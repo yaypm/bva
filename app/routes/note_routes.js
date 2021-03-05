@@ -959,6 +959,7 @@ module.exports = function(app, db) {
 			if(currency == "uk") { var operations = '34000'; var developers = '39000'; var qas = '25000'; }
 			if(currency == "ireland") { var operations = '40000'; var developers = '41000'; var qas = '33000'; }
 			if(currency == "us") { var operations = '64000'; var developers = '79000'; var qas = '60000'; }
+			if(currency == "australia") { var operations = '65000'; var developers = '90000'; var qas = '90000'; }
 			if(currency == "france") { var operations = '40000'; var developers = '44000'; var qas = '50000'; }
 			if(currency == "benelux") { var operations = '48000'; var developers = '48000'; var qas = '48000'; }
 			if(currency == "germany") { var operations = '48000'; var developers = '50000'; var qas = '58000'; }
