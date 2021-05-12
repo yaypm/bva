@@ -24,7 +24,7 @@
     "express": "^4.15.4",
     "express-session": "^1.15.6",
     "mongodb": "^2.2.31",
-    "nodemailer": "^4.4.2",
+    "nodemailer": "^6.4.16",
     "request": "^2.75.0",
     "request-promise": "^4.2.1"
   },
