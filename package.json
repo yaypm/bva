@@ -21,7 +21,7 @@
     "body-parser": "^1.18.0",
     "connect-mongo": "^2.0.3",
     "es6-promise": "^4.2.2",
-    "express": "^4.15.4",
+    "express": "^4.17.3",
     "express-session": "^1.15.6",
     "mongodb": "^2.2.31",
     "nodemailer": "^4.4.2",
